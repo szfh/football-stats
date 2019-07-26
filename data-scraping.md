@@ -48,5 +48,82 @@ individually.
 
 ## Load the webpage containing the data
 
-This is pretty easy with rvest. Just set the page variable to the page
-we want to scrape and the pass in through the read\_html function.
+This is pretty easy with **rvest**. Just set the page variable to the
+page we want to scrape and the pass in through the read\_html
+function.
+
+``` r
+page <- "https://www.transfermarkt.co.uk/transfers/transferrekorde/statistik/top/plus/0/galerie/0?saison_id=2000"
+ 
+scraped_page <- read_html(page)
+```
+
+## Locate the data within a page & extract it
+
+To fully appreciate what we are doing here, you probably need a basic
+grasp of HTML – the language that structures a webpage. As simply as I
+can put it for this article, HTML is made up of elements, like a
+paragraph or a link, that tell the browser what to render. For scraping,
+we will use this information to tell our program what information to
+take.
+
+You can inspect the source code of the page or use SelectorGadget to
+help us tell our scraping code where the information is that we want to
+grab.
+
+Take another look at the page we are scraping. We want two things – the
+player name and the transfer value.
+
+Using **SelectorGadget** we can find the following node locations:
+
+Player Name = \#yw2 .spielprofil\_tooltip Transfer Value =
+.rechts.hauptlink a
+
+Extracting the data is then quiet easy. Reading the code left to right
+the\_page -\> the\_nodes -\> the\_text -\> as\_text. Each time storing
+them as objects with
+\<-
+
+``` r
+PlayerNames  <- scraped_page %>% html_nodes("#yw2 .spielprofil_tooltip") %>% html_text() %>% as.character()
+TransferValue <- scraped_page %>% html_nodes(".rechts.hauptlink a") %>% html_text() %>% as.character()
+```
+
+## Organise the data into a dataframe
+
+This is pretty simple as we now have two objects PlayersNames and
+TransferValues. So we just add them to the construction of a dataframe.
+
+``` r
+df <- data.frame(PlayerNames, TransferValue)
+```
+
+and then display the top 5 items of the dataframe with :
+
+``` r
+head(df)
+```
+
+    ##         PlayerNames TransferValue
+    ## 1         Luís Figo       £54.00m
+    ## 2     Hernán Crespo       £51.13m
+    ## 3     Marc Overmars       £36.00m
+    ## 4 Gabriel Batistuta       £32.54m
+    ## 5    Nicolas Anelka       £31.05m
+    ## 6     Rio Ferdinand       £23.40m
+
+## Summary
+
+This article has gone through the absolute basics of scraping, we can
+now load a page, identify elements that we want to scrape and then
+process them into a dataframe.
+
+There is more that we need to do to scrape efficiently though. Firstly,
+we can apply a for loop to the whole program above, changing the initial
+webpage name slightly to scrape the next year – I’ll let you figure out
+how\!
+
+You will also need to understand more about HTML, particularly class and
+ID selectors, to get the most out of scraping. Regardless, if you’ve
+followed along and understand what we’ve achieved and how, then you’re
+in a good place to apply this to other pages.
