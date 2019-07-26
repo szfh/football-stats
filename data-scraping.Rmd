@@ -97,3 +97,40 @@ This article has gone through the absolute basics of scraping, we can now load a
 There is more that we need to do to scrape efficiently though. Firstly, we can apply a for loop to the whole program above, changing the initial webpage name slightly to scrape the next year – I’ll let you figure out how!
 
 You will also need to understand more about HTML, particularly class and ID selectors, to get the most out of scraping. Regardless, if you’ve followed along and understand what we’ve achieved and how, then you’re in a good place to apply this to other pages.
+
+# Scraping Lists Through Transfermarkt and Saving Images in R
+
+This is a R conversion of a tutorial by [FC Python](https://twitter.com/FC_Python). I take no credit for the idea and have their blessing to make this conversion. All text is a direct copy unless changes were relevant. Please follow them on twitter and if you have a desire to learn Python then they are a fantastic resource!
+
+In this tutorial, we’ll be looking to develop our scraping knowledge beyond just lifting text from a single page. Following through the article, you’ll learn how to scrape links from a page and iterate through them to take information from each link, speeding up the process of creating new datasets. We will also run through how to identify and download images, creating a database of every player in the Premier League’s picture. This should save 10 minutes a week for anyone searching in Google Images to decorate their pre-match presentations!
+
+This tutorial builds on the [first tutorial](https://github.com/FCrSTATS/ScrappingTutorials/blob/master/1.ScrapingTransferFeeData.rmd) in our scraping series, so it is strongly recommended that you understand the concepts there before starting here.
+
+Let’s import our package and get started. Rvest is the only package we need to install.
+
+Our aim is to extract a picture of every player in the Premier League. We have identified Transfermarkt as our target, given that each player page should have a picture. Our secondary aim is to run this in one piece of code and not to run a new command for each player or team individually. To do this, we need to follow this process:
+
+1) Locate a list of teams in the league with links to a squad list – then save these links
+
+2) Run through each squad list link and save the link to each player’s page
+
+3) Locate the player’s image and save it to our local computer
+
+For what seems to be a massive task, we can distill it down to three main tasks. Below, we’ll break each one down.
+
+## Locate a list of team links and save them
+
+The [Premier League page](https://www.transfermarkt.co.uk/premier-league/startseite/wettbewerb/GB1) is the obvious place to start. As you can see, each team name is a link through to the squad page.
+
+All we need to do is use Selector Gadget to identify the names of the nodes that we want to scrape.
+
+Finally, we append these links to the transfermarkt domain so that we can call them on their own.
+
+```{r}
+page <- "https://www.transfermarkt.co.uk/premier-league/startseite/wettbewerb/GB1"
+scraped_page <- read_html(page)
+teamLinks <- scraped_page %>% html_nodes(".hide-for-pad .vereinprofil_tooltip") %>% html_attr("href")
+teamLinks <- paste0("https://www.transfermarkt.co.uk", teamLinks)
+```
+
+## Run through each squad and save the player links
