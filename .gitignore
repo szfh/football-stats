@@ -1,0 +1,12 @@
+#R files
+.Rproj.user
+.Rhistory
+.Rapp.history
+.RData
+.Ruserdata
+*.utf8.md
+*.knit.md
+
+#folders
+data/
+plots/
