@@ -1,0 +1,26 @@
+---
+title: "data-scraping"
+author: "saintsnumbers"
+output: github_document
+date: 2019-07-26
+---
+
+```{r setup, include=FALSE}
+# knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r packages, include=FALSE}
+# library(tidytext)
+# library(tidyverse)
+# library(gridExtra)
+# library(ggalt)
+# library(knitr)
+# library(lubridate)
+# library(modelr)
+# library(magrittr)
+# theme_set(theme_bw())
+```
+
+```{r data import, include=FALSE}
+rm(list=ls())
+```
