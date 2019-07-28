@@ -54,6 +54,16 @@ player_names <- page_scraped %>%
   html_text()
 
 player_names <- player_names[seq(1,length(player_names),2)] #duplicated - odd numbered data only
-head(player_names,12)
+
+player_numbers <- page_scraped %>%
+  html_nodes(".rn_nummer") %>%
+  html_text
+
+player_data <- as_tibble(data.frame(Name = player_names, No = player_numbers))
+player_data
 ```
 
+### To do
+
+* Turn into proper tibble
+* Try to get better html selectors process to avoid having to remove duplicated data
