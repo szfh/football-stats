@@ -189,6 +189,106 @@ page <- "https://www.transfermarkt.co.uk/premier-league/startseite/wettbewerb/GB
 scraped_page <- read_html(page)
 teamLinks <- scraped_page %>% html_nodes(".hide-for-pad .vereinprofil_tooltip") %>% html_attr("href")
 teamLinks <- paste0("https://www.transfermarkt.co.uk", teamLinks)
+head(teamLinks)
 ```
 
+    ## [1] "https://www.transfermarkt.co.uk/manchester-city/startseite/verein/281/saison_id/2019"  
+    ## [2] "https://www.transfermarkt.co.uk/fc-liverpool/startseite/verein/31/saison_id/2019"      
+    ## [3] "https://www.transfermarkt.co.uk/tottenham-hotspur/startseite/verein/148/saison_id/2019"
+    ## [4] "https://www.transfermarkt.co.uk/fc-chelsea/startseite/verein/631/saison_id/2019"       
+    ## [5] "https://www.transfermarkt.co.uk/manchester-united/startseite/verein/985/saison_id/2019"
+    ## [6] "https://www.transfermarkt.co.uk/fc-arsenal/startseite/verein/11/saison_id/2019"
+
 ## Run through each squad and save the player links
+
+So we now have 20 team links. We will now iterate through each of these
+team links and do the same thing, only this time we are taking player
+links and not squad links. Take a look through the code below, but
+you’ll notice that it is very similar to the last chunk of
+instructions – the key difference being that we will run it within a
+loop to go through all 20 teams in one go.
+
+``` r
+PlayerLinks <- list()
+#was i in length(PlayerLinks)
+for (i in 1:2) {
+  page <- teamLinks[i]
+  scraped_page <- read_html(page)
+  temp_PlayerLinks <- scraped_page %>% html_nodes(".hide-for-small .spielprofil_tooltip") %>% html_attr("href")
+  PlayerLinks <- append(PlayerLinks, temp_PlayerLinks)
+}
+head(PlayerLinks)
+```
+
+    ## [[1]]
+    ## [1] "/ederson/profil/spieler/238223"
+    ## 
+    ## [[2]]
+    ## [1] "/claudio-bravo/profil/spieler/40423"
+    ## 
+    ## [[3]]
+    ## [1] "/aymeric-laporte/profil/spieler/176553"
+    ## 
+    ## [[4]]
+    ## [1] "/john-stones/profil/spieler/186590"
+    ## 
+    ## [[5]]
+    ## [1] "/nicolas-otamendi/profil/spieler/54781"
+    ## 
+    ## [[6]]
+    ## [1] "/eliaquim-mangala/profil/spieler/90681"
+
+(done for 2 teams only)
+
+We have to make some quick changes to the PlayerLinks list to make them
+easier to use in the next step. Firstly, unlist them. Finally, we append
+these links to the transfermarkt domain so that we can call them on
+their own.
+
+``` r
+PlayerLinks <- unlist(PlayerLinks)
+PlayerLinks <- paste0("https://www.transfermarkt.co.uk" , PlayerLinks)
+head(PlayerLinks)
+```
+
+    ## [1] "https://www.transfermarkt.co.uk/ederson/profil/spieler/238223"        
+    ## [2] "https://www.transfermarkt.co.uk/claudio-bravo/profil/spieler/40423"   
+    ## [3] "https://www.transfermarkt.co.uk/aymeric-laporte/profil/spieler/176553"
+    ## [4] "https://www.transfermarkt.co.uk/john-stones/profil/spieler/186590"    
+    ## [5] "https://www.transfermarkt.co.uk/nicolas-otamendi/profil/spieler/54781"
+    ## [6] "https://www.transfermarkt.co.uk/eliaquim-mangala/profil/spieler/90681"
+
+## Locate and save each player’s image
+
+We now have a lot of links for players…
+
+513 links, in fact\! We now need to iterate through each of these links
+and save the player’s picture.
+
+Hopefully you should now be comfortable with the process to download and
+process a webpage, but the second part of this step will need some
+unpacking – locating the image and saving it.
+
+Once again, we are locating elements in the page. We grab the image by
+the node and use the “src” as the input to html\_attr(). This gives us
+the url of the image. We also grab the player’s name using the “h1”
+node. The we use the download.file function to grab the image and save
+it with the filename of the player. The image then downloads to the
+working directory you have set in R.
+
+``` r
+#was i in length(teamLinks)
+for (i in 1:2) {
+  page <- PlayerLinks[i]
+  scraped_page <- read_html(page)
+  Player <- scraped_page %>% html_node("h1") %>% html_text() %>% as.character()
+  Image_Title <- paste0(Player,".jpg")
+  Image_url <- scraped_page %>% html_node(".dataBild img") %>% html_attr("src")
+  download.file(Image_url,Image_Title, mode = 'wb')
+}
+```
+
+… and job done\! We now have a catalog of player images. To help test
+what you have learnt try and add the players club name to the filename
+of each image i.e. “AymericLaporte\_ManchesterCity.jpg” …. maybe helpful
+when cataloging the images for future use.

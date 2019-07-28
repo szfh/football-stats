@@ -141,7 +141,7 @@ So we now have 20 team links. We will now iterate through each of these team lin
 ```{r}
 PlayerLinks <- list()
 #was i in length(PlayerLinks)
-for (i in 1:5) {
+for (i in 1:2) {
   page <- teamLinks[i]
   scraped_page <- read_html(page)
   temp_PlayerLinks <- scraped_page %>% html_nodes(".hide-for-small .spielprofil_tooltip") %>% html_attr("href")
@@ -172,7 +172,7 @@ Once again, we are locating elements in the page. We grab the image by the node 
 
 ```{r}
 #was i in length(teamLinks)
-for (i in 1:5) {
+for (i in 1:2) {
   page <- PlayerLinks[i]
   scraped_page <- read_html(page)
   Player <- scraped_page %>% html_node("h1") %>% html_text() %>% as.character()
