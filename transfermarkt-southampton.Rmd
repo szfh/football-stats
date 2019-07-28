@@ -1,7 +1,7 @@
 ---
-title: "transfermarkt-southampton"
+title: "Southampton FC Transfermarkt Scraper"
 author: "saintsnumbers"
-output: html_notebook
+output: github_document
 date: 2019-07-28
 editor_options: 
   chunk_output_type: inline
@@ -11,8 +11,8 @@ editor_options:
 # knitr::opts_chunk$set(echo = FALSE)
 
 #libraries
-# library(rvest)
 library(tidyverse)
+library(rvest)
 # theme_set(theme_bw())
 
 
