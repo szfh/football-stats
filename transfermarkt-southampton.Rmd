@@ -13,22 +13,23 @@ editor_options:
 #libraries
 library(tidyverse)
 library(rvest)
-# theme_set(theme_bw())
+library(magrittr)
+theme_set(theme_bw())
 
 
 #delete environment variables
 rm(list=ls())
 ```
 
-# Scraping Southampton FC Transfermarkt data.
+## Scraping Southampton FC Transfermarkt data.
 
-## Plan
+### Plan
 
 * Load the webpage containing the data.
 * Locate the data within the page and extract it.
 * Organise the data into a dataframe
 
-## Load the webpage
+### Load the webpage
 
 * [**Southampton FC Transfermarkt** (detailed)](https://www.transfermarkt.co.uk/southampton-fc/kader/verein/180/saison_id/2019/plus/1)
 * [Page used in the example](https://www.transfermarkt.co.uk/manchester-city/startseite/verein/281/saison_id/2019)
@@ -38,23 +39,20 @@ page_url <- "https://www.transfermarkt.co.uk/southampton-fc/kader/verein/180/sai
 page_scraped <- read_html(page_url)
 ```
 
-## Extract the data
+### Extract the data
 
-* **Name**
-* *Squad Number*
-* *DOB/Age*
-* *Height*
-* *Foot*
-* *Joined*
-* *Contract*
-* *Position*
+Done | Needs tidying | Not done
+-- | -- | --
+Name | Height | DOB/Age
+Squad Number | Foot | Contract
+Position | | Joined
 
-```{r}
-player_names <- page_scraped %>%
+```{r extract}
+player_names_raw <- page_scraped %>%
   html_nodes(".spielprofil_tooltip") %>%
   html_text()
 
-player_names <- player_names[seq(1,length(player_names),2)] #duplicated - odd numbered data only
+player_names <- player_names_raw[seq(1,length(player_names_raw),2)] #duplicated - odd numbered data only
 
 player_numbers <- page_scraped %>%
   html_nodes(".rn_nummer") %>%
@@ -75,13 +73,24 @@ player_foot <- page_scraped %>%
 player_name_alt <- page_scraped %>%
   html_nodes(".posrela") %>%
   html_text
+```
 
-player_data <- data.frame(Name = player_names, No = player_numbers, Position = player_position, Height = player_heigt, Foot = player_foot)
-player_data <- as_tibble(player_data)
+### Tidy data
+
+```{r tidy}
+player_data <- data.frame(Name = player_names, No = player_numbers, Position = player_position, Height = player_height, Foot = player_foot)
+
+player_data %<>%
+  as_tibble %>%
+  mutate(No = as.integer(No))
+  
 player_data
 ```
+
 
 ### To do
 
 * Turn into proper tibble
+  + Started
 * Try to get better html selectors process to avoid having to remove duplicated data
+* Improve format of data as in table above
