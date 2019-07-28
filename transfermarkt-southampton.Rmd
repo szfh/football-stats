@@ -30,9 +30,30 @@ rm(list=ls())
 
 ## Load the webpage
 
-[**Transfermarkt Southampton FC Webpage**](https://www.transfermarkt.co.uk/fc-southampton/startseite/verein/180)
+* [**Southampton FC Transfermarkt** (detailed)](https://www.transfermarkt.co.uk/southampton-fc/kader/verein/180/saison_id/2019/plus/1)
+* [Page used in the example](https://www.transfermarkt.co.uk/manchester-city/startseite/verein/281/saison_id/2019)
 
 ```{r load}
-page_url <- "https://www.transfermarkt.co.uk/fc-southampton/startseite/verein/180"
+page_url <- "https://www.transfermarkt.co.uk/southampton-fc/kader/verein/180/saison_id/2019/plus/1"
 page_scraped <- read_html(page_url)
 ```
+
+## Extract the data
+
+* **Name**
+* *Squad Number*
+* *DOB/Age*
+* *Height*
+* *Foot*
+* *Joined*
+* *Contract*
+
+```{r}
+player_names <- page_scraped %>%
+  html_nodes(".spielprofil_tooltip") %>%
+  html_text()
+
+player_names <- player_names[seq(1,length(player_names),2)] #duplicated - odd numbered data only
+head(player_names,12)
+```
+
