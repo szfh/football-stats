@@ -11,3 +11,6 @@
 #folders
 data/
 plots/
+
+#html
+*.html
