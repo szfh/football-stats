@@ -19,3 +19,20 @@ library(rvest)
 #delete environment variables
 rm(list=ls())
 ```
+
+# Scraping Southampton FC Transfermarkt data.
+
+## Plan
+
+* Load the webpage containing the data.
+* Locate the data within the page and extract it.
+* Organise the data into a dataframe
+
+## Load the webpage
+
+[**Transfermarkt Southampton FC Webpage**](https://www.transfermarkt.co.uk/fc-southampton/startseite/verein/180)
+
+```{r load}
+page_url <- "https://www.transfermarkt.co.uk/fc-southampton/startseite/verein/180"
+page_scraped <- read_html(page_url)
+```
