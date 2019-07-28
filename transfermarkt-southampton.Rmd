@@ -1,0 +1,21 @@
+---
+title: "transfermarkt-southampton"
+author: "saintsnumbers"
+output: html_notebook
+date: 2019-07-28
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+# knitr::opts_chunk$set(echo = FALSE)
+
+#libraries
+# library(rvest)
+library(tidyverse)
+# theme_set(theme_bw())
+
+
+#delete environment variables
+rm(list=ls())
+```
