@@ -16,29 +16,31 @@ library(rvest)
 library(magrittr)
 theme_set(theme_bw())
 
-
 #delete environment variables
 rm(list=ls())
 ```
 
-## Scraping Southampton FC Transfermarkt data.
+## Scraping Southampton FC Transfermarkt data
 
 ### Plan
 
 * Load the webpage containing the data.
 * Locate the data within the page and extract it.
-* Organise the data into a dataframe
+* Organise the data into a dataframe.
+* Load more data.
+* Do stats on it.
 
 ### Load the webpage
 
 * [**Southampton FC Transfermarkt** (detailed)](https://www.transfermarkt.co.uk/southampton-fc/kader/verein/180/saison_id/2019/plus/1)
-[**Southampton FC Transfermarkt** Premier League 18/19 (detailed)](https://www.transfermarkt.co.uk/southampton-fc/leistungsdaten/verein/180/reldata/GB1%262018/plus/1)
+* [**Southampton FC Transfermarkt** Premier League 18/19 (detailed)](https://www.transfermarkt.co.uk/southampton-fc/leistungsdaten/verein/180/reldata/GB1%262018/plus/1)
 * [Page used in the example](https://www.transfermarkt.co.uk/manchester-city/startseite/verein/281/saison_id/2019)
 
 ```{r load}
-page_url <- "https://www.transfermarkt.co.uk/southampton-fc/kader/verein/180/saison_id/2019/plus/1"
-page_scraped <- read_html(page_url)
-#do this as a vector?
+squad_url <- "https://www.transfermarkt.co.uk/southampton-fc/kader/verein/180/saison_id/2019/plus/1"
+season19_url <- "https://www.transfermarkt.co.uk/southampton-fc/leistungsdaten/verein/180/reldata/GB1%262018/plus/1"
+squad_scraped <- read_html("https://www.transfermarkt.co.uk/southampton-fc/kader/verein/180/saison_id/2019/plus/1")
+season19_scraped <- read_html("https://www.transfermarkt.co.uk/southampton-fc/leistungsdaten/verein/180/reldata/GB1%262018/plus/1")
 ```
 
 ### Extract the data
@@ -46,45 +48,45 @@ page_scraped <- read_html(page_url)
 Done | Needs tidying | Not done
 -- | -- | --
 Name | Height |
-Squad Number | Foot |
+Squad Number | Foot | 18/19 Stats
 Position | |
 DOB/Age | |
 Contract | |
 Joined | |
 
 ```{r extract}
-player_names_raw <- page_scraped %>%
+player_names_raw <- squad_scraped %>%
   html_nodes(".spielprofil_tooltip") %>%
   html_text()
 
 player_names <- player_names_raw[seq(1,length(player_names_raw),2)] #duplicated - take odd numbered data only
 
-player_numbers <- page_scraped %>%
+player_numbers <- squad_scraped %>%
   html_nodes(".rn_nummer") %>%
   html_text
 player_numbers[player_numbers == "-"] <- NA
 
-player_position <- page_scraped %>%
+player_position <- squad_scraped %>%
   html_nodes(".inline-table tr:nth-child(2) td") %>%
   html_text
 
-player_dob <- page_scraped %>%
+player_dob <- squad_scraped %>%
   html_nodes("#yw1 td:nth-child(3)") %>%
   html_text
 
-player_height <- page_scraped %>%
+player_height <- squad_scraped %>%
   html_nodes("td:nth-child(5)") %>%
   html_text
 
-player_foot <- page_scraped %>%
+player_foot <- squad_scraped %>%
   html_nodes("td:nth-child(6)") %>%
   html_text
 
-player_joined <- page_scraped %>%
+player_joined <- squad_scraped %>%
   html_nodes("td:nth-child(7)") %>%
   html_text
 
-player_contract <- page_scraped %>%
+player_contract <- squad_scraped %>%
   html_nodes("td:nth-child(9)") %>%
   html_text
 ```
