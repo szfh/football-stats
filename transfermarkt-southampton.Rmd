@@ -52,11 +52,12 @@ player_names_raw <- page_scraped %>%
   html_nodes(".spielprofil_tooltip") %>%
   html_text()
 
-player_names <- player_names_raw[seq(1,length(player_names_raw),2)] #duplicated - odd numbered data only
+player_names <- player_names_raw[seq(1,length(player_names_raw),2)] #duplicated - take odd numbered data only
 
 player_numbers <- page_scraped %>%
   html_nodes(".rn_nummer") %>%
   html_text
+player_numbers[player_numbers == "-"] <- NA
 
 player_position <- page_scraped %>%
   html_nodes(".inline-table tr:nth-child(2) td") %>%
@@ -78,19 +79,18 @@ player_name_alt <- page_scraped %>%
 ### Tidy data
 
 ```{r tidy}
-player_data <- data.frame(Name = player_names, No = player_numbers, Position = player_position, Height = player_height, Foot = player_foot)
+player_data <- data.frame(Name = player_names, Number = player_numbers, Position = player_position, Height = player_height, Foot = player_foot)
 
 player_data %<>%
-  as_tibble %>%
-  mutate(No = as.integer(No))
+  as_tibble
   
-player_data
+head(player_data,8)
 ```
 
 
 ### To do
 
 * Turn into proper tibble
-  + Started
+  + Done
 * Try to get better html selectors process to avoid having to remove duplicated data
 * Improve format of data as in table above
