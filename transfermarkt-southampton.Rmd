@@ -32,20 +32,25 @@ rm(list=ls())
 ### Load the webpage
 
 * [**Southampton FC Transfermarkt** (detailed)](https://www.transfermarkt.co.uk/southampton-fc/kader/verein/180/saison_id/2019/plus/1)
+[**Southampton FC Transfermarkt** Premier League 18/19 (detailed)](https://www.transfermarkt.co.uk/southampton-fc/leistungsdaten/verein/180/reldata/GB1%262018/plus/1)
 * [Page used in the example](https://www.transfermarkt.co.uk/manchester-city/startseite/verein/281/saison_id/2019)
 
 ```{r load}
 page_url <- "https://www.transfermarkt.co.uk/southampton-fc/kader/verein/180/saison_id/2019/plus/1"
 page_scraped <- read_html(page_url)
+#do this as a vector?
 ```
 
 ### Extract the data
 
 Done | Needs tidying | Not done
 -- | -- | --
-Name | Height | DOB/Age
-Squad Number | Foot | Contract
-Position | | Joined
+Name | Height |
+Squad Number | Foot |
+Position | |
+DOB/Age | |
+Contract | |
+Joined | |
 
 ```{r extract}
 player_names_raw <- page_scraped %>%
@@ -63,6 +68,10 @@ player_position <- page_scraped %>%
   html_nodes(".inline-table tr:nth-child(2) td") %>%
   html_text
 
+player_dob <- page_scraped %>%
+  html_nodes("#yw1 td:nth-child(3)") %>%
+  html_text
+
 player_height <- page_scraped %>%
   html_nodes("td:nth-child(5)") %>%
   html_text
@@ -71,26 +80,35 @@ player_foot <- page_scraped %>%
   html_nodes("td:nth-child(6)") %>%
   html_text
 
-player_name_alt <- page_scraped %>%
-  html_nodes(".posrela") %>%
+player_joined <- page_scraped %>%
+  html_nodes("td:nth-child(7)") %>%
+  html_text
+
+player_contract <- page_scraped %>%
+  html_nodes("td:nth-child(9)") %>%
   html_text
 ```
 
 ### Tidy data
 
 ```{r tidy}
-player_data <- data.frame(Name = player_names, Number = player_numbers, Position = player_position, Height = player_height, Foot = player_foot)
+player_data <- data.frame(Name = player_names, Number = player_numbers, Position = player_position, DoB = player_dob, Height = player_height, Foot = player_foot, Joined = player_joined, Contract = player_contract)
 
 player_data %<>%
   as_tibble
-  
-head(player_data,8)
+
+player_data %>%
+  head(8)
 ```
 
 
 ### To do
 
-* Turn into proper tibble
-  + Done
-* Try to get better html selectors process to avoid having to remove duplicated data
+* Get better html selectors process to avoid having to remove duplicated data
 * Improve format of data as in table above
+* Scrape new web pages
+
+```{r}
+# ggplot(player_data) + geom_point(aes(x=Name,y=as.integer(Number)))
+```
+
