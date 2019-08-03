@@ -52,7 +52,7 @@ This is pretty easy with **rvest**. Just set the page variable to the page we wa
 
 ```{r}
 page <- "https://www.transfermarkt.co.uk/transfers/transferrekorde/statistik/top/plus/0/galerie/0?saison_id=2000"
- 
+
 scraped_page <- read_html(page)
 ```
 
