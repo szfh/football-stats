@@ -1,4 +1,4 @@
-StatsBomb Messi Data
+StatsBomb Women’s World Cup Data
 ================
 saintsnumbers
 2019-08-09
@@ -37,14 +37,6 @@ statsbombdata %>%
 ## Graphing shots on a chart
 
 ``` r
-# statsbombdata %>%
-#   tail(50) %>%
-#   View("Last 50")
-
-# statsbombdata %>%
-#   select(type.name) %>%
-#   unique
-
 statsbombdata %>%
   group_by(team.name) %>%
   summarise(shots=sum(type.name=="Shot",na.rm=TRUE),
@@ -58,3 +50,19 @@ statsbombdata %>%
 ```
 
 ![](statsbomb_files/figure-gfm/data%20to%20chart-1.png)<!-- -->
+
+``` r
+statsbombdata %>%
+  group_by(team.name) %>%
+  summarise(shots=sum(type.name=="Shot",na.rm=TRUE),
+            goals=sum(shot.outcome.name=="Goal",na.rm=TRUE)) %>%
+  gather(type,value,-team.name) %>%
+  ggplot(aes(x=reorder(team.name,value),y=value,fill=type)) +
+  geom_bar(stat="identity",position="dodge") +
+  labs(x="Team",y="Shots/Goals") +
+  theme(axis.title.x=element_blank(),axis.title.y=element_blank()) +
+  scale_y_continuous(expand=c(0,0)) +
+  coord_flip()
+```
+
+![](statsbomb_files/figure-gfm/data%20to%20chart-2.png)<!-- -->
