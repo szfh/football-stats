@@ -25,7 +25,7 @@ theme_set(theme_bw())
 
 ```{r import, include=FALSE}
 statsbombdata <- FreeCompetitions() %>%
-  filter(competition_name=="La Liga" & season_name=="2004/2005") %>%
+  filter(competition_name=="Women's World Cup	" & season_name=="2019") %>%
   FreeMatches() %>%
   StatsBombFreeEvents(MatchesDF=.,Parallel=TRUE) %>%
   allclean()
@@ -36,7 +36,16 @@ statsbombdata <- FreeCompetitions() %>%
 1. Player shots per 90
 1. Mapping passes
 
+##Shots and Goals
+
 ```{r shots and goals}
+statsbombdata %>%
+  group_by(team.name) %>%
+  summarise(shots=sum(type.name=="Shot",na.rm=TRUE),
+            goals=sum(shot.outcome.name=="Goal",na.rm=TRUE))
+```
+
+```{r data to chart}
 # statsbombdata %>%
 #   tail(50) %>%
 #   View("Last 50")
@@ -48,9 +57,11 @@ statsbombdata <- FreeCompetitions() %>%
 statsbombdata %>%
   group_by(team.name) %>%
   summarise(shots=sum(type.name=="Shot",na.rm=TRUE),
-            goals=sum(shot.outcome.name=="Goal",na.rm=TRUE))
-```
-
-```{rdata to chart}
-
+            goals=sum(shot.outcome.name=="Goal",na.rm=TRUE)) %>%
+  ggplot(aes(x=reorder(team.name,shots),y=shots)) +
+  geom_bar(stat="identity",width=.5) +
+  labs(x="Team",y="Shots") +
+  theme(axis.title.x=element_blank()) +
+  scale_y_continuous(expand=c(0,0)) +
+  coord_flip()
 ```
