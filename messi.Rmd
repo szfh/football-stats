@@ -1,5 +1,5 @@
 ---
-title: "Southampton FC Transfermarkt Scraper"
+title: "StatsBomb Messi Data"
 author: "saintsnumbers"
 output: github_document
 date: 2019-08-09
@@ -9,7 +9,7 @@ editor_options:
 
 # Messi Data
 
-##[http://statsbomb.com/wp-content/uploads/2019/07/Using-StatsBomb-Data-In-R-English.pdf](Link)
+[Guide](http://statsbomb.com/wp-content/uploads/2019/07/Using-StatsBomb-Data-In-R-English.pdf)
 
 ```{r setup, include=FALSE}
 # knitr::opts_chunk$set(echo = FALSE)
@@ -19,9 +19,16 @@ library(tidyverse)
 library(devtools)
 library(knitr)
 library(kableExtra)
-library(magrittr)
 library(StatsBombR)
 theme_set(theme_bw())
 # search()
 # detach(package())
+```
+
+```{r import, include=FALSE}
+StatsBombData <- FreeCompetitions() %>%
+  filter(competition_name=="La Liga" & season_name=="2004/2005") %>%
+  FreeMatches() %>%
+  StatsBombFreeEvents(MatchesDF=.,Parallel=TRUE) %>%
+  allclean()
 ```
