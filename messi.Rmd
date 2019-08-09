@@ -6,3 +6,22 @@ date: 2019-08-09
 editor_options: 
   chunk_output_type: inline
 ---
+
+# Messi Data
+
+##[http://statsbomb.com/wp-content/uploads/2019/07/Using-StatsBomb-Data-In-R-English.pdf](Link)
+
+```{r setup, include=FALSE}
+# knitr::opts_chunk$set(echo = FALSE)
+
+#libraries
+library(tidyverse)
+library(devtools)
+library(knitr)
+library(kableExtra)
+library(magrittr)
+library(StatsBombR)
+theme_set(theme_bw())
+# search()
+# detach(package())
+```
