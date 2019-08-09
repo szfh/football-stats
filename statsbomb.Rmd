@@ -25,7 +25,7 @@ theme_set(theme_bw())
 
 ```{r import, include=FALSE}
 statsbombdata <- FreeCompetitions() %>%
-  filter(competition_name=="Women's World Cup	" & season_name=="2019") %>%
+  filter(competition_name=="Women's World Cup" & season_name=="2019") %>%
   FreeMatches() %>%
   StatsBombFreeEvents(MatchesDF=.,Parallel=TRUE) %>%
   allclean()
