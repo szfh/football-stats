@@ -7,9 +7,7 @@ editor_options:
   chunk_output_type: inline
 ---
 
-# Messi Data
-
-[Guide](http://statsbomb.com/wp-content/uploads/2019/07/Using-StatsBomb-Data-In-R-English.pdf)
+[**Guide**](http://statsbomb.com/wp-content/uploads/2019/07/Using-StatsBomb-Data-In-R-English.pdf)
 
 ```{r setup, include=FALSE}
 # knitr::opts_chunk$set(echo = FALSE)
@@ -26,9 +24,33 @@ theme_set(theme_bw())
 ```
 
 ```{r import, include=FALSE}
-StatsBombData <- FreeCompetitions() %>%
+statsbombdata <- FreeCompetitions() %>%
   filter(competition_name=="La Liga" & season_name=="2004/2005") %>%
   FreeMatches() %>%
   StatsBombFreeEvents(MatchesDF=.,Parallel=TRUE) %>%
   allclean()
+```
+
+1. Shots and goals
+1. Graphing shots on a chart
+1. Player shots per 90
+1. Mapping passes
+
+```{r shots and goals}
+# statsbombdata %>%
+#   tail(50) %>%
+#   View("Last 50")
+
+# statsbombdata %>%
+#   select(type.name) %>%
+#   unique
+
+statsbombdata %>%
+  group_by(team.name) %>%
+  summarise(shots=sum(type.name=="Shot",na.rm=TRUE),
+            goals=sum(shot.outcome.name=="Goal",na.rm=TRUE))
+```
+
+```{rdata to chart}
+
 ```
