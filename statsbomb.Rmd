@@ -37,7 +37,7 @@ statsbombdata <- FreeCompetitions() %>%
 1. Player shots per 90
 1. Mapping passes
 
-##Shots and Goals
+## Shots and Goals
 
 ```{r shots and goals}
 statsbombdata %>%
@@ -45,6 +45,8 @@ statsbombdata %>%
   summarise(shots=sum(type.name=="Shot",na.rm=TRUE),
             goals=sum(shot.outcome.name=="Goal",na.rm=TRUE))
 ```
+
+## Graphing shots on a chart
 
 ```{r data to chart}
 # statsbombdata %>%
