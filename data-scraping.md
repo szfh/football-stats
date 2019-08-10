@@ -54,7 +54,7 @@ function.
 
 ``` r
 page <- "https://www.transfermarkt.co.uk/transfers/transferrekorde/statistik/top/plus/0/galerie/0?saison_id=2000"
- 
+
 scraped_page <- read_html(page)
 ```
 
@@ -227,16 +227,16 @@ head(PlayerLinks)
     ## [1] "/claudio-bravo/profil/spieler/40423"
     ## 
     ## [[3]]
-    ## [1] "/aymeric-laporte/profil/spieler/176553"
+    ## [1] "/scott-carson/profil/spieler/14555"
     ## 
     ## [[4]]
-    ## [1] "/john-stones/profil/spieler/186590"
+    ## [1] "/aymeric-laporte/profil/spieler/176553"
     ## 
     ## [[5]]
-    ## [1] "/nicolas-otamendi/profil/spieler/54781"
+    ## [1] "/john-stones/profil/spieler/186590"
     ## 
     ## [[6]]
-    ## [1] "/eliaquim-mangala/profil/spieler/90681"
+    ## [1] "/nicolas-otamendi/profil/spieler/54781"
 
 (done for 2 teams only)
 
@@ -253,10 +253,10 @@ head(PlayerLinks)
 
     ## [1] "https://www.transfermarkt.co.uk/ederson/profil/spieler/238223"        
     ## [2] "https://www.transfermarkt.co.uk/claudio-bravo/profil/spieler/40423"   
-    ## [3] "https://www.transfermarkt.co.uk/aymeric-laporte/profil/spieler/176553"
-    ## [4] "https://www.transfermarkt.co.uk/john-stones/profil/spieler/186590"    
-    ## [5] "https://www.transfermarkt.co.uk/nicolas-otamendi/profil/spieler/54781"
-    ## [6] "https://www.transfermarkt.co.uk/eliaquim-mangala/profil/spieler/90681"
+    ## [3] "https://www.transfermarkt.co.uk/scott-carson/profil/spieler/14555"    
+    ## [4] "https://www.transfermarkt.co.uk/aymeric-laporte/profil/spieler/176553"
+    ## [5] "https://www.transfermarkt.co.uk/john-stones/profil/spieler/186590"    
+    ## [6] "https://www.transfermarkt.co.uk/nicolas-otamendi/profil/spieler/54781"
 
 ## Locate and save each player’s image
 
@@ -284,7 +284,7 @@ for (i in 1:2) {
   Player <- scraped_page %>% html_node("h1") %>% html_text() %>% as.character()
   Image_Title <- paste0(Player,".jpg")
   Image_url <- scraped_page %>% html_node(".dataBild img") %>% html_attr("src")
-  download.file(Image_url,Image_Title, mode = 'wb')
+  # download.file(Image_url,Image_Title, mode = 'wb') #uncomment to download
 }
 ```
 
