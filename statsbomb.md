@@ -66,3 +66,43 @@ statsbombdata %>%
 ```
 
 ![](statsbomb_files/figure-gfm/data%20to%20chart-2.png)<!-- -->
+
+## Player shots per 90
+
+``` r
+player_minutes <- statsbombdata %>%
+  get.minutesplayed() %>%
+  group_by(player.id) %>%
+  summarise(minutes=sum(MinutesPlayed))
+```
+
+    ## Joining, by = "id"
+
+    ## Joining, by = "match_id"
+
+``` r
+statsbombdata %>%
+  group_by(player.name,player.id) %>%
+  summarise(shots=sum(type.name=="Shot",na.rm=TRUE)) %>%
+  left_join(player_minutes) %>%
+  mutate(shotsper90=(shots/minutes)*90) %>%
+  arrange(-shotsper90)
+```
+
+    ## Joining, by = "player.id"
+
+    ## # A tibble: 442 x 5
+    ## # Groups:   player.name [442]
+    ##    player.name                player.id shots minutes shotsper90
+    ##    <chr>                          <int> <int>   <dbl>      <dbl>
+    ##  1 Alice Ogebe                    26155     1    11.8       7.66
+    ##  2 Javiera Grez                   26090     4    50.5       7.13
+    ##  3 Carli Lloyd                     5097    17   239.        6.41
+    ##  4 Therese Ninon Abena            26095     3    44.7       6.04
+    ##  5 Mariela Del Carmen Coronel     25600     1    15.3       5.90
+    ##  6 Min-Ji Yeo                     25443     9   142.        5.71
+    ##  7 Lana Clelland                  10176     1    16.3       5.53
+    ##  8 Georgia Stanway                 4643     8   132.        5.43
+    ##  9 Fiona Brown                    10174     1    17.2       5.23
+    ## 10 Saori Takarada                 25604     1    18.5       4.87
+    ## # ... with 432 more rows
