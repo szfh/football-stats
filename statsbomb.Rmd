@@ -109,13 +109,28 @@ eng_passes <- statsbombdata %>%
 create_Pitch() +
   geom_segment(data=eng_passes,aes(x=location.x,y=location.y,xend=pass.end_location.x,yend=pass.end_location.y),
                lineend="round",size=0.5,arrow=arrow(length=unit(0.15,"cm"))) +
-  labs(title="All England Passes",subtitle="Women's World Cup 2019") +
+  labs(title="England passes",subtitle="Women's World Cup 2019") +
   coord_fixed(ratio=105/100)
 ```
 
 ```{r plotting shots}
 jam_shots <- statsbombdata %>%
   filter(team.name=="Jamaica Women's") %>%
-  filter(type.name=="Shot") %>%
-  View("Jamaica Shots")
+  filter(type.name=="Shot")
+  # discard(~all(is.na(.x)))
+  # View("jamaica shots")
+
+create_Pitch() +
+  geom_segment(data=jam_shots,aes(x=location.x,y=location.y,xend=shot.end_location.x,yend=shot.end_location.y),
+               lineend="round",size=0.5,arrow=arrow(length=unit(0.15,"cm"))) +
+  labs(title="Jamaica shots",subtitle="Women's World Cup 2019") +
+  coord_fixed(ratio=105/100)
+```
+
+```{r plotting pressures}
+# prc_pressures <- statsbombdata %>%
+#   filter(team.name=="China PR Women's") %>%
+#   filter(type.name=="Pressure") %>%
+#   discard(~all(is.na(.x))) %>%
+#   View("china pressures")
 ```
