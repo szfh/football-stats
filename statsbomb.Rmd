@@ -77,18 +77,6 @@ statsbombdata %>%
 ## Player shots per 90
 
 ```{r shots per 90}
-# player_minutes <- statsbombdata %>%
-#   get.minutesplayed() %>%
-#   group_by(player.id) %>%
-#   summarise(minutes=sum(MinutesPlayed))
-# 
-# statsbombdata %>%
-#   group_by(player.name,player.id) %>%
-#   summarise(shots=sum(type.name=="Shot",na.rm=TRUE)) %>%
-#   left_join(player_minutes) %>%
-#   mutate(shotsper90=(shots/minutes)*90) %>%
-#   arrange(-shots)
-
 statsbombdata %>%
   group_by(player.name,player.id) %>%
   summarise(shots=sum(type.name=="Shot",na.rm=TRUE)) %>%
@@ -103,9 +91,16 @@ statsbombdata %>%
 ## Plotting passes
 
 ```{r plotting passes}
-statsbombdata %>%
+types <- statsbombdata %>%
   select(type.name) %>%
   unique
+
+teams <- statsbombdata %>%
+  select(team.name) %>%
+  unique
+
+statsbombdata %>%
+  filter
 
 eng_passes <- statsbombdata %>%
   filter(team.name=="England Women's") %>%
@@ -116,4 +111,11 @@ create_Pitch() +
                lineend="round",size=0.5,arrow=arrow(length=unit(0.15,"cm"))) +
   labs(title="All England Passes",subtitle="Women's World Cup 2019") +
   coord_fixed(ratio=105/100)
+```
+
+```{r plotting shots}
+jam_shots <- statsbombdata %>%
+  filter(team.name=="Jamaica Women's") %>%
+  filter(type.name=="Shot") %>%
+  View("Jamaica Shots")
 ```
