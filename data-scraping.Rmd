@@ -11,7 +11,7 @@ date: 2019-07-26
 #libraries
 library(rvest)
 # library(tidytext)
-# library(tidyverse)
+library(tidyverse)
 # library(gridExtra)
 # library(ggalt)
 # library(knitr)
@@ -178,7 +178,7 @@ for (i in 1:2) {
   Player <- scraped_page %>% html_node("h1") %>% html_text() %>% as.character()
   Image_Title <- paste0(Player,".jpg")
   Image_url <- scraped_page %>% html_node(".dataBild img") %>% html_attr("src")
-  download.file(Image_url,Image_Title, mode = 'wb')
+  # download.file(Image_url,Image_Title, mode = 'wb') #uncomment to download
 }
 ```
 
