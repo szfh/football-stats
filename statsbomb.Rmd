@@ -72,3 +72,19 @@ statsbombdata %>%
   scale_y_continuous(expand=c(0,0)) +
   coord_flip()
 ```
+
+## Player shots per 90
+
+```{r shots per 90}
+player_minutes <- statsbombdata %>%
+  get.minutesplayed() %>%
+  group_by(player.id) %>%
+  summarise(minutes=sum(MinutesPlayed))
+
+statsbombdata %>%
+  group_by(player.name,player.id) %>%
+  summarise(shots=sum(type.name=="Shot",na.rm=TRUE)) %>%
+  left_join(player_minutes) %>%
+  mutate(shotsper90=(shots/minutes)*90) %>%
+  arrange(-shotsper90)
+```
