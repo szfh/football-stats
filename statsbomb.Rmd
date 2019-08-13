@@ -25,18 +25,22 @@ theme_set(theme_bw())
 rm(list=ls())
 ```
 
-```{r import, include=FALSE}
+## Import data
+
+```{r import, message=FALSE, warning=FALSE, results="hide"}
 statsbombdata <- FreeCompetitions() %>%
   filter(competition_name=="Women's World Cup" & season_name=="2019") %>%
   FreeMatches() %>%
-  StatsBombFreeEvents(MatchesDF=.,Parallel=TRUE) %>%
+  StatsBombFreeEvents(Parallel=TRUE) %>%
   allclean()
 ```
 
 1. Shots and goals
 1. Graphing shots on a chart
 1. Player shots per 90
-1. Mapping passes
+1. Plotting passes
+1. Plotting shots
+1. Plotting pressures
 
 ## Shots and Goals
 
@@ -76,7 +80,7 @@ statsbombdata %>%
 
 ## Player shots per 90
 
-```{r shots per 90}
+```{r shots per 90, message=FALSE}
 statsbombdata %>%
   group_by(player.name,player.id) %>%
   summarise(shots=sum(type.name=="Shot",na.rm=TRUE)) %>%
@@ -91,17 +95,6 @@ statsbombdata %>%
 ## Plotting passes
 
 ```{r plotting passes}
-types <- statsbombdata %>%
-  select(type.name) %>%
-  unique
-
-teams <- statsbombdata %>%
-  select(team.name) %>%
-  unique
-
-statsbombdata %>%
-  filter
-
 eng_passes <- statsbombdata %>%
   filter(team.name=="England Women's") %>%
   filter(type.name=="Pass")
@@ -113,12 +106,14 @@ create_Pitch() +
   coord_fixed(ratio=105/100)
 ```
 
+## Plotting shots
+
 ```{r plotting shots}
-statsbombdata %>%
-  filter(team.name=="Jamaica Women's") %>%
-  filter(type.name=="Shot") %>%
-  discard(~all(is.na(.x))) %>%
-  View("jamaica shots")
+# statsbombdata %>%
+#   filter(team.name=="Jamaica Women's") %>%
+#   filter(type.name=="Shot") %>%
+#   discard(~all(is.na(.x))) %>%
+#   View("jamaica shots")
 
 jam_shots <- statsbombdata %>%
   filter(team.name=="Jamaica Women's") %>%
@@ -131,12 +126,14 @@ create_Pitch() +
   coord_fixed(ratio=105/100)
 ```
 
+## Plotting pressures
+
 ```{r plotting pressures}
-statsbombdata %>%
-  filter(team.name=="China PR Women's") %>%
-  filter(type.name=="Pressure") %>%
-  discard(~all(is.na(.x))) %>%
-  View("china pressures")
+# statsbombdata %>%
+#   filter(team.name=="China PR Women's") %>%
+#   filter(type.name=="Pressure") %>%
+#   discard(~all(is.na(.x))) %>%
+#   View("china pressures")
 
 prc_pressures <- statsbombdata %>%
   filter(team.name=="China PR Women's") %>%
