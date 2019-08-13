@@ -114,11 +114,15 @@ create_Pitch() +
 ```
 
 ```{r plotting shots}
+statsbombdata %>%
+  filter(team.name=="Jamaica Women's") %>%
+  filter(type.name=="Shot") %>%
+  discard(~all(is.na(.x))) %>%
+  View("jamaica shots")
+
 jam_shots <- statsbombdata %>%
   filter(team.name=="Jamaica Women's") %>%
   filter(type.name=="Shot")
-  # discard(~all(is.na(.x)))
-  # View("jamaica shots")
 
 create_Pitch() +
   geom_segment(data=jam_shots,aes(x=location.x,y=location.y,xend=shot.end_location.x,yend=shot.end_location.y),
@@ -128,9 +132,19 @@ create_Pitch() +
 ```
 
 ```{r plotting pressures}
-# prc_pressures <- statsbombdata %>%
-#   filter(team.name=="China PR Women's") %>%
-#   filter(type.name=="Pressure") %>%
-#   discard(~all(is.na(.x))) %>%
-#   View("china pressures")
+statsbombdata %>%
+  filter(team.name=="China PR Women's") %>%
+  filter(type.name=="Pressure") %>%
+  discard(~all(is.na(.x))) %>%
+  View("china pressures")
+
+prc_pressures <- statsbombdata %>%
+  filter(team.name=="China PR Women's") %>%
+  filter(type.name=="Pressure")
+
+create_Pitch() +
+  geom_segment(data=prc_pressures,aes(x=location.x,y=location.y,xend=location.x,yend=location.y),
+               lineend="round",size=0.5) +
+  labs(title="China PR Pressures",subtitle="Women's World Cup 2019") +
+  coord_fixed(ratio=105/100)
 ```
