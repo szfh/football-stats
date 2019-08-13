@@ -5,10 +5,22 @@ saintsnumbers
 
 [**Guide**](http://statsbomb.com/wp-content/uploads/2019/07/Using-StatsBomb-Data-In-R-English.pdf)
 
+## Import data
+
+``` r
+statsbombdata <- FreeCompetitions() %>%
+  filter(competition_name=="Women's World Cup" & season_name=="2019") %>%
+  FreeMatches() %>%
+  StatsBombFreeEvents(Parallel=TRUE) %>%
+  allclean()
+```
+
 1.  Shots and goals
 2.  Graphing shots on a chart
 3.  Player shots per 90
-4.  Mapping passes
+4.  Plotting passes
+5.  Plotting shots
+6.  Plotting pressures
 
 ## Shots and Goals
 
@@ -70,39 +82,89 @@ statsbombdata %>%
 ## Player shots per 90
 
 ``` r
-player_minutes <- statsbombdata %>%
-  get.minutesplayed() %>%
-  group_by(player.id) %>%
-  summarise(minutes=sum(MinutesPlayed))
-```
-
-    ## Joining, by = "id"
-
-    ## Joining, by = "match_id"
-
-``` r
 statsbombdata %>%
   group_by(player.name,player.id) %>%
   summarise(shots=sum(type.name=="Shot",na.rm=TRUE)) %>%
-  left_join(player_minutes) %>%
+  left_join(statsbombdata %>%
+              get.minutesplayed() %>%
+              group_by(player.id) %>%
+              summarise(minutes=sum(MinutesPlayed))) %>%
   mutate(shotsper90=(shots/minutes)*90) %>%
-  arrange(-shotsper90)
+  arrange(-shots)
 ```
-
-    ## Joining, by = "player.id"
 
     ## # A tibble: 442 x 5
     ## # Groups:   player.name [442]
-    ##    player.name                player.id shots minutes shotsper90
-    ##    <chr>                          <int> <int>   <dbl>      <dbl>
-    ##  1 Alice Ogebe                    26155     1    11.8       7.66
-    ##  2 Javiera Grez                   26090     4    50.5       7.13
-    ##  3 Carli Lloyd                     5097    17   239.        6.41
-    ##  4 Therese Ninon Abena            26095     3    44.7       6.04
-    ##  5 Mariela Del Carmen Coronel     25600     1    15.3       5.90
-    ##  6 Min-Ji Yeo                     25443     9   142.        5.71
-    ##  7 Lana Clelland                  10176     1    16.3       5.53
-    ##  8 Georgia Stanway                 4643     8   132.        5.43
-    ##  9 Fiona Brown                    10174     1    17.2       5.23
-    ## 10 Saori Takarada                 25604     1    18.5       4.87
+    ##    player.name              player.id shots minutes shotsper90
+    ##    <chr>                        <int> <int>   <dbl>      <dbl>
+    ##  1 Vivianne Miedema             15623    23    708.       2.92
+    ##  2 Alex Morgan                   5085    20    526.       3.43
+    ##  3 Samantha Kerr                 4961    20    418.       4.30
+    ##  4 Sara Däbritz                 10263    20    487.       3.69
+    ##  5 Ellen White                  10180    18    558.       2.90
+    ##  6 Carli Lloyd                   5097    17    239.       6.41
+    ##  7 Eugénie Le Sommer            10121    17    438.       3.49
+    ##  8 Janine Beckie                 4992    17    363.       4.21
+    ##  9 Jennifer Hermoso Fuentes     10151    17    391.       3.92
+    ## 10 Amandine Henry               10123    16    517.       2.79
     ## # ... with 432 more rows
+
+## Plotting passes
+
+``` r
+eng_passes <- statsbombdata %>%
+  filter(team.name=="England Women's") %>%
+  filter(type.name=="Pass")
+
+create_Pitch() +
+  geom_segment(data=eng_passes,aes(x=location.x,y=location.y,xend=pass.end_location.x,yend=pass.end_location.y),
+               lineend="round",size=0.5,arrow=arrow(length=unit(0.15,"cm"))) +
+  labs(title="England passes",subtitle="Women's World Cup 2019") +
+  coord_fixed(ratio=105/100)
+```
+
+![](statsbomb_files/figure-gfm/plotting%20passes-1.png)<!-- -->
+
+## Plotting shots
+
+``` r
+# statsbombdata %>%
+#   filter(team.name=="Jamaica Women's") %>%
+#   filter(type.name=="Shot") %>%
+#   discard(~all(is.na(.x))) %>%
+#   View("jamaica shots")
+
+jam_shots <- statsbombdata %>%
+  filter(team.name=="Jamaica Women's") %>%
+  filter(type.name=="Shot")
+
+create_Pitch() +
+  geom_segment(data=jam_shots,aes(x=location.x,y=location.y,xend=shot.end_location.x,yend=shot.end_location.y),
+               lineend="round",size=0.5,arrow=arrow(length=unit(0.15,"cm"))) +
+  labs(title="Jamaica shots",subtitle="Women's World Cup 2019") +
+  coord_fixed(ratio=105/100)
+```
+
+![](statsbomb_files/figure-gfm/plotting%20shots-1.png)<!-- -->
+
+## Plotting pressures
+
+``` r
+# statsbombdata %>%
+#   filter(team.name=="China PR Women's") %>%
+#   filter(type.name=="Pressure") %>%
+#   discard(~all(is.na(.x))) %>%
+#   View("china pressures")
+
+prc_pressures <- statsbombdata %>%
+  filter(team.name=="China PR Women's") %>%
+  filter(type.name=="Pressure")
+
+create_Pitch() +
+  geom_segment(data=prc_pressures,aes(x=location.x,y=location.y,xend=location.x,yend=location.y),
+               lineend="round",size=0.5) +
+  labs(title="China PR Pressures",subtitle="Women's World Cup 2019") +
+  coord_fixed(ratio=105/100)
+```
+
+![](statsbomb_files/figure-gfm/plotting%20pressures-1.png)<!-- -->
