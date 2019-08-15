@@ -25,7 +25,7 @@ rm(list=ls())
 
 ### [Understatr package](https://github.com/ewenme/understatr)
 
-```{r}
+```{r view, include=F}
 get_leagues_meta() %>%
   View("Leagues")
 
@@ -40,8 +40,20 @@ get_player_matches_stats(843) %>%
 
 get_player_seasons_stats(843) %>%
   View("JWP seasons")
-
+```
+## Plots
+```{r plots}
 get_team_players_stats("Southampton",2018) %>%
   ggplot(aes(x=reorder(player_name,time),y=time)) + geom_bar(stat="identity") +
   coord_flip()
+
+get_team_players_stats("Southampton",2018) %>%
+  filter(xG > 0) %>%
+  ggplot(aes(x=reorder(player_name,xG),y=xG)) + geom_bar(stat="identity") +
+  coord_flip()
+
+get_team_players_stats("Southampton",2018) %>%
+  filter((xG > 0)|(xA > 0)) %>%
+  ggplot(aes(x=xG,y=xA)) +
+  geom_point()
 ```
