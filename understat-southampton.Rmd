@@ -25,7 +25,7 @@ rm(list=ls())
 
 ### [Understatr package](https://github.com/ewenme/understatr)
 
-```{r view, include=F}
+```{r view, eval=F}
 get_leagues_meta() %>%
   View("Leagues")
 
