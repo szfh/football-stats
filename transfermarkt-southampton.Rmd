@@ -8,7 +8,7 @@ editor_options:
 ---
 
 ```{r setup, include=FALSE}
-# knitr::opts_chunk$set(echo = FALSE)
+# knitr::opts_chungit sk$set(echo = FALSE)
 
 #libraries
 library(tidyverse)
@@ -109,6 +109,10 @@ player_data %>%
 * Get better html selectors process to avoid having to remove duplicated data
 * Improve format of data as in table above
 * Scrape new web pages
+
+#http://www.fantasyfutopia.com/python-for-fantasy-football-getting-and-cleaning-data/
+#https://github.com/ewenme/understatr
+#https://www.daolf.com/posts/avoiding-being-blocked-while-scraping-ultimate-guide/
 
 ```{r}
 # ggplot(player_data) + geom_point(aes(x=Name,y=as.integer(Number)))
