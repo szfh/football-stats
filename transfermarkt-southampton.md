@@ -101,16 +101,19 @@ player_data %>%
     ## 5 Jan Bednarek 35     Centre-Ba~ Apr 12, 19~ 1,89 m right Jul 1, ~ 30.06.2~
     ## 6 Wesley Hoedt 6      Centre-Ba~ Mar 6, 199~ 1,88 m left  Aug 22,~ 30.06.2~
     ## 7 Jack Stephe~ 5      Centre-Ba~ Jan 27, 19~ 1,85 m right Jul 1, ~ 30.06.2~
-    ## 8 Maya Yoshida 3      Centre-Ba~ Aug 24, 19~ 1,89 m right Aug 30,~ 30.06.2~
+    ## 8 Kevin Danso  38     Centre-Ba~ Sep 19, 19~ 1,90 m right Aug 8, ~ 30.06.2~
 
 ### To do
 
   - Get better html selectors process to avoid having to remove
     duplicated data
   - Improve format of data as in table above
-  - Scrape new web pages
+  - Scrape new web
+pages
 
-<!-- end list -->
+\#<http://www.fantasyfutopia.com/python-for-fantasy-football-getting-and-cleaning-data/>
+\#<https://github.com/ewenme/understatr>
+\#<https://www.daolf.com/posts/avoiding-being-blocked-while-scraping-ultimate-guide/>
 
 ``` r
 # ggplot(player_data) + geom_point(aes(x=Name,y=as.integer(Number)))
