@@ -62,7 +62,10 @@ get_team_players_stats("Southampton",2018) %>%
 get_team_players_stats("Southampton",2018) %>%
   filter((xG > 0)|(xA > 0)) %>%
   ggplot(aes(x=xG,y=xA)) +
-  geom_point(colour="#e61919") +
-  geom_text(aes(label=ifelse((xG>2)|(xA>2),player_name,""),hjust=0,vjust=0),size=3) +
-  labs(title="League xG/xA 2018-19",x="xG",y="xA")
+  geom_point(aes(shape="circle"),colour="#e61919",alpha=0.6) +
+  geom_text(aes(label=ifelse(xG+xA>=2,player_name,""),hjust="inward",vjust="inward"),size=3) +
+  labs(title="League xG/xA 2018-19",x="xG",y="xA") +
+  scale_shape_identity()
+
+# https://ggplot2.tidyverse.org/articles/ggplot2-specs.html
 ```
