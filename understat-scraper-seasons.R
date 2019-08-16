@@ -1,9 +1,5 @@
-library(understatr)
-
-# get_leagues_meta() %>%
-#   View("Leagues_old")
-
 # https://github.com/ewenme/understatr/blob/master/R/leagues.R
+
 #function to get available seasons for each league
 league_seasons <- function(league_name){
   # construct league url
@@ -33,7 +29,7 @@ league_seasons <- function(league_name){
 }
 
 #function to get available seasons for a league
-leagues <- function(){
+seasons <- function(){
   home_page <- read_html(home_page_url)
   league_url <- html_nodes(home_page,".link") %>%
     html_attr("href")
@@ -46,6 +42,6 @@ leagues <- function(){
   return(as_tibble(league_df))
 }
 
-leagues %>%
-  View()
+# leagues %>%
+#   View()
 

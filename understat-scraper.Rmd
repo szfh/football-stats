@@ -27,7 +27,10 @@ source("understat-scraper-seasons.R")
 source("understat-scraper-players.R")
 source("understat-scraper-matches.R")
 ```
-## Leagues
-```{r leagues}
-leagues()
+## Seasons
+```{r seasons}
+seasons()
+```
+## Teams
+```{r teams}
 ```
