@@ -2,7 +2,7 @@
 title: "Southampton FC Understat Scraper"
 author: "saintsnumbers"
 output: github_document
-date: 2019-088-14
+date: 2019-08-14
 editor_options: 
   chunk_output_type: inline
 ---
@@ -84,7 +84,6 @@ get_team_players_stats(source[[1]],source[[2]]) %>%
   gather("xG","xA",key="x",value="xN") %>%
   select("player_name","x","xN") %>%
   mutate(x=factor(x,levels=c("xG","xA"))) %>%
-  # View("xGxA")
   ggplot(aes(x=player_name,y=xN,fill=x)) +
   geom_bar(stat="identity",position="dodge") +
   labs(title=paste0("League xG/xA ",as.integer(source[[2]]),"-",as.integer(source[[2]])+1)) +
