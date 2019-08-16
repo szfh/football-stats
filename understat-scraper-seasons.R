@@ -3,21 +3,6 @@ library(understatr)
 # get_leagues_meta() %>%
 #   View("Leagues_old")
 
-# get_league_teams_stats("EPL",2018) %>%
-#   View("EPL 2018")
-
-# get_team_players_stats("Southampton",2018) %>%
-#   # View("Southampton 2018")
-
-# get_player_matches_stats(843) %>%
-#   View("JWP matches")
-
-# get_player_seasons_stats(843) %>%
-# View("JWP seasons")
-
-# global objects
-home_page_url <- "https://understat.com"
-
 #function to get available seasons for each league
 league_seasons <- function(league_name){
   # construct league url
