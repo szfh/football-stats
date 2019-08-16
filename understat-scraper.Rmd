@@ -1,0 +1,29 @@
+---
+title: "Understat Scraper"
+author: "saintsnumbers"
+output: github_document
+date: 2019-08-16
+editor_options: 
+  chunk_output_type: inline
+---
+  
+```{r setup, include=FALSE}
+# knitr::opts_chunk$set(echo = FALSE)
+
+#libraries
+library(tidyverse)
+library(rvest)
+library(magrittr)
+library(understatr)
+theme_set(theme_bw())
+
+#delete environment variables
+rm(list=ls())
+```
+```{r,include=FALSE}
+source("understat-global-objects.R")
+source("understat-scraper-teams.R")
+source("understat-scraper-seasons.R")
+source("understat-scraper-players.R")
+source("understat-scraper-matches.R")
+```

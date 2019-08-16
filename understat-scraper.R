@@ -1,5 +1,0 @@
-source("understat-global-objects.R")
-source("understat-scraper-teams.R")
-source("understat-scraper-seasons.R")
-source("understat-scraper-players.R")
-source("understat-scraper-matches.R")
