@@ -1,27 +1,64 @@
-# library(understatr)
+library(understatr)
 
 # get_leagues_meta() %>%
-#   View("Leagues")
+#   View("Leagues_old")
 
 # get_league_teams_stats("EPL",2018) %>%
 #   View("EPL 2018")
-# 
+
 # get_team_players_stats("Southampton",2018) %>%
 #   # View("Southampton 2018")
-# 
+
 # get_player_matches_stats(843) %>%
 #   View("JWP matches")
-# 
+
 # get_player_seasons_stats(843) %>%
-#   View("JWP seasons")
+# View("JWP seasons")
 
 # global objects
 home_page_url <- "https://understat.com"
 
+#function to get available seasons for each league
+league_seasons <- function(league_name){
+  # construct league url
+  league_url <- str_glue("https://understat.com/league/{league_name}")
+  
+  # read league page
+  league_page <- read_html(league_url)
+  
+  # pick year link
+  year_link <- html_nodes(league_page, "#header :nth-child(2)")
+  
+  # isolate year options
+  year_options <- html_nodes(year_link[2], "option")
+  
+  # create league fields as df
+  seasons_df <- data.frame(
+    league_name = league_name,
+    year = as.numeric(html_attr(year_options, "value")),
+    season = html_text(year_options),
+    stringsAsFactors = FALSE
+  )
+  
+  # create url per season
+  seasons_df$url <- file.path(league_url, seasons_df$year)
+  
+  return(seasons_df)
+}
+
+#function to get available seasons for a league
 leagues <- function(){
   home_page <- read_html(home_page_url)
   league_url <- html_nodes(home_page,".link") %>%
     html_attr("href")
   league_names <- html_nodes(home_page,".link") %>%
     html_text()
+  
+  league_df <- map_dfr(
+    league_names, get_league_seasons)
+  
+  return(as_tibble(league_df))
 }
+
+leagues %>%
+  View()
