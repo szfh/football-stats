@@ -4,7 +4,7 @@
 league_seasons <- function(league_name){
   # construct league url
   league_url <- str_glue("https://understat.com/league/{league_name}")
-  
+  browser()
   # read league page
   league_page <- read_html(league_url)
   
@@ -37,7 +37,7 @@ seasons <- function(){
     html_text()
   
   league_df <- map_dfr(
-    league_names, get_league_seasons)
+    league_names, league_seasons)
   
   return(as_tibble(league_df))
 }
