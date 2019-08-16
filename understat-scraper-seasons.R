@@ -2,14 +2,12 @@
 
 #function to get available seasons for each league
 league_seasons <- function(league_name){
-  # construct league url
-  league_url <- str_glue("https://understat.com/league/{league_name}")
-  browser()
-  # read league page
-  league_page <- read_html(league_url)
-  
-  # pick year link
-  year_link <- html_nodes(league_page, "#header :nth-child(2)")
+  # get league url
+  league_url <- paste0("https://understat.com/league/",league_name)
+
+  # get year link
+  year_link <- read_html(league_url) %>%
+    html_nodes("#header :nth-child(2)")
   
   # isolate year options
   year_options <- html_nodes(year_link[2], "option")
@@ -22,10 +20,18 @@ league_seasons <- function(league_name){
     stringsAsFactors = FALSE
   )
   
-  # create url per season
-  seasons_df$url <- file.path(league_url, seasons_df$year)
+  league_seasons <- data.frame(
+    league_name = league_name,
+    year = as.numeric(html_attr(year_options, "value")),
+    season = html_text(year_options),
+    stringsAsFactors = FALSE
+  )
   
-  return(seasons_df)
+  # as tibble and create league url
+  league_seasons %<>%
+    as_tibble %>%
+    mutate(url=file.path(league_url, year))
+  return(league_seasons)
 }
 
 #function to get available seasons for a league
@@ -41,7 +47,4 @@ seasons <- function(){
   
   return(as_tibble(league_df))
 }
-
-# leagues %>%
-#   View()
 
