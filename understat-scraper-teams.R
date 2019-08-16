@@ -4,6 +4,7 @@
 get_team_players_stats("Southampton",2018) %>%
   View("Southampton 2018")
 
+# https://github.com/ewenme/understatr/blob/master/R/teams.R
 team_meta <- function(team_name) {
   
   team_name <- str_replace_all(team_name, " ", "_")

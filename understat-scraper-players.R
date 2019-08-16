@@ -4,7 +4,8 @@
 # get_player_seasons_stats(843) %>%
 # View("JWP seasons")
 
-#' Retrieve season-level data for a player listed on understat.
+# https://github.com/ewenme/understatr/blob/master/R/players.R
+# Retrieve season-level data for a player listed on understat.
 player_seasons_stats <- function(player_id) {
   
   # construct player url
@@ -49,7 +50,7 @@ player_seasons_stats <- function(player_id) {
 }
 
 #' Get match-level stats for a player
-get_player_matches_stats <- function(player_id) {
+player_matches_stats <- function(player_id) {
 
 # construct player url
 player_url <- file.path(home_url, "player", player_id)
