@@ -15,6 +15,7 @@ library(tidyverse)
 library(rvest)
 library(magrittr)
 library(understatr)
+set.seed(9999)
 theme_set(theme_bw())
 
 #delete environment variables
