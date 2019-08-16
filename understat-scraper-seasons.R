@@ -62,3 +62,4 @@ leagues <- function(){
 
 leagues %>%
   View()
+
