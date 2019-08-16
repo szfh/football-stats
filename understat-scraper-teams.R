@@ -1,8 +1,8 @@
 # get_league_teams_stats("EPL",2018) %>%
 #   View("EPL 2018")
 
-# get_team_players_stats("Southampton",2018) %>%
-#   # View("Southampton 2018")
+get_team_players_stats("Southampton",2018) %>%
+  View("Southampton 2018")
 
 team_meta <- function(team_name) {
   
@@ -34,5 +34,42 @@ team_meta <- function(team_name) {
   
 }
 
-team_meta("Newcastle United") %>%
-  View("NU")
+team_players_stats <- function(team_name, year) {
+  
+  stopifnot(is.character(team_name))
+  
+  team_name <- str_replace_all(team_name, " ", "_")
+  
+  # construct team url
+  team_url <- str_glue("https://understat.com/team/{team_name}/{year}")
+  
+  # read team page
+  team_page <- read_html(team_url)
+  
+  players_data <- team_page %>%
+    # locate script tags
+    html_nodes("script") %>%
+    as.character() %>%
+    # isolate player data
+    str_subset("playersData") %>%
+    # fix encoding
+    stri_unescape_unicode() %>%
+    # pick out JSON string
+    rm_square(extract = TRUE, include.markers = TRUE) %>%
+    unlist() %>%
+    str_subset("\\[\\]", negate = TRUE) %>%
+    # parse JSON
+    fromJSON()
+  
+  # add reference fields
+  players_data$year <- as.numeric(year)
+  names(players_data)[names(players_data) == 'team_title'] <- 'team_name'
+  names(players_data)[names(players_data) == 'id'] <- 'player_id'
+  
+  # fix col classes
+  players_data <- type.convert(players_data)
+  players_data[] <- lapply(players_data, function(x) if(is.factor(x)) as.character(x) else x)
+  
+  return(as_tibble(players_data))
+  
+}
