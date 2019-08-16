@@ -42,6 +42,7 @@ get_player_seasons_stats(843) %>%
   View("JWP seasons")
 ```
 ## Plots from 2018
+### [ggplot2 specs](https://ggplot2.tidyverse.org/articles/ggplot2-specs.html)
 ```{r plots}
 source <- c("Southampton",2018)
 get_team_players_stats(source[[1]],source[[2]]) %>%
@@ -74,6 +75,4 @@ get_team_players_stats("Southampton",2018) %>%
   labs(title=paste0("League xG/xA ",as.integer(source[[2]]),"-",as.integer(source[[2]])+1),x="xG",y="xA") +
   scale_shape_identity()
 ggsave(paste0("./plots/","xGxA",source[[1]],source[[2]],".jpg"))
-
-# https://ggplot2.tidyverse.org/articles/ggplot2-specs.html
 ```
