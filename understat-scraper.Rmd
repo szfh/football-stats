@@ -14,7 +14,7 @@ editor_options:
 library(tidyverse)
 library(rvest)
 library(magrittr)
-library(understatr)
+# library(understatr)
 theme_set(theme_bw())
 
 #delete environment variables
@@ -26,4 +26,8 @@ source("understat-scraper-teams.R")
 source("understat-scraper-seasons.R")
 source("understat-scraper-players.R")
 source("understat-scraper-matches.R")
+```
+## Leagues
+```{r leagues}
+leagues()
 ```
