@@ -1,3 +1,3 @@
 # global objects
 library(understatr)
-home_page_url <- "https://understat.com"
+url_home_page <- "https://understat.com"

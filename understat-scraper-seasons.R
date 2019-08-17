@@ -36,15 +36,23 @@ league_seasons <- function(league_name){
 
 #function to get available seasons for a league
 seasons <- function(){
-  home_page <- read_html(home_page_url)
+  #read home page into html
+  home_page <- read_html(url_home_page)
+  
+  #extract league urls
   league_url <- html_nodes(home_page,".link") %>%
     html_attr("href")
+  #extract league names
   league_names <- html_nodes(home_page,".link") %>%
     html_text()
   
-  league_df <- map_dfr(
+  #turn into tibble
+  seasons <- map_dfr(
     league_names, league_seasons)
   
-  return(as_tibble(league_df))
+  seasons %<>%
+    as_tibble
+  
+  return(seasons)
 }
 
