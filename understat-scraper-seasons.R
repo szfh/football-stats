@@ -3,7 +3,8 @@
 #function to get available seasons for each league
 league_seasons <- function(league_name){
   # get league url
-  league_url <- paste0("https://understat.com/league/",league_name)
+  league_url <- paste0("https://understat.com/league/",league_name) %>%
+    str_replace_all(" ", "_")
 
   # get year link
   year_link <- read_html(league_url) %>%
