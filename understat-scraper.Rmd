@@ -14,6 +14,11 @@ editor_options:
 library(tidyverse)
 library(rvest)
 library(magrittr)
+
+library(stringi)
+library(qdapRegex)
+library(jsonlite)
+
 # library(understatr)
 theme_set(theme_bw())
 
@@ -29,10 +34,28 @@ source("understat-scraper-matches.R")
 ```
 ## Seasons
 ```{r seasons}
-# source("understat-scraper-seasons.R")
-seasons()
+source("understat-scraper-seasons.R")
+# seasons() %>%
+#   View("Seasons")
 ```
 ## Teams
 ```{r teams}
 source("understat-scraper-teams.R")
+# get_team_meta("Southampton") %>%
+#   View("Southampton team meta")
+
+# team_meta("Southampton") %>%
+#   View("Southampton team meta new")
+
+# get_league_teams_stats("EPL",2018) %>%
+#   View("EPL 2018")
+
+# league_teams_stats("EPL",2018) %>%
+#   View("EPL 2018")
+
+# get_team_players_stats("Southampton",2018) %>%
+#   View("Southampton 2018 old")
+
+team_players_stats("Southampton",2018) %>%
+  View("Southampton 2018 new")
 ```
