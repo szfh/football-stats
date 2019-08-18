@@ -35,14 +35,17 @@ team_meta <- function(team_name) {
   return(team_meta)
 }
 
+# Get stats for a team's players for a given season
 team_players_stats <- function(team_name, year) {
   
-  stopifnot(is.character(team_name))
+  # stopifnot(is.character(team_name))
   
-  team_name <- str_replace_all(team_name, " ", "_")
+  # team_name <- str_replace_all(team_name, " ", "_")
   
   # construct team url
-  team_url <- str_glue("https://understat.com/team/{team_name}/{year}")
+  # team_url <- str_glue("https://understat.com/team/{team_name}/{year}")
+  team_url <- paste0("https://understat.com/team/",team_name,"/",year) %>%
+    str_replace_all(" ", "_")
   
   # read team page
   team_page <- read_html(team_url)
@@ -72,5 +75,4 @@ team_players_stats <- function(team_name, year) {
   players_data[] <- lapply(players_data, function(x) if(is.factor(x)) as.character(x) else x)
   
   return(as_tibble(players_data))
-  
 }
