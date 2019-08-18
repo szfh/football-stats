@@ -1,8 +1,15 @@
-# Football Stats
+---
+title: "Football Statistics"
+author: "saintsnumbers"
+output: github_document
+date: 2019-08-18
+---
+
+# Football Statistics
 
 A repository to keep track of some football stats work and tests.
 
-## Possible resources
+## Resources
 
 * [**FC rSTATS:** Tracking Data Tutorials](https://github.com/FCrSTATS/TrackingDataTutorials)
 * [**FC rSTATS:** Scraping Tutorials](https://github.com/FCrSTATS/ScrapingTutorials)
