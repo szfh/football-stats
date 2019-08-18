@@ -14,12 +14,12 @@ league_seasons <- function(league_name){
   year_options <- html_nodes(year_link[2], "option")
   
   # create league fields as df
-  seasons_df <- data.frame(
-    league_name = league_name,
-    year = as.numeric(html_attr(year_options, "value")),
-    season = html_text(year_options),
-    stringsAsFactors = FALSE
-  )
+  # seasons_df <- data.frame(
+  #   league_name = league_name,
+  #   year = as.numeric(html_attr(year_options, "value")),
+  #   season = html_text(year_options),
+  #   stringsAsFactors = FALSE
+  # )
   
   league_seasons <- data.frame(
     league_name = league_name,
