@@ -15,3 +15,12 @@ A repository to keep track of some football stats work.
 1. [**FC rSTATS**: Scraping Tutorials](https://github.com/FCrSTATS/ScrapingTutorials)
 1. [Possibly useful CSS selector tutorial](http://flukeout.github.io/)
 1. [**Statsbomb Messi data guide**](https://statsbomb.com/2019/07/messi-data-release-part-1-working-with-statsbomb-data-in-r/)
+
+## Stats websites
+
+1. Transfermarkt
+1. Infogol
+1. WhoScored
+1. fbref.com
+1. Sofascore
+1. Understat

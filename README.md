@@ -1,18 +1,27 @@
-Football Statistics
+football-stats
 ================
 saintsnumbers
-2019-08-18
+2019-07-28
 
 # Football Statistics
 
-A repository to keep track of some football stats work and tests.
+A repository to keep track of some football stats work.
 
 ## Resources
 
-  - [**FC rSTATS:** Tracking Data
+1.  [**FC rSTATS**: Tracking Data
     Tutorials](https://github.com/FCrSTATS/TrackingDataTutorials)
-  - [**FC rSTATS:** Scraping
+2.  [**FC rSTATS**: Scraping
     Tutorials](https://github.com/FCrSTATS/ScrapingTutorials)
-  - [Possibly useful CSS selector tutorial](http://flukeout.github.io/)
-  - [**Statsbomb Messi data
+3.  [Possibly useful CSS selector tutorial](http://flukeout.github.io/)
+4.  [**Statsbomb Messi data
     guide**](https://statsbomb.com/2019/07/messi-data-release-part-1-working-with-statsbomb-data-in-r/)
+
+## Stats websites
+
+1.  Transfermarkt
+2.  Infogol
+3.  WhoScored
+4.  fbref.com
+5.  Sofascore
+6.  Understat
