@@ -24,11 +24,11 @@ rm(list=ls())
 
 ### Plan
 
-* Load the webpage containing the data.
-* Locate the data within the page and extract it.
-* Organise the data into a dataframe.
-* Load more data.
-* Do stats on it.
+1. Load the webpage containing the data.
+1. Locate the data within the page and extract it.
+1. Organise the data into a dataframe.
+1. Load more data.
+1. Do stats on it.
 
 ### Load the webpage
 
@@ -106,9 +106,11 @@ player_data %>%
 
 ### To do
 
-* Get better html selectors process to avoid having to remove duplicated data
-* Improve format of data as in table above
-* Scrape new web pages
+1. Get better html selectors process to avoid having to remove duplicated data
+1. Improve format of data as in table above
+1. Scrape new web pages
+1. Investigate rvest
+
 
 ```{r}
 # ggplot(player_data) + geom_point(aes(x=Name,y=as.integer(Number)))
