@@ -24,3 +24,4 @@ A repository to keep track of some football stats work.
 1. fbref.com
 1. Sofascore
 1. Understat
+1. [s2stats](https://s2stats.home.blog/)
