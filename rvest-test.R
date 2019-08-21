@@ -17,8 +17,9 @@ lego_movie %>%
   html_text %>%
   as.numeric()
 
+# regex special characters
+# https://www.regular-expressions.info/characters.html
 lego_movie %>%
   html_nodes("td:nth-child(2) a") %>%
   html_text() %>%
   str_replace_all("\n","")
-  # str_replace_all("\\\","")
