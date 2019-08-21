@@ -25,3 +25,5 @@ A repository to keep track of some football stats work.
 4.  fbref.com
 5.  Sofascore
 6.  Understat
+7.  [s2stats](https://s2stats.home.blog/)
+8.  <https://ryo-n7.github.io/2019-08-21-visualize-soccer-statsbomb-part-1/>
