@@ -28,5 +28,5 @@ lego_movie %>%
 
 lego_movie %>%
   html_nodes("table")
-
+# To get to the data, you will need some functions of the rvest package. To convert a website into an XML object, you use the read_html() function. You need to supply a target URL and the function calls the webserver, collects the data, and parses it. To extract the relevant nodes from the XML object you use html_nodes(), whose argument is the class descriptor, prepended by a . to signify that it is a class. The output will be a list of all the nodes found in that way. To extract the tagged data, you need to apply html_text() to the nodes you want. For the cases where you need to extract the attributes instead, you apply html_attrs(). This will return a list of the attributes, which you can subset to get to the attribute you want to extract.
 amazon_url <- "http://www.trustpilot.com/review/www.amazon.com"
