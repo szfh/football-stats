@@ -2,6 +2,8 @@ library(tidyverse)
 library(rvest)
 library(magrittr)
 library(stringr)
+# library(rebus)
+# library(lubridate)
 theme_set(theme_bw())
 rm(list=ls())
 
@@ -23,3 +25,8 @@ lego_movie %>%
   html_nodes("td:nth-child(2) a") %>%
   html_text() %>%
   str_replace_all("\n","")
+
+lego_movie %>%
+  html_nodes("table")
+
+amazon_url <- "http://www.trustpilot.com/review/www.amazon.com"
