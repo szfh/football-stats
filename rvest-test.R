@@ -40,3 +40,6 @@ form <- html_form(session)[[1]]
 html_form(read_html("https://hadley.wufoo.com/forms/libraryrequire-quiz/"))
 html_form(read_html("https://hadley.wufoo.com/forms/r-journal-submission/"))
 understatform <- html_form(read_html("https://understat.com/team/Southampton/"))
+
+# python understat scraper
+# [**Python Understat Scraper**](https://understat.readthedocs.io/en/latest/)
