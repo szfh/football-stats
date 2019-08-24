@@ -76,7 +76,7 @@ get_team_players_stats(source[[1]],source[[2]]) %>%
   filter((xG > 0)|(xA > 0)) %>%
   ggplot(aes(x=xG,y=xA)) +
   geom_point(colour="#e61919",alpha=0.6) +
-  geom_text(aes(label=ifelse(xG+xA>=.2,player_name,""),hjust="inward",vjust="outward"),size=1.5) +
+  geom_text(aes(label=ifelse(xG+xA>=0.2,player_name,""),hjust="inward",vjust="outward"),size=1.5) +
   labs(title=paste0("League xG/xA ",as.integer(source[[2]]),"-",as.integer(source[[2]])+1),x="xG",y="xA") +
   coord_fixed()
 ```
