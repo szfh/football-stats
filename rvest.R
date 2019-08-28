@@ -7,6 +7,7 @@ library(stringr)
 theme_set(theme_bw())
 rm(list=ls())
 
+# https://rvest.tidyverse.org/
 # https://blog.rstudio.com/2014/11/24/rvest-easy-web-scraping-with-r/
 # https://cran.r-project.org/web/packages/rvest/rvest.pdf
 
