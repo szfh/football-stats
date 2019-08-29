@@ -6,7 +6,7 @@ date: 2019-08-16
 editor_options: 
   chunk_output_type: inline
 ---
-  
+
 ```{r setup, include=FALSE}
 # knitr::opts_chunk$set(echo = FALSE)
 
@@ -19,43 +19,25 @@ library(stringi)
 library(qdapRegex)
 library(jsonlite)
 
-# library(understatr)
+# remotes::install_github('ewenme/understatr')
+library(understatr)
 theme_set(theme_bw())
 
 #delete environment variables
 rm(list=ls())
 ```
+
 ```{r,include=FALSE}
-source("understat-global-objects.R")
-source("understat-scraper-teams.R")
-source("understat-scraper-seasons.R")
-source("understat-scraper-players.R")
-source("understat-scraper-matches.R")
+# source("understat-global-objects.R")
+# source("understat-scraper-teams.R")
+# source("understat-scraper-seasons.R")
+# source("understat-scraper-players.R")
+# source("understat-scraper-matches.R")
 ```
-## Seasons
-```{r seasons}
-source("understat-scraper-seasons.R")
-# seasons() %>%
-#   View("Seasons")
-```
-## Teams
-```{r teams}
-source("understat-scraper-teams.R")
-# get_team_meta("Southampton") %>%
-#   View("Southampton team meta")
 
-# team_meta("Southampton") %>%
-#   View("Southampton team meta new")
+### [Understatr](https://github.com/ewenme/understatr)
 
-# get_league_teams_stats("EPL",2018) %>%
-#   View("EPL 2018")
-
-# league_teams_stats("EPL",2018) %>%
-#   View("EPL 2018")
-
-# get_team_players_stats("Southampton",2018) %>%
-#   View("Southampton 2018 old")
-
-team_players_stats("Southampton",2018) %>%
-  View("Southampton 2018 new")
+```{r understatr}
+get_league_seasons("EPL") %>%
+  glimpse
 ```
