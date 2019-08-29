@@ -15,16 +15,11 @@ library(tidyverse)
 library(rvest)
 library(magrittr)
 
-library(stringi)
-library(qdapRegex)
-library(jsonlite)
-
 # remotes::install_github('ewenme/understatr')
 library(understatr)
-theme_set(theme_bw())
 
 #delete environment variables
-rm(list=ls())
+# rm(list=ls())
 ```
 
 ```{r,include=FALSE}
@@ -43,7 +38,7 @@ rm(list=ls())
 ls("package:understatr")
 ```
 
-### League
+### League methods
 
 ```{r understatr league}
 get_leagues_meta()
@@ -55,7 +50,7 @@ get_league_teams_stats("EPL",2018) %>%
   glimpse
 ```
 
-### Team
+### Team methods
 
 ```{r understatr team}
 get_team_meta("Southampton")
@@ -65,7 +60,7 @@ get_team_players_stats("Southampton",2019) %>%
   head
 ```
 
-### Player
+### Player methods
 
 ```{r understatr player}
 get_player_matches_stats(1734) %>%
@@ -81,7 +76,7 @@ get_player_shots(790) %>%
   head
 ```
 
-### Match
+### Match methods
 
 ```{r understatr match}
 get_match_shots(11658) %>%
