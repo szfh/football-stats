@@ -35,9 +35,60 @@ rm(list=ls())
 # source("understat-scraper-matches.R")
 ```
 
-### [Understatr](https://github.com/ewenme/understatr)
+## [Understatr](https://github.com/ewenme/understatr)
 
-```{r understatr}
+### List of methods
+
+```{r understatr methods, echo=FALSE}
+ls("package:understatr")
+```
+
+### League
+
+```{r understatr league}
+get_leagues_meta()
+
 get_league_seasons("EPL") %>%
   glimpse
+
+get_league_teams_stats("EPL",2018) %>%
+  glimpse
+```
+
+### Team
+
+```{r understatr team}
+get_team_meta("Southampton")
+
+get_team_players_stats("Southampton",2019) %>%
+  glimpse %>%
+  head
+```
+
+### Player
+
+```{r understatr player}
+get_player_matches_stats(1734) %>%
+  glimpse %>%
+  head
+
+get_player_seasons_stats(1734) %>%
+  glimpse %>%
+  head
+
+get_player_shots(790) %>%
+  glimpse %>%
+  head
+```
+
+### Match
+
+```{r understatr match}
+get_match_shots(11658) %>%
+  glimpse %>%
+  head
+
+get_match_stats(11658) %>%
+  glimpse %>%
+  head
 ```
