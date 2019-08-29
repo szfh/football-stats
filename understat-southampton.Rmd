@@ -1,0 +1,67 @@
+---
+title: "Southampton FC Understat Scraper"
+author: "saintsnumbers"
+output: github_document
+date: 2019-088-14
+editor_options: 
+  chunk_output_type: inline
+---
+  
+```{r setup, include=FALSE}
+# knitr::opts_chunk$set(echo = FALSE)
+
+#libraries
+library(tidyverse)
+library(rvest)
+library(magrittr)
+library(understatr)
+library(ggedit)
+theme_set(theme_bw())
+
+#delete environment variables
+rm(list=ls())
+```
+
+## Scraping Southampton FC Understat data
+
+### [Understatr package](https://github.com/ewenme/understatr)
+
+```{r view, eval=F}
+get_leagues_meta() %>%
+  View("Leagues")
+
+get_league_teams_stats("EPL",2018) %>%
+  View("EPL 2018")
+
+get_team_players_stats("Southampton",2018) %>%
+  # View("Southampton 2018")
+  str
+
+get_player_matches_stats(843) %>%
+  View("JWP matches")
+
+get_player_seasons_stats(843) %>%
+  View("JWP seasons")
+
+#ggedit
+```
+## Plots from 2018
+```{r plots}
+get_team_players_stats("Southampton",2018) %>%
+  filter(time>0) %>%
+  ggplot(aes(x=factor(reorder(player_name,time)),y=time)) +
+  geom_bar(stat="identity",fill="#e61919",width=0.8,alpha=0.6) +
+  labs(title="League minutes 2018-19") +
+  theme(axis.title.x=element_blank(),axis.title.y=element_blank()) +
+  coord_flip()
+
+get_team_players_stats("Southampton",2018) %>%
+  filter(xG > 0) %>%
+  ggplot(aes(x=reorder(player_name,xG),y=xG)) + geom_bar(stat="identity") +
+  coord_flip()
+
+get_team_players_stats("Southampton",2018) %>%
+  filter((xG > 0)|(xA > 0)) %>%
+  ggplot(aes(x=xG,y=xA)) +
+  geom_point()
+```
