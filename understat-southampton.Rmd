@@ -85,8 +85,8 @@ ggsave(paste0("./plots/","KeyPasses_",source[[1]],"_",source[[2]],".jpg"))
 
 get_match_shots(11666) %>%
   mutate(team = ifelse(h_a == "h", h_team, a_team)) %>%
-  filter(team == "Southampton") %>%
-  ggplot(aes(x=X,y=Y,size=xG)) +
+  # filter(team == "Southampton") %>%
+  ggplot(aes(x=X,y=Y,size=xG,colour=team)) +
   geom_point()
 ```
 
