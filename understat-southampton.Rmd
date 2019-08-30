@@ -30,6 +30,7 @@ rm(list=ls())
 team <- "Southampton"
 year <- 2018
 source <- c(team,year)
+
 get_team_players_stats(source[[1]],source[[2]]) %>%
   filter(time>0) %>%
   mutate(player_name=factor(player_name,levels=player_name[order(time)])) %>%
@@ -71,4 +72,14 @@ get_team_players_stats(source[[1]],source[[2]]) %>%
   theme(axis.title.x=element_blank(),axis.title.y=element_blank(),legend.title=element_blank()) +
   coord_flip()
 ggsave(paste0("./plots/","xGxA_",source[[1]],"_",source[[2]],"_Bar.jpg"))
+
+get_team_players_stats(source[[1]],source[[2]]) %>%
+  filter(key_passes > 0) %>%
+  mutate(player_name=factor(player_name,levels=player_name[order(key_passes)])) %>%
+  ggplot(aes(x=player_name,y=key_passes)) +
+  geom_bar(stat="identity",fill="#e61919",width=0.8,alpha=0.6) +
+  labs(title=paste0("Key passes ",as.integer(source[[2]]),"-",as.integer(source[[2]])+1)) +
+  theme(axis.title.x=element_blank(),axis.title.y=element_blank()) +
+  coord_flip()
+ggsave(paste0("./plots/","KeyPasses_",source[[1]],"_",source[[2]],".jpg"))
 ```
