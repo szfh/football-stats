@@ -83,3 +83,8 @@ get_team_players_stats(source[[1]],source[[2]]) %>%
   coord_flip()
 ggsave(paste0("./plots/","KeyPasses_",source[[1]],"_",source[[2]],".jpg"))
 ```
+
+### Data
+
+```{r data, echo=T}
+```
