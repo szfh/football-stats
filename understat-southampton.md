@@ -5,32 +5,11 @@ saintsnumbers
 
 ## Scraping Southampton FC Understat data
 
-### [Understatr package](https://github.com/ewenme/understatr)
-
-``` r
-get_leagues_meta() %>%
-  View("Leagues")
-
-get_league_teams_stats("EPL",2018) %>%
-  View("EPL 2018")
-
-get_team_players_stats("Southampton",2018) %>%
-  View("Southampton 2018")
-
-get_player_matches_stats(843) %>%
-  View("JWP matches")
-
-get_player_seasons_stats(843) %>%
-  View("JWP seasons")
-```
-
-## Plots from 2018
-
-### [ggplot2 specs](https://ggplot2.tidyverse.org/articles/ggplot2-specs.html)
+### Plots from 2018
 
 ``` r
 team <- "Southampton"
-year <- 2019
+year <- 2018
 source <- c(team,year)
 get_team_players_stats(source[[1]],source[[2]]) %>%
   filter(time>0) %>%
