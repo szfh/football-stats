@@ -93,4 +93,8 @@ get_match_shots(11666) %>%
 ### Data
 
 ```{r data, echo=T}
+get_match_shots(11666) %>%
+  mutate(team = ifelse(h_a == "h", h_team, a_team)) %>%
+  group_by(team,situation,result) %>%
+  summarise(n = n())
 ```
