@@ -2,8 +2,8 @@
 # title: "Southampton FC Understat Scraper"
 # author: "saintsnumbers"
 output: github_document
-date: 2019-08-14
-# editor_options: 
+# date: 2019-08-14
+editor_options:
   chunk_output_type: inline
 ---
 
@@ -32,7 +32,7 @@ source <- c(team,year)
 
 ## Scraping Southampton FC Understat data
 
-### Plots from 2018
+### Plots from `r source[[2]]`
 
 ```{r plots}
 get_team_players_stats(source[[1]],source[[2]]) %>%
