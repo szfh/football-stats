@@ -24,6 +24,10 @@ theme_set(theme_bw())
 
 #delete environment variables
 rm(list=ls())
+
+team <- "Southampton"
+year <- 2018
+source <- c(team,year)
 ```
 
 ## Scraping Southampton FC Understat data
@@ -31,10 +35,6 @@ rm(list=ls())
 ### Plots from 2018
 
 ```{r plots}
-team <- "Southampton"
-year <- 2018
-source <- c(team,year)
-
 get_team_players_stats(source[[1]],source[[2]]) %>%
   filter(time>0) %>%
   mutate(player_name=factor(player_name,levels=player_name[order(time)])) %>%
