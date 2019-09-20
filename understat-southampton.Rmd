@@ -77,6 +77,16 @@ get_team_players_stats(source[[1]],source[[2]]) %>%
 ggsave(paste0("./plots/",source[[2]],"/",source[[1]],"_xGxA_Bar.jpg"))
 
 get_team_players_stats(source[[1]],source[[2]]) %>%
+  filter(shots > 0) %>%
+  mutate(player_name=factor(player_name,levels=player_name[order(shots)])) %>%
+  ggplot(aes(x=player_name,y=key_passes)) +
+  geom_bar(stat="identity",fill="#e61919",width=0.8,alpha=0.6) +
+  labs(title=paste0("Shots ",as.integer(source[[2]]),"-",as.integer(source[[2]])+1)) +
+  theme(axis.title.x=element_blank(),axis.title.y=element_blank()) +
+  coord_flip()
+ggsave(paste0("./plots/",source[[2]],"/",source[[1]],"_Shots.jpg"))
+
+get_team_players_stats(source[[1]],source[[2]]) %>%
   filter(key_passes > 0) %>%
   mutate(player_name=factor(player_name,levels=player_name[order(key_passes)])) %>%
   ggplot(aes(x=player_name,y=key_passes)) +
@@ -118,6 +128,9 @@ get_match_shots(11666) %>%
 ### [Methods from Understatr](https://github.com/saintsnumbers/football-stats/blob/data-scraping/understat-scraper.md)
 
 ```{r data, echo=T, eval=T}
+get_team_players_stats(source[[1]],source[[2]]) %>%
+  str()
+
 get_match_shots(11666) %>%
   mutate(team = ifelse(h_a == "h", h_team, a_team)) %>%
   group_by(team,situation,result) %>%
