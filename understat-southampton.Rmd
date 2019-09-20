@@ -143,7 +143,7 @@ ggsave(paste0("./plots/",source[[2]],"/",source[[1]],"_xGshot.jpg"))
 ```
 
 ## Shots
-```{r shots, echo=T, eval=T}
+```{r shots, echo=F, eval=F}
 get_match_shots(11666) %>%
   mutate(team = ifelse(h_a == "h", h_team, a_team)) %>%
   # filter(team == "Southampton") %>%
@@ -152,7 +152,7 @@ get_match_shots(11666) %>%
 ```
 ## Data
 
-```{r data, echo=T, eval=T}
+```{r data, echo=F, eval=F}
 get_match_shots(11666) %>%
   mutate(team = ifelse(h_a == "h", h_team, a_team)) %>%
   group_by(team,situation,result) %>%
