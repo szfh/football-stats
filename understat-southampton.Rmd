@@ -152,8 +152,6 @@ get_match_shots(11666) %>%
 ```
 ## Data
 
-### [Methods from Understatr](https://github.com/saintsnumbers/football-stats/blob/data-scraping/understat-scraper.md)
-
 ```{r data, echo=T, eval=T}
 get_match_shots(11666) %>%
   mutate(team = ifelse(h_a == "h", h_team, a_team)) %>%
