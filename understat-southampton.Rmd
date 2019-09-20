@@ -145,6 +145,9 @@ ggsave(paste0("./plots/",source[[2]],"/",source[[1]],"_xGshot.jpg"))
 ## Test plots
 
 ```{r test plots}
+id_che <- get_team_players_stats("Southampton",2019) %>%
+  filter(player_name == "Che Adams") %>%
+  select(player_id,player_name)
 ```
 
 ## Shots
