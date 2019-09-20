@@ -1,7 +1,9 @@
 ---
 # title: "Southampton FC Understat Scraper"
 # author: "saintsnumbers"
-output: github_document
+output:
+  github_document:
+    fig_height: 3
 # date: 2019-08-14
 editor_options:
   chunk_output_type: inline
