@@ -120,6 +120,8 @@ ggsave(paste0("./plots/",source[[2]],"/",source[[1]],"_KeyPasses.jpg"))
 get_team_players_stats(source[[1]],source[[2]]) %>%
   filter(shots > 0) %>%
   mutate(xG_per_shot = xG/shots) %>%
+  filter(xG_per_shot > 0.1) %>%
+  filter(shots >= 2) %>%
   ggplot(aes(x=shots,y=xG_per_shot)) +
   geom_point(colour="#e61919",alpha=0.6) +
   geom_text_repel(aes(label=player_name),size=2) +
