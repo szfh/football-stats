@@ -86,6 +86,26 @@ get_team_players_stats(source[[1]],source[[2]]) %>%
   coord_flip()
 ggsave(paste0("./plots/","KeyPasses_",source[[1]],"_",source[[2]],".jpg"))
 
+get_team_players_stats(source[[1]],source[[2]]) %>%
+  filter(shots > 0) %>%
+  mutate(xG_per_shot = xG/shots) %>%
+  ggplot(aes(x=shots,y=xG_per_shot)) +
+  geom_point(colour="#e61919",alpha=0.6) +
+  geom_text_repel(aes(label=player_name),size=2) +
+  labs(title=paste0("League xG per shot ",as.integer(source[[2]]),"-",as.integer(source[[2]])+1),x="Shots",y="xG per shot")
+ggsave(paste0("./plots/","ShotsvxGperShot_",source[[1]],"_",source[[2]],".jpg"))
+
+get_team_players_stats(source[[1]],source[[2]]) %>%
+  filter(shots > 0) %>%
+  mutate(xG_per_shot = xG/shots) %>%
+  mutate(player_name=factor(player_name,levels=player_name[order(xG_per_shot)])) %>%
+  ggplot(aes(x=player_name,y=xG_per_shot)) +
+  geom_bar(stat="identity",fill="#e61919",width=0.8,alpha=0.6) +
+  labs(title=paste0("League xG per shot ",as.integer(source[[2]]),"-",as.integer(source[[2]])+1)) +
+  theme(axis.title.x=element_blank(),axis.title.y=element_blank()) +
+  coord_flip()
+ggsave(paste0("./plots/","xGperShot_",source[[1]],"_",source[[2]],".jpg"))
+
 get_match_shots(11666) %>%
   mutate(team = ifelse(h_a == "h", h_team, a_team)) %>%
   # filter(team == "Southampton") %>%
