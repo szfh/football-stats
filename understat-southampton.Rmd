@@ -30,7 +30,7 @@ year <- 2019
 source <- c(team,year)
 ```
 
-## Plots from `r source[[2]]`
+## Season `r source[[2]]`
 
 ```{r plots}
 get_team_players_stats(source[[1]],source[[2]]) %>%
