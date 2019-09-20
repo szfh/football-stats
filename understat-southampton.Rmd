@@ -32,7 +32,7 @@ year <- 2019
 source <- c(team,year)
 ```
 
-## Season `r source[[2]]`
+## Season `r source[[2]]` plots
 
 ```{r plots}
 get_team_players_stats(source[[1]],source[[2]]) %>%
@@ -142,7 +142,13 @@ get_team_players_stats(source[[1]],source[[2]]) %>%
 ggsave(paste0("./plots/",source[[2]],"/",source[[1]],"_xGshot.jpg"))
 ```
 
+## Test plots
+
+```{r test plots}
+```
+
 ## Shots
+
 ```{r shots, echo=F, eval=F}
 get_match_shots(11666) %>%
   mutate(team = ifelse(h_a == "h", h_team, a_team)) %>%
@@ -150,6 +156,7 @@ get_match_shots(11666) %>%
   ggplot(aes(x=X,y=Y,size=xG,colour=team)) +
   geom_point()
 ```
+
 ## Data
 
 ```{r data, echo=F, eval=F}
