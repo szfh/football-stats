@@ -136,14 +136,16 @@ get_team_players_stats(source[[1]],source[[2]]) %>%
   theme(axis.title.x=element_blank(),axis.title.y=element_blank()) +
   coord_flip()
 ggsave(paste0("./plots/",source[[2]],"/",source[[1]],"_xGshot.jpg"))
+```
 
+## Shots
+```{r shots, echo=T, eval=T}
 get_match_shots(11666) %>%
   mutate(team = ifelse(h_a == "h", h_team, a_team)) %>%
   # filter(team == "Southampton") %>%
   ggplot(aes(x=X,y=Y,size=xG,colour=team)) +
   geom_point()
 ```
-
 ## Data
 
 ### [Methods from Understatr](https://github.com/saintsnumbers/football-stats/blob/data-scraping/understat-scraper.md)
