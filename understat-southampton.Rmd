@@ -79,12 +79,33 @@ ggsave(paste0("./plots/",source[[2]],"/",source[[1]],"_xGxA_Bar.jpg"))
 get_team_players_stats(source[[1]],source[[2]]) %>%
   filter(shots > 0) %>%
   mutate(player_name=factor(player_name,levels=player_name[order(shots)])) %>%
-  ggplot(aes(x=player_name,y=key_passes)) +
+  ggplot(aes(x=player_name,y=shots)) +
   geom_bar(stat="identity",fill="#e61919",width=0.8,alpha=0.6) +
   labs(title=paste0("Shots ",as.integer(source[[2]]),"-",as.integer(source[[2]])+1)) +
   theme(axis.title.x=element_blank(),axis.title.y=element_blank()) +
   coord_flip()
 ggsave(paste0("./plots/",source[[2]],"/",source[[1]],"_Shots.jpg"))
+
+get_team_players_stats(source[[1]],source[[2]]) %>%
+  filter(shots > 0) %>%
+  mutate(shots_per_90=(shots/time)*90) %>%
+  mutate(player_name=factor(player_name,levels=player_name[order(shots_per_90)])) %>%
+  ggplot(aes(x=player_name,y=shots_per_90)) +
+  geom_bar(stat="identity",fill="#e61919",width=0.8,alpha=0.6) +
+  labs(title=paste0("Shots per 90",as.integer(source[[2]]),"-",as.integer(source[[2]])+1)) +
+  theme(axis.title.x=element_blank(),axis.title.y=element_blank()) +
+  coord_flip()
+ggsave(paste0("./plots/",source[[2]],"/",source[[1]],"_Shotsper90_bar.jpg"))
+
+get_team_players_stats(source[[1]],source[[2]]) %>%
+  filter(shots > 0) %>%
+  mutate(shots_per_90=(shots/time)*90) %>%
+  filter(shots_per_90 > 1) %>%
+  ggplot(aes(x=time,y=shots_per_90)) +
+  geom_point(colour="#e61919",alpha=0.6) +
+  geom_text_repel(aes(label=player_name),size=2) +
+  labs(title=paste0("Shots per 90 ",as.integer(source[[2]]),"-",as.integer(source[[2]])+1),x="Minutes",y="Shots per 90")
+ggsave(paste0("./plots/",source[[2]],"/",source[[1]],"_Shotsper90_point.jpg"))
 
 get_team_players_stats(source[[1]],source[[2]]) %>%
   filter(key_passes > 0) %>%
