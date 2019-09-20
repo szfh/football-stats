@@ -1,13 +1,22 @@
 
 # Understat Data
 
-## Plots from 2019
+## Season 2019
 
-![](understat-southampton_files/figure-gfm/plots-1.png)<!-- -->![](understat-southampton_files/figure-gfm/plots-2.png)<!-- -->![](understat-southampton_files/figure-gfm/plots-3.png)<!-- -->![](understat-southampton_files/figure-gfm/plots-4.png)<!-- -->![](understat-southampton_files/figure-gfm/plots-5.png)<!-- -->![](understat-southampton_files/figure-gfm/plots-6.png)<!-- -->
+![](understat-southampton_files/figure-gfm/plots-1.png)<!-- -->![](understat-southampton_files/figure-gfm/plots-2.png)<!-- -->![](understat-southampton_files/figure-gfm/plots-3.png)<!-- -->![](understat-southampton_files/figure-gfm/plots-4.png)<!-- -->![](understat-southampton_files/figure-gfm/plots-5.png)<!-- -->![](understat-southampton_files/figure-gfm/plots-6.png)<!-- -->![](understat-southampton_files/figure-gfm/plots-7.png)<!-- -->![](understat-southampton_files/figure-gfm/plots-8.png)<!-- -->![](understat-southampton_files/figure-gfm/plots-9.png)<!-- -->![](understat-southampton_files/figure-gfm/plots-10.png)<!-- -->
 
-## Data
+## Shots
 
-### [Methods from Understatr](https://github.com/saintsnumbers/football-stats/blob/data-scraping/understat-scraper.md)
+``` r
+get_match_shots(11666) %>%
+  mutate(team = ifelse(h_a == "h", h_team, a_team)) %>%
+  # filter(team == "Southampton") %>%
+  ggplot(aes(x=X,y=Y,size=xG,colour=team)) +
+  geom_point()
+```
+
+![](understat-southampton_files/figure-gfm/shots-1.png)<!-- --> \#\#
+Data
 
 ``` r
 get_match_shots(11666) %>%
