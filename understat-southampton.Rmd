@@ -11,7 +11,7 @@ editor_options:
 
 # Understat Data
 
-```{r setup, include=FALSE}
+```{r setup,include=F}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE)
 
 #libraries
@@ -147,7 +147,7 @@ ggsave(paste0("./plots/",source[[2]],"/",source[[1]],"_xG_per_shot.jpg"))
 
 ## Test plots
 
-```{r test plots}
+```{r test plots,echo=F,eval=T}
 id_che <- get_team_players_stats("Southampton",2019) %>%
   filter(player_name == "Che Adams") %>%
   select(player_id,player_name)
@@ -159,7 +159,7 @@ epl_teams <- get_league_teams_stats("EPL",2019) %>%
 
 ## Shot maps
 
-```{r shots}
+```{r shots,echo=T,eval=T}
 get_match_shots(11666) %>%
   mutate(team = ifelse(h_a == "h", h_team, a_team)) %>%
   filter(team == "Southampton") %>%
@@ -174,7 +174,7 @@ get_match_shots(11666) %>%
 
 ## Data
 
-```{r data, echo=F, eval=F}
+```{r data,echo=F,eval=T}
 get_match_shots(11666) %>%
   mutate(team = ifelse(h_a == "h", h_team, a_team)) %>%
   group_by(team,situation,result) %>%
