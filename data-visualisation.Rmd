@@ -1,0 +1,10 @@
+---
+# title: "Soccer Visualisation"
+# author: "saintsnumbers"
+output:
+  github_document:
+    fig_height: 3
+# date: 2019-10-05
+editor_options:
+  chunk_output_type: inline
+---
