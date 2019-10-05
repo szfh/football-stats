@@ -148,11 +148,11 @@ ggsave(paste0("./plots/",source[[2]],"/",source[[1]],"_xG_per_shot.jpg"))
 ## Test plots
 
 ```{r test plots,echo=F,eval=T}
-id_che <- get_team_players_stats("Southampton",2019) %>%
+get_team_players_stats("Southampton",2019) %>%
   filter(player_name == "Che Adams") %>%
   select(player_id,player_name)
 
-epl_teams <- get_league_teams_stats("EPL",2019) %>%
+get_league_teams_stats("EPL",2019) %>%
   select(team_id,team_name) %>%
   unique()
 ```
