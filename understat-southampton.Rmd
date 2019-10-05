@@ -43,7 +43,7 @@ get_team_players_stats(source[[1]],source[[2]]) %>%
   labs(title=paste0("League minutes ",as.integer(source[[2]]),"-",as.integer(source[[2]])+1)) +
   theme(axis.title.x=element_blank(),axis.title.y=element_blank()) +
   coord_flip()
-ggsave(paste0("./plots/",source[[2]],"/",source[[1]],"_Minutes.jpg"))
+ggsave(paste0("./plots/",source[[2]],"/",source[[1]],"_minutes.jpg"))
 
 get_team_players_stats(source[[1]],source[[2]]) %>%
   filter(xG > 0) %>%
@@ -63,7 +63,7 @@ get_team_players_stats(source[[1]],source[[2]]) %>%
   geom_text_repel(aes(label=ifelse(xG+xA>=0.1,player_name,"")),size=2) +
   labs(title=paste0("League xG/xA ",as.integer(source[[2]]),"-",as.integer(source[[2]])+1),x="xG",y="xA") +
   coord_fixed()
-ggsave(paste0("./plots/",source[[2]],"/",source[[1]],"_xGxA_Point.jpg"))
+ggsave(paste0("./plots/",source[[2]],"/",source[[1]],"_xG_xA_point.jpg"))
 
 get_team_players_stats(source[[1]],source[[2]]) %>%
   filter((xG > 0)|(xA > 0)) %>%
@@ -76,7 +76,7 @@ get_team_players_stats(source[[1]],source[[2]]) %>%
   labs(title=paste0("League xG/xA ",as.integer(source[[2]]),"-",as.integer(source[[2]])+1)) +
   theme(axis.title.x=element_blank(),axis.title.y=element_blank(),legend.title=element_blank()) +
   coord_flip()
-ggsave(paste0("./plots/",source[[2]],"/",source[[1]],"_xGxA_Bar.jpg"))
+ggsave(paste0("./plots/",source[[2]],"/",source[[1]],"_xG_xA_bar.jpg"))
 
 get_team_players_stats(source[[1]],source[[2]]) %>%
   filter(shots > 0) %>%
@@ -86,7 +86,7 @@ get_team_players_stats(source[[1]],source[[2]]) %>%
   labs(title=paste0("Shots ",as.integer(source[[2]]),"-",as.integer(source[[2]])+1)) +
   theme(axis.title.x=element_blank(),axis.title.y=element_blank()) +
   coord_flip()
-ggsave(paste0("./plots/",source[[2]],"/",source[[1]],"_Shots.jpg"))
+ggsave(paste0("./plots/",source[[2]],"/",source[[1]],"_shots.jpg"))
 
 get_team_players_stats(source[[1]],source[[2]]) %>%
   filter(shots > 0) %>%
@@ -97,7 +97,7 @@ get_team_players_stats(source[[1]],source[[2]]) %>%
   labs(title=paste0("Shots per 90",as.integer(source[[2]]),"-",as.integer(source[[2]])+1)) +
   theme(axis.title.x=element_blank(),axis.title.y=element_blank()) +
   coord_flip()
-ggsave(paste0("./plots/",source[[2]],"/",source[[1]],"_Shotsper90_bar.jpg"))
+ggsave(paste0("./plots/",source[[2]],"/",source[[1]],"_shots_per_90_bar.jpg"))
 
 get_team_players_stats(source[[1]],source[[2]]) %>%
   filter(shots > 0) %>%
@@ -107,7 +107,7 @@ get_team_players_stats(source[[1]],source[[2]]) %>%
   geom_point(colour="#e61919",alpha=0.6) +
   geom_text_repel(aes(label=player_name),size=2) +
   labs(title=paste0("Shots per 90 ",as.integer(source[[2]]),"-",as.integer(source[[2]])+1),x="Minutes",y="Shots per 90")
-ggsave(paste0("./plots/",source[[2]],"/",source[[1]],"_Shotsper90_point.jpg"))
+ggsave(paste0("./plots/",source[[2]],"/",source[[1]],"_shots_per_90_point.jpg"))
 
 get_team_players_stats(source[[1]],source[[2]]) %>%
   filter(key_passes > 0) %>%
@@ -117,7 +117,7 @@ get_team_players_stats(source[[1]],source[[2]]) %>%
   labs(title=paste0("Key passes ",as.integer(source[[2]]),"-",as.integer(source[[2]])+1)) +
   theme(axis.title.x=element_blank(),axis.title.y=element_blank()) +
   coord_flip()
-ggsave(paste0("./plots/",source[[2]],"/",source[[1]],"_KeyPasses.jpg"))
+ggsave(paste0("./plots/",source[[2]],"/",source[[1]],"_keypasses.jpg"))
 
 get_team_players_stats(source[[1]],source[[2]]) %>%
   filter(shots > 0) %>%
@@ -130,7 +130,7 @@ get_team_players_stats(source[[1]],source[[2]]) %>%
   # scale_y_continuous() +
   expand_limits(x=c(4,13),y=0) +
   labs(title=paste0("xG per shot ",as.integer(source[[2]]),"-",as.integer(source[[2]])+1),x="Shots",y="xG per shot")
-ggsave(paste0("./plots/",source[[2]],"/",source[[1]],"_Shots_xGshot.jpg"))
+ggsave(paste0("./plots/",source[[2]],"/",source[[1]],"_shots_xG_per_shot.jpg"))
 
 get_team_players_stats(source[[1]],source[[2]]) %>%
   filter(shots > 0) %>%
@@ -141,7 +141,7 @@ get_team_players_stats(source[[1]],source[[2]]) %>%
   labs(title=paste0("League xG per shot ",as.integer(source[[2]]),"-",as.integer(source[[2]])+1)) +
   theme(axis.title.x=element_blank(),axis.title.y=element_blank()) +
   coord_flip()
-ggsave(paste0("./plots/",source[[2]],"/",source[[1]],"_xGshot.jpg"))
+ggsave(paste0("./plots/",source[[2]],"/",source[[1]],"_xG_per_shot.jpg"))
 ```
 
 ## Test plots
