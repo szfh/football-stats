@@ -164,17 +164,11 @@ get_match_shots(11666) %>%
   mutate(team = ifelse(h_a == "h", h_team, a_team)) %>%
   filter(team == "Southampton") %>%
   ggplot() +
-  annotate_pitch(colour = "white",
-                 fill   = "chartreuse4",
-                 limits = FALSE) +
-  geom_point(aes(x = 100 * X, y = 100 * Y),
-             colour = "yellow", 
-             size = 4) +
+  annotate_pitch(colour="white",fill="chartreuse4",limits=FALSE) +
+  geom_point(aes(x=100*X,y= 100*Y),colour="yellow",size=4) +
   theme_pitch() +
-  theme(plot.background = element_rect(fill = "chartreuse4"),
-        title = element_text(colour = "white")) +
-  coord_flip(xlim = c(49, 101),
-             ylim = c(-1, 101)) +
+  theme(plot.background = element_rect(fill="chartreuse4"),title=element_text(colour="white")) +
+  coord_flip(xlim = c(49, 101),ylim = c(-1, 101)) +
   ggtitle("Shot map","Brighton v Southampton")
 ```
 
