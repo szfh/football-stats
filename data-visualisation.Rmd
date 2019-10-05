@@ -32,7 +32,7 @@ year <- 2019
 source <- c(team,year)
 ```
 
-### (ggsoccer)[https://torvaney.github.io/ggsoccer/]
+### [ggsoccer](https://torvaney.github.io/ggsoccer/)
 
 ```{r visualise}
 ggplot() +
