@@ -21,8 +21,13 @@ A repository to keep track of some football stats work.
 1. Transfermarkt
 1. Infogol
 1. WhoScored
-1. fbref.com
+1. [fbref](https://fbref.com/)
 1. Sofascore
 1. Understat
 1. [s2stats](https://s2stats.home.blog/)
-1. https://ryo-n7.github.io/2019-08-21-visualize-soccer-statsbomb-part-1/
+
+## Concepts and resources
+
+1. [Visualise StatsBomb](https://ryo-n7.github.io/2019-08-21-visualize-soccer-statsbomb-part-1/)
+1. [Game States](https://7500toholte.sbnation.com/platform/amp/2019/8/21/20812030/expected-villa-afc-bournemouth-game-states-responsible-analysis)
+1. [Deserved Goals 2.0](https://8yards8feet.wordpress.com/2019/09/07/deserved-goals-2-0/amp/)
