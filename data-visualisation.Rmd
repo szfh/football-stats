@@ -38,4 +38,19 @@ source <- c(team,year)
 ggplot() +
   annotate_pitch() +
   theme_pitch()
+
+pass_data <- data.frame(x = c(24, 18, 64, 78, 53),
+                        y = c(43, 55, 88, 18, 44),
+                        x2 = c(34, 44, 81, 85, 64),
+                        y2 = c(40, 62, 89, 44, 28))
+
+ggplot(pass_data) +
+  annotate_pitch() +
+  geom_segment(aes(x = x, y = y, xend = x2, yend = y2),
+               arrow = arrow(length = unit(0.25, "cm"),
+                             type = "closed")) +
+  theme_pitch() +
+  direction_label() +
+  ggtitle("Simple passmap", 
+          "ggsoccer example")
 ```
