@@ -94,7 +94,7 @@ get_team_players_stats(source[[1]],source[[2]]) %>%
   mutate(player_name=factor(player_name,levels=player_name[order(shots_per_90)])) %>%
   ggplot(aes(x=player_name,y=shots_per_90)) +
   geom_bar(stat="identity",fill="#e61919",width=0.8,alpha=0.6) +
-  labs(title=paste0("Shots per 90",as.integer(source[[2]]),"-",as.integer(source[[2]])+1)) +
+  labs(title=paste0("Shots per 90 ",as.integer(source[[2]]),"-",as.integer(source[[2]])+1)) +
   theme(axis.title.x=element_blank(),axis.title.y=element_blank()) +
   coord_flip()
 ggsave(paste0("./plots/",source[[2]],"/",source[[1]],"_shots_per_90_bar.jpg"))
