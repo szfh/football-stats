@@ -8,3 +8,26 @@ output:
 editor_options:
   chunk_output_type: inline
 ---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE)
+
+#libraries
+library(tidyverse)
+library(rvest)
+library(magrittr)
+library(understatr)
+# library(SBpitch)
+library(ggsoccer)
+library(ggtext)
+library(ggrepel)
+set.seed(9999)
+theme_set(theme_bw())
+
+#delete environment variables
+rm(list=ls())
+
+team <- "Southampton"
+year <- 2019
+source <- c(team,year)
+```
