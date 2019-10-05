@@ -11,7 +11,7 @@ editor_options:
 
 # Understat Data
 
-```{r setup, include=FALSE}
+```{r setup,include=F}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE)
 
 #libraries
@@ -19,6 +19,7 @@ library(tidyverse)
 library(rvest)
 library(magrittr)
 library(understatr)
+library(ggsoccer)
 library(ggtext)
 library(ggrepel)
 set.seed(9999)
@@ -146,29 +147,34 @@ ggsave(paste0("./plots/",source[[2]],"/",source[[1]],"_xG_per_shot.jpg"))
 
 ## Test plots
 
-```{r test plots}
-id_che <- get_team_players_stats("Southampton",2019) %>%
+```{r test plots,echo=F,eval=T}
+get_team_players_stats("Southampton",2019) %>%
   filter(player_name == "Che Adams") %>%
   select(player_id,player_name)
 
-epl_teams <- get_league_teams_stats("EPL",2019) %>%
+get_league_teams_stats("EPL",2019) %>%
   select(team_id,team_name) %>%
   unique()
 ```
 
-## Shots
+## Shot maps
 
-```{r shots, echo=F, eval=F}
+```{r shots,echo=T,eval=T}
 get_match_shots(11666) %>%
   mutate(team = ifelse(h_a == "h", h_team, a_team)) %>%
-  # filter(team == "Southampton") %>%
-  ggplot(aes(x=X,y=Y,size=xG,colour=team)) +
-  geom_point()
+  filter(team == "Southampton") %>%
+  ggplot() +
+  annotate_pitch(colour="white",fill="chartreuse3",limits=FALSE) +
+  geom_point(aes(x=100*X,y= 100*Y),colour="#e61919",size=3) +
+  theme_pitch() +
+  theme(plot.background = element_rect(fill="chartreuse3"),title=element_text(colour="black")) +
+  coord_flip(xlim = c(49, 101),ylim = c(-1, 101)) +
+  ggtitle("Brighton v Southampton","Southampton shots")
 ```
 
 ## Data
 
-```{r data, echo=F, eval=F}
+```{r data,echo=F,eval=T}
 get_match_shots(11666) %>%
   mutate(team = ifelse(h_a == "h", h_team, a_team)) %>%
   group_by(team,situation,result) %>%
