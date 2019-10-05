@@ -31,3 +31,9 @@ team <- "Southampton"
 year <- 2019
 source <- c(team,year)
 ```
+
+```{r visualise}
+ggplot() +
+  annotate_pitch() +
+  theme_pitch()
+```
