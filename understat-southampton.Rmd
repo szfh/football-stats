@@ -19,6 +19,7 @@ library(tidyverse)
 library(rvest)
 library(magrittr)
 library(understatr)
+library(ggsoccer)
 library(ggtext)
 library(ggrepel)
 set.seed(9999)
@@ -161,9 +162,7 @@ epl_teams <- get_league_teams_stats("EPL",2019) %>%
 ```{r shots, echo=F, eval=F}
 get_match_shots(11666) %>%
   mutate(team = ifelse(h_a == "h", h_team, a_team)) %>%
-  # filter(team == "Southampton") %>%
-  ggplot(aes(x=X,y=Y,size=xG,colour=team)) +
-  geom_point()
+  filter(team == "Southampton")
 ```
 
 ## Data
