@@ -157,9 +157,9 @@ epl_teams <- get_league_teams_stats("EPL",2019) %>%
   unique()
 ```
 
-## Shots
+## Shot maps
 
-```{r shots, echo=F, eval=F}
+```{r shots}
 get_match_shots(11666) %>%
   mutate(team = ifelse(h_a == "h", h_team, a_team)) %>%
   filter(team == "Southampton") %>%
@@ -169,7 +169,7 @@ get_match_shots(11666) %>%
   theme_pitch() +
   theme(plot.background = element_rect(fill="chartreuse3"),title=element_text(colour="black")) +
   coord_flip(xlim = c(49, 101),ylim = c(-1, 101)) +
-  ggtitle("Shot map","Brighton v Southampton")
+  ggtitle("Brighton v Southampton","Southampton shots")
 ```
 
 ## Data
