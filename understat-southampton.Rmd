@@ -112,6 +112,16 @@ ggsave(paste0("./plots/",source[[2]],"/",source[[1]],"_shots_per_90_point.jpg"))
 
 get_team_players_stats(source[[1]],source[[2]]) %>%
   filter(key_passes > 0) %>%
+  mutate(key_passes_per_90=(shots/time)*90) %>%
+  filter(key_passes_per_90 > 0.2) %>%
+  ggplot(aes(x=time,y=key_passes_per_90)) +
+  geom_point(colour="#e61919",alpha=0.6) +
+  geom_text_repel(aes(label=player_name),size=2) +
+  labs(title=paste0("Key passes per 90 ",as.integer(source[[2]]),"-",as.integer(source[[2]])+1),x="Minutes",y="Key passes per 90")
+ggsave(paste0("./plots/",source[[2]],"/",source[[1]],"_keypasses_per_90_point.jpg"))
+
+get_team_players_stats(source[[1]],source[[2]]) %>%
+  filter(key_passes > 0) %>%
   mutate(player_name=factor(player_name,levels=player_name[order(key_passes)])) %>%
   ggplot(aes(x=player_name,y=key_passes)) +
   geom_bar(stat="identity",fill="#e61919",width=0.8,alpha=0.6) +
