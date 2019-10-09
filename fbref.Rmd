@@ -1,0 +1,10 @@
+---
+# title: "fbRef Scraper"
+# author: "saintsnumbers"
+output:
+  github_document:
+    fig_height: 3
+# date: 2019-10-09
+editor_options:
+  chunk_output_type: inline
+---
