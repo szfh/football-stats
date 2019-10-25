@@ -1,5 +1,5 @@
 ---
-# title: "fbRef Scraper"
+# title: "fbref Scraper"
 # author: "saintsnumbers"
 output:
   github_document:
