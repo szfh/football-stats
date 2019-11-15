@@ -1,11 +1,11 @@
 
-# Understat Data
+## Understat Data
 
-## Season 2019 plots
+### Season 2019 plots
 
 ![](understat-southampton_files/figure-gfm/plots-1.png)<!-- -->![](understat-southampton_files/figure-gfm/plots-2.png)<!-- -->![](understat-southampton_files/figure-gfm/plots-3.png)<!-- -->![](understat-southampton_files/figure-gfm/plots-4.png)<!-- -->![](understat-southampton_files/figure-gfm/plots-5.png)<!-- -->![](understat-southampton_files/figure-gfm/plots-6.png)<!-- -->![](understat-southampton_files/figure-gfm/plots-7.png)<!-- -->![](understat-southampton_files/figure-gfm/plots-8.png)<!-- -->![](understat-southampton_files/figure-gfm/plots-9.png)<!-- -->![](understat-southampton_files/figure-gfm/plots-10.png)<!-- -->![](understat-southampton_files/figure-gfm/plots-11.png)<!-- -->
 
-## Test plots
+### Test plots
 
     ## # A tibble: 1 x 2
     ##   player_id player_name
@@ -36,7 +36,7 @@
     ## 19 229     Wolverhampton Wanderers
     ## 20 238     Sheffield United
 
-## Shot maps
+### Shot maps
 
 ``` r
 get_match_shots(11666) %>%
@@ -44,7 +44,7 @@ get_match_shots(11666) %>%
   filter(team == "Southampton") %>%
   ggplot() +
   annotate_pitch(colour="white",fill="chartreuse3",limits=FALSE) +
-  geom_point(aes(x=100*X,y= 100*Y),colour="#e61919",size=3) +
+  geom_point(aes(x=100*X,y= 100*Y),colour=colour_sfc1,size=3) +
   theme_pitch() +
   theme(plot.background = element_rect(fill="chartreuse3"),title=element_text(colour="black")) +
   coord_flip(xlim = c(49, 101),ylim = c(-1, 101)) +
@@ -53,7 +53,7 @@ get_match_shots(11666) %>%
 
 ![](understat-southampton_files/figure-gfm/shots-1.png)<!-- -->
 
-## Data
+### Data
 
     ## # A tibble: 14 x 4
     ## # Groups:   team, situation [6]
