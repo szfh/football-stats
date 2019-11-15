@@ -151,7 +151,7 @@ ggsave(paste0("./plots/",year,"/",team,"_xG_per_shot.jpg"))
 
 ### Test plots
 
-```{r test plots,echo=F,eval=T}
+```{r test plots,echo=T,eval=F}
 get_team_players_stats("Southampton",2019) %>%
   filter(player_name == "Che Adams") %>%
   select(player_id,player_name)
@@ -163,7 +163,7 @@ get_league_teams_stats("EPL",2019) %>%
 
 ### Shot maps
 
-```{r shots,echo=T,eval=T}
+```{r shots,echo=T,eval=F}
 get_match_shots(11666) %>%
   mutate(team = ifelse(h_a == "h", h_team, a_team)) %>%
   filter(team == "Southampton") %>%
@@ -178,7 +178,7 @@ get_match_shots(11666) %>%
 
 ### Data
 
-```{r data,echo=F,eval=T}
+```{r data,echo=T,eval=F}
 get_match_shots(11666) %>%
   mutate(team = ifelse(h_a == "h", h_team, a_team)) %>%
   group_by(team,situation,result) %>%
