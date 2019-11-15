@@ -13,6 +13,7 @@ editor_options:
 knitr::opts_chunk$set(echo=F,message=F,warning=F)
 
 library(tidyverse)
+library(rvest)
 library(understatr)
 library(ggsoccer)
 library(ggrepel)
