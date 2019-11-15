@@ -12,7 +12,7 @@ editor_options:
 ## Understat Data
 
 ```{r setup,include=F}
-knitr::opts_chunk$set(echo = FALSE, message = FALSE)
+knitr::opts_chunk$set(echo=F,message=F,warning=F)
 
 #libraries
 library(tidyverse)
@@ -22,6 +22,8 @@ library(understatr)
 library(ggsoccer)
 library(ggtext)
 library(ggrepel)
+library(ggthemes)
+
 set.seed(9999)
 theme_set(theme_bw())
 
@@ -30,7 +32,6 @@ rm(list=ls())
 
 team <- "Southampton"
 year <- 2019
-source <- c(team,year)
 ```
 
 ### Season `r year` plots
