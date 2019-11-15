@@ -9,7 +9,7 @@ editor_options:
   chunk_output_type: inline
 ---
 
-# Understat Data
+## Understat Data
 
 ```{r setup,include=F}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE)
@@ -33,7 +33,7 @@ year <- 2019
 source <- c(team,year)
 ```
 
-## Season `r year` plots
+### Season `r year` plots
 
 ```{r plots}
 get_team_players_stats(team,year) %>%
@@ -155,7 +155,7 @@ get_team_players_stats(team,year) %>%
 ggsave(paste0("./plots/",year,"/",team,"_xG_per_shot.jpg"))
 ```
 
-## Test plots
+### Test plots
 
 ```{r test plots,echo=F,eval=T}
 get_team_players_stats("Southampton",2019) %>%
@@ -167,7 +167,7 @@ get_league_teams_stats("EPL",2019) %>%
   unique()
 ```
 
-## Shot maps
+### Shot maps
 
 ```{r shots,echo=T,eval=T}
 get_match_shots(11666) %>%
@@ -182,7 +182,7 @@ get_match_shots(11666) %>%
   ggtitle("Brighton v Southampton","Southampton shots")
 ```
 
-## Data
+### Data
 
 ```{r data,echo=F,eval=T}
 get_match_shots(11666) %>%
