@@ -28,5 +28,15 @@ source("./fbref-import.R")
 source("./fbref-themes.R")
 ```
 
-```{r import}
+```{r plots}
+# EPLPlayerStats %>%
+#   filter(Squad %in% c("Southampton","Chelsea")) %>%
+#   filter(Minutes>400) %>%
+#   mutate(xA90=(90*xA/Minutes)) %>%
+#   arrange(desc(xA90)) %>%
+#   head(12) %>%
+#   ggplot() +
+#   geom_bar(aes(x=reorder(Player,xA90),y=xA90),stat="identity") +
+#   themesfc() +
+#   coord_flip()
 ```
