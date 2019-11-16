@@ -46,5 +46,6 @@ EPLPlayerStats %>%
   # mutate(Player=factor(Player,levels=Player[order(Minutes)])) %>%
   ggplot(aes(x=Player,y=Minutes)) +
   geom_bar(stat="identity") +
+  # themesfc() +
   coord_flip()
 ```
