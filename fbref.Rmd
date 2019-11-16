@@ -23,14 +23,9 @@ library(ggthemes)
 set.seed(9999)
 theme_set(theme_bw())
 
-rm(list=ls())
-
-team <- "Southampton"
-year <- 2019
-colour_sfc1 <- "#e61919"
+source("./fbref-functions.R")
+source("./fbref-import.R")
 ```
 
 ```{r import}
-test_url_club <- "https://fbref.com/en/squads/33c895d4/Southampton"
-test_url_match <- "https://fbref.com/en/matches/644a3723/Wolverhampton-Wanderers-Southampton-October-19-2019-Premier-League"
 ```
