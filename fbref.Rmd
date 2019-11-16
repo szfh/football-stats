@@ -39,4 +39,12 @@ source("./fbref-themes.R")
 #   geom_bar(aes(x=reorder(Player,xA90),y=xA90),stat="identity") +
 #   themesfc() +
 #   coord_flip()
+
+EPLPlayerStats %>%
+  filter(Squad=="Southampton") %>%
+  arrange(desc(Minutes)) %>%
+  # mutate(Player=factor(Player,levels=Player[order(Minutes)])) %>%
+  ggplot(aes(x=Player,y=Minutes)) +
+  geom_bar(stat="identity") +
+  coord_flip()
 ```
