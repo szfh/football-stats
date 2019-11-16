@@ -25,6 +25,7 @@ theme_set(theme_bw())
 
 source("./fbref-functions.R")
 source("./fbref-import.R")
+source("./fbref-themes.R")
 ```
 
 ```{r import}
