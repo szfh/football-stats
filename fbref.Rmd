@@ -47,10 +47,12 @@ EPLPlayerStats %>%
   geom_bar(stat="identity",fill=sfc,width=0.8,alpha=0.6) +
   geom_label(aes(label=Minutes),colour=sfc_light,size=3) +
   themesfc() +
+  theme(panel.grid.minor=element_blank()) +
   labs(title="League minutes",
        x=element_blank(),
        y=element_blank()) +
-  # scale_y_continuous(breaks=seq(0,1080,90)) +
+  # scale_y_continuous(breaks=seq(0,max((EPLPlayerStats %>% filter(Squad=="Southampton"))$Minutes)+90,90)) +
+  scale_y_continuous(breaks=seq(0,90*38,90)) +
   coord_flip()
 ggsave("./plots/fbref/minutes.jpg")
 ```
