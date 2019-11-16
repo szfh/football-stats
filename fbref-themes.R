@@ -17,3 +17,11 @@ themesfc() <- function(base_size=10,base_family=""){
       axis.line=element_blank()
     )
 }
+
+col_light <- few_pal("Light")(8)
+col_medium <- few_pal("Medium")(8)
+col_dark <- few_pal("Dark")(8)
+col_gdocs <- gdocs_pal()(10)
+
+sfc <- "#D71920"
+sfc_light <- "#ED5C5C"
