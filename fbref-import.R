@@ -1,10 +1,10 @@
 # import from ./data/fbref/2019/
-EPLTable_raw <- readr::read_csv("./data/fbref/2019/EPLTable.txt",comment="##") # https://fbref.com/en/comps/9/Premier-League-Stats#results32321::none
-EPLTeamStats_raw <- readr::read_csv("./data/fbref/2019/EPLTeamStats.txt",comment="##",skip=1) # https://fbref.com/en/comps/9/stats/Premier-League-Stats#stats_player_teams::none
-EPLPlayerStats_raw <- readr::read_csv("./data/fbref/2019/EPLPlayerStats.txt",comment="##",skip=1) # https://fbref.com/en/comps/9/stats/Premier-League-Stats#stats_player::none
+EPLTable_raw <- readr::read_csv("./data/fbref/2019/EPLTable.txt",comment="##") # https://fbref.com/en/comps/9/Premier-League-Stats
+EPLTeamStats_raw <- readr::read_csv("./data/fbref/2019/EPLTeamStats.txt",comment="##",skip=1) # https://fbref.com/en/comps/9/stats/Premier-League-Stats
+EPLPlayerStats_raw <- readr::read_csv("./data/fbref/2019/EPLPlayerStats.txt",comment="##",skip=1) # https://fbref.com/en/comps/9/stats/Premier-League-Stats
 EPLMatches_raw <-readr::read_csv("./data/fbref/2019/EPLMatches.txt",comment="##") # https://fbref.com/en/comps/9/schedule/Premier-League-Fixtures
-SFCMatches_raw <- readr::read_csv("./data/fbref/2019/SFCMatches.txt",comment="##") # https://fbref.com/en/squads/33c895d4/Southampton#ks_sched_all::none
-# SFCPlayerStats_raw <- readr::read_csv("./data/fbref/2019/SFCPlayerStats.txt",comment="##",skip=1) # https://fbref.com/en/squads/33c895d4/Southampton#stats_player::none
+SFCMatches_raw <- readr::read_csv("./data/fbref/2019/SFCMatches.txt",comment="##") # https://fbref.com/en/squads/33c895d4/Southampton
+# SFCPlayerStats_raw <- readr::read_csv("./data/fbref/2019/SFCPlayerStats.txt",comment="##",skip=1) # https://fbref.com/en/squads/33c895d4/Southampton
 
 # tidy
 EPLTable <- EPLTable_raw %>%
