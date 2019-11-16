@@ -43,9 +43,8 @@ source("./R/fbref-themes.R")
 EPLPlayerStats %>%
   filter(Squad=="Southampton") %>%
   arrange(desc(Minutes)) %>%
-  # mutate(Player=factor(Player,levels=Player[order(Minutes)])) %>%
-  ggplot(aes(x=Player,y=Minutes)) +
+  ggplot(aes(x=reorder(Player,Minutes),y=Minutes)) +
   geom_bar(stat="identity") +
-  # themesfc() +
+  themesfc() +
   coord_flip()
 ```
