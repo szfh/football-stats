@@ -10,8 +10,7 @@ EPLTable <- EPLTable_raw %>%
   rename("P"="Apps") %>%
   rename("GD"="GDiff") %>%
   rename("xGD"="xGDiff") %>%
-  select(-c("Top Team Scorer",Goalkeeper)) %>%
-  View("EPLTable")
+  select(-c("Top Team Scorer",Goalkeeper))
 
 EPLTeamStats <- EPLTeamStats_raw %>%
   rename("Players"="# Pl") %>%
@@ -23,8 +22,7 @@ EPLTeamStats <- EPLTeamStats_raw %>%
   rename("Fouls"="Fls") %>%
   rename("YC"="CrdY") %>%
   rename("RC"="CrdR") %>%
-  select(-("Gls_1":"Crd")) %>%
-  View("EPLTeamStats")
+  select(-("Gls_1":"Crd"))
 
 EPLPlayerStats <- EPLPlayerStats_raw %>%
   separate("Player",c("Player",NA),sep="\\\\") %>%
@@ -38,17 +36,14 @@ EPLPlayerStats <- EPLPlayerStats_raw %>%
   rename("Fouls"="Fls") %>%
   rename("YC"="CrdY") %>%
   rename("RC"="CrdR") %>%
-  select(-c("Rk","Mn/Ap","Gls_1":"npxG+xA")) %>%
-  View("EPLPlayerStats")
+  select(-c("Rk","Mn/Ap","Gls_1":"npxG+xA"))
 
 EPLMatches <- EPLMatches_raw %>%
   separate("Score",c("GH","GA"),sep="[:punct:]") %>%
   rename("xGH"="xG") %>%
   rename("xGA"="xG_1") %>%
   filter(!is.na(Wk)) %>%
-  select(-c("Match Report","Notes")) %>%
-  View("EPLMatches")
+  select(-c("Match Report","Notes"))
 
 SFCMatches <- SFCMatches_raw %>%
-  select(-c("Match Report","Notes")) %>%
-  View("SFCMatches")
+  select(-c("Match Report","Notes"))
