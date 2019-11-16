@@ -48,3 +48,7 @@ EPLMatches <- EPLMatches_raw %>%
   filter(!is.na(Wk)) %>%
   select(-c("Match Report","Notes")) %>%
   View("EPLMatches")
+
+SFCMatches <- SFCMatches_raw %>%
+  select(-c("Match Report","Notes")) %>%
+  View("SFCMatches")
