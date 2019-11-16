@@ -11,3 +11,16 @@ EPLTable <- EPLTable_raw %>%
   rename("xGD"="xGDiff") %>%
   select(-c("Top Team Scorer",Goalkeeper)) %>%
   View("EPLTable")
+
+EPLTeamStats <- EPLTeamStats_raw %>%
+  rename("Players"="# Pl") %>%
+  rename("Played"="Apps") %>%
+  rename("Goals"="Gls") %>%
+  rename("Assists"="Ast") %>%
+  rename("PKGoals"="PK") %>%
+  rename("PKs"="PKatt") %>%
+  rename("Fouls"="Fls") %>%
+  rename("YC"="CrdY") %>%
+  rename("RC"="CrdR") %>%
+  select(-("Gls_1":"Crd")) %>%
+  View("EPLTeamStats")
