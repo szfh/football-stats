@@ -50,5 +50,7 @@ EPLPlayerStats %>%
   labs(title="League minutes",
        x=element_blank(),
        y=element_blank()) +
+  # scale_y_continuous(breaks=seq(0,1080,90)) +
   coord_flip()
+ggsave("./plots/fbref/minutes.jpg")
 ```
