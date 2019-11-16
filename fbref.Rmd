@@ -45,6 +45,7 @@ EPLPlayerStats %>%
   arrange(desc(Minutes)) %>%
   ggplot(aes(x=reorder(Player,Minutes),y=Minutes)) +
   geom_bar(stat="identity",fill=sfc,width=0.8,alpha=0.6) +
+  geom_label(aes(label=Minutes),colour=sfc_light,size=3) +
   themesfc() +
   labs(title="League minutes",
        x=element_blank(),
