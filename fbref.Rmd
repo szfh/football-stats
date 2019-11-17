@@ -54,7 +54,7 @@ EPLPlayerStats %>%
   # scale_y_continuous(breaks=seq(0,max((EPLPlayerStats %>% filter(Squad=="Southampton"))$Minutes)+90,90)) +
   scale_y_continuous(breaks=seq(0,90*38,90)) +
   coord_flip()
-ggsave("./plots/fbref/minutes.jpg")
+# ggsave("./plots/fbref/minutes.jpg")
 
 EPLTable %>%
   ggplot(aes(x=Squad,y=xG)) +
