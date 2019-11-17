@@ -55,13 +55,12 @@ EPLPlayerStats %>%
   scale_y_continuous(breaks=seq(0,90*38,90)) +
   coord_flip()
 # ggsave("./plots/fbref/minutes.jpg")
+```
 
+```{r test,include=F}
 EPLTable %>%
   ggplot(aes(x=Squad,y=xG)) +
   geom_bar(stat="identity") +
   themesfc() +
   coord_flip()
-```
-
-```{r test,include=F}
 ```
