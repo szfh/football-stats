@@ -19,6 +19,27 @@ themesfc <- function(base_size=12,base_family=""){
     )
 }
 
+themeepl <- function(base_size=12,base_family=""){
+  theme_clean(base_size=base_size,base_family=base_family) +
+    theme(
+      # strip.background = element_blank(),
+      # strip.text = element_text(size = base_size),
+      # plot.background=element_blank(),
+      # plot.margin=unit(c(0.5,0.5,0.5,0.5),"lines"),
+      # plot.title=element_text(size=16),
+      # plot.subtitle=element_text(size=12),
+      # plot.caption=element_text(size=8),
+      # legend.position="none",
+      # panel.background=element_blank(),
+      # panel.border=element_blank(),
+      # panel.grid.major=element_line(size=0.4),
+      # panel.grid.minor=element_line(size=0.1,
+      #                               linetype="dashed"),
+      # axis.ticks=element_blank(),
+      # axis.line=element_blank()
+    )
+}
+
 col_light <- few_pal("Light")(8)
 col_medium <- few_pal("Medium")(8)
 col_dark <- few_pal("Dark")(8)
