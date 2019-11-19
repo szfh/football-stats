@@ -40,6 +40,33 @@ themeepl <- function(base_size=12,base_family=""){
     )
 }
 
+# https://drsimonj.svbtle.com/creating-corporate-colour-palettes-for-ggplot2
+# https://teamcolorcodes.com/premier-league-color-codes/
+
+col_epl <- c(
+  `Arsenal` = "#EF0107",
+  `Aston Villa` = "#670E36",
+  `Brighton & Hove Albion` = "#0057B8",
+  `Bournemouth` = "#DA291C",
+  `Burnley` = "#6C1D45",
+  `Chelsea` = "#034694",
+  `Crystal Palace` = "#1B458F",
+  `Everton` = "#003399",
+  `Leicester City` = "#003090",
+  `Liverpool` = "#C8102E",
+  `Manchester City` = "#6CABDD",
+  `Manchester United` = "#DA291C",
+  `Newcastle United` = "#241F20",
+  `Norwich City` = "#FFEE00",
+  `Sheffield United` = "#EE2737",
+  `Southampton` = "#D71920",
+  `Tottenham Hotspur` = "#132257",
+  `Watford` = "#FBEE23",
+  `West Ham United` = "#7A263A",
+  `Wolverhampton Wanderers` = "#FDB913"
+)
+# pie(rep(1, length(col_epl)), col = col_epl)
+
 col_light <- few_pal("Light")(8)
 col_medium <- few_pal("Medium")(8)
 col_dark <- few_pal("Dark")(8)
