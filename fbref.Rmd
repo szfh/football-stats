@@ -54,7 +54,7 @@ ggsave("./plots/fbref/minutes.jpg")
 ```{r test,include=F}
 EPLTable %>%
   ggplot(aes(x=Squad,y=xG,fill=Squad)) +
-  geom_bar(stat="identity") +
+  geom_bar(stat="identity",alpha=0.8) +
   themesfc() +
   scale_fill_manual(values=col_epl()) +
   coord_flip()
@@ -66,7 +66,7 @@ EPLPlayerStats %>%
   arrange(desc(xA90)) %>%
   head(20) %>%
   ggplot() +
-  geom_bar(aes(x=reorder(Player,xA90),y=xA90,fill=Squad),stat="identity") +
+  geom_bar(aes(x=reorder(Player,xA90),y=xA90,fill=Squad),stat="identity",alpha=0.8) +
   themesfc() +
   scale_fill_manual(values=col_epl()) +
   coord_flip()
