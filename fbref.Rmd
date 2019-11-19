@@ -58,14 +58,15 @@ EPLTable %>%
   themesfc() +
   coord_flip()
 
-# EPLPlayerStats %>%
-#   filter(Squad %in% c("Southampton","Chelsea")) %>%
-#   filter(Minutes>400) %>%
-#   mutate(xA90=(90*xA/Minutes)) %>%
-#   arrange(desc(xA90)) %>%
-#   head(12) %>%
-#   ggplot() +
-#   geom_bar(aes(x=reorder(Player,xA90),y=xA90),stat="identity") +
-#   themesfc() +
-#   coord_flip()
+EPLPlayerStats %>%
+  filter(Squad %in% c("Southampton","Chelsea","Norwich City")) %>%
+  filter(Minutes>400) %>%
+  mutate(xA90=(90*xA/Minutes)) %>%
+  arrange(desc(xA90)) %>%
+  head(20) %>%
+  ggplot() +
+  geom_bar(aes(x=reorder(Player,xA90),y=xA90,fill=Squad),stat="identity") +
+  themesfc() +
+  scale_fill_manual(values=col_epl()) +
+  coord_flip()
 ```
