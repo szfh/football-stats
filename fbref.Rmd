@@ -47,6 +47,18 @@ EPLPlayerStats %>%
   scale_y_continuous(breaks=seq(0,90*38,90)) +
   coord_flip()
 ggsave("./plots/fbref/Minutes.jpg")
+
+EPLPlayerStats %>%
+  filter(Squad=="Southampton") %>%
+  filter(xG+xA>0) %>%
+  ggplot(aes(x=xG,y=xA)) +
+  geom_point(colour=sfc,size=1.5,alpha=0.8) +
+  geom_text_repel(aes(label=Player),size=3) +
+  themesfc() +
+  labs(title="Southampton EPL xG/xA",
+       x="xG",
+       y="xA")
+ggsave("./plots/fbref/xGxA.jpg")
 ```
 
 ```{r test,include=F}
