@@ -41,7 +41,7 @@ themeepl <- function(base_size=12,base_family=""){
 }
 
 # https://drsimonj.svbtle.com/creating-corporate-colour-palettes-for-ggplot2
-# https://teamcolorcodes.com/premier-league-color-codes/
+# https://encycolorpedia.com/teams/football/epl
 
 col_epl <- c(
   `Arsenal` = "#EF0107",
