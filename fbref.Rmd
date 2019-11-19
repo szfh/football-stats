@@ -29,7 +29,6 @@ source("./R/fbref-themes.R")
 ```
 
 ```{r plots}
-# mins <- 
 EPLPlayerStats %>%
   filter(Squad=="Southampton") %>%
   arrange(desc(Minutes)) %>%
@@ -47,8 +46,7 @@ EPLPlayerStats %>%
        y=element_blank()) +
   scale_y_continuous(breaks=seq(0,90*38,90)) +
   coord_flip()
-ggsave("./plots/fbref/minutes.jpg")
-# mins
+ggsave("./plots/fbref/Minutes.jpg")
 ```
 
 ```{r test,include=F}
