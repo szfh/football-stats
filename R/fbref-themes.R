@@ -1,5 +1,5 @@
 themesfc <- function(base_size=12,base_family=""){
-  theme_clean(base_size=base_size,base_family=base_family) +
+  theme_bw(base_size=base_size,base_family=base_family) +
     theme(
       strip.background = element_blank(),
       strip.text = element_text(size = base_size),
