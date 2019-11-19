@@ -40,6 +40,7 @@ source("./R/fbref-themes.R")
 #   themesfc() +
 #   coord_flip()
 
+mins <- 
 EPLPlayerStats %>%
   filter(Squad=="Southampton") %>%
   arrange(desc(Minutes)) %>%
@@ -47,7 +48,11 @@ EPLPlayerStats %>%
   geom_bar(stat="identity",fill=sfc,width=0.8,alpha=0.6) +
   geom_label(aes(label=Minutes),colour=sfc_light,size=2) +
   themesfc() +
-  theme(panel.grid.minor=element_blank()) +
+  theme(panel.grid.major.x=element_line(size=0.1,
+                                        linetype="dashed"),
+        panel.grid.minor.x=element_blank(),
+        panel.grid.major.y=element_blank(),
+        panel.grid.minor.y=element_blank()) +
   labs(title="League minutes",
        x=element_blank(),
        y=element_blank()) +
@@ -55,6 +60,7 @@ EPLPlayerStats %>%
   scale_y_continuous(breaks=seq(0,90*38,90)) +
   coord_flip()
 # ggsave("./plots/fbref/minutes.jpg")
+# mins
 ```
 
 ```{r test,include=F}
