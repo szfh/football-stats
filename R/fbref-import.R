@@ -51,3 +51,19 @@ EPLMatches <- EPLMatches_raw %>%
 
 SFCMatches <- SFCMatches_raw %>%
   select(-c("Match Report","Notes"))
+
+EPLTeamShooting <- EPLTeamShooting_raw %>%
+  rename("Players"="# Pl") %>%
+  rename("Goals"="Gls") %>%
+  rename("PKGoals"="PK") %>%
+  rename("PKs"="PKatt") %>%
+  rename("Shots"="Sh") %>%
+  select(-"SoT%")
+
+EPLPlayerShooting <- EPLPlayerShooting_raw %>%
+  separate("Player",c("Player",NA),sep="\\\\") %>%
+  separate("Nation",c(NA,"Nation"),sep=" ") %>%
+  rename("Goals"="Gls") %>%
+  rename("PKGoals"="PK") %>%
+  rename("PKs"="PKatt") %>%
+  View("PlayerShooting")
