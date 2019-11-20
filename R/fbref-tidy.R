@@ -10,8 +10,7 @@ EPLPlayerShooting <- EPLPlayerShooting_raw %>%
   separate("Nation",c(NA,"Nation"),sep=" ") %>%
   rename("Goals"="Gls") %>%
   rename("PKGoals"="PK") %>%
-  rename("PKs"="PKatt") %>%
-  View("PlayerShooting")
+  rename("PKs"="PKatt")
 
 EPLPlayerStats <- EPLPlayerStats_raw %>%
   separate("Player",c("Player",NA),sep="\\\\") %>%
