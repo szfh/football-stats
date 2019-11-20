@@ -59,15 +59,23 @@ EPLPlayerStats %>%
        x="xG",
        y="xA")
 ggsave("./plots/fbref/xGxA.jpg")
+
+EPLTeamStats %>%
+  ggplot(aes(x=reorder(Squad,xG),y=xG,fill=Squad)) +
+  geom_bar(stat="identity",alpha=0.8) +
+  themesfc() +
+  themesfc() +
+  labs(title="EPL xG",
+       x=element_blank(),
+       y="xG") +
+  scale_fill_manual(values=col_epl()) +
+  coord_flip()
+ggsave("./plots/fbref/EPLxG.jpg")
 ```
 
 ```{r test,include=F}
-EPLTable %>%
-  ggplot(aes(x=Squad,y=xG,fill=Squad)) +
-  geom_bar(stat="identity",alpha=0.8) +
-  themesfc() +
-  scale_fill_manual(values=col_epl()) +
-  coord_flip()
+EPLTeamStats %>%
+  str()
 
 EPLPlayerStats %>%
   filter(Squad %in% c("Southampton","Chelsea","Norwich City")) %>%
