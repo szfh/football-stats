@@ -73,21 +73,25 @@ EPLTeamStats %>%
   scale_fill_manual(values=col_epl()) +
   coord_flip()
 ggsave("./plots/fbref/EPLnpxG.jpg")
-```
-
-```{r test,include=F}
-EPLTeamStats %>%
-  str()
 
 EPLPlayerStats %>%
-  filter(Squad %in% c("Southampton","Chelsea","Norwich City")) %>%
-  filter(Minutes>400) %>%
+  filter(Minutes>=400) %>%
   mutate(xA90=(90*xA/Minutes)) %>%
   arrange(desc(xA90)) %>%
   head(20) %>%
   ggplot() +
   geom_bar(aes(x=reorder(Player,xA90),y=xA90,fill=Squad),stat="identity",alpha=0.8) +
   themesfc() +
+  labs(title="xA/90 (min 400 minutes)",
+       x=element_blank(),
+       y="xA/90",
+       caption="statsbomb/fbref") +
   scale_fill_manual(values=col_epl()) +
   coord_flip()
+ggsave("./plots/fbref/xA90.jpg")
+```
+
+```{r test,include=F}
+EPLTeamStats %>%
+  str()
 ```
