@@ -47,6 +47,7 @@ col_epl <- function(team_name){
     `Arsenal` = "#EF0107",
     `Aston Villa` = "#670E36",
     `Brighton & Hove Albion` = "#0057B8",
+    `Brighton` = "#0057B8",
     `Bournemouth` = "#DA291C",
     `Burnley` = "#6C1D45",
     `Chelsea` = "#034694",
@@ -56,14 +57,20 @@ col_epl <- function(team_name){
     `Liverpool` = "#C8102E",
     `Manchester City` = "#6CABDD",
     `Manchester United` = "#DA291C",
+    `Manchester Utd` = "#DA291C",
     `Newcastle United` = "#241F20",
+    `Newcastle Utd` = "#241F20",
     `Norwich City` = "#FFEE00",
     `Sheffield United` = "#EE2737",
+    `Sheffield Utd` = "#EE2737",
     `Southampton` = "#D71920",
     `Tottenham Hotspur` = "#132257",
+    `Tottenham` = "#132257",
     `Watford` = "#FBEE23",
     `West Ham United` = "#7A263A",
-    `Wolverhampton Wanderers` = "#FDB913"
+    `West Ham` = "#7A263A",
+    `Wolverhampton Wanderers` = "#FDB913",
+    `Wolves` = "#FDB913"
   )
   
   if(is.null(col_epl))
