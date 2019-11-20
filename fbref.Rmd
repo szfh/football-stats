@@ -51,26 +51,25 @@ ggsave("./plots/fbref/Minutes.jpg")
 EPLPlayerStats %>%
   filter(Squad=="Southampton") %>%
   filter(xG+xA>0) %>%
-  ggplot(aes(x=xG,y=xA)) +
+  ggplot(aes(x=npxG,y=xA)) +
   geom_point(colour=sfc,size=1.5,alpha=0.8) +
   geom_text_repel(aes(label=Player),size=3) +
   themesfc() +
-  labs(title="Southampton EPL xG/xA",
-       x="xG",
+  labs(title="Southampton EPL xG/xA (non-penalty)",
+       x="npxG",
        y="xA")
-ggsave("./plots/fbref/xGxA.jpg")
+ggsave("./plots/fbref/npxGxA.jpg")
 
 EPLTeamStats %>%
-  ggplot(aes(x=reorder(Squad,xG),y=xG,fill=Squad)) +
+  ggplot(aes(x=reorder(Squad,npxG),y=npxG,fill=Squad)) +
   geom_bar(stat="identity",alpha=0.8) +
   themesfc() +
-  themesfc() +
-  labs(title="EPL xG",
+  labs(title="EPL xG (non-penalty)",
        x=element_blank(),
-       y="xG") +
+       y="npxG") +
   scale_fill_manual(values=col_epl()) +
   coord_flip()
-ggsave("./plots/fbref/EPLxG.jpg")
+ggsave("./plots/fbref/EPLnpxG.jpg")
 ```
 
 ```{r test,include=F}
