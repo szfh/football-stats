@@ -10,7 +10,8 @@ EPLPlayerShooting <- EPLPlayerShooting_raw %>%
   separate("Nation",c(NA,"Nation"),sep=" ") %>%
   rename("Goals"="Gls") %>%
   rename("PKGoals"="PK") %>%
-  rename("PKs"="PKatt")
+  rename("PKs"="PKatt")  %>%
+  select(-("SoT%":"G/SoT"),-("npxG/Sh":"np:G-xG"))
 
 EPLPlayerStats <- EPLPlayerStats_raw %>%
   separate("Player",c("Player",NA),sep="\\\\") %>%
@@ -24,14 +25,14 @@ EPLPlayerStats <- EPLPlayerStats_raw %>%
   rename("Fouls"="Fls") %>%
   rename("YC"="CrdY") %>%
   rename("RC"="CrdR") %>%
-  select(-c("Rk","Mn/Ap","Gls_1":"npxG+xA"))
+  select(-"Rk",-"Mn/Ap",-("Gls_1":"npxG+xA"))
 
 EPLTable <- EPLTable_raw %>%
   rename("Pos"="Rk") %>%
   rename("P"="Apps") %>%
   rename("GD"="GDiff") %>%
   rename("xGD"="xGDiff") %>%
-  select(-c("Top Team Scorer",Goalkeeper))
+  select(-"Top Team Scorer",-"Goalkeeper")
 
 EPLTeamShooting <- EPLTeamShooting_raw %>%
   rename("Players"="# Pl") %>%
@@ -43,15 +44,14 @@ EPLTeamShooting <- EPLTeamShooting_raw %>%
 
 EPLTeamStats <- EPLTeamStats_raw %>%
   rename("Players"="# Pl") %>%
-  rename("Played"="Apps") %>%
+  rename("Played"="MP") %>%
   rename("Goals"="Gls") %>%
   rename("Assists"="Ast") %>%
   rename("PKGoals"="PK") %>%
   rename("PKs"="PKatt") %>%
-  rename("Fouls"="Fls") %>%
   rename("YC"="CrdY") %>%
   rename("RC"="CrdR") %>%
-  select(-("Gls_1":"Crd"))
+  select(-("Starts":"Min"),-("Gls_1":"G+A-PK"),-("xG_1":"npxG+xA"))
 
 SFCMatches <- SFCMatches_raw %>%
   select(-c("Match Report","Notes"))
