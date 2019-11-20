@@ -75,6 +75,22 @@ ggsave("./plots/fbref/EPLnpxG.jpg")
 
 EPLPlayerStats %>%
   filter(Minutes>=400) %>%
+  mutate(npxG90=(90*npxG/Minutes)) %>%
+  arrange(desc(npxG90)) %>%
+  head(20) %>%
+  ggplot() +
+  geom_bar(aes(x=reorder(Player,npxG90),y=npxG90,fill=Squad),stat="identity",alpha=0.8) +
+  themesfc() +
+  labs(title="npxG/90 (min 400 minutes)",
+       x=element_blank(),
+       y="npxG/90",
+       caption="statsbomb/fbref") +
+  scale_fill_manual(values=col_epl()) +
+  coord_flip()
+ggsave("./plots/fbref/npxG90.jpg")
+
+EPLPlayerStats %>%
+  filter(Minutes>=400) %>%
   mutate(xA90=(90*xA/Minutes)) %>%
   arrange(desc(xA90)) %>%
   head(20) %>%
@@ -92,5 +108,8 @@ ggsave("./plots/fbref/xA90.jpg")
 
 ```{r test,include=F}
 EPLTeamStats %>%
+  str()
+
+EPLPlayerStats %>%
   str()
 ```
