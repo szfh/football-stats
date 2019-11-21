@@ -25,6 +25,7 @@ theme_set(theme_bw())
 
 source("./R/fbref-functions.R")
 source("./R/fbref-import.R")
+source("./R/fbref-tidy.R")
 source("./R/fbref-themes.R")
 ```
 
@@ -111,5 +112,11 @@ EPLTeamStats %>%
   str()
 
 EPLPlayerStats %>%
+  str()
+
+EPLTeamShooting %>%
+  str()
+
+EPLPlayerShooting %>%
   str()
 ```
