@@ -105,6 +105,19 @@ EPLPlayerStats %>%
   scale_fill_manual(values=col_epl()) +
   coord_flip()
 ggsave("./plots/fbref/EPLxA90.jpg")
+
+EPLPlayerPassing %>%
+  filter(Squad=="Southampton") %>%
+  filter(ShotAssists>0) %>%
+  ggplot() +
+  geom_bar(aes(x=reorder(Player,ShotAssists),y=ShotAssists),stat="identity",fill=sfc,alpha=0.8) +
+  themesfc() +
+  labs(title="Passes leading to shot",
+       x=element_blank(),
+       y=element_blank(),
+       caption="statsbomb/fbref") +
+  coord_flip()
+ggsave("./plots/fbref/SFCKeyPasses.jpg")
 ```
 
 ```{r test,include=F}
@@ -118,5 +131,11 @@ EPLTeamShooting %>%
   str()
 
 EPLPlayerShooting %>%
+  str()
+
+EPLTeamPassing %>%
+  str()
+
+EPLPlayerPassing %>%
   str()
 ```
