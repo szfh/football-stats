@@ -47,7 +47,7 @@ EPLPlayerStats %>%
        caption="statsbomb/fbref") +
   scale_y_continuous(breaks=seq(0,90*38,90)) +
   coord_flip()
-ggsave("./plots/fbref/Minutes.jpg")
+ggsave("./plots/fbref/SFCMinutes.jpg")
 
 EPLPlayerStats %>%
   filter(Squad=="Southampton") %>%
@@ -60,7 +60,7 @@ EPLPlayerStats %>%
        x="npxG",
        y="xA",
        caption="statsbomb/fbref")
-ggsave("./plots/fbref/npxGxA.jpg")
+ggsave("./plots/fbref/SFCnpxGxA.jpg")
 
 EPLTeamStats %>%
   ggplot(aes(x=reorder(Squad,npxG),y=npxG,fill=Squad)) +
@@ -88,7 +88,7 @@ EPLPlayerStats %>%
        caption="statsbomb/fbref") +
   scale_fill_manual(values=col_epl()) +
   coord_flip()
-ggsave("./plots/fbref/npxG90.jpg")
+ggsave("./plots/fbref/EPLnpxG90.jpg")
 
 EPLPlayerStats %>%
   filter(Minutes>=400) %>%
@@ -104,7 +104,7 @@ EPLPlayerStats %>%
        caption="statsbomb/fbref") +
   scale_fill_manual(values=col_epl()) +
   coord_flip()
-ggsave("./plots/fbref/xA90.jpg")
+ggsave("./plots/fbref/EPLxA90.jpg")
 ```
 
 ```{r test,include=F}
