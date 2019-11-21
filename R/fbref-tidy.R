@@ -5,6 +5,22 @@ EPLMatches <- EPLMatches_raw %>%
   filter(!is.na(Wk)) %>%
   select(-c("Match Report","Notes"))
 
+EPLPlayerPassing <- EPLPlayerPassing_raw %>%
+  separate("Player",c("Player",NA),sep="\\\\") %>%
+  separate("Nation",c(NA,"Nation"),sep=" ") %>%
+  rename("Assists"="Ast") %>%
+  rename("ShotAssists"="KP") %>%
+  rename("TotalComp"="Cmp") %>%
+  rename("TotalAtt"="Att") %>%
+  rename("ShortComp"="Cmp_1") %>%
+  rename("ShortAtt"="Att_1") %>%
+  rename("MediumComp"="Cmp_2") %>%
+  rename("MediumAtt"="Att_2") %>%
+  rename("LongComp"="Cmp_3") %>%
+  rename("LongAtt"="Att_3") %>%
+  rename("FinalThird"="1/3") %>%
+  select(-"Rk",-"xA-A",-"Cmp%",-"Cmp%_1",-"Cmp%_2",-"Cmp%_3")
+
 EPLPlayerShooting <- EPLPlayerShooting_raw %>%
   separate("Player",c("Player",NA),sep="\\\\") %>%
   separate("Nation",c(NA,"Nation"),sep=" ") %>%
