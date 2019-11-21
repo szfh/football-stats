@@ -50,6 +50,21 @@ EPLTable <- EPLTable_raw %>%
   rename("xGD"="xGDiff") %>%
   select(-"Top Team Scorer",-"Goalkeeper")
 
+EPLTeamPassing <- EPLTeamPassing_raw %>%
+  rename("Players"="# Pl") %>%
+  rename("Assists"="Ast") %>%
+  rename("ShotAssists"="KP") %>%
+  rename("TotalComp"="Cmp") %>%
+  rename("TotalAtt"="Att") %>%
+  rename("ShortComp"="Cmp_1") %>%
+  rename("ShortAtt"="Att_1") %>%
+  rename("MediumComp"="Cmp_2") %>%
+  rename("MediumAtt"="Att_2") %>%
+  rename("LongComp"="Cmp_3") %>%
+  rename("LongAtt"="Att_3") %>%
+  rename("FinalThird"="1/3") %>%
+  select(-"xA-A",-"Cmp%",-"Cmp%_1",-"Cmp%_2",-"Cmp%_3")
+
 EPLTeamShooting <- EPLTeamShooting_raw %>%
   rename("Players"="# Pl") %>%
   rename("Goals"="Gls") %>%
