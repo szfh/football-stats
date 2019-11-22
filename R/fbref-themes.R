@@ -1,4 +1,4 @@
-themesfc <- function(base_size=12,base_family=""){
+theme_sfc <- function(base_size=12,base_family=""){
   theme_bw(base_size=base_size,base_family=base_family) +
     theme(
       strip.background = element_blank(),
@@ -19,7 +19,7 @@ themesfc <- function(base_size=12,base_family=""){
     )
 }
 
-themeepl <- function(base_size=12,base_family=""){
+theme_epl <- function(base_size=12,base_family=""){
   theme_clean(base_size=base_size,base_family=base_family) +
     theme(
       # strip.background = element_blank(),

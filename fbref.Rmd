@@ -35,7 +35,7 @@ EPLPlayerStats %>%
   ggplot(aes(x=reorder(Player,Minutes),y=Minutes)) +
   geom_bar(stat="identity",fill=sfc,width=0.8,alpha=0.6) +
   geom_label(aes(label=Minutes),colour=sfc_light,size=2) +
-  themesfc() +
+  theme_sfc() +
   theme(panel.grid.major.x=element_line(size=0.1,
                                         linetype="dashed"),
         panel.grid.minor.x=element_blank(),
@@ -55,7 +55,7 @@ EPLPlayerStats %>%
   ggplot(aes(x=npxG,y=xA)) +
   geom_point(colour=sfc,size=1.5,alpha=0.8) +
   geom_text_repel(aes(label=Player),size=3) +
-  themesfc() +
+  theme_sfc() +
   labs(title="Southampton EPL xG/xA (non-penalty)",
        x="npxG",
        y="xA",
@@ -65,7 +65,7 @@ ggsave("./plots/fbref/SFCnpxGxA.jpg")
 EPLTeamStats %>%
   ggplot(aes(x=reorder(Squad,npxG),y=npxG,fill=Squad)) +
   geom_bar(stat="identity",alpha=0.8) +
-  themesfc() +
+  theme_sfc() +
   labs(title="EPL xG (non-penalty)",
        x=element_blank(),
        y="npxG",
@@ -81,7 +81,7 @@ EPLPlayerStats %>%
   head(20) %>%
   ggplot() +
   geom_bar(aes(x=reorder(Player,npxG90),y=npxG90,fill=Squad),stat="identity",alpha=0.8) +
-  themesfc() +
+  theme_sfc() +
   labs(title="npxG/90 (min 400 minutes)",
        x=element_blank(),
        y="npxG/90",
@@ -97,7 +97,7 @@ EPLPlayerStats %>%
   head(20) %>%
   ggplot() +
   geom_bar(aes(x=reorder(Player,xA90),y=xA90,fill=Squad),stat="identity",alpha=0.8) +
-  themesfc() +
+  theme_sfc() +
   labs(title="xA/90 (min 400 minutes)",
        x=element_blank(),
        y="xA/90",
@@ -111,7 +111,7 @@ EPLPlayerPassing %>%
   filter(ShotAssists>0) %>%
   ggplot() +
   geom_bar(aes(x=reorder(Player,ShotAssists),y=ShotAssists),stat="identity",fill=sfc,alpha=0.8) +
-  themesfc() +
+  theme_sfc() +
   labs(title="Passes leading to shot",
        x=element_blank(),
        y=element_blank(),
