@@ -42,8 +42,8 @@ theme_epl <- function(base_size=12,base_family=""){
 
 # https://drsimonj.svbtle.com/creating-corporate-colour-palettes-for-ggplot2
 # https://encycolorpedia.com/teams/football/epl
-col_epl <- function(team_name){
-  col_epl <- c(
+palette_epl <- function(team_name){
+  palette_epl <- c(
     `Arsenal` = "#EF0107",
     `Aston Villa` = "#670E36",
     `Brighton & Hove Albion` = "#0057B8",
@@ -73,12 +73,12 @@ col_epl <- function(team_name){
     `Wolves` = "#FDB913"
   )
   
-  if(is.null(col_epl))
-    return(col_epl)
+  if(is.null(palette_epl))
+    return(palette_epl)
   
-  return(col_epl[team_name])
+  return(palette_epl[team_name])
 }
-# pie(rep(1, length(col_epl)), col = col_epl)
+# pie(rep(1, length(palette_epl)), col = palette_epl)
 
 col_light <- few_pal("Light")(8)
 col_medium <- few_pal("Medium")(8)

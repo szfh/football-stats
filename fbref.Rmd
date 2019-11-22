@@ -70,7 +70,7 @@ EPLTeamStats %>%
        x=element_blank(),
        y="npxG",
        caption="statsbomb/fbref") +
-  scale_fill_manual(values=col_epl()) +
+  scale_fill_manual(values=palette_epl()) +
   coord_flip()
 ggsave("./plots/fbref/EPLnpxG.jpg")
 
@@ -86,7 +86,7 @@ EPLPlayerStats %>%
        x=element_blank(),
        y="npxG/90",
        caption="statsbomb/fbref") +
-  scale_fill_manual(values=col_epl()) +
+  scale_fill_manual(values=palette_epl()) +
   coord_flip()
 ggsave("./plots/fbref/EPLnpxG90.jpg")
 
@@ -102,7 +102,7 @@ EPLPlayerStats %>%
        x=element_blank(),
        y="xA/90",
        caption="statsbomb/fbref") +
-  scale_fill_manual(values=col_epl()) +
+  scale_fill_manual(values=palette_epl()) +
   coord_flip()
 ggsave("./plots/fbref/EPLxA90.jpg")
 
