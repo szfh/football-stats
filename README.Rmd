@@ -15,6 +15,8 @@ A repository to keep track of some football stats work.
 1. [**FC rSTATS**: Scraping Tutorials](https://github.com/FCrSTATS/ScrapingTutorials)
 1. [Possibly useful CSS selector tutorial](http://flukeout.github.io/)
 1. [**Statsbomb Messi data guide**](https://statsbomb.com/2019/07/messi-data-release-part-1-working-with-statsbomb-data-in-r/)
+1. [**Visualise the EPL**](https://ryo-n7.github.io/2019-11-21-visualize-EPL-part-1/) - Ryo-n7
+1. [**Scraping fbref**](https://chmartin.github.io/2019/02/18/EPL-History-Scraping.html)
 
 ## Stats websites
 
@@ -25,6 +27,7 @@ A repository to keep track of some football stats work.
 1. Sofascore
 1. Understat
 1. [s2stats](https://s2stats.home.blog/)
+1. [football-data.co.uk](https://www.football-data.co.uk/downloadm.php) - Excel download
 
 ## Concepts and resources
 
