@@ -67,10 +67,6 @@ ggsave("./plots/fbref/SFCnpxGxA.jpg")
 
 Players %>%
   filter(Squad=="Southampton") %>%
-  str()
-
-Players %>%
-  filter(Squad=="Southampton") %>%
   filter(xG90+xA90>0) %>%
   ggplot(aes(x=npxG90,y=xA90)) +
   geom_point(colour=sfc,size=1.5,alpha=0.8) +
@@ -99,12 +95,29 @@ Teams %>%
 ggsave("./plots/fbref/EPLnpxG.jpg")
 ```
 
-```{r test,include=F}
+```{r data-frames}
 Players %>%
-  str()
+  glimpse()
 
 Teams %>%
-  str()
+  glimpse()
+```
+
+
+
+```{r test,include=F}
+Players %>%
+  filter(Squad=="Southampton") %>%
+  filter(KP>0) %>%
+  ggplot(aes(x=reorder(Player,KP),y=KP)) +
+  geom_bar(stat="identity") +
+  coord_flip()
+
+Players %>%
+  filter(Squad=="Southampton") %>%
+  filter(`1/3`+PenArea>0) %>%
+  ggplot(aes(x=`1/3`,y=PenArea)) +
+  geom_point()
 
 # Players %>%
 #   filter(MP>=400) %>%
