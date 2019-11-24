@@ -78,6 +78,7 @@ Teams <- Standard_Team %>%
   full_join(PlayingTime_Team)
 
 rm(list=ls(pattern="_raw"))
+rm(list=ls(pattern="_tidy"))
 
 # EPLMatches <- EPLMatches_raw %>%
 #   separate("Score",c("GH","GA"),sep="[:punct:]") %>%
