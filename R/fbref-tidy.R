@@ -69,14 +69,16 @@ Players <- Standard_Player_tidy %>%
   left_join(Passing_Player_tidy) %>%
   left_join(Shooting_Player_tidy) %>%
   left_join(Misc_Player_tidy) %>%
-  left_join(PlayingTime_Player_tidy)
+  left_join(PlayingTime_Player_tidy) %>%
+  separate("Player",c("Player",NA),sep="\\\\") %>%
+  separate("Nation",c(NA,"Nation"),sep=" ")
 
 Teams <- Standard_Team_tidy %>%
   left_join(Passing_Team_tidy) %>%
   left_join(Shooting_Team_tidy) %>%
   left_join(Misc_Team_tidy) %>%
-  left_join(PlayingTime_Team_tidy) %>% View()
-
+  left_join(PlayingTime_Team_tidy)
+    
 rm(list=ls(pattern="_raw"))
 rm(list=ls(pattern="_tidy"))
 
