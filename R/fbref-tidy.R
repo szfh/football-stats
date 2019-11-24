@@ -65,6 +65,19 @@ Misc_Team <- Misc_Team_raw
 PlayingTime_Player <- PlayingTime_Player_raw
 PlayingTime_Team <- PlayingTime_Team_raw
 
+Players <- Standard_Player %>%
+  full_join(Passing_Player) %>%
+  full_join(Shooting_Player) %>%
+  full_join(Misc_Player) %>%
+  full_join(PlayingTime_Player)
+
+Teams <- Standard_Team %>%
+  full_join(Passing_Team) %>%
+  full_join(Shooting_Team) %>%
+  full_join(Misc_Team) %>%
+  full_join(PlayingTime_Team)
+  
+
 # EPLMatches <- EPLMatches_raw %>%
 #   separate("Score",c("GH","GA"),sep="[:punct:]") %>%
 #   rename("xGH"="xG") %>%
