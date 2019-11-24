@@ -122,6 +122,12 @@ Teams %>%
 ```{r test,include=F}
 Players %>%
   filter(Squad=="Southampton") %>%
+  ggplot(aes(x=reorder(Player,`+/-`),y=`+/-`)) +
+  geom_bar(stat="identity") +
+  coord_flip()
+
+Players %>%
+  filter(Squad=="Southampton") %>%
   filter(KP>0) %>%
   ggplot(aes(x=reorder(Player,KP),y=KP)) +
   geom_bar(stat="identity") +
