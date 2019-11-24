@@ -57,13 +57,30 @@ Players %>%
   filter(xG+xA>0) %>%
   ggplot(aes(x=npxG,y=xA)) +
   geom_point(colour=sfc,size=1.5,alpha=0.8) +
-  geom_text_repel(aes(label=ifelse(xG+xA>0.5,Player,element_blank())),size=3) +
+  geom_text_repel(aes(label=ifelse(npxG+xA>0.6,Player,element_blank())),size=3) +
   theme_sfc() +
   labs(title="Southampton EPL xG/xA (non-penalty)",
-       x="npxG",
+       x="xG",
        y="xA",
        caption="statsbomb/fbref")
 ggsave("./plots/fbref/SFCnpxGxA.jpg")
+
+Players %>%
+  filter(Squad=="Southampton") %>%
+  str()
+
+Players %>%
+  filter(Squad=="Southampton") %>%
+  filter(xG90+xA90>0) %>%
+  ggplot(aes(x=npxG90,y=xA90)) +
+  geom_point(colour=sfc,size=1.5,alpha=0.8) +
+  geom_text_repel(aes(label=ifelse(npxG90+xA90>0.1,Player,element_blank())),size=3) +
+  theme_sfc() +
+  labs(title="Southampton EPL xG/xA per 90 minutes (non-penalty)",
+       x="xG per 90",
+       y="xA per 90",
+       caption="statsbomb/fbref")
+ggsave("./plots/fbref/SFCnpxGxA90.jpg")
 ```
 
 ### Premier League plots
