@@ -19,6 +19,7 @@ library(understatr)
 library(ggsoccer)
 library(ggrepel)
 library(ggthemes)
+library(glue)
 
 set.seed(9999)
 theme_set(theme_bw())
