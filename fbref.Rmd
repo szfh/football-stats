@@ -77,6 +77,19 @@ Players %>%
        y="xA per 90",
        caption="statsbomb/fbref")
 ggsave("./plots/fbref/SFCnpxGxA90.jpg")
+
+Players %>%
+  filter(Squad=="Southampton") %>%
+  filter(`1/3`+PenArea>0) %>%
+  ggplot(aes(x=`1/3`,y=PenArea)) +
+  geom_point(colour=sfc,size=1.5,alpha=0.8) +
+  geom_text_repel(aes(label=ifelse(`1/3`+PenArea>8,Player,element_blank())),size=3) +
+  theme_sfc() +
+  labs(title=element_blank(),
+       x="Passes into final third",
+       y="Passes into penalty area",
+       caption="statsbomb/fbref")
+ggsave("./plots/fbref/SFCAttackingPasses.jpg")
 ```
 
 ### Premier League plots
@@ -97,6 +110,7 @@ ggsave("./plots/fbref/EPLnpxG.jpg")
 
 ```{r data-frames}
 Players %>%
+  filter(Squad=="Southampton") %>%
   glimpse()
 
 Teams %>%
@@ -112,12 +126,6 @@ Players %>%
   ggplot(aes(x=reorder(Player,KP),y=KP)) +
   geom_bar(stat="identity") +
   coord_flip()
-
-Players %>%
-  filter(Squad=="Southampton") %>%
-  filter(`1/3`+PenArea>0) %>%
-  ggplot(aes(x=`1/3`,y=PenArea)) +
-  geom_point()
 
 # Players %>%
 #   filter(MP>=400) %>%
