@@ -30,7 +30,9 @@ source("./R/fbref-tidy.R")
 source("./R/fbref-themes.R")
 ```
 
-```{r plots}
+### Southampton plots
+
+```{r plots-sfc}
 Players %>%
   filter(Squad=="Southampton") %>%
   ggplot(aes(x=reorder(Player,Min),y=Min)) +
@@ -62,7 +64,11 @@ Players %>%
        y="xA",
        caption="statsbomb/fbref")
 ggsave("./plots/fbref/SFCnpxGxA.jpg")
+```
 
+### Premier League plots
+
+```{r plots-epl}
 Teams %>%
   ggplot(aes(x=reorder(Squad,npxG),y=npxG,fill=Squad)) +
   geom_bar(stat="identity",alpha=0.8) +
