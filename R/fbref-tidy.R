@@ -65,17 +65,17 @@ Misc_Team_tidy <- Misc_Team_raw
 PlayingTime_Player_tidy <- PlayingTime_Player_raw
 PlayingTime_Team_tidy <- PlayingTime_Team_raw
 
-Players <- Standard_Player %>%
-  full_join(Passing_Player) %>%
-  full_join(Shooting_Player) %>%
-  full_join(Misc_Player) %>%
-  full_join(PlayingTime_Player)
+Players <- Standard_Player_tidy %>%
+  left_join(Passing_Player_tidy) %>%
+  left_join(Shooting_Player_tidy) %>%
+  left_join(Misc_Player_tidy) %>%
+  left_join(PlayingTime_Player_tidy)
 
-Teams <- Standard_Team %>%
-  full_join(Passing_Team) %>%
-  full_join(Shooting_Team) %>%
-  full_join(Misc_Team) %>%
-  full_join(PlayingTime_Team)
+Teams <- Standard_Team_tidy %>%
+  left_join(Passing_Team_tidy) %>%
+  left_join(Shooting_Team_tidy) %>%
+  left_join(Misc_Team_tidy) %>%
+  left_join(PlayingTime_Team_tidy) %>% View()
 
 rm(list=ls(pattern="_raw"))
 rm(list=ls(pattern="_tidy"))
