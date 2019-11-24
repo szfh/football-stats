@@ -1,4 +1,4 @@
-Standard_Player <- Standard_Player_raw %>%
+Standard_Player_tidy <- Standard_Player_raw %>%
   rename(
     "Gls90"="Gls_1",
     "Ast90"="Ast_1",
@@ -12,7 +12,7 @@ Standard_Player <- Standard_Player_raw %>%
     "npxG+xA90"="npxG+xA",
   )
 
-Standard_Team <- Standard_Team_raw %>%
+Standard_Team_tidy <- Standard_Team_raw %>%
   rename(
     "Gls90"="Gls_1",
     "Ast90"="Ast_1",
@@ -26,7 +26,7 @@ Standard_Team <- Standard_Team_raw %>%
     "npxG+xA90"="npxG+xA",
   )
 
-Passing_Player <- Passing_Player_raw %>%
+Passing_Player_tidy <- Passing_Player_raw %>%
   rename("TotalCmp"="Cmp",
          "TotalAtt"="Att",
          "TotalCmp%"="Cmp%",
@@ -41,7 +41,7 @@ Passing_Player <- Passing_Player_raw %>%
          "LongCmp%"="Cmp%_3",
   )
 
-Passing_Team <- Passing_Team_raw %>%
+Passing_Team_tidy <- Passing_Team_raw %>%
   rename("TotalCmp"="Cmp",
          "TotalAtt"="Att",
          "TotalCmp%"="Cmp%",
@@ -56,14 +56,14 @@ Passing_Team <- Passing_Team_raw %>%
          "LongCmp%"="Cmp%_3",
   )
 
-Shooting_Player <- Shooting_Player_raw
-Shooting_Team <- Shooting_Team_raw
+Shooting_Player_tidy <- Shooting_Player_raw
+Shooting_Team_tidy <- Shooting_Team_raw
 
-Misc_Player <- Misc_Player_raw
-Misc_Team <- Misc_Team_raw
+Misc_Player_tidy <- Misc_Player_raw
+Misc_Team_tidy <- Misc_Team_raw
 
-PlayingTime_Player <- PlayingTime_Player_raw
-PlayingTime_Team <- PlayingTime_Team_raw
+PlayingTime_Player_tidy <- PlayingTime_Player_raw
+PlayingTime_Team_tidy <- PlayingTime_Team_raw
 
 Players <- Standard_Player %>%
   full_join(Passing_Player) %>%
@@ -76,7 +76,8 @@ Teams <- Standard_Team %>%
   full_join(Shooting_Team) %>%
   full_join(Misc_Team) %>%
   full_join(PlayingTime_Team)
-  
+
+rm(list=ls(pattern="_raw"))
 
 # EPLMatches <- EPLMatches_raw %>%
 #   separate("Score",c("GH","GA"),sep="[:punct:]") %>%
