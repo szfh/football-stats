@@ -31,11 +31,11 @@ source("./R/fbref-themes.R")
 ```
 
 ```{r plots}
-EPLPlayerStats %>%
+Players %>%
   filter(Squad=="Southampton") %>%
-  ggplot(aes(x=reorder(Player,Minutes),y=Minutes)) +
+  ggplot(aes(x=reorder(Player,Min),y=Min)) +
   geom_bar(stat="identity",fill=sfc,width=0.8,alpha=0.6) +
-  geom_label(aes(label=Minutes),colour=sfc_light,size=2) +
+  geom_label(aes(label=Min),colour=sfc_light,size=2) +
   theme_sfc() +
   theme(panel.grid.major.x=element_line(size=0.1,
                                         linetype="dashed"),
@@ -50,12 +50,12 @@ EPLPlayerStats %>%
   coord_flip()
 ggsave("./plots/fbref/SFCMinutes.jpg")
 
-EPLPlayerStats %>%
+Players %>%
   filter(Squad=="Southampton") %>%
   filter(xG+xA>0) %>%
   ggplot(aes(x=npxG,y=xA)) +
   geom_point(colour=sfc,size=1.5,alpha=0.8) +
-  geom_text_repel(aes(label=Player),size=3) +
+  geom_text_repel(aes(label=ifelse(xG+xA>0.5,Player,element_blank())),size=3) +
   theme_sfc() +
   labs(title="Southampton EPL xG/xA (non-penalty)",
        x="npxG",
@@ -63,7 +63,7 @@ EPLPlayerStats %>%
        caption="statsbomb/fbref")
 ggsave("./plots/fbref/SFCnpxGxA.jpg")
 
-EPLTeamStats %>%
+Teams %>%
   ggplot(aes(x=reorder(Squad,npxG),y=npxG,fill=Squad)) +
   geom_bar(stat="identity",alpha=0.8) +
   theme_sfc() +
@@ -74,69 +74,57 @@ EPLTeamStats %>%
   scale_fill_manual(values=palette_epl()) +
   coord_flip()
 ggsave("./plots/fbref/EPLnpxG.jpg")
-
-EPLPlayerStats %>%
-  filter(Minutes>=400) %>%
-  mutate(npxG90=(90*npxG/Minutes)) %>%
-  arrange(desc(npxG90)) %>%
-  head(20) %>%
-  ggplot() +
-  geom_bar(aes(x=reorder(Player,npxG90),y=npxG90,fill=Squad),stat="identity",alpha=0.8) +
-  theme_sfc() +
-  labs(title="npxG/90 (min 400 minutes)",
-       x=element_blank(),
-       y="npxG/90",
-       caption="statsbomb/fbref") +
-  scale_fill_manual(values=palette_epl()) +
-  coord_flip()
-ggsave("./plots/fbref/EPLnpxG90.jpg")
-
-EPLPlayerStats %>%
-  filter(Minutes>=400) %>%
-  mutate(xA90=(90*xA/Minutes)) %>%
-  arrange(desc(xA90)) %>%
-  head(20) %>%
-  ggplot() +
-  geom_bar(aes(x=reorder(Player,xA90),y=xA90,fill=Squad),stat="identity",alpha=0.8) +
-  theme_sfc() +
-  labs(title="xA/90 (min 400 minutes)",
-       x=element_blank(),
-       y="xA/90",
-       caption="statsbomb/fbref") +
-  scale_fill_manual(values=palette_epl()) +
-  coord_flip()
-ggsave("./plots/fbref/EPLxA90.jpg")
-
-EPLPlayerPassing %>%
-  filter(Squad=="Southampton") %>%
-  filter(ShotAssists>0) %>%
-  ggplot() +
-  geom_bar(aes(x=reorder(Player,ShotAssists),y=ShotAssists),stat="identity",fill=sfc,alpha=0.8) +
-  theme_sfc() +
-  labs(title="Passes leading to shot",
-       x=element_blank(),
-       y=element_blank(),
-       caption="statsbomb/fbref") +
-  coord_flip()
-ggsave("./plots/fbref/SFCKeyPasses.jpg")
 ```
 
 ```{r test,include=F}
-EPLTeamStats %>%
+Players %>%
   str()
 
-EPLPlayerStats %>%
+Teams %>%
   str()
 
-EPLTeamShooting %>%
-  str()
+# Players %>%
+#   filter(MP>=400) %>%
+#   mutate(npxG90=(90*npxG/MP)) %>%
+#   arrange(desc(npxG90)) %>%
+#   head(20) %>%
+#   ggplot() +
+#   geom_bar(aes(x=reorder(Player,npxG90),y=npxG90,fill=Squad),stat="identity",alpha=0.8) +
+#   theme_sfc() +
+#   labs(title="npxG/90 (min 400 minutes)",
+#        x=element_blank(),
+#        y="npxG/90",
+#        caption="statsbomb/fbref") +
+#   scale_fill_manual(values=palette_epl()) +
+#   coord_flip()
+# ggsave("./plots/fbref/EPLnpxG90.jpg")
 
-EPLPlayerShooting %>%
-  str()
+# Players %>%
+#   filter(Minutes>=400) %>%
+#   mutate(xA90=(90*xA/Minutes)) %>%
+#   arrange(desc(xA90)) %>%
+#   head(20) %>%
+#   ggplot() +
+#   geom_bar(aes(x=reorder(Player,xA90),y=xA90,fill=Squad),stat="identity",alpha=0.8) +
+#   theme_sfc() +
+#   labs(title="xA/90 (min 400 minutes)",
+#        x=element_blank(),
+#        y="xA/90",
+#        caption="statsbomb/fbref") +
+#   scale_fill_manual(values=palette_epl()) +
+#   coord_flip()
+# ggsave("./plots/fbref/EPLxA90.jpg")
 
-EPLTeamPassing %>%
-  str()
-
-EPLPlayerPassing %>%
-  str()
+# Players %>%
+#   filter(Squad=="Southampton") %>%
+#   filter(ShotAssists>0) %>%
+#   ggplot() +
+#   geom_bar(aes(x=reorder(Player,ShotAssists),y=ShotAssists),stat="identity",fill=sfc,alpha=0.8) +
+#   theme_sfc() +
+#   labs(title="Passes leading to shot",
+#        x=element_blank(),
+#        y=element_blank(),
+#        caption="statsbomb/fbref") +
+#   coord_flip()
+# ggsave("./plots/fbref/SFCKeyPasses.jpg")
 ```
