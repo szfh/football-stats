@@ -9,7 +9,6 @@ EPLPlayerPassing <- EPLPlayerPassing_raw %>%
   separate("Player",c("Player",NA),sep="\\\\") %>%
   separate("Nation",c(NA,"Nation"),sep=" ") %>%
   rename("Assists"="Ast") %>%
-  rename("ShotAssists"="KP") %>%
   rename("TotalComp"="Cmp") %>%
   rename("TotalAtt"="Att") %>%
   rename("ShortComp"="Cmp_1") %>%
@@ -18,8 +17,7 @@ EPLPlayerPassing <- EPLPlayerPassing_raw %>%
   rename("MediumAtt"="Att_2") %>%
   rename("LongComp"="Cmp_3") %>%
   rename("LongAtt"="Att_3") %>%
-  rename("FinalThird"="1/3") %>%
-  select(-"Rk",-"xA-A",-"Cmp%",-"Cmp%_1",-"Cmp%_2",-"Cmp%_3")
+  select(-"Rk",-"Cmp%",-"Cmp%_1",-"Cmp%_2",-"Cmp%_3")
 
 EPLPlayerShooting <- EPLPlayerShooting_raw %>%
   separate("Player",c("Player",NA),sep="\\\\") %>%
@@ -27,27 +25,27 @@ EPLPlayerShooting <- EPLPlayerShooting_raw %>%
   rename("Goals"="Gls") %>%
   rename("PKGoals"="PK") %>%
   rename("PKs"="PKatt")  %>%
-  select(-("SoT%":"G/SoT"),-("npxG/Sh":"np:G-xG"))
+  select(-"Rk",-"SoT%")
 
 EPLPlayerStats <- EPLPlayerStats_raw %>%
   separate("Player",c("Player",NA),sep="\\\\") %>%
   separate("Nation",c(NA,"Nation"),sep=" ") %>%
-  rename("Played"="Apps") %>%
-  rename("Minutes"="Min") %>%
-  rename("Goals"="Gls") %>%
-  rename("Assists"="Ast") %>%
-  rename("PKGoals"="PK") %>%
-  rename("PKs"="PKatt") %>%
-  rename("Fouls"="Fls") %>%
-  rename("YC"="CrdY") %>%
-  rename("RC"="CrdR") %>%
-  select(-"Rk",-"Mn/Ap",-("Gls_1":"npxG+xA"))
+  # rename("Played"="MP") %>%
+  # rename("Minutes"="Min") %>%
+  # rename("Goals"="Gls") %>%
+  # rename("Assists"="Ast") %>%
+  # rename("PKGoals"="PK") %>%
+  # rename("PKs"="PKatt") %>%
+  # rename("Fouls"="Fls") %>%
+  # rename("YC"="CrdY") %>%
+  # rename("RC"="CrdR") %>%
+  select(-"Rk",-("Gls_1":"G+A-PK"),-("xG_1":"npxG+xA"))
 
 EPLTable <- EPLTable_raw %>%
-  rename("Pos"="Rk") %>%
-  rename("P"="Apps") %>%
-  rename("GD"="GDiff") %>%
-  rename("xGD"="xGDiff") %>%
+  # rename("Pos"="Rk") %>%
+  # rename("P"="Apps") %>%
+  # rename("GD"="GDiff") %>%
+  # rename("xGD"="xGDiff") %>%
   select(-"Top Team Scorer",-"Goalkeeper")
 
 EPLTeamPassing <- EPLTeamPassing_raw %>%
