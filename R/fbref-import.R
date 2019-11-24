@@ -1,28 +1,22 @@
-# import from ./data/fbref/2019/
+path <- "./data/fbref/EPL/2019/"
+csv_comment <- "##"
 
-EPLMatches_raw <- readr::read_csv("./data/fbref/2019/EPLMatches.txt",skip=1,comment="##")
-# https://fbref.com/en/comps/9/schedule/Premier-League-Fixtures
+# read_csv(glue(path,"Standard_Player"),skip=1,comment=csv_comment)
 
-EPLPlayerPassing_raw <- readr::read_csv("./data/fbref/2019/EPLPlayerPassing.txt",skip=2,comment="##")
-# https://fbref.com/en/comps/9/passing/Premier-League-Stats
+Standard_Player_raw <- read_csv(glue(path,"Standard_Player.txt"),skip=2,comment=csv_comment)
+Standard_Team_raw <- read_csv(glue(path,"Standard_Team.txt"),skip=2,comment=csv_comment)
 
-EPLPlayerShooting_raw <- readr::read_csv("./data/fbref/2019/EPLPlayerShooting.txt",skip=1,comment="##")
-# https://fbref.com/en/comps/9/shooting/Premier-League-Stats
+Passing_Player_raw <- read_csv(glue(path,"Passing_Player.txt"),skip=2,comment=csv_comment)
+Passing_Team_raw <- read_csv(glue(path,"Passing_Team.txt"),skip=2,comment=csv_comment)
 
-EPLPlayerStats_raw <- readr::read_csv("./data/fbref/2019/EPLPlayerStats.txt",comment="##",skip=2)
-# https://fbref.com/en/comps/9/stats/Premier-League-Stats
+Shooting_Player_raw <- read_csv(glue(path,"Shooting_Player.txt"),skip=1,comment=csv_comment)
+Shooting_Team_raw <- read_csv(glue(path,"Shooting_Team.txt"),skip=1,comment=csv_comment)
 
-EPLTable_raw <- readr::read_csv("./data/fbref/2019/EPLTable.txt",skip=1,comment="##")
-# https://fbref.com/en/comps/9/Premier-League-Stats
+Misc_Player_raw <- read_csv(glue(path,"Misc_Player.txt"),skip=0,comment=csv_comment)
+Misc_Team_raw <- read_csv(glue(path,"Misc_Team.txt"),skip=0,comment=csv_comment)
 
-EPLTeamPassing_raw <- readr::read_csv("./data/fbref/2019/EPLTeamPassing.txt",skip=2,comment="##")
-# https://fbref.com/en/comps/9/passing/Premier-League-Stats
+PlayingTime_Player_raw <- read_csv(glue(path,"PlayingTime_Player.txt"),skip=2,comment=csv_comment)
+PlayingTime_Team_raw <- read_csv(glue(path,"PlayingTime_Team.txt"),skip=2,comment=csv_comment)
 
-EPLTeamShooting_raw <- readr::read_csv("./data/fbref/2019/EPLTeamShooting.txt",comment="##")
-# https://fbref.com/en/comps/9/shooting/Premier-League-Stats
-
-EPLTeamStats_raw <- readr::read_csv("./data/fbref/2019/EPLTeamStats.txt",skip=2,comment="##")
-# https://fbref.com/en/comps/9/stats/Premier-League-Stats
-
-SFCMatches_raw <- readr::read_csv("./data/fbref/2019/SFCMatches.txt",comment="##")
-# https://fbref.com/en/squads/33c895d4/Southampton
+Table_raw <- read_csv(glue(path,"Table.txt"),skip=0,comment=csv_comment)
+Matches_raw <- read_csv(glue(path,"Matches.txt"),skip=0,comment=csv_comment)
