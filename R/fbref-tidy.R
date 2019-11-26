@@ -27,18 +27,19 @@ Standard_Team_tidy <- Standard_Team_raw %>%
   )
 
 Passing_Player_tidy <- Passing_Player_raw %>%
-  rename("TotalCmp"="Cmp",
-         "TotalAtt"="Att",
-         "TotalCmp%"="Cmp%",
-         "ShortCmp"="Cmp_1",
-         "ShortAtt"="Att_1",
-         "ShortCmp%"="Cmp%_1",
-         "MediumCmp"="Cmp_2",
-         "MediumAtt"="Att_2",
-         "MediumCmp%"="Cmp%_2",
-         "LongCmp"="Cmp_3",
-         "LongAtt"="Att_3",
-         "LongCmp%"="Cmp%_3",
+  rename(
+    "TotalCmp"="Cmp",
+    "TotalAtt"="Att",
+    "TotalCmp%"="Cmp%",
+    "ShortCmp"="Cmp_1",
+    "ShortAtt"="Att_1",
+    "ShortCmp%"="Cmp%_1",
+    "MediumCmp"="Cmp_2",
+    "MediumAtt"="Att_2",
+    "MediumCmp%"="Cmp%_2",
+    "LongCmp"="Cmp_3",
+    "LongAtt"="Att_3",
+    "LongCmp%"="Cmp%_3",
   ) %>%
   select(
     -"Rk",
@@ -47,18 +48,19 @@ Passing_Player_tidy <- Passing_Player_raw %>%
   )
 
 Passing_Team_tidy <- Passing_Team_raw %>%
-  rename("TotalCmp"="Cmp",
-         "TotalAtt"="Att",
-         "TotalCmp%"="Cmp%",
-         "ShortCmp"="Cmp_1",
-         "ShortAtt"="Att_1",
-         "ShortCmp%"="Cmp%_1",
-         "MediumCmp"="Cmp_2",
-         "MediumAtt"="Att_2",
-         "MediumCmp%"="Cmp%_2",
-         "LongCmp"="Cmp_3",
-         "LongAtt"="Att_3",
-         "LongCmp%"="Cmp%_3",
+  rename(
+    "TotalCmp"="Cmp",
+    "TotalAtt"="Att",
+    "TotalCmp%"="Cmp%",
+    "ShortCmp"="Cmp_1",
+    "ShortAtt"="Att_1",
+    "ShortCmp%"="Cmp%_1",
+    "MediumCmp"="Cmp_2",
+    "MediumAtt"="Att_2",
+    "MediumCmp%"="Cmp%_2",
+    "LongCmp"="Cmp_3",
+    "LongAtt"="Att_3",
+    "LongCmp%"="Cmp%_3",
   )
 
 Shooting_Player_tidy <- Shooting_Player_raw %>%
