@@ -86,12 +86,16 @@ Misc_Player_tidy <- Misc_Player_raw %>%
 Misc_Team_tidy <- Misc_Team_raw
 
 PlayingTime_Player_tidy <- PlayingTime_Player_raw %>%
+  rename(
+    "xGOn-Off"="On-Off_1"
+  ) %>%
   select(
     -"Rk",
     -"MP",
     -"Starts",
     -"Min",
     -"90s",
+    -"Matches",
   )
 
 PlayingTime_Team_tidy <- PlayingTime_Team_raw
