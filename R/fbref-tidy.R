@@ -39,6 +39,11 @@ Passing_Player_tidy <- Passing_Player_raw %>%
          "LongCmp"="Cmp_3",
          "LongAtt"="Att_3",
          "LongCmp%"="Cmp%_3",
+  ) %>%
+  select(
+    -"Rk",
+    -"Ast",
+    -"xA",
   )
 
 Passing_Team_tidy <- Passing_Team_raw %>%
@@ -56,13 +61,39 @@ Passing_Team_tidy <- Passing_Team_raw %>%
          "LongCmp%"="Cmp%_3",
   )
 
-Shooting_Player_tidy <- Shooting_Player_raw
+Shooting_Player_tidy <- Shooting_Player_raw %>%
+  select(
+    -"Rk",
+    -"Gls",
+    -"PK",
+    -"PKatt",
+    -"xG",
+    -"npxG",
+    -"90s",
+    -"FK",
+  )
+
 Shooting_Team_tidy <- Shooting_Team_raw
 
-Misc_Player_tidy <- Misc_Player_raw
+Misc_Player_tidy <- Misc_Player_raw %>%
+  select(
+    -"Rk",
+    -"CrdY",
+    -"CrdR",
+    -"90s",
+  )
+
 Misc_Team_tidy <- Misc_Team_raw
 
-PlayingTime_Player_tidy <- PlayingTime_Player_raw
+PlayingTime_Player_tidy <- PlayingTime_Player_raw %>%
+  select(
+    -"Rk",
+    -"MP",
+    -"Starts",
+    -"Min",
+    -"90s",
+  )
+
 PlayingTime_Team_tidy <- PlayingTime_Team_raw
 
 Players <- Standard_Player_tidy %>%
@@ -79,8 +110,8 @@ Teams <- Standard_Team_tidy %>%
   left_join(Misc_Team_tidy) %>%
   left_join(PlayingTime_Team_tidy)
     
-rm(list=ls(pattern="_raw"))
-rm(list=ls(pattern="_tidy"))
+# rm(list=ls(pattern="_raw"))
+# rm(list=ls(pattern="_tidy"))
 
 # EPLMatches <- EPLMatches_raw %>%
 #   separate("Score",c("GH","GA"),sep="[:punct:]") %>%
