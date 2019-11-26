@@ -90,6 +90,23 @@ Players %>%
        y="Passes into penalty area",
        caption="statsbomb/fbref")
 ggsave("./plots/fbref/SFCAttackingPasses.jpg")
+
+Players %>%
+  filter(Squad=="Southampton") %>%
+  # filter(!is.na(`+/-`)) %>%
+  mutate(PlusMinusPos=ifelse(`+/-`>=0,TRUE,FALSE)) %>%
+  ggplot(aes(x=reorder(Player,`+/-`),y=`+/-`)) +
+  geom_bar(aes(fill=PlusMinusPos),stat="identity",width=0.8,alpha=0.6) +
+  theme_sfc() +
+  theme(panel.grid.minor.x=element_blank()) +
+  labs(title="On-pitch goal difference",
+       x=element_blank(),
+       y="goals scored - goals conceded\nwhile on the pitch",
+       caption="statsbomb/fbref") +
+  scale_fill_manual(values=c(col_gdocs[[2]],col_gdocs[[4]])) +
+  scale_y_reverse() +
+  coord_flip()
+ggsave("./plots/fbref/SFCGoalDifference.jpg")
 ```
 
 ### Premier League plots
@@ -109,23 +126,17 @@ ggsave("./plots/fbref/EPLnpxG.jpg")
 ```
 
 ```{r data-frames}
-Players %>%
-  filter(Squad=="Southampton") %>%
-  glimpse()
-
-Teams %>%
-  glimpse()
+# Players %>%
+#   filter(Squad=="Southampton") %>%
+#   glimpse()
+# 
+# Teams %>%
+#   glimpse()
 ```
 
 
 
 ```{r test,include=F}
-Players %>%
-  filter(Squad=="Southampton") %>%
-  ggplot(aes(x=reorder(Player,`+/-`),y=`+/-`)) +
-  geom_bar(stat="identity") +
-  coord_flip()
-
 Players %>%
   filter(Squad=="Southampton") %>%
   filter(KP>0) %>%
