@@ -15,7 +15,7 @@ Shooting_Team_raw <- read_csv(glue(path,"Shooting_Team.txt"),skip=1,comment=csv_
 Misc_Player_raw <- read_csv(glue(path,"Misc_Player.txt"),skip=0,comment=csv_comment)
 Misc_Team_raw <- read_csv(glue(path,"Misc_Team.txt"),skip=0,comment=csv_comment)
 
-PlayingTime_Player_raw <- read_csv(glue(path,"PlayingTime_Player.txt"),skip=2,comment=csv_comment)
+PlayingTime_Player_raw <- read_csv(glue(path,"PlayingTime_Player.txt"),skip=1,comment=csv_comment)
 PlayingTime_Team_raw <- read_csv(glue(path,"PlayingTime_Team.txt"),skip=2,comment=csv_comment)
 
 Table_raw <- read_csv(glue(path,"Table.txt"),skip=0,comment=csv_comment)
