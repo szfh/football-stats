@@ -107,6 +107,22 @@ Players %>%
   scale_y_reverse() +
   coord_flip()
 ggsave("./plots/fbref/SFCGoalDifference.jpg")
+
+Players %>%
+  filter(Squad=="Southampton") %>%
+  filter(!is.na(`xG+/-90`)) %>%
+  mutate(PlusMinusPos=ifelse(`xG+/-90`>=0,TRUE,FALSE)) %>%
+  ggplot(aes(x=reorder(Player,`xG+/-90`),y=`xG+/-90`)) +
+  geom_bar(aes(fill=PlusMinusPos),stat="identity",width=0.8,alpha=0.6) +
+  theme_sfc() +
+  labs(title="On-pitch expected goals difference (per 90 minutes)",
+       x=element_blank(),
+       y="expected goals scored - expected goals conceded\nper 90 minutes while on the pitch",
+       caption="statsbomb/fbref") +
+  scale_fill_manual(values=c(col_gdocs[[2]],col_gdocs[[4]])) +
+  scale_y_reverse() +
+  coord_flip()
+ggsave("./plots/fbref/SFCxG90Difference.jpg")
 ```
 
 ### Premier League plots
