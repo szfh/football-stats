@@ -1,13 +1,9 @@
-football-stats
-================
-saintsnumbers
-2019-07-28
 
-# Football Statistics
+## Football Statistics
 
 A repository to keep track of some football stats work.
 
-## Resources
+### Resources
 
 1.  [**FC rSTATS**: Tracking Data
     Tutorials](https://github.com/FCrSTATS/TrackingDataTutorials)
@@ -22,7 +18,7 @@ A repository to keep track of some football stats work.
 6.  [**Scraping
     fbref**](https://chmartin.github.io/2019/02/18/EPL-History-Scraping.html)
 
-## Stats websites
+### Stats websites
 
 1.  Transfermarkt
 2.  Infogol
@@ -34,7 +30,7 @@ A repository to keep track of some football stats work.
 8.  [football-data.co.uk](https://www.football-data.co.uk/downloadm.php)
     Excel download
 
-## Concepts and resources
+### Concepts and resources
 
 1.  [Visualise
     StatsBomb](https://ryo-n7.github.io/2019-08-21-visualize-soccer-statsbomb-part-1/)
