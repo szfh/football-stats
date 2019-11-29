@@ -139,6 +139,18 @@ Teams %>%
   scale_fill_manual(values=palette_epl()) +
   coord_flip()
 ggsave("./plots/fbref/EPLnpxG.jpg")
+
+Table_raw %>%
+  ggplot(aes(x=reorder(Squad,desc(xGA)),y=xGA,fill=Squad)) +
+  geom_bar(stat="identity",alpha=0.8) +
+  theme_sfc() +
+  labs(title="EPL expected goals allowed (non-penalty)",
+       x=element_blank(),
+       y="xGA",
+       caption="statsbomb/fbref") +
+  scale_fill_manual(values=palette_epl()) +
+  coord_flip()
+ggsave("./plots/fbref/EPLnpxGA.jpg")
 ```
 
 ```{r data-frames}
@@ -153,4 +165,12 @@ ggsave("./plots/fbref/EPLnpxG.jpg")
 
 
 ```{r test,include=F}
+Players %>%
+  filter(Squad=="Southampton") %>%
+  gather("Left","Right",key="PassFoot",value="Passes") %>%
+  ggplot(aes(x=reorder(Player,Passes),y=Passes,fill=PassFoot)) +
+  geom_bar(stat="identity") +
+  theme_sfc() +
+  scale_fill_manual(values=c(col_gdocs[[1]],col_gdocs[[7]])) +
+  coord_flip()
 ```
