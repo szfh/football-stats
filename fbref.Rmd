@@ -180,10 +180,30 @@ ggsave("./plots/fbref/EPLnpxGA-GA.jpg")
 ```{r test,include=F}
 Players %>%
   filter(Squad=="Southampton") %>%
+  # mutate(PassRatio=(max(Left,Right)/(Left+Right)) %>% abs %>% round(digits=2)) %>%
   gather("Left","Right",key="PassFoot",value="Passes") %>%
-  ggplot(aes(x=reorder(Player,Passes),y=Passes,fill=PassFoot)) +
-  geom_bar(stat="identity") +
-  theme_sfc() +
-  scale_fill_manual(values=c(col_gdocs[[1]],col_gdocs[[7]])) +
+  ggplot(aes(x=reorder(Player,Passes),y=Passes)) +
+  geom_bar(aes(fill=PassFoot),stat="identity") +
+  # geom_label(aes(label=PassRatio),colour=sfc_light,size=2) +
+  # theme_sfc() +
+  labs(title=element_blank(),
+       x=element_blank(),
+       y="Total passes",
+       caption="statsbomb/fbref",
+       legend.position="right") +
+  scale_fill_manual(values=c(col_medium[[1]],col_medium[[8]])) +
   coord_flip()
+# ggsave("./plots/fbref/SFCPassFootedness.jpg",height=4)
+
+Players %>%
+  filter(Squad=="Southampton") %>%
+  mutate(Passes=Left+Right) %>%
+  ggplot(aes(x=reorder(Player,Passes))) +
+  geom_bar(aes(y=Right),stat="identity",fill=col_light[[1]]) +
+  geom_bar(aes(y=-Left),stat="identity",fill=col_medium[[8]]) +
+  coord_flip()
+
+# Players %>%
+#   filter(Squad=="Southampton") %>%
+#   max(Left,Right)
 ```
