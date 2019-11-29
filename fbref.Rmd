@@ -151,6 +151,19 @@ Table_raw %>%
   scale_fill_manual(values=palette_epl()) +
   coord_flip()
 ggsave("./plots/fbref/EPLnpxGA.jpg")
+
+Table_raw %>%
+  mutate(`xGA-GA`=xGA-GA) %>%
+  ggplot(aes(x=reorder(Squad,`xGA-GA`),y=`xGA-GA`,fill=Squad)) +
+  geom_bar(stat="identity",alpha=0.8) +
+  theme_sfc() +
+  labs(title="EPL expected goals allowed - goals allowed",
+       x=element_blank(),
+       y="xGA-GA",
+       caption="statsbomb/fbref") +
+  scale_fill_manual(values=palette_epl()) +
+  coord_flip()
+ggsave("./plots/fbref/EPLnpxGA-GA.jpg")
 ```
 
 ```{r data-frames}
