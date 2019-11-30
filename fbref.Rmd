@@ -28,6 +28,8 @@ source("./R/fbref-functions.R")
 source("./R/fbref-import.R")
 source("./R/fbref-tidy-player.R")
 source("./R/fbref-tidy-team.R")
+source("./R/fbref-tidy-matches.R")
+source("./R/fbref-tidy-table.R")
 source("./R/fbref-themes.R")
 ```
 
