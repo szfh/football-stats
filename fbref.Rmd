@@ -26,8 +26,12 @@ theme_set(theme_bw())
 
 source("./R/fbref-functions.R")
 source("./R/fbref-import.R")
-source("./R/fbref-tidy.R")
+source("./R/fbref-tidy-players.R")
+source("./R/fbref-tidy-teams.R")
+source("./R/fbref-tidy-matches.R")
 source("./R/fbref-themes.R")
+# rm(list=ls(pattern="_raw"))
+# rm(list=ls(pattern="_tidy"))
 ```
 
 ### Southampton plots
@@ -140,7 +144,7 @@ Teams %>%
   coord_flip()
 ggsave("./plots/fbref/EPLnpxG.jpg")
 
-Table_raw %>%
+Teams %>%
   ggplot(aes(x=reorder(Squad,desc(xGA)),y=xGA,fill=Squad)) +
   geom_bar(stat="identity",alpha=0.8) +
   theme_sfc() +
@@ -152,7 +156,7 @@ Table_raw %>%
   coord_flip()
 ggsave("./plots/fbref/EPLnpxGA.jpg")
 
-Table_raw %>%
+Teams %>%
   mutate(`xGA-GA`=xGA-GA) %>%
   ggplot(aes(x=reorder(Squad,`xGA-GA`),y=`xGA-GA`,fill=Squad)) +
   geom_bar(stat="identity",alpha=0.8) +
