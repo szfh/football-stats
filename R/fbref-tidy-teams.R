@@ -1,3 +1,10 @@
+Table <- Table_raw %>%
+  select(
+    -"Top Team Scorer",
+    -"Goalkeeper",
+    -"Notes",
+  )
+
 Standard_Team_tidy <- Standard_Team_raw %>%
   rename(
     "Gls90"="Gls_1",
@@ -10,6 +17,10 @@ Standard_Team_tidy <- Standard_Team_raw %>%
     "xG+xA90"="xG+xA",
     "npxG90"="npxG_1",
     "npxG+xA90"="npxG+xA",
+  ) %>%
+  select(
+    -"MP",
+    -"xG",
   )
 
 Passing_Team_tidy <- Passing_Team_raw %>%
@@ -26,16 +37,43 @@ Passing_Team_tidy <- Passing_Team_raw %>%
     "LongCmp"="Cmp_3",
     "LongAtt"="Att_3",
     "LongCmp%"="Cmp%_3",
+  ) %>% 
+  select(
+    -"# Pl",
+    -"Ast",
+    -"xA",
   )
 
-Shooting_Team_tidy <- Shooting_Team_raw
+Shooting_Team_tidy <- Shooting_Team_raw %>%
+  select(
+    -"xG",
+    -"# Pl",
+    -"Gls",
+    -"PK",
+    -"PKatt",
+    -"npxG",
+    -"FK",
+  )
 
-Misc_Team_tidy <- Misc_Team_raw
+Misc_Team_tidy <- Misc_Team_raw %>%
+  select(
+    -"# Pl",
+    -"CrdY",
+    -"CrdR",
+  )
 
-PlayingTime_Team_tidy <- PlayingTime_Team_raw
 
-Teams <- Standard_Team_tidy %>%
+PlayingTime_Team_tidy <- PlayingTime_Team_raw %>% 
+  select(
+    -"MP",
+    -"# Pl",
+    -"Starts",
+    -"Min",
+  )
+
+Teams <- Table %>%
+  left_join(Standard_Team_tidy) %>%
   left_join(Passing_Team_tidy) %>%
   left_join(Shooting_Team_tidy) %>%
-  left_join(Misc_Team_tidy) %>%
+  left_join(Misc_Team_tidy) %>% 
   left_join(PlayingTime_Team_tidy)
