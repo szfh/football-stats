@@ -26,7 +26,8 @@ theme_set(theme_bw())
 
 source("./R/fbref-functions.R")
 source("./R/fbref-import.R")
-source("./R/fbref-tidy.R")
+source("./R/fbref-tidy-player.R")
+source("./R/fbref-tidy-team.R")
 source("./R/fbref-themes.R")
 ```
 
