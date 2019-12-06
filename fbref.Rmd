@@ -13,6 +13,7 @@ editor_options:
 knitr::opts_chunk$set(echo=F,message=F,warning=F)
 
 library(tidyverse)
+library(magrittr)
 library(rvest)
 library(readr)
 library(understatr)
@@ -30,9 +31,15 @@ source("./R/fbref-tidy-players.R")
 source("./R/fbref-tidy-teams.R")
 source("./R/fbref-tidy-matches.R")
 source("./R/fbref-themes.R")
-# rm(list=ls(pattern="_raw"))
-# rm(list=ls(pattern="_tidy"))
+rm(list=ls(pattern="_raw"))
+rm(list=ls(pattern="_tidy"))
 ```
+
+```{r scraper,include=F}
+# run this code to scrape data and save locally
+# source("./R/fbref-scraper.R")
+```
+
 
 ### Southampton plots
 
