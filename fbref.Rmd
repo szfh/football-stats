@@ -40,11 +40,11 @@ rm(list=ls(pattern="_tidy"))
 # source("./R/fbref-scraper.R")
 source("./R/fbref-scraper-functions.R")
 
-scrape_test <- fbref_scrape(url="https://fbref.com/en/comps/9/Premier-League-Stats",
-                            nodes="#results32321_overall .center , #results32321_overall .right, #results32321_overall .left, #results32321_overall .right",
-                            ncol=19,
-                            fix_columns=TRUE) %>%
+scrape_test <- fbref_scrape(url="https://fbref.com/en/comps/9/Premier-League-Stats",ncol=19,fix_columns=TRUE,
+                            nodes="#results32321_overall .center , #results32321_overall .right, #results32321_overall .left, #results32321_overall .right") %>%
   View()
+
+source("./R/fbref-scraper-new.R")
 ```
 
 
