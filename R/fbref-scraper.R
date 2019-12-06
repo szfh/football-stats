@@ -30,3 +30,5 @@ matches_tibble <-
   matrix(ncol = 14, byrow = T)
 
 write.csv(matches_raw,file="data/fbref/matches_raw.csv",row.names=F)
+
+

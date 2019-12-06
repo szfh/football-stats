@@ -1,12 +1,17 @@
 # function to scrape fbref
-fbref_scrape <- function(url,nodes,nrow=NULL,ncol=NULL){
+fbref_scrape <- function(url,nodes,ncol=1,fix_columns=FALSE){
+  # browser()
   data <-
     url %>%
     read_html() %>%
-    html_nodes(nodes) %>%
+    html_nodes(as.character(nodes)) %>%
     html_text %>%
-    matrix(nrow=nrow,ncol=ncol,byrow=T) %>%
+    matrix(ncol=ncol,byrow=T) %>%
     as_tibble()
+  
+  if(fix_columns==TRUE){
+    data <- first_row_to_columns(data)
+  }
   
   return(data)
 }
