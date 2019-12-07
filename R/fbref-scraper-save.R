@@ -1,1 +1,7 @@
-# write.csv(matches_raw,file="data/fbref/matches_raw.csv",row.names=F)
+for(data in ls(pattern="_raw")){
+  write.csv(
+    data,
+    file=paste0("data/fbref/",data,".csv"),
+    row.names=FALSE
+  )
+}
