@@ -34,8 +34,9 @@ fbref_scrape <- function(url,nodes,ncol=1,skip_head=0,skip_tail=0,fix_columns=FA
       deframe
   }
   
-  data <- data_text #matrix
-    # matrix(ncol=ncol,byrow=T)
+  data <- data_text %>%
+    matrix(ncol=ncol,byrow=T) %>%
+    as_tibble()
   
   if(fix_columns==TRUE){
     data <- first_row_to_columns(data)
