@@ -37,10 +37,9 @@ rm(list=ls(pattern="_tidy"))
 
 ```{r scraper,include=F}
 # run this code to scrape data and save locally
-# source("./R/fbref-scraper.R")
 source("./R/fbref-scraper-functions.R")
-source("./R/fbref-scraper-new.R")
-# source("./R/fbref-scraper-save.R")
+source("./R/fbref-scraper.R")
+source("./R/fbref-scraper-save.R")
 ```
 
 
