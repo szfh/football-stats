@@ -1,5 +1,5 @@
 # function to scrape fbref
-fbref_scrape <- function(url,nodes,ncol=1,skip_head=0,skip_tail=0,fix_columns=FALSE){
+fbref_scrape <- function(url,nodes,ncol=1,skip_head=0,skip_tail=0,fix_columns=FALSE,remove_last_row=FALSE){
 
   data_text <-
     url %>%
@@ -15,10 +15,12 @@ fbref_scrape <- function(url,nodes,ncol=1,skip_head=0,skip_tail=0,fix_columns=FA
   }
   
   if(skip_tail!=0){
+    browser()
     data_text <- data_text %>%
       enframe() %>%
       slice(-c(length(data_text)-skip_tail+1:length(data_text))) %>%
       deframe
+    browser()
   }
   
   data <- data_text %>%
@@ -27,6 +29,10 @@ fbref_scrape <- function(url,nodes,ncol=1,skip_head=0,skip_tail=0,fix_columns=FA
   
   if(fix_columns==TRUE){
     data <- first_row_to_columns(data)
+  }
+  
+  if(remove_last_row==TRUE){
+    data <- remove_last_row(data)
   }
   
   return(data)
@@ -38,5 +44,13 @@ first_row_to_columns <- function(data){
     set_colnames(data[1,]) %>%
     slice(-1)
 
+  return(data)
+}
+
+#function to remove the last row containing extra data
+remove_last_row <- function(data){
+  data <- data %>%
+    slice(-nrow(data))
+  
   return(data)
 }
