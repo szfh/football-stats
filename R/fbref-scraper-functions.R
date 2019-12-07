@@ -1,25 +1,12 @@
 # function to scrape fbref
 fbref_scrape <- function(url,nodes,ncol=1,skip_head=0,skip_tail=0,fix_columns=FALSE){
-  # browser()
-  # data <-
-  #   url %>%
-  #   read_html() %>%
-  #   html_nodes(as.character(nodes)) %>%
-  #   html_text %>%
-  #   matrix(ncol=ncol,byrow=T) %>%
-  #   as_tibble(.name_repair="minimal")
-  
-  # browser()
-  
+
   data_text <-
     url %>%
     read_html() %>% 
     html_nodes(nodes) %>% 
     html_text
-    # tibble::enframe()
-  
-  # browser()
-  
+
   if(skip_head!=0){
     data_text <- data_text %>%
       enframe() %>%
