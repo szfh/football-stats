@@ -62,3 +62,19 @@ save_data <- function(data){
     file=paste0("./data/",data,".rds")
   )
 }
+
+#function to read data from RDS
+read_data <- function(){
+  readRDS(
+    file=paste0("./data/",
+                list.files(path="./data",pattern="_raw.rds"))
+  )
+}
+
+# readRDS(paste0("./data/","matches_raw.rds"))
+# readRDS(paste0("./data/",
+#                list.files(path="./data",pattern="_raw.rds")))
+# 
+# list.files(path="./data",pattern="_raw.rds")
+# paste0("./data/",
+#        list.files(path="./data",pattern="_raw.rds"))
