@@ -54,3 +54,11 @@ remove_last_row <- function(data){
   
   return(data)
 }
+
+#function to save data as RDS
+save_data <- function(data){
+  saveRDS(
+    object=get(data),
+    file=paste0("./data/",data,".rds")
+  )
+}
