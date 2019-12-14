@@ -14,9 +14,25 @@ squad_standard_raw <- fbref_scrape(ncol=24,skip_head=6,fix_columns=TRUE,
                                url="https://fbref.com/en/comps/9/stats/Premier-League-Stats",
                                nodes="#stats_standard_squads .left , #stats_standard_squads .right, #stats_standard_squads .center")
 
+squad_keepers_raw <- fbref_scrape(ncol=15,skip_head=0,fix_columns=TRUE,
+                                      url="https://fbref.com/en/comps/9/keepers/Premier-League-Stats",
+                                      nodes="#stats_keeper_squads .left , #stats_keeper_squads .right, #stats_keeper_squads .center")
+
 squad_shooting_raw <- fbref_scrape(ncol=18,skip_head=0,fix_columns=TRUE,
                                    url="https://fbref.com/en/comps/9/shooting/Premier-League-Stats",
                                    nodes="#stats_shooting_squads .left , #stats_shooting_squads .right, #stats_shooting_squads .center")
+
+squad_passing_raw <- fbref_scrape(ncol=26,skip_head=7,fix_columns=TRUE,
+                                   url="https://fbref.com/en/comps/9/passing/Premier-League-Stats",
+                                   nodes="#stats_passing_squads .left , #stats_passing_squads .right, #stats_passing_squads .center")
+
+squad_playingtime_raw <- fbref_scrape(ncol=20,skip_head=6,fix_columns=TRUE,
+                                  url="https://fbref.com/en/comps/9/playingtime/Premier-League-Stats",
+                                  nodes="#stats_playing_time_squads .left , #stats_playing_time_squads .right, #stats_playing_time_squads .center")
+
+squad_misc_raw <- fbref_scrape(ncol=14,skip_head=0,fix_columns=TRUE,
+                                      url="https://fbref.com/en/comps/9/misc/Premier-League-Stats",
+                                      nodes="#stats_misc_squads .left , #stats_misc_squads .right, #stats_misc_squads .center")
 
 # fbref_scrape(ncol=1,skip_head=0,fix_columns=F,
 #                                    url="https://fbref.com/en/comps/9/stats/Premier-League-Stats",
