@@ -15,18 +15,16 @@ fbref_scrape <- function(url,nodes,ncol=1,skip_head=0,skip_tail=0,fix_columns=FA
   }
   
   if(skip_tail!=0){
-    browser()
     data_text <- data_text %>%
       enframe() %>%
       slice(-c(length(data_text)-skip_tail+1:length(data_text))) %>%
       deframe
-    browser()
   }
   
   data <- data_text %>%
     matrix(ncol=ncol,byrow=T) %>%
-    as_tibble()
-  
+    as_tibble(.name_repair = "minimal")
+
   if(fix_columns==TRUE){
     data <- first_row_to_columns(data)
   }
@@ -34,14 +32,16 @@ fbref_scrape <- function(url,nodes,ncol=1,skip_head=0,skip_tail=0,fix_columns=FA
   if(remove_last_row==TRUE){
     data <- remove_last_row(data)
   }
-  
+
   return(data)
 }
 
-#function to make the first row of a tibble into the column names, then delete the first row
+#function to make the first row of a tibble into unique column names, then delete the first row
 first_row_to_columns <- function(data){
   data <- data %>%
-    set_colnames(data[1,]) %>%
+    set_colnames(
+      make.names(data[1,],unique=TRUE)
+      ) %>%
     slice(-1)
 
   return(data)
