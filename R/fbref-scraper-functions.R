@@ -65,16 +65,29 @@ save_data <- function(data){
 
 #function to read data from RDS
 read_data <- function(){
-  readRDS(
-    file=paste0("./data/",
-                list.files(path="./data",pattern="_raw.rds"))
-  )
+  # readRDS(
+  #   file=paste0("./data/",
+  #               list.files(path="./data",pattern="_raw.rds"))
+  # )
+  
+  filepath <- "./data/"
+  
+  matches_raw <- readRDS(paste0(filepath,"matches_raw.rds"))
+  squad_keepers_raw <- readRDS(paste0(filepath,"squad_keepers_raw.rds"))
+  squad_misc_raw <- readRDS(paste0(filepath,"squad_misc_raw.rds"))
+  squad_passing_raw <- readRDS(paste0(filepath,"squad_passing_raw.rds"))
+  squad_playingtime_raw <- readRDS(paste0(filepath,"squad_playingtime_raw.rds"))
+  squad_shooting_raw <- readRDS(paste0(filepath,"squad_shooting_raw.rds"))
+  squad_standard_raw <- readRDS(paste0(filepath,"squad_standard_raw.rds"))
+  table_raw <- readRDS(paste0(filepath,"table_raw.rds"))
 }
 
 # readRDS(paste0("./data/","matches_raw.rds"))
 # readRDS(paste0("./data/",
 #                list.files(path="./data",pattern="_raw.rds")))
-# 
+
 # list.files(path="./data",pattern="_raw.rds")
 # paste0("./data/",
 #        list.files(path="./data",pattern="_raw.rds"))
+
+# https://stats.idre.ucla.edu/r/codefragments/read_multiple/
