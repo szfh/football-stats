@@ -35,12 +35,18 @@ rm(list=ls(pattern="_raw"))
 rm(list=ls(pattern="_tidy"))
 ```
 
-```{r scraper,include=F}
+```{r scraper,include=F,eval=F}
 # run this code to scrape data and save locally
 source("./R/fbref-scraper-functions.R")
 source("./R/fbref-scraper.R")
 source("./R/fbref-scraper-save.R")
 ```
+
+```{r}
+# or read from saved data
+source("./R/fbref-scraper-read.R")
+```
+
 
 
 ### Southampton plots
