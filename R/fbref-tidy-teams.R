@@ -1,79 +1,106 @@
-Table <- Table_raw %>%
+table <- table_raw %>%
   select(
-    -"Top Team Scorer",
+    -"Top.Team.Scorer",
     -"Goalkeeper",
     -"Notes",
   )
 
-Standard_Team_tidy <- Standard_Team_raw %>%
+squad_standard_tidy <- squad_standard_raw %>%
   rename(
-    "Gls90"="Gls_1",
-    "Ast90"="Ast_1",
-    "G+A90"="G+A",
-    "G-PK90"="G-PK",
-    "G+A-PK90"="G+A-PK",
-    "xG90"="xG_1",
-    "xA90"="xA_1",
-    "xG+xA90"="xG+xA",
-    "npxG90"="npxG_1",
-    "npxG+xA90"="npxG+xA",
+    "Players"="X..Pl",
+    "Gls90"="Gls.1",
+    "Ast90"="Ast.1",
+    "G+A90"="G.A",
+    "G-PK90"="G.PK",
+    "G+A-PK90"="G.A.PK",
+    "xG90"="xG.1",
+    "xA90"="xA.1",
+    "xG+xA90"="xG.xA",
+    "npxG90"="npxG.1",
+    "npxG+xA90"="npxG.xA",
   ) %>%
   select(
     -"MP",
     -"xG",
   )
 
-Passing_Team_tidy <- Passing_Team_raw %>%
+squad_passing_tidy <- squad_passing_raw %>%
   rename(
+    "A-xA"="A.xA",
+    "Cmp%"="Cmp.",
     "TotalCmp"="Cmp",
     "TotalAtt"="Att",
-    "TotalCmp%"="Cmp%",
-    "ShortCmp"="Cmp_1",
-    "ShortAtt"="Att_1",
-    "ShortCmp%"="Cmp%_1",
-    "MediumCmp"="Cmp_2",
-    "MediumAtt"="Att_2",
-    "MediumCmp%"="Cmp%_2",
-    "LongCmp"="Cmp_3",
-    "LongAtt"="Att_3",
-    "LongCmp%"="Cmp%_3",
+    "TotalCmp%"="Cmp.",
+    "ShortCmp"="Cmp.1",
+    "ShortAtt"="Att.1",
+    "ShortCmp%"="Cmp..1",
+    "MediumCmp"="Cmp.2",
+    "MediumAtt"="Att.2",
+    "MediumCmp%"="Cmp..2",
+    "LongCmp"="Cmp.3",
+    "LongAtt"="Att.3",
+    "LongCmp%"="Cmp..3",
+    "1/3"="X1.3",
   ) %>% 
   select(
-    -"# Pl",
+    -"X..Pl",
     -"Ast",
     -"xA",
   )
 
-Shooting_Team_tidy <- Shooting_Team_raw %>%
+squad_shooting_tidy <- squad_shooting_raw %>%
+  rename(
+    "SoT%"="SoT.",
+    "Sh/90"="Sh.90",
+    "SoT/90"="SoT.90",
+    "G/Sh"="G.Sh",
+    "G/SoT"="G.SoT",
+    "npxG/Sh"="npxG.Sh",
+    "G-xG"="G.xG",
+    "np:G-xG"="np.G.xG",
+  ) %>%
   select(
-    -"xG",
-    -"# Pl",
+    -"X..Pl",
     -"Gls",
     -"PK",
     -"PKatt",
+    -"xG",
     -"npxG",
     -"FK",
   )
 
-Misc_Team_tidy <- Misc_Team_raw %>%
+squad_misc_tidy <- squad_misc_raw %>%
+  rename(
+    "2CrdY"="X2CrdY",
+  ) %>%
   select(
-    -"# Pl",
+    -"X..Pl",
     -"CrdY",
     -"CrdR",
   )
 
 
-PlayingTime_Team_tidy <- PlayingTime_Team_raw %>% 
+squad_playingtime_tidy <- squad_playingtime_raw %>% 
+  rename(
+    "Mn/MP"="Mn.MP",
+    "Min%"="Min.",
+    "Mn/Start"="Mn.Start",
+    "Mn/Sub"="Mn.Sub",
+    "+/-"="X...",
+    "+/-90"="X...90",
+    "xG+/-"="xG...",
+    "xG+/-90"="xG...90",
+  ) %>%
   select(
+    -"X..Pl",
     -"MP",
-    -"# Pl",
     -"Starts",
     -"Min",
   )
 
-Teams <- Table %>%
-  left_join(Standard_Team_tidy) %>%
-  left_join(Passing_Team_tidy) %>%
-  left_join(Shooting_Team_tidy) %>%
-  left_join(Misc_Team_tidy) %>% 
-  left_join(PlayingTime_Team_tidy)
+teams <- table %>%
+  left_join(squad_standard_tidy) %>%
+  left_join(squad_passing_tidy) %>%
+  left_join(squad_shooting_tidy) %>%
+  left_join(squad_misc_tidy) %>% 
+  left_join(squad_playingtime_tidy)

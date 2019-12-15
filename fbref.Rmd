@@ -149,7 +149,7 @@ ggsave("./plots/fbref/SFCxG90Difference.jpg")
 ### Premier League plots
 
 ```{r plots-epl}
-Teams %>%
+teams %>%
   ggplot(aes(x=reorder(Squad,npxG),y=npxG,fill=Squad)) +
   geom_bar(stat="identity",alpha=0.8) +
   theme_sfc() +
@@ -161,7 +161,7 @@ Teams %>%
   coord_flip()
 ggsave("./plots/fbref/EPLnpxG.jpg")
 
-Teams %>%
+teams %>%
   ggplot(aes(x=reorder(Squad,desc(xGA)),y=xGA,fill=Squad)) +
   geom_bar(stat="identity",alpha=0.8) +
   theme_sfc() +
@@ -173,7 +173,7 @@ Teams %>%
   coord_flip()
 ggsave("./plots/fbref/EPLnpxGA.jpg")
 
-Teams %>%
+teams %>%
   mutate(`xGA-GA`=xGA-GA) %>%
   ggplot(aes(x=reorder(Squad,`xGA-GA`),y=`xGA-GA`,fill=Squad)) +
   geom_bar(stat="identity",alpha=0.8) +
@@ -192,7 +192,7 @@ ggsave("./plots/fbref/EPLnpxGA-GA.jpg")
 #   filter(Squad=="Southampton") %>%
 #   glimpse()
 # 
-# Teams %>%
+# teams %>%
 #   glimpse()
 ```
 
