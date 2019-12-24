@@ -33,20 +33,20 @@ source("./R/fbref-scraper.R")
 source("./R/fbref-scraper-save.R")
 ```
 
-```{r}
+```{r read}
 # or read from saved data
 source("./R/fbref-scraper-read.R")
 ```
 
-```{r}
-source("./R/fbref-functions.R")
-# source("./R/fbref-import.R")
-# source("./R/fbref-tidy-players.R")
+```{r tidy}
+# source("./R/fbref-functions.R")
+source("./R/fbref-import.R")
+source("./R/fbref-tidy-players.R")
 source("./R/fbref-tidy-teams.R")
 # source("./R/fbref-tidy-matches.R")
 source("./R/fbref-themes.R")
-# rm(list=ls(pattern="_raw"))
-# rm(list=ls(pattern="_tidy"))
+rm(list=ls(pattern="_raw"))
+rm(list=ls(pattern="_tidy"))
 ```
 
 
@@ -150,7 +150,8 @@ ggsave("./plots/fbref/SFCxG90Difference.jpg")
 
 ```{r plots-epl}
 teams %>%
-  ggplot(aes(x=reorder(Squad,npxG),y=npxG,fill=Squad)) +
+  mutate(npxG=as.numeric(npxG)) %>%
+  ggplot(aes(x=reorder(Squad,desc(npxG)),y=npxG,fill=Squad)) +
   geom_bar(stat="identity",alpha=0.8) +
   theme_sfc() +
   labs(title="EPL xG (non-penalty)",
@@ -158,10 +159,12 @@ teams %>%
        y="npxG",
        caption="statsbomb/fbref") +
   scale_fill_manual(values=palette_epl()) +
+  # scale_y_continuous(breaks=seq(0,50,5)) +
   coord_flip()
 ggsave("./plots/fbref/EPLnpxG.jpg")
 
 teams %>%
+  mutate(xGA=as.numeric(xGA)) %>%
   ggplot(aes(x=reorder(Squad,desc(xGA)),y=xGA,fill=Squad)) +
   geom_bar(stat="identity",alpha=0.8) +
   theme_sfc() +
@@ -174,9 +177,12 @@ teams %>%
 ggsave("./plots/fbref/EPLnpxGA.jpg")
 
 teams %>%
+  mutate(GA=as.numeric(GA)) %>%
+  mutate(xGA=as.numeric(xGA)) %>%
   mutate(`xGA-GA`=xGA-GA) %>%
   ggplot(aes(x=reorder(Squad,`xGA-GA`),y=`xGA-GA`,fill=Squad)) +
   geom_bar(stat="identity",alpha=0.8) +
+  # geom_label(aes(label=`xGA-GA`)) +
   theme_sfc() +
   labs(title="EPL expected goals allowed - goals allowed",
        x=element_blank(),
