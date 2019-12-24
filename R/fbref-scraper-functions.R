@@ -5,6 +5,7 @@ fbref_scrape <- function(fbref_url,nodes=NA,fix_columns=FALSE,extract=NA){
   
   data_table <-
     read_html(fbref_url) %>%
+    html_nodes("table") %>%
     html_table
   
   if(is.na(extract)==FALSE){
