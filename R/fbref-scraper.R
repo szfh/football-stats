@@ -1,10 +1,10 @@
 source("./R/fbref-scraper-functions.R")
 # table
-table_raw <- fbref_scrape2(fbref_url="https://fbref.com/en/comps/9/Premier-League-Stats",extract=1)
+table_raw <- fbref_scrape(fbref_url="https://fbref.com/en/comps/9/Premier-League-Stats",extract=1)
 # xpath='//*[@id="results32321_overall"]'
 
 # matches
-matches_raw <- fbref_scrape2(fbref_url="https://fbref.com/en/comps/9/schedule/Premier-League-Fixtures",extract=1)
+matches_raw <- fbref_scrape(fbref_url="https://fbref.com/en/comps/9/schedule/Premier-League-Fixtures",extract=1)
 
 # squad stats
 squad_standard_raw <- fbref_scrape(fbref_url="https://fbref.com/en/comps/9/stats/Premier-League-Stats",extract=1,fix_columns=TRUE)
