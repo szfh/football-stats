@@ -1,38 +1,45 @@
 source("./R/fbref-scraper-functions.R")
 # table
-table_raw <- fbref_scrape(ncol=19,fix_columns=TRUE,
-                          url="https://fbref.com/en/comps/9/Premier-League-Stats",
-                          nodes="#results32321_overall .center , #results32321_overall .right, #results32321_overall .left, #results32321_overall .right")
+table_raw <- fbref_scrape2(fbref_url="https://fbref.com/en/comps/9/Premier-League-Stats",extract=1)
+# xpath='//*[@id="results32321_overall"]'
 
 # matches
-matches_raw <- fbref_scrape(ncol=14,fix_columns=TRUE,remove_last_row=TRUE,
-                            url="https://fbref.com/en/comps/9/schedule/Premier-League-Fixtures",
-                            nodes=".left , .right, .center")
+matches_raw <- fbref_scrape2(fbref_url="https://fbref.com/en/comps/9/schedule/Premier-League-Fixtures",extract=1)
 
 # squad stats
-squad_standard_raw <- fbref_scrape(ncol=24,skip_head=6,fix_columns=TRUE,
-                               url="https://fbref.com/en/comps/9/stats/Premier-League-Stats",
-                               nodes="#stats_standard_squads .left , #stats_standard_squads .right, #stats_standard_squads .center")
+squad_standard_raw <- fbref_scrape(fbref_url="https://fbref.com/en/comps/9/stats/Premier-League-Stats",extract=1,fix_columns=TRUE)
+squad_keepers_raw <- fbref_scrape(fbref_url="https://fbref.com/en/comps/9/keepers/Premier-League-Stats",extract=1,fix_columns=TRUE)
+squad_shooting_raw <- fbref_scrape(fbref_url="https://fbref.com/en/comps/9/shooting/Premier-League-Stats",extract=1,fix_columns=FALSE)
+squad_passing_raw <- fbref_scrape(fbref_url="https://fbref.com/en/comps/9/passing/Premier-League-Stats",extract=1,fix_columns=TRUE)
+squad_playingtime_raw <- fbref_scrape(fbref_url="https://fbref.com/en/comps/9/playingtime/Premier-League-Stats",extract=1,fix_columns=TRUE)
+squad_misc_raw <- fbref_scrape(fbref_url="https://fbref.com/en/comps/9/misc/Premier-League-Stats",extract=1,fix_columns=FALSE)
 
-squad_keepers_raw <- fbref_scrape(ncol=15,skip_head=0,fix_columns=TRUE,
-                                      url="https://fbref.com/en/comps/9/keepers/Premier-League-Stats",
-                                      nodes="#stats_keeper_squads .left , #stats_keeper_squads .right, #stats_keeper_squads .center")
+# player stats
+# player_standard_raw <- fbref_scrape(ncol=10,skip_head=0,fix_columns=TRUE,
+#                                     fbref_url="https://fbref.com/en/comps/9/stats/Premier-League-Stats",
+#                                    nodes="#all_stats_standard .center , #all_stats_standard .left, #all_stats_standard .right")
 
-squad_shooting_raw <- fbref_scrape(ncol=18,skip_head=0,fix_columns=TRUE,
-                                   url="https://fbref.com/en/comps/9/shooting/Premier-League-Stats",
-                                   nodes="#stats_shooting_squads .left , #stats_shooting_squads .right, #stats_shooting_squads .center")
+# https://github.com/moisesvasquezca/EPLPredictor/tree/b082999e700e0854c0686a0d8a48cb7ad094d8e4
 
-squad_passing_raw <- fbref_scrape(ncol=26,skip_head=7,fix_columns=TRUE,
-                                   url="https://fbref.com/en/comps/9/passing/Premier-League-Stats",
-                                   nodes="#stats_passing_squads .left , #stats_passing_squads .right, #stats_passing_squads .center")
-
-squad_playingtime_raw <- fbref_scrape(ncol=20,skip_head=6,fix_columns=TRUE,
-                                  url="https://fbref.com/en/comps/9/playingtime/Premier-League-Stats",
-                                  nodes="#stats_playing_time_squads .left , #stats_playing_time_squads .right, #stats_playing_time_squads .center")
-
-squad_misc_raw <- fbref_scrape(ncol=14,skip_head=0,fix_columns=TRUE,
-                                      url="https://fbref.com/en/comps/9/misc/Premier-League-Stats",
-                                      nodes="#stats_misc_squads .left , #stats_misc_squads .right, #stats_misc_squads .center")
+# player_keepers_raw <- fbref_scrape(ncol=10,skip_head=0,fix_columns=F,
+#                                   url="https://fbref.com/en/comps/9/keepers/Premier-League-Stats",
+#                                   nodes="#stats_keeper .left , #stats_keeper .right, #stats_keeper .center")
+# 
+# player_shooting_raw <- fbref_scrape(ncol=10,skip_head=0,fix_columns=F,
+#                                    url="https://fbref.com/en/comps/9/shooting/Premier-League-Stats",
+#                                    nodes="#stats_shooting .left , #stats_shooting .right, #stats_shooting .center")
+# 
+# player_passing_raw <- fbref_scrape(ncol=10,skip_head=0,fix_columns=F,
+#                                   url="https://fbref.com/en/comps/9/passing/Premier-League-Stats",
+#                                   nodes="#stats_passing .left , #stats_passing .right, #stats_passing .center")
+# 
+# player_playingtime_raw <- fbref_scrape(ncol=10,skip_head=0,fix_columns=F,
+#                                       url="https://fbref.com/en/comps/9/playingtime/Premier-League-Stats",
+#                                       nodes="#stats_playing_time .left , #stats_playing_time .right, #stats_playing_time .center")
+# 
+# player_misc_raw <- fbref_scrape(ncol=10,skip_head=0,fix_columns=F,
+#                                url="https://fbref.com/en/comps/9/misc/Premier-League-Stats",
+#                                nodes="#stats_misc .left , #stats_misc .right, #stats_misc .center")
 
 # fbref_scrape(ncol=1,skip_head=0,fix_columns=F,
 #                                    url="https://fbref.com/en/comps/9/stats/Premier-League-Stats",
