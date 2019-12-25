@@ -1,18 +1,27 @@
 source("./R/fbref-scraper-functions.R")
-# table
-table_raw <- fbref_scrape(fbref_url="https://fbref.com/en/comps/9/Premier-League-Stats",extract=1)
+
+raw <- list()
+
+raw[["table"]] <- fbref_scrape(fbref_url="https://fbref.com/en/comps/9/Premier-League-Stats",extract=1)
+# table_raw <- fbref_scrape(fbref_url="https://fbref.com/en/comps/9/Premier-League-Stats",extract=1)
 # xpath='//*[@id="results32321_overall"]'
+# css="table"
+
+# xtable
 
 # matches
-matches_raw <- fbref_scrape(fbref_url="https://fbref.com/en/comps/9/schedule/Premier-League-Fixtures",extract=1)
-
+raw[["matches"]] <- fbref_scrape(fbref_url="https://fbref.com/en/comps/9/schedule/Premier-League-Fixtures",extract=1)
+# raw[["squad"]] <- list()
 # squad stats
-squad_standard_raw <- fbref_scrape(fbref_url="https://fbref.com/en/comps/9/stats/Premier-League-Stats",extract=1,fix_columns=TRUE)
-squad_keepers_raw <- fbref_scrape(fbref_url="https://fbref.com/en/comps/9/keepers/Premier-League-Stats",extract=1,fix_columns=TRUE)
-squad_shooting_raw <- fbref_scrape(fbref_url="https://fbref.com/en/comps/9/shooting/Premier-League-Stats",extract=1,fix_columns=FALSE)
-squad_passing_raw <- fbref_scrape(fbref_url="https://fbref.com/en/comps/9/passing/Premier-League-Stats",extract=1,fix_columns=TRUE)
-squad_playingtime_raw <- fbref_scrape(fbref_url="https://fbref.com/en/comps/9/playingtime/Premier-League-Stats",extract=1,fix_columns=TRUE)
-squad_misc_raw <- fbref_scrape(fbref_url="https://fbref.com/en/comps/9/misc/Premier-League-Stats",extract=1,fix_columns=FALSE)
+raw[["squad"]][["standard"]] <- fbref_scrape(fbref_url="https://fbref.com/en/comps/9/stats/Premier-League-Stats",extract=1,fix_columns=TRUE)
+raw[["squad"]][["keepers"]] <- fbref_scrape(fbref_url="https://fbref.com/en/comps/9/keepers/Premier-League-Stats",extract=1,fix_columns=TRUE)
+raw[["squad"]][["shooting"]] <- fbref_scrape(fbref_url="https://fbref.com/en/comps/9/shooting/Premier-League-Stats",extract=1,fix_columns=FALSE)
+raw[["squad"]][["passing"]] <- fbref_scrape(fbref_url="https://fbref.com/en/comps/9/passing/Premier-League-Stats",extract=1,fix_columns=TRUE)
+raw[["squad"]][["playingtime"]] <- fbref_scrape(fbref_url="https://fbref.com/en/comps/9/playingtime/Premier-League-Stats",extract=1,fix_columns=TRUE)
+raw[["squad"]][["misc"]] <- fbref_scrape(fbref_url="https://fbref.com/en/comps/9/misc/Premier-League-Stats",extract=1,fix_columns=FALSE)
+
+# as list - http://www.r-tutor.com/r-introduction/list/named-list-members
+# how to make a list of data frames https://stackoverflow.com/questions/17499013/how-do-i-make-a-list-of-data-frames
 
 # player stats
 # player_standard_raw <- fbref_scrape(ncol=10,skip_head=0,fix_columns=TRUE,
