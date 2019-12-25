@@ -19,6 +19,8 @@ fbref_scrape <- function(fbref_url,nodes=NA,fix_columns=FALSE,extract=NA){
         make.names(data_table[1,],unique=TRUE)
       ) %>%
       slice(-1)
+    
+    data_table <- type_convert(data_table)
   }
   
   return(data_table)
