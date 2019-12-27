@@ -1,5 +1,3 @@
-source("./R/fbref-scraper-functions.R")
-
 raw <- list()
 raw[["table"]] <- fbref_scrape(fbref_url="https://fbref.com/en/comps/9/Premier-League-Stats",extract=1,fix_columns=FALSE)
 raw[["matches"]] <- fbref_scrape(fbref_url="https://fbref.com/en/comps/9/schedule/Premier-League-Fixtures",extract=1,fix_columns=FALSE)
