@@ -75,9 +75,5 @@ tidy[["squad"]][["playingtime"]] <- raw[["squad"]][["playingtime"]] %>%
     -"Min",
   )
 
-# teams <- table %>%
-#   left_join(squad_standard_tidy) %>%
-#   left_join(squad_passing_tidy) %>%
-#   left_join(squad_shooting_tidy) %>%
-#   left_join(squad_misc_tidy) %>% 
-#   left_join(squad_playingtime_tidy)
+squad <- tidy[["table"]] %>%
+  left_join(reduce(tidy[["squad"]],left_join))
