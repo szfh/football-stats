@@ -1,4 +1,3 @@
-# better scraper using CSS and html_table
 fbref_scrape <- function(fbref_url,nodes=NA,fix_columns=FALSE,extract=NA){
   
   data_table <-
