@@ -1,9 +1,18 @@
-table <- table_raw %>%
+tidy[["table"]] <- raw[["table"]] %>%
   select(
-    -"Top.Team.Scorer",
+    -"Top Team Scorer",
     -"Goalkeeper",
     -"Notes",
+    -"Attendance",
   )
+# attendance as number?
+
+# table <- table_raw %>%
+#   select(
+#     -"Top.Team.Scorer",
+#     -"Goalkeeper",
+#     -"Notes",
+#   )
 
 squad_standard_tidy <- squad_standard_raw %>%
   rename(
