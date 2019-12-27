@@ -170,13 +170,25 @@ squad %>%
   ggplot(aes(x=reorder(Squad,desc(xGA)),y=xGA,fill=Squad)) +
   geom_bar(stat="identity",alpha=0.8) +
   theme_sfc() +
-  labs(title="EPL expected goals allowed (non-penalty)",
+  labs(title="Premier League expected goals allowed (non-penalty)",
        x=element_blank(),
-       y="xGA",
+       y="non-pen xG allowed",
        caption="statsbomb/fbref") +
   scale_fill_manual(values=palette_epl()) +
   coord_flip()
 ggsave("./plots/fbref/EPLnpxGA.jpg")
+
+squad %>%
+  ggplot(aes(x=reorder(Squad,`np:G-xG`),y=`np:G-xG`,fill=Squad)) +
+  geom_bar(stat="identity",alpha=0.8) +
+  theme_sfc() +
+  labs(title="EPL goals - expected goals (non-penalty)",
+       x=element_blank(),
+       y="xG-G",
+       caption="statsbomb/fbref") +
+  scale_fill_manual(values=palette_epl()) +
+  coord_flip()
+ggsave("./plots/fbref/EPLnpG-xG.jpg")
 
 squad %>%
   # mutate(GA=as.numeric(GA)) %>%
