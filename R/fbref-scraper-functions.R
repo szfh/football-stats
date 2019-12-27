@@ -1,8 +1,6 @@
 # better scraper using CSS and html_table
 fbref_scrape <- function(fbref_url,nodes=NA,fix_columns=FALSE,extract=NA){
   
-  # browser()
-  
   data_table <-
     read_html(fbref_url) %>%
     html_nodes("table") %>%
@@ -14,13 +12,13 @@ fbref_scrape <- function(fbref_url,nodes=NA,fix_columns=FALSE,extract=NA){
   }
   
   if(fix_columns==TRUE){
-    data_table <- data_table %>%
-      set_colnames(
-        make.names(data_table[1,],unique=TRUE)
-      ) %>%
-      slice(-1)
-    
-    data_table <- type_convert(data_table)
+    names(data_table) <- data_table[1,] # move first row to names
+    data_table <- as_tibble(data_table, .name_repair="unique") # create tibble
+    data_table <- data_table %>% slice(-1) # remove first row
+    data_table <- type_convert(data_table) # reset types
+  }
+  else {
+    data_table <- as_tibble(data_table, .name_repair = "unique") # create tibble
   }
   
   return(data_table)
