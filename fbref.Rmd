@@ -15,45 +15,47 @@ knitr::opts_chunk$set(echo=F,message=F,warning=F)
 library(tidyverse)
 library(magrittr)
 library(rvest)
-library(readr)
-library(understatr)
-library(ggsoccer)
-library(ggrepel)
+# library(readr)
+# library(understatr)
+# library(ggsoccer)
+# library(ggrepel)
 library(ggthemes)
-library(glue)
+# library(glue)
 
 set.seed(9999)
-theme_set(theme_bw())
+# theme_set(theme_bw())
+```
+
+```{r,include=F}
+raw <- list()
+tidy <- list()
 ```
 
 ```{r scraper,include=F,eval=F}
-# run this code to scrape data and save locally
+# scrape data and save locally
 source("./R/fbref-scraper-functions.R")
 source("./R/fbref-scraper.R")
+# source("./R/fbref-import.R")
 source("./R/fbref-scraper-save.R")
 ```
 
 ```{r read}
-# or read from saved data
+# read from saved data
 source("./R/fbref-scraper-read.R")
 ```
 
 ```{r tidy}
-# source("./R/fbref-functions.R")
-source("./R/fbref-import.R")
-source("./R/fbref-tidy-players.R")
+source("./R/fbref-functions.R")
+# source("./R/fbref-import.R")
+# source("./R/fbref-tidy-players.R")
 source("./R/fbref-tidy-teams.R")
 # source("./R/fbref-tidy-matches.R")
 source("./R/fbref-themes.R")
-rm(list=ls(pattern="_raw"))
-rm(list=ls(pattern="_tidy"))
 ```
-
-
 
 ### Southampton plots
 
-```{r plots-sfc}
+```{r plots-sfc,eval=F}
 Players %>%
   filter(Squad=="Southampton") %>%
   ggplot(aes(x=reorder(Player,Min),y=Min)) +
@@ -148,23 +150,23 @@ ggsave("./plots/fbref/SFCxG90Difference.jpg")
 
 ### Premier League plots
 
-```{r plots-epl}
-teams %>%
-  mutate(npxG=as.numeric(npxG)) %>%
-  ggplot(aes(x=reorder(Squad,desc(npxG)),y=npxG,fill=Squad)) +
+```{r plots-epl,eval=T}
+squad %>%
+  # mutate(npxG=as.numeric(npxG)) %>%
+  ggplot(aes(x=reorder(Squad,npxG),y=npxG,fill=Squad)) +
   geom_bar(stat="identity",alpha=0.8) +
   theme_sfc() +
-  labs(title="EPL xG (non-penalty)",
+  labs(title="Premier League expected goals (non-penalty)",
        x=element_blank(),
-       y="npxG",
+       y="non-pen xG",
        caption="statsbomb/fbref") +
   scale_fill_manual(values=palette_epl()) +
   # scale_y_continuous(breaks=seq(0,50,5)) +
   coord_flip()
 ggsave("./plots/fbref/EPLnpxG.jpg")
 
-teams %>%
-  mutate(xGA=as.numeric(xGA)) %>%
+squad %>%
+  # mutate(xGA=as.numeric(xGA)) %>%
   ggplot(aes(x=reorder(Squad,desc(xGA)),y=xGA,fill=Squad)) +
   geom_bar(stat="identity",alpha=0.8) +
   theme_sfc() +
@@ -176,9 +178,9 @@ teams %>%
   coord_flip()
 ggsave("./plots/fbref/EPLnpxGA.jpg")
 
-teams %>%
-  mutate(GA=as.numeric(GA)) %>%
-  mutate(xGA=as.numeric(xGA)) %>%
+squad %>%
+  # mutate(GA=as.numeric(GA)) %>%
+  # mutate(xGA=as.numeric(xGA)) %>%
   mutate(`xGA-GA`=xGA-GA) %>%
   ggplot(aes(x=reorder(Squad,`xGA-GA`),y=`xGA-GA`,fill=Squad)) +
   geom_bar(stat="identity",alpha=0.8) +
@@ -193,7 +195,7 @@ teams %>%
 ggsave("./plots/fbref/EPLnpxGA-GA.jpg")
 ```
 
-```{r data-frames}
+```{r data-frames,eval=F}
 # Players %>%
 #   filter(Squad=="Southampton") %>%
 #   glimpse()
@@ -204,7 +206,7 @@ ggsave("./plots/fbref/EPLnpxGA-GA.jpg")
 
 
 
-```{r test,include=F}
+```{r test,eval=F}
 Players %>%
   filter(Squad=="Southampton") %>%
   # mutate(PassRatio=(max(Left,Right)/(Left+Right)) %>% abs %>% round(digits=2)) %>%
