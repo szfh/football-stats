@@ -7,69 +7,50 @@ tidy[["table"]] <- raw[["table"]] %>%
   )
 # attendance as number?
 
-# table <- table_raw %>%
-#   select(
-#     -"Top.Team.Scorer",
-#     -"Goalkeeper",
-#     -"Notes",
-#   )
-
-squad_standard_tidy <- squad_standard_raw %>%
+tidy[["squad"]][["standard"]] <- raw[["squad"]][["standard"]] %>%
   rename(
-    "Players"="X..Pl",
-    "Gls90"="Gls.1",
-    "Ast90"="Ast.1",
-    "G+A90"="G.A",
-    "G-PK90"="G.PK",
-    "G+A-PK90"="G.A.PK",
-    "xG90"="xG.1",
-    "xA90"="xA.1",
-    "xG+xA90"="xG.xA",
-    "npxG90"="npxG.1",
-    "npxG+xA90"="npxG.xA",
+    "Gls"="Gls...6",
+    "Ast"="Ast...7",
+    "Gls90"="Gls...12",
+    "Ast90"="Ast...13",
+    "xG"="xG...17",
+    "npxG"="npxG...18",
+    "xA"="xA...19",
+    "xG90"="xG...20",
+    "xA90"="xA...21",
+    "xG+xA90"="xG+xA",
+    "npxG90"="npxG...23",
+    "npxG+xA90"="npxG+xA",
   ) %>%
   select(
     -"MP",
     -"xG",
   )
 
-squad_passing_tidy <- squad_passing_raw %>%
+tidy[["squad"]][["passing"]] <- raw[["squad"]][["passing"]] %>%
   rename(
-    "A-xA"="A.xA",
-    "Cmp%"="Cmp.",
-    "TotalCmp"="Cmp",
-    "TotalAtt"="Att",
-    "TotalCmp%"="Cmp.",
-    "ShortCmp"="Cmp.1",
-    "ShortAtt"="Att.1",
-    "ShortCmp%"="Cmp..1",
-    "MediumCmp"="Cmp.2",
-    "MediumAtt"="Att.2",
-    "MediumCmp%"="Cmp..2",
-    "LongCmp"="Cmp.3",
-    "LongAtt"="Att.3",
-    "LongCmp%"="Cmp..3",
-    "1/3"="X1.3",
+    "TotalCmp"="Cmp...7",
+    "TotalAtt"="Att...8",
+    "TotalCmp%"="Cmp%...9",
+    "ShortCmp"="Cmp...10",
+    "ShortAtt"="Att...11",
+    "ShortCmp%"="Cmp%...12",
+    "MediumCmp"="Cmp...13",
+    "MediumAtt"="Att...14",
+    "MediumCmp%"="Cmp%...15",
+    "LongCmp"="Cmp...16",
+    "LongAtt"="Att...17",
+    "LongCmp%"="Cmp%...18",
   ) %>% 
   select(
-    -"X..Pl",
+    -"# Pl",
     -"Ast",
     -"xA",
   )
 
-squad_shooting_tidy <- squad_shooting_raw %>%
-  rename(
-    "SoT%"="SoT.",
-    "Sh/90"="Sh.90",
-    "SoT/90"="SoT.90",
-    "G/Sh"="G.Sh",
-    "G/SoT"="G.SoT",
-    "npxG/Sh"="npxG.Sh",
-    "G-xG"="G.xG",
-    "np:G-xG"="np.G.xG",
-  ) %>%
+tidy[["squad"]][["shooting"]] <- raw[["squad"]][["shooting"]] %>%
   select(
-    -"X..Pl",
+    -"# Pl",
     -"Gls",
     -"PK",
     -"PKatt",
@@ -78,38 +59,25 @@ squad_shooting_tidy <- squad_shooting_raw %>%
     -"FK",
   )
 
-squad_misc_tidy <- squad_misc_raw %>%
-  rename(
-    "2CrdY"="X2CrdY",
-  ) %>%
+tidy[["squad"]][["misc"]] <- raw[["squad"]][["misc"]] %>%
   select(
-    -"X..Pl",
+    -"# Pl",
     -"CrdY",
     -"CrdR",
   )
 
 
-squad_playingtime_tidy <- squad_playingtime_raw %>% 
-  rename(
-    "Mn/MP"="Mn.MP",
-    "Min%"="Min.",
-    "Mn/Start"="Mn.Start",
-    "Mn/Sub"="Mn.Sub",
-    "+/-"="X...",
-    "+/-90"="X...90",
-    "xG+/-"="xG...",
-    "xG+/-90"="xG...90",
-  ) %>%
+tidy[["squad"]][["playingtime"]] <- raw[["squad"]][["playingtime"]] %>%
   select(
-    -"X..Pl",
+    -"# Pl",
     -"MP",
     -"Starts",
     -"Min",
   )
 
-teams <- table %>%
-  left_join(squad_standard_tidy) %>%
-  left_join(squad_passing_tidy) %>%
-  left_join(squad_shooting_tidy) %>%
-  left_join(squad_misc_tidy) %>% 
-  left_join(squad_playingtime_tidy)
+# teams <- table %>%
+#   left_join(squad_standard_tidy) %>%
+#   left_join(squad_passing_tidy) %>%
+#   left_join(squad_shooting_tidy) %>%
+#   left_join(squad_misc_tidy) %>% 
+#   left_join(squad_playingtime_tidy)
