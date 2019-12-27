@@ -1,1 +1,2 @@
-sapply(as.list(ls(pattern="_raw")),save_data)
+path <- "./data/fbref/EPL/2019/"
+saveRDS(raw, file=paste0(path,"raw.rds"))
