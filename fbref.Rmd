@@ -205,6 +205,18 @@ squad %>%
   scale_fill_manual(values=palette_epl()) +
   coord_flip()
 ggsave("./plots/fbref/EPLnpxGA-GA.jpg")
+
+squad %>%
+  ggplot(aes(x=reorder(Squad,xGDiff),y=xGDiff,fill=Squad)) +
+  geom_bar(stat="identity",alpha=0.8) +
+  theme_sfc() +
+  labs(title="EPL expected goal difference",
+       x=element_blank(),
+       y="xGD",
+       caption="statsbomb/fbref") +
+  scale_fill_manual(values=palette_epl()) +
+  coord_flip()
+ggsave("./plots/fbref/EPLxGD.jpg")
 ```
 
 ```{r data-frames,eval=F}
