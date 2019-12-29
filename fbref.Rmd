@@ -152,7 +152,6 @@ ggsave("./plots/fbref/SFCxG90Difference.jpg")
 
 ```{r plots-epl,eval=T}
 squad %>%
-  # mutate(npxG=as.numeric(npxG)) %>%
   ggplot(aes(x=reorder(Squad,npxG),y=npxG,fill=Squad)) +
   geom_bar(stat="identity",alpha=0.8) +
   theme_sfc() +
@@ -161,13 +160,12 @@ squad %>%
        y="non-pen xG",
        caption="statsbomb/fbref") +
   scale_fill_manual(values=palette_epl()) +
-  # scale_y_continuous(breaks=seq(0,50,5)) +
   coord_flip()
 ggsave("./plots/fbref/EPLnpxG.jpg")
 
 squad %>%
   # mutate(xGA=as.numeric(xGA)) %>%
-  ggplot(aes(x=reorder(Squad,desc(xGA)),y=xGA,fill=Squad)) +
+  ggplot(aes(x=reorder(Squad,-xGA),y=xGA,fill=Squad)) +
   geom_bar(stat="identity",alpha=0.8) +
   theme_sfc() +
   labs(title="Premier League expected goals allowed (non-penalty)",
@@ -191,12 +189,10 @@ squad %>%
 ggsave("./plots/fbref/EPLnpG-xG.jpg")
 
 squad %>%
-  # mutate(GA=as.numeric(GA)) %>%
-  # mutate(xGA=as.numeric(xGA)) %>%
-  mutate(`xGA-GA`=xGA-GA) %>%
+  mutate(`xGA-GA`=round(xGA-GA,digits=1)) %>%
   ggplot(aes(x=reorder(Squad,`xGA-GA`),y=`xGA-GA`,fill=Squad)) +
   geom_bar(stat="identity",alpha=0.8) +
-  # geom_label(aes(label=`xGA-GA`)) +
+  # geom_label(aes(label=`xGA-GA`),size=3) +
   theme_sfc() +
   labs(title="EPL expected goals allowed - goals allowed",
        x=element_blank(),
@@ -212,7 +208,7 @@ squad %>%
   theme_sfc() +
   labs(title="EPL expected goal difference",
        x=element_blank(),
-       y="xGD",
+       y="expected goals for - expected goals against",
        caption="statsbomb/fbref") +
   scale_fill_manual(values=palette_epl()) +
   coord_flip()
