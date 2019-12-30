@@ -26,30 +26,31 @@ set.seed(9999)
 # theme_set(theme_bw())
 ```
 
-```{r,include=F}
-raw <- list()
-tidy <- list()
-```
-
 ```{r scraper,include=F,eval=F}
 # scrape data and save locally
-source("./R/fbref-scraper-functions.R")
-source("./R/fbref-scraper.R")
-# source("./R/fbref-import.R")
+# run only this block to scrape data and save
+# (ctrl+shift+F10 :: ctrl+shift+enter)
+raw <- list()
+source("./R/scraper/fbref-scraper-functions.R")
+source("./R/scraper/fbref-scraper.R")
+source("./R/scraper/fbref-import-local.R")
 source("./R/fbref-scraper-save.R")
 ```
 
 ```{r read}
 # read from saved data
+raw <- list()
 source("./R/fbref-scraper-read.R")
 ```
 
 ```{r tidy}
-source("./R/fbref-functions.R")
+# tidy raw data
+tidy <- list()
+# source("./R/fbref-functions.R")
 # source("./R/fbref-import.R")
-# source("./R/fbref-tidy-players.R")
-source("./R/fbref-tidy-teams.R")
-# source("./R/fbref-tidy-matches.R")
+# source("./R/tidy/fbref-tidy-players.R")
+source("./R/tidy/fbref-tidy-teams.R")
+# source("./R/tidy/fbref-tidy-matches.R")
 source("./R/fbref-themes.R")
 ```
 
@@ -222,6 +223,8 @@ ggsave("./plots/fbref/EPLxGD.jpg")
 # 
 # teams %>%
 #   glimpse()
+
+# squad %>% str
 ```
 
 
