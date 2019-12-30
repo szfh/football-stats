@@ -6,7 +6,7 @@ output:
     # fig_height: 3
 # date: 2019-10-09
 editor_options:
-  chunk_output_type: inline
+  chunk_output_type: console
 ---
 
 ```{r setup,include=F}
@@ -79,7 +79,7 @@ players %>%
   filter(xG+xA>0) %>%
   ggplot(aes(x=npxG,y=xA)) +
   geom_point(colour=sfc,size=1.5,alpha=0.8) +
-  geom_text_repel(aes(label=ifelse(npxG+xA>0.6,Player,element_blank())),size=3) +
+  geom_text_repel(aes(label=ifelse(npxG+xA>1,Player,element_blank())),size=3) +
   theme_sfc() +
   labs(title="Southampton EPL xG/xA (non-penalty)",
        x="xG",
