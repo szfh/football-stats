@@ -7,7 +7,7 @@ raw[["squad"]][["shooting"]] <- fbref_scrape(fbref_url="https://fbref.com/en/com
 raw[["squad"]][["passing"]] <- fbref_scrape(fbref_url="https://fbref.com/en/comps/9/passing/Premier-League-Stats",extract=1,fix_columns=TRUE)
 raw[["squad"]][["playingtime"]] <- fbref_scrape(fbref_url="https://fbref.com/en/comps/9/playingtime/Premier-League-Stats",extract=1,fix_columns=TRUE)
 raw[["squad"]][["misc"]] <- fbref_scrape(fbref_url="https://fbref.com/en/comps/9/misc/Premier-League-Stats",extract=1,fix_columns=FALSE)
-raw[["player"]] <- list()
+# raw[["player"]] <- list()
 
 # player stats
 # player_standard_raw <- fbref_scrape(ncol=10,skip_head=0,fix_columns=TRUE,
