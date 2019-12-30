@@ -5,4 +5,6 @@
 
 ### Premier League plots
 
+![](fbref_files/figure-gfm/plots-epl-players-1.png)<!-- -->
+
 ![](fbref_files/figure-gfm/plots-epl-teams-1.png)<!-- -->![](fbref_files/figure-gfm/plots-epl-teams-2.png)<!-- -->![](fbref_files/figure-gfm/plots-epl-teams-3.png)<!-- -->![](fbref_files/figure-gfm/plots-epl-teams-4.png)<!-- -->![](fbref_files/figure-gfm/plots-epl-teams-5.png)<!-- -->
