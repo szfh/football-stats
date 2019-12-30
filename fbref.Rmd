@@ -150,6 +150,23 @@ ggsave("./plots/fbref/SFCxG90Difference.jpg")
 ### Premier League plots
 
 ```{r plots-epl-players}
+players %>%
+  filter(Gls==0) %>%
+  filter(Sh>=12) %>%
+  ggplot(aes(x=xG,y=Sh)) +
+  geom_text_repel(aes(label=Player),size=2) +
+  geom_point(aes(colour=Squad),size=2.5,shape=4) +
+  theme_sfc() +
+  labs(title="Who hasn't scored yet?",
+       subtitle="12+ shots, 0 goals",
+       x="Expected goals",
+       y="Shots",
+       caption="statsbomb/fbref") +
+  scale_colour_manual(values=palette_epl()) +
+  expand_limits(x=0,y=10) +
+  scale_x_continuous(breaks=seq(0,10,0.5)) +
+  scale_y_continuous(breaks=seq(15,50,5))
+ggsave("./plots/fbref/EPLNoGoalsxGShots.jpg")
 ```
 
 ```{r plots-epl-teams}
