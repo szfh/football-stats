@@ -1,8 +1,5 @@
-for(data in list.files("./data/fbref/", pattern=".csv")){
-  print(data)
-  read.csv(
-    paste0("./data/fbref/",data)
-  )
-}
-
-list.files("./data/fbref/", pattern=".csv")
+raw[["player"]][["misc"]] <- fbref_import("player/misc.txt",skip=0)
+raw[["player"]][["passing"]] <- fbref_import("player/passing.txt",skip=1)
+raw[["player"]][["playingtime"]] <- fbref_import("player/playingtime.txt",skip=1)
+raw[["player"]][["shooting"]] <- fbref_import("player/shooting.txt",skip=0)
+raw[["player"]][["standard"]] <- fbref_import("player/standard.txt",skip=1)
