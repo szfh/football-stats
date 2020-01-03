@@ -330,4 +330,12 @@ players %>%
        caption="statsbomb/fbref") +
   scale_x_continuous(limit=c(0,3)) +
   scale_y_continuous()
+
+players %>%
+  filter(Min>1750) %>%
+  ggplot(aes(x=reorder(Player,Min),y=Min,fill=Pos1)) +
+  geom_bar(stat="identity") +
+  coord_flip() +
+  theme_epl() +
+  scale_fill_manual(col_gdocs)
 ```
