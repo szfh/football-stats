@@ -104,7 +104,7 @@ players %>%
     colour="black",
     fill=sfc
     ) +
-  geom_text_repel(aes(label=ifelse(npxG90+xA90>0.1,Player,"")),size=3) +
+  geom_text_repel(aes(label=ifelse(npxG90+xA90>0.1,Player,"")),size=rel(4)) +
   theme_sfc() +
   labs(title="Southampton EPL xG/xA per 90 minutes",
        x="Expected goals per 90 minutes",
