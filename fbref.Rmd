@@ -78,7 +78,7 @@ players %>%
   geom_point(colour=sfc,size=2,alpha=0.8) +
   geom_text_repel(aes(label=ifelse(npxG+xA>1,Player,element_blank())),size=3) +
   theme_sfc() +
-  labs(title="Southampton EPL xG/xA (non-penalty)",
+  labs(title="Southampton EPL xG/xA",
        x="Expected goals",
        y="Expected assists",
        caption="statsbomb/fbref") +
@@ -94,7 +94,7 @@ players %>%
   geom_point(colour=sfc,size=2,alpha=0.8) +
   geom_text_repel(aes(label=ifelse(npxG90+xA90>0.1,Player,element_blank())),size=3) +
   theme_sfc() +
-  labs(title="Southampton EPL xG/xA per 90 minutes (non-penalty)",
+  labs(title="Southampton EPL xG/xA per 90 minutes",
        x="Expected goals per 90 minutes",
        y="Expected assists per 90 minutes",
        caption="statsbomb/fbref") +
