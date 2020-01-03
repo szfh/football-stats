@@ -67,7 +67,7 @@ players %>%
        x=element_blank(),
        y=element_blank(),
        caption="statsbomb/fbref") +
-  scale_y_continuous(breaks=seq(0,90*38,90),expand=expand_scale(add=c(0,50))) +
+  scale_y_continuous(breaks=seq(0,90*38,90),expand=expand_scale(add=c(0,80))) +
   coord_flip()
 ggsave("./plots/fbref/SFCMinutes.jpg")
 
@@ -157,6 +157,7 @@ ggsave("./plots/fbref/SFCxG90Difference.jpg")
 players %>%
   filter(Gls==0) %>%
   filter(Sh>=12) %>%
+  # filter(Player!="David McGoldrick") %>%
   ggplot(aes(x=xG,y=Sh)) +
   geom_text_repel(aes(label=Player),size=2) +
   geom_point(aes(colour=Squad),size=2.5,shape=4) +
@@ -168,8 +169,8 @@ players %>%
        caption="statsbomb/fbref") +
   scale_colour_manual(values=palette_epl()) +
   expand_limits(x=0,y=10) +
-  scale_x_continuous(breaks=seq(0,10,0.5)) +
-  scale_y_continuous(breaks=seq(15,50,5))
+  scale_x_continuous(breaks=seq(0,10,0.5),expand=expand_scale(add=c(0,0.2))) +
+  scale_y_continuous(breaks=seq(15,50,5),expand=expand_scale(add=c(0,0.5))) #include 0?
 ggsave("./plots/fbref/EPLNoGoalsxGShots.jpg")
 ```
 
@@ -180,34 +181,37 @@ squad %>%
   theme_sfc() +
   labs(title="Premier League expected goals (non-penalty)",
        x=element_blank(),
-       y="non-pen xG",
+       y=element_blank(),
        caption="statsbomb/fbref") +
   scale_fill_manual(values=palette_epl()) +
+  scale_y_continuous(breaks=seq(0,200,5),expand=expand_scale(add=c(0,0.5))) +
   coord_flip()
 ggsave("./plots/fbref/EPLnpxG.jpg")
 
 squad %>%
-  # mutate(xGA=as.numeric(xGA)) %>%
   ggplot(aes(x=reorder(Squad,-xGA),y=xGA,fill=Squad)) +
   geom_bar(stat="identity",alpha=0.8) +
   theme_sfc() +
   labs(title="Premier League expected goals allowed (non-penalty)",
        x=element_blank(),
-       y="non-pen xG allowed",
+       y=element_blank(),
        caption="statsbomb/fbref") +
   scale_fill_manual(values=palette_epl()) +
+  scale_y_continuous(breaks=seq(0,200,5),expand=expand_scale(add=c(0,0.5))) +
   coord_flip()
 ggsave("./plots/fbref/EPLnpxGA.jpg")
 
 squad %>%
   ggplot(aes(x=reorder(Squad,`np:G-xG`),y=`np:G-xG`,fill=Squad)) +
   geom_bar(stat="identity",alpha=0.8) +
+  # label/text?
   theme_sfc() +
-  labs(title="EPL goals - expected goals (non-penalty)",
+  labs(title="Expected goals over/underperformance",
        x=element_blank(),
-       y="xG-G",
+       y=element_blank(),
        caption="statsbomb/fbref") +
   scale_fill_manual(values=palette_epl()) +
+  scale_y_continuous(breaks=seq(-50,50,2),expand=expand_scale(add=0.1)) +
   coord_flip()
 ggsave("./plots/fbref/EPLnpG-xG.jpg")
 
@@ -215,13 +219,14 @@ squad %>%
   mutate(`xGA-GA`=round(xGA-GA,digits=1)) %>%
   ggplot(aes(x=reorder(Squad,`xGA-GA`),y=`xGA-GA`,fill=Squad)) +
   geom_bar(stat="identity",alpha=0.8) +
-  # geom_label(aes(label=`xGA-GA`),size=3) +
+  # label/text?
   theme_sfc() +
-  labs(title="EPL expected goals allowed - goals allowed",
+  labs(title="Expected goals allowed over/underperformance",
        x=element_blank(),
-       y="xGA-GA",
+       y=element_blank(),
        caption="statsbomb/fbref") +
   scale_fill_manual(values=palette_epl()) +
+  scale_y_continuous(breaks=seq(-50,50,2),expand=expand_scale(add=0.1)) +
   coord_flip()
 ggsave("./plots/fbref/EPLnpxGA-GA.jpg")
 
@@ -229,11 +234,12 @@ squad %>%
   ggplot(aes(x=reorder(Squad,xGDiff),y=xGDiff,fill=Squad)) +
   geom_bar(stat="identity",alpha=0.8) +
   theme_sfc() +
-  labs(title="EPL expected goal difference",
+  labs(title="Expected goal difference",
        x=element_blank(),
-       y="expected goals for - expected goals against",
+       y=element_blank(),
        caption="statsbomb/fbref") +
   scale_fill_manual(values=palette_epl()) +
+  scale_y_continuous(breaks=seq(-50,50,5),expand=expand_scale(add=0.1)) +
   coord_flip()
 ggsave("./plots/fbref/EPLxGD.jpg")
 ```
@@ -262,7 +268,7 @@ players %>%
   ggplot(aes(x=reorder(Player,Passes))) +
   geom_bar(aes(y=Right),stat="identity",fill=col_light[[1]]) +
   geom_bar(aes(y=-Left),stat="identity",fill=col_medium[[8]]) +
-  theme_sfc() +
+  # theme_sfc() +
   coord_flip()
 
 # Players %>%
