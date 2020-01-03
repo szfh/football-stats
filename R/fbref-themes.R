@@ -1,4 +1,4 @@
-theme_sfc <- function(base_size=12,base_family=""){
+theme_sfc <- function(base_size=12,base_family="serif"){
   theme_bw(base_size=base_size,base_family=base_family) +
     theme(
       axis.ticks=element_blank(),
