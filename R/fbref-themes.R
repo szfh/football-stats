@@ -1,47 +1,29 @@
 theme_sfc <- function(base_size=12,base_family=""){
   theme_bw(base_size=base_size,base_family=base_family) +
     theme(
-      strip.background = element_blank(),
-      strip.text = element_text(size = base_size),
-      plot.background=element_blank(),
-      plot.margin=unit(c(0.5,0.5,0.5,0.5),"lines"),
-      plot.title=element_text(size=16),
-      plot.subtitle=element_text(size=12),
-      plot.caption=element_text(size=8),
-      legend.position="none",
-      panel.background=element_blank(),
-      panel.border=element_blank(),
-      panel.grid.major=element_line(size=0.4),
-      panel.grid.minor=element_line(size=0.1,
-                                    linetype="dashed"),
       axis.ticks=element_blank(),
-      axis.line=element_blank()
+      axis.line=element_line(size=0.6),
+      axis.text=element_text(hjust=0.5,vjust=0.5,size=rel(1)),
+      
+      legend.position="none",
+      
+      panel.border=element_blank(),
+      panel.background=element_blank(),
+      
+      panel.grid.major=element_line(size=0.4),
+      panel.grid.minor=element_blank(),
+      
+      plot.title=element_text(size=rel(1.5),face="bold",hjust=0.5),
+      plot.subtitle=element_text(size=rel(1),hjust=0.5),
+      plot.caption=element_text(size=rel(0.8)),
+      
+      plot.background=element_blank(),
+      plot.margin=unit(c(1,1,0.5,0.5),"lines"),
     )
 }
 
-theme_epl <- function(base_size=12,base_family=""){
-  theme_clean(base_size=base_size,base_family=base_family) +
-    theme(
-      # strip.background = element_blank(),
-      # strip.text = element_text(size = base_size),
-      # plot.background=element_blank(),
-      # plot.margin=unit(c(0.5,0.5,0.5,0.5),"lines"),
-      # plot.title=element_text(size=16),
-      # plot.subtitle=element_text(size=12),
-      # plot.caption=element_text(size=8),
-      # legend.position="none",
-      # panel.background=element_blank(),
-      # panel.border=element_blank(),
-      # panel.grid.major=element_line(size=0.4),
-      # panel.grid.minor=element_line(size=0.1,
-      #                               linetype="dashed"),
-      # axis.ticks=element_blank(),
-      # axis.line=element_blank()
-    )
-}
+theme_epl <- theme_sfc
 
-# https://drsimonj.svbtle.com/creating-corporate-colour-palettes-for-ggplot2
-# https://encycolorpedia.com/teams/football/epl
 palette_epl <- function(team_name){
   palette_epl <- c(
     `Arsenal` = "#EF0107",
