@@ -179,6 +179,7 @@ squad %>%
   ggplot(aes(x=reorder(Squad,npxG),y=npxG,fill=Squad)) +
   geom_bar(stat="identity",alpha=0.8) +
   theme_sfc() +
+  theme(panel.grid.major.y=element_blank()) +
   labs(title="Premier League expected goals (non-penalty)",
        x=element_blank(),
        y=element_blank(),
@@ -192,6 +193,7 @@ squad %>%
   ggplot(aes(x=reorder(Squad,-xGA),y=xGA,fill=Squad)) +
   geom_bar(stat="identity",alpha=0.8) +
   theme_sfc() +
+  theme(panel.grid.major.y=element_blank()) +
   labs(title="Premier League expected goals allowed (non-penalty)",
        x=element_blank(),
        y=element_blank(),
