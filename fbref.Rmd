@@ -61,16 +61,13 @@ players %>%
   geom_bar(stat="identity",fill=sfc,width=0.8,alpha=0.6) +
   geom_label(aes(label=Min),colour=sfc_light,size=2) +
   theme_sfc() +
-  theme(panel.grid.major.x=element_line(size=0.1,
-                                        linetype="dashed"),
-        panel.grid.minor.x=element_blank(),
-        panel.grid.major.y=element_blank(),
-        panel.grid.minor.y=element_blank()) +
+  theme(panel.grid.major.y=element_blank(),
+        axis.text.x=element_text(hjust=0.5,size=rel(0.8))) +
   labs(title="League minutes",
        x=element_blank(),
        y=element_blank(),
        caption="statsbomb/fbref") +
-  scale_y_continuous(breaks=seq(0,90*38,90)) +
+  scale_y_continuous(breaks=seq(0,90*38,90),expand=expand_scale(add=c(0,50))) +
   coord_flip()
 ggsave("./plots/fbref/SFCMinutes.jpg")
 
@@ -78,55 +75,62 @@ players %>%
   filter(Squad=="Southampton") %>%
   filter(xG+xA>0) %>%
   ggplot(aes(x=npxG,y=xA)) +
-  geom_point(colour=sfc,size=1.5,alpha=0.8) +
+  geom_point(colour=sfc,size=2,alpha=0.8) +
   geom_text_repel(aes(label=ifelse(npxG+xA>1,Player,element_blank())),size=3) +
   theme_sfc() +
   labs(title="Southampton EPL xG/xA (non-penalty)",
-       x="xG",
-       y="xA",
-       caption="statsbomb/fbref")
+       x="Expected goals",
+       y="Expected assists",
+       caption="statsbomb/fbref") +
+  scale_x_continuous(breaks=seq(0,30,1),expand=expand_scale(mult=0.02)) +
+  scale_y_continuous(breaks=seq(0,30,1),expand=expand_scale(mult=0.02)) +
+  coord_fixed()
 ggsave("./plots/fbref/SFCnpxGxA.jpg")
 
 players %>%
   filter(Squad=="Southampton") %>%
   filter(xG90+xA90>0) %>%
   ggplot(aes(x=npxG90,y=xA90)) +
-  geom_point(colour=sfc,size=1.5,alpha=0.8) +
+  geom_point(colour=sfc,size=2,alpha=0.8) +
   geom_text_repel(aes(label=ifelse(npxG90+xA90>0.1,Player,element_blank())),size=3) +
   theme_sfc() +
   labs(title="Southampton EPL xG/xA per 90 minutes (non-penalty)",
-       x="xG per 90",
-       y="xA per 90",
-       caption="statsbomb/fbref")
+       x="Expected goals per 90 minutes",
+       y="Expected assists per 90 minutes",
+       caption="statsbomb/fbref") +
+  scale_x_continuous(breaks=seq(0,2,0.1),expand=expand_scale(mult=0.02)) +
+  scale_y_continuous(breaks=seq(0,2,0.1),expand=expand_scale(mult=0.02)) +
+  coord_fixed()
 ggsave("./plots/fbref/SFCnpxGxA90.jpg")
 
 players %>%
   filter(Squad=="Southampton") %>%
-  filter(`1/3`+PenArea>0) %>%
-  ggplot(aes(x=`1/3`,y=PenArea)) +
-  geom_point(colour=sfc,size=1.5,alpha=0.8) +
-  geom_text_repel(aes(label=ifelse(`1/3`+PenArea>8,Player,element_blank())),size=3) +
+  filter(`1/3`+PPA>0) %>%
+  ggplot(aes(x=`1/3`,y=PPA)) +
+  geom_point(colour=sfc,size=2,alpha=0.8) +
+  geom_text_repel(aes(label=ifelse(`1/3`+PPA>12,Player,element_blank())),size=3) +
   theme_sfc() +
-  labs(title=element_blank(),
+  labs(title="Southampton EPL attacking passes",
        x="Passes into final third",
        y="Passes into penalty area",
-       caption="statsbomb/fbref")
+       caption="statsbomb/fbref") +
+  scale_x_continuous(breaks=seq(0,500,10),expand=expand_scale(mult=0.02)) +
+  scale_y_continuous(breaks=seq(0,500,2),expand=expand_scale(mult=0.02))
 ggsave("./plots/fbref/SFCAttackingPasses.jpg")
 
 players %>%
   filter(Squad=="Southampton") %>%
-  # filter(!is.na(`+/-`)) %>%
   mutate(PlusMinusPos=ifelse(`+/-`>=0,TRUE,FALSE)) %>%
   ggplot(aes(x=reorder(Player,`+/-`),y=`+/-`)) +
   geom_bar(aes(fill=PlusMinusPos),stat="identity",width=0.8,alpha=0.6) +
   theme_sfc() +
-  theme(panel.grid.minor.x=element_blank()) +
+  theme(axis.text.x=element_text(hjust=0.5)) +
   labs(title="On-pitch goal difference",
        x=element_blank(),
-       y="goals scored - goals conceded\nwhile on the pitch",
+       y="Goals scored - Goals conceded",
        caption="statsbomb/fbref") +
   scale_fill_manual(values=c(col_gdocs[[2]],col_gdocs[[4]])) +
-  scale_y_reverse() +
+  scale_y_reverse(breaks=seq(-100,100,2),expand=expand_scale(add=0.2)) +
   coord_flip()
 ggsave("./plots/fbref/SFCGoalDifference.jpg")
 
@@ -139,10 +143,10 @@ players %>%
   theme_sfc() +
   labs(title="On-pitch expected goals difference (per 90 minutes)",
        x=element_blank(),
-       y="expected goals scored - expected goals conceded\nper 90 minutes while on the pitch",
+       y="Expected goals scored - Expected goals conceded per 90 minutes",
        caption="statsbomb/fbref") +
   scale_fill_manual(values=c(col_gdocs[[2]],col_gdocs[[4]])) +
-  scale_y_reverse() +
+  scale_y_reverse(breaks=seq(-2,2,0.1),expand=expand_scale(add=0.01)) +
   coord_flip()
 ggsave("./plots/fbref/SFCxG90Difference.jpg")
 ```
