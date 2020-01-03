@@ -332,10 +332,10 @@ players %>%
   scale_y_continuous()
 
 players %>%
-  filter(Min>1750) %>%
+  top_n(25, Min) %>%
   ggplot(aes(x=reorder(Player,Min),y=Min,fill=Pos1)) +
   geom_bar(stat="identity") +
   coord_flip() +
   theme_epl() +
-  scale_fill_manual(col_gdocs)
+  scale_fill_manual(values=col_medium)
 ```
