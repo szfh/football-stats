@@ -301,4 +301,33 @@ players %>%
   ggplot(aes(x=Player,y=Cmp,fill=PassType)) +
   geom_bar(stat="identity") +
   coord_flip()
+
+players %>%
+  filter(Squad=="Southampton") %>%
+  pivot_longer(cols=c(ShortCmp,MediumCmp,LongCmp),names_to="PassType",values_to="Cmp") %>%
+  mutate(PassType=factor(PassType,levels=c("ShortCmp","MediumCmp","LongCmp"))) %>%
+  ggplot(aes(x=0,y=Cmp,label=Player)) +
+  geom_point(size=2,colour=sfc) +
+  geom_text_repel(
+    size=3,
+    nudge_x=0,
+    direction="y",
+    hjust=0,
+    segment.size=0
+  ) +
+  theme_sfc() +
+  theme(
+    axis.line.x=element_blank(),
+    axis.ticks.x=element_blank(),
+    axis.text.x=element_blank(),
+    axis.title.x=element_blank(),
+    panel.grid.major.x=element_blank(),
+  ) +
+  facet_wrap("PassType",scales="free") +
+  labs(title="Completed passes",
+       x=element_blank(),
+       y=element_blank(),
+       caption="statsbomb/fbref") +
+  scale_x_continuous(limit=c(0,3)) +
+  scale_y_continuous()
 ```
