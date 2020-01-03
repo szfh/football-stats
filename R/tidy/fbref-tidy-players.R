@@ -67,5 +67,6 @@ tidy[["player"]][["playingtime"]] <- raw[["player"]][["playingtime"]] %>%
   )
 
 players <- reduce(tidy[["player"]],left_join) %>%
-    separate("Player",c("Player",NA),sep="\\\\") %>%
-    separate("Nation",c(NA,"Nation"),sep=" ")
+  separate("Player",c("Player",NA),sep="\\\\") %>%
+  separate("Nation",c(NA,"Nation"),sep=" ") %>%
+  separate("Pos",c("Pos1","Pos2"),sep=2)
