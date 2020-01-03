@@ -294,4 +294,11 @@ players %>%
 # Players %>%
 #   filter(Squad=="Southampton") %>%
 #   max(Left,Right)
+
+players %>%
+  filter(Squad=="Southampton") %>%
+  pivot_longer(cols=c(ShortCmp,MediumCmp,LongCmp),names_to="PassType",values_to="Cmp") %>%
+  ggplot(aes(x=Player,y=Cmp,fill=PassType)) +
+  geom_bar(stat="identity") +
+  coord_flip()
 ```
