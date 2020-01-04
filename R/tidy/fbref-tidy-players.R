@@ -1,4 +1,4 @@
-Standard_Player_tidy <- Standard_Player_raw %>%
+tidy[["player"]][["standard"]] <- raw[["player"]][["standard"]] %>%
   rename(
     "Gls90"="Gls_1",
     "Ast90"="Ast_1",
@@ -12,7 +12,7 @@ Standard_Player_tidy <- Standard_Player_raw %>%
     "npxG+xA90"="npxG+xA",
   )
 
-Passing_Player_tidy <- Passing_Player_raw %>%
+tidy[["player"]][["passing"]] <- raw[["player"]][["passing"]] %>%
   rename(
     "TotalCmp"="Cmp",
     "TotalAtt"="Att",
@@ -33,7 +33,7 @@ Passing_Player_tidy <- Passing_Player_raw %>%
     -"xA",
   )
 
-Shooting_Player_tidy <- Shooting_Player_raw %>%
+tidy[["player"]][["shooting"]] <- raw[["player"]][["shooting"]] %>%
   select(
     -"Rk",
     -"Gls",
@@ -45,7 +45,7 @@ Shooting_Player_tidy <- Shooting_Player_raw %>%
     -"FK",
   )
 
-Misc_Player_tidy <- Misc_Player_raw %>%
+tidy[["player"]][["misc"]] <- raw[["player"]][["misc"]] %>%
   select(
     -"Rk",
     -"CrdY",
@@ -53,7 +53,7 @@ Misc_Player_tidy <- Misc_Player_raw %>%
     -"90s",
   )
 
-PlayingTime_Player_tidy <- PlayingTime_Player_raw %>%
+tidy[["player"]][["playingtime"]] <- raw[["player"]][["playingtime"]] %>%
   rename(
     "xGOn-Off"="On-Off_1"
   ) %>%
@@ -66,10 +66,7 @@ PlayingTime_Player_tidy <- PlayingTime_Player_raw %>%
     -"Matches",
   )
 
-Players <- Standard_Player_tidy %>%
-  left_join(Passing_Player_tidy) %>%
-  left_join(Shooting_Player_tidy) %>%
-  left_join(Misc_Player_tidy) %>%
-  left_join(PlayingTime_Player_tidy) %>%
+players <- reduce(tidy[["player"]],left_join) %>%
   separate("Player",c("Player",NA),sep="\\\\") %>%
-  separate("Nation",c(NA,"Nation"),sep=" ")
+  separate("Nation",c(NA,"Nation"),sep=" ") %>%
+  separate("Pos",c("Pos1","Pos2"),sep=2)
