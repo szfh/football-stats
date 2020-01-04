@@ -1,5 +1,5 @@
 #R files
-*.Rproj
+.Rproj
 .Rproj.user
 .Rhistory
 .Rapp.history
