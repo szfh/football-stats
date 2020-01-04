@@ -67,7 +67,7 @@ players %>%
        x=element_blank(),
        y=element_blank(),
        caption="statsbomb/fbref") +
-  scale_y_continuous(breaks=seq(0,90*38,90),expand=expand_scale(add=c(0,80))) +
+  scale_y_continuous(breaks=seq(0,90*38,180),expand=expand_scale(add=c(0,80))) +
   coord_flip()
 ggsave("./plots/fbref/SFCMinutes.jpg")
 
@@ -338,4 +338,21 @@ players %>%
   coord_flip() +
   theme_epl() +
   scale_fill_manual(values=col_medium)
+
+players %>%
+  filter(Pos1 %in% c("DF","MF","FW")) %>%
+  top_n(20, Min) %>%
+  ggplot(aes(x=reorder(Player,Min),y=Min,fill=Pos1)) +
+  geom_bar(stat="identity",width=0.8,alpha=0.8) +
+  geom_label(aes(label=Min),fontface="bold",size=2) +
+  theme_epl() +
+  theme(panel.grid.major.y=element_blank(),
+        axis.text.x=element_text(hjust=0.5,size=rel(0.8))) +
+  labs(title="League minutes - midfielders and attackers",
+       x=element_blank(),
+       y=element_blank(),
+       caption="statsbomb/fbref") +
+  scale_fill_manual(values=c(col_gdocs[[2]],col_gdocs[[4]],col_gdocs[[6]])) +
+  scale_y_continuous(breaks=seq(0,90*38,180),expand=expand_scale(add=c(-1000,80))) +
+  coord_flip()
 ```
