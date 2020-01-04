@@ -19,6 +19,7 @@ library(rvest)
 # library(ggsoccer)
 library(ggrepel)
 library(ggthemes)
+library(here)
 
 set.seed(9999)
 ```
@@ -28,28 +29,29 @@ set.seed(9999)
 # run only this block to scrape data and save
 # (ctrl+shift+F10 :: ctrl+shift+enter)
 raw <- list()
-source("./R/scraper/fbref-scraper-functions.R")
-source("./R/scraper/fbref-scraper.R")
-source("./R/scraper/fbref-import-local.R")
-source("./R/scraper/fbref-scraper-save.R")
+source(here("R","fbref","scraper","fbref-scraper-functions.R"))
+source(here("R","fbref","scraper","fbref-scraper.R"))
+source(here("R","fbref","scraper","fbref-import-local.R"))
+source(here("R","fbref","scraper","fbref-scraper-save.R"))
 ```
 
 ```{r read}
 # read from saved fbref data
 raw <- list()
-source("./R/scraper/fbref-scraper-read.R")
+source(here("R","fbref","scraper","fbref-scraper-read.R"))
 ```
 
 ```{r tidy}
 # tidy raw fbref data
 tidy <- list()
-source("./R/tidy/fbref-tidy-players.R")
-source("./R/tidy/fbref-tidy-teams.R")
-source("./R/tidy/fbref-tidy-matches.R")
+source(here("R","fbref","tidy","fbref-tidy-players.R"))
+source(here("R","fbref","tidy","fbref-tidy-teams.R"))
+source(here("R","fbref","tidy","fbref-tidy-matches.R"))
 ```
 
 ```{r themes}
-source("./R/fbref-themes.R")
+# source("./R/fbref-themes.R")
+source(here("R","fbref","fbref-themes.R"))
 ```
 
 ### Southampton plots
@@ -69,7 +71,7 @@ players %>%
        caption="statsbomb/fbref") +
   scale_y_continuous(breaks=seq(0,90*38,180),expand=expand_scale(add=c(0,80))) +
   coord_flip()
-ggsave("./plots/fbref/SFCMinutes.jpg")
+ggsave(here("plots","fbref","SFCMinutes.jpg"))
 
 players %>%
   filter(Squad=="Southampton") %>%
@@ -91,7 +93,7 @@ players %>%
   scale_x_continuous(breaks=seq(0,30,1),expand=expand_scale(mult=0.02)) +
   scale_y_continuous(breaks=seq(0,30,1),expand=expand_scale(mult=0.02)) +
   coord_fixed()
-ggsave("./plots/fbref/SFCnpxGxA.jpg")
+ggsave(here("plots","fbref","SFCnpxGxA.jpg"))
 
 players %>%
   filter(Squad=="Southampton") %>%
@@ -113,7 +115,7 @@ players %>%
   scale_x_continuous(breaks=seq(0,2,0.1),expand=expand_scale(mult=0.02)) +
   scale_y_continuous(breaks=seq(0,2,0.1),expand=expand_scale(mult=0.02)) +
   coord_fixed()
-ggsave("./plots/fbref/SFCnpxGxA90.jpg")
+ggsave(here("plots","fbref","SFCnpxGxA90.jpg"))
 
 players %>%
   filter(Squad=="Southampton") %>%
@@ -134,7 +136,7 @@ players %>%
        caption="statsbomb/fbref") +
   scale_x_continuous(breaks=seq(0,500,10),expand=expand_scale(mult=0.02)) +
   scale_y_continuous(breaks=seq(0,500,2),expand=expand_scale(mult=0.02))
-ggsave("./plots/fbref/SFCAttackingPasses.jpg")
+ggsave(here("plots","fbref","SFCAttackingPasses.jpg"))
 
 players %>%
   filter(Squad=="Southampton") %>%
@@ -150,7 +152,7 @@ players %>%
   scale_fill_manual(values=c(col_gdocs[[2]],col_gdocs[[4]])) +
   scale_y_reverse(breaks=seq(-100,100,2),expand=expand_scale(add=0.2)) +
   coord_flip()
-ggsave("./plots/fbref/SFCGoalDifference.jpg")
+ggsave(here("plots","fbref","SFCGoalDifference.jpg"))
 
 players %>%
   filter(Squad=="Southampton") %>%
@@ -166,7 +168,7 @@ players %>%
   scale_fill_manual(values=c(col_gdocs[[2]],col_gdocs[[4]])) +
   scale_y_reverse(breaks=seq(-2,2,0.1),expand=expand_scale(add=0.01)) +
   coord_flip()
-ggsave("./plots/fbref/SFCxG90Difference.jpg")
+ggsave(here("plots","fbref","SFCxG90GoalDifference.jpg"))
 ```
 
 ### Premier League plots
@@ -189,7 +191,7 @@ players %>%
   expand_limits(x=0,y=10) +
   scale_x_continuous(breaks=seq(0,10,0.5),expand=expand_scale(add=c(0,0.2))) +
   scale_y_continuous(breaks=seq(15,50,5),expand=expand_scale(add=c(0,0.5))) #include 0?
-ggsave("./plots/fbref/EPLNoGoalsxGShots.jpg")
+ggsave(here("plots","fbref","EPLNoGoalsxGShots.jpg"))
 ```
 
 ```{r plots-epl-teams}
@@ -205,7 +207,7 @@ squad %>%
   scale_fill_manual(values=palette_epl()) +
   scale_y_continuous(breaks=seq(0,200,5),expand=expand_scale(add=c(0,0.5))) +
   coord_flip()
-ggsave("./plots/fbref/EPLnpxG.jpg")
+ggsave(here("plots","fbref","EPLnpxG.jpg"))
 
 squad %>%
   ggplot(aes(x=reorder(Squad,-xGA),y=xGA,fill=Squad)) +
@@ -219,7 +221,7 @@ squad %>%
   scale_fill_manual(values=palette_epl()) +
   scale_y_continuous(breaks=seq(0,200,5),expand=expand_scale(add=c(0,0.5))) +
   coord_flip()
-ggsave("./plots/fbref/EPLnpxGA.jpg")
+ggsave(here("plots","fbref","EPLnpxGA.jpg"))
 
 squad %>%
   ggplot(aes(x=reorder(Squad,`np:G-xG`),y=`np:G-xG`,fill=Squad)) +
@@ -233,7 +235,7 @@ squad %>%
   scale_fill_manual(values=palette_epl()) +
   scale_y_continuous(breaks=seq(-50,50,2),expand=expand_scale(add=0.1)) +
   coord_flip()
-ggsave("./plots/fbref/EPLnpG-xG.jpg")
+ggsave(here("plots","fbref","EPLnpG-xG.jpg"))
 
 squad %>%
   mutate(`xGA-GA`=round(xGA-GA,digits=1)) %>%
@@ -248,7 +250,7 @@ squad %>%
   scale_fill_manual(values=palette_epl()) +
   scale_y_continuous(breaks=seq(-50,50,2),expand=expand_scale(add=0.1)) +
   coord_flip()
-ggsave("./plots/fbref/EPLnpxGA-GA.jpg")
+ggsave(here("plots","fbref","EPLnpxGA-GA.jpg"))
 
 squad %>%
   ggplot(aes(x=reorder(Squad,xGDiff),y=xGDiff,fill=Squad)) +
@@ -261,7 +263,7 @@ squad %>%
   scale_fill_manual(values=palette_epl()) +
   scale_y_continuous(breaks=seq(-50,50,5),expand=expand_scale(add=0.1)) +
   coord_flip()
-ggsave("./plots/fbref/EPLxGD.jpg")
+ggsave(here("plots","fbref","EPLxGD.jpg"))
 ```
 
 ```{r test,eval=F}
@@ -280,7 +282,6 @@ players %>%
        legend.position="right") +
   scale_fill_manual(values=c(col_medium[[1]],col_medium[[8]])) +
   coord_flip()
-# ggsave("./plots/fbref/SFCPassFootedness.jpg",height=4)
 
 players %>%
   filter(Squad=="Southampton") %>%

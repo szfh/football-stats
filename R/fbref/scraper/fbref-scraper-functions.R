@@ -25,18 +25,7 @@ fbref_scrape <- function(fbref_url,nodes=NA,fix_columns=FALSE,extract=NA){
 
 #function to import from local CSV file
 fbref_import <- function(file,skip=0){
-  path <- "./data/fbref/EPL/2019/"
-  
-  data_csv <- read_csv(paste0(path,file),skip=skip)
-  
+  data_csv <- read_csv(file,skip=skip)
+
   return(data_csv)
-}
-
-
-#function to save data as RDS
-save_data <- function(data){
-  saveRDS(
-    object=get(data),
-    file=paste0("./data/",data,".rds")
-  )
 }
