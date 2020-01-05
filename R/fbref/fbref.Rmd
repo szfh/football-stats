@@ -28,11 +28,11 @@ set.seed(9999)
 # scrape data from fbref and save locally
 # run only this block to scrape data and save
 # (ctrl+shift+F10 :: ctrl+shift+enter)
-raw <- list()
-source(here("R","fbref","scraper","fbref-scraper-functions.R"))
-source(here("R","fbref","scraper","fbref-scraper.R"))
-source(here("R","fbref","scraper","fbref-import-local.R"))
-source(here("R","fbref","scraper","fbref-scraper-save.R"))
+# raw <- list()
+# source(here("R","fbref","scraper","fbref-scraper-functions.R"))
+# source(here("R","fbref","scraper","fbref-scraper.R"))
+# source(here("R","fbref","scraper","fbref-import-local.R"))
+# source(here("R","fbref","scraper","fbref-scraper-save.R"))
 ```
 
 ```{r read}
