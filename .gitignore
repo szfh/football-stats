@@ -1,16 +1,19 @@
-#R files
+#R
 .Rproj
 .Rproj.user
 .Rhistory
 .Rapp.history
 .RData
 .Ruserdata
-*.utf8.md
-*.knit.md
+.utf8.md
+.knit.md
+
+#python
+.spyproject
 
 #folders
 data/
 plots/
 
 #html
-*.html
+.html
