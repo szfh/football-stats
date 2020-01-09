@@ -22,6 +22,8 @@ library(ggthemes)
 library(here)
 
 set.seed(9999)
+
+source(here("R","fbref","fbref-themes.R"))
 ```
 
 ```{r scraper,eval=F}
@@ -31,7 +33,6 @@ set.seed(9999)
 # raw <- list()
 # source(here("R","fbref","scraper","fbref-scraper-functions.R"))
 # source(here("R","fbref","scraper","fbref-scraper.R"))
-# source(here("R","fbref","scraper","fbref-import-local.R"))
 # source(here("R","fbref","scraper","fbref-scraper-save.R"))
 ```
 
@@ -47,11 +48,7 @@ tidy <- list()
 source(here("R","fbref","tidy","fbref-tidy-players.R"))
 source(here("R","fbref","tidy","fbref-tidy-teams.R"))
 source(here("R","fbref","tidy","fbref-tidy-matches.R"))
-```
-
-```{r themes}
-# source("./R/fbref-themes.R")
-source(here("R","fbref","fbref-themes.R"))
+# rm(raw,tidy)
 ```
 
 ### Southampton plots
@@ -140,8 +137,8 @@ ggsave(here("plots","fbref","SFCAttackingPasses.jpg"))
 
 players %>%
   filter(Squad=="Southampton") %>%
-  mutate(PlusMinusPos=ifelse(`+/-`>=0,TRUE,FALSE)) %>%
-  ggplot(aes(x=reorder(Player,`+/-`),y=`+/-`)) +
+  mutate(PlusMinusPos=ifelse(`Gls+/-`>=0,TRUE,FALSE)) %>%
+  ggplot(aes(x=reorder(Player,`Gls+/-`),y=`Gls+/-`)) +
   geom_bar(aes(fill=PlusMinusPos),stat="identity",width=0.8,alpha=0.6) +
   theme_sfc() +
   theme(axis.text.x=element_text(hjust=0.5)) +
@@ -169,6 +166,28 @@ players %>%
   scale_y_reverse(breaks=seq(-2,2,0.1),expand=expand_scale(add=0.01)) +
   coord_flip()
 ggsave(here("plots","fbref","SFCxG90GoalDifference.jpg"))
+
+players %>%
+  filter(Squad=="Southampton") %>%
+  filter(Pos1 %in% c("MF","FW")) %>%
+  filter(ShortCmp>0) %>%
+  ggplot(aes(x=ShortAtt,y=`ShortCmp%`,label=Player)) +
+  geom_point(
+    shape=21,
+    size=2,
+    alpha=0.8,
+    colour="black",
+    fill=sfc
+    ) +
+  geom_text_repel(size=3) +
+  theme_sfc() +
+  labs(title="Southampton short passes (MF/FW)",
+       x="Short passes attempted",
+       y="Short pass completion",
+       caption="statsbomb/fbref") +
+  scale_x_continuous(breaks=seq(0,500,5),expand=expand_scale(add=c(1.1,1.1))) +
+  scale_y_continuous(breaks=seq(0,500,5),labels=function(x) paste0(x,"%"),expand=expand_scale(add=c(17,5)))
+ggsave(here("plots","fbref","SFCShortPassComp.jpg"))
 ```
 
 ### Premier League plots
@@ -224,7 +243,7 @@ players %>%
   filter(Pos1=="FW" | Pos2=="FW") %>%
   filter(Sh>=4) %>%
   # filter(Player!="David McGoldrick") %>%
-  ggplot(aes(x=`SoT%`,y=`Sh/90`)) +
+  ggplot(aes(x=`SoT%`,y=`Sh90`)) +
   geom_text_repel(aes(label=ifelse(has_scored==FALSE,Player,"")),size=2) +
   geom_point(aes(colour=has_scored),size=3,shape=4) +
   theme_sfc() +
