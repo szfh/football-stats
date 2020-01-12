@@ -263,6 +263,7 @@ players %>%
   geom_bar(stat="identity") +
   coord_flip()
 
+# https://ryo-n7.github.io/2019-11-28-visualize-EPL-part-2/
 players %>%
   filter(Squad=="Southampton") %>%
   pivot_longer(cols=c(ShortCmp,MediumCmp,LongCmp),names_to="PassType",values_to="Cmp") %>%
