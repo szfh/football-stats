@@ -14,3 +14,5 @@ tidy[["matches"]] <- raw[["matches"]] %>%
     -"Notes",
   ) %>%
   drop_na("Wk")
+
+matches <- tidy[["matches"]]
