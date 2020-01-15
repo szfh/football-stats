@@ -74,6 +74,7 @@ players %>%
   filter(Squad=="Southampton") %>%
   filter(xG+xA>0) %>%
   ggplot(aes(x=npxG,y=xA)) +
+  geom_blank(data=data.frame(npxG=0,xA=0)) +
   geom_point(shape=21,size=3,alpha=0.8,colour="black",fill=sfc) +
   geom_text_repel(aes(label=ifelse(npxG+xA>1,Player,"")),size=rel(4)) +
   theme_sfc() +
@@ -81,8 +82,8 @@ players %>%
        x="Expected goals",
        y="Expected assists",
        caption="statsbomb/fbref") +
-  scale_x_continuous(breaks=seq(0,30,1),expand=expand_scale(mult=0.02)) +
-  scale_y_continuous(breaks=seq(0,30,1),expand=expand_scale(mult=0.02)) +
+  scale_x_continuous(breaks=seq(0,30,1),expand=expand_scale(add=c(0,0.1))) +
+  scale_y_continuous(breaks=seq(0,30,1),expand=expand_scale(add=c(0,0.1))) +
   coord_fixed()
 ggsave(here("plots","SFC","npxGxA.jpg"))
 
@@ -90,15 +91,16 @@ players %>%
   filter(Squad=="Southampton") %>%
   filter(xG90+xA90>0) %>%
   ggplot(aes(x=npxG90,y=xA90)) +
+  geom_blank(data=data.frame(npxG90=0,xA90=0)) +
   geom_point(shape=21,size=2,alpha=0.8,colour="black",fill=sfc) +
   geom_text_repel(aes(label=ifelse(npxG90>0.1|xA90>0.1,Player,"")),size=rel(3)) +
   theme_sfc() +
-  labs(title="Southampton xG/xA per 90 minutes",
+  labs(title="Southampton xG/xA (per 90 mins)",
        x="Expected goals per 90 minutes",
        y="Expected assists per 90 minutes",
        caption="statsbomb/fbref") +
-  scale_x_continuous(breaks=seq(0,2,0.1),expand=expand_scale(mult=0.02)) +
-  scale_y_continuous(breaks=seq(0,2,0.1),expand=expand_scale(mult=0.02)) +
+  scale_x_continuous(breaks=seq(0,2,0.1),expand=expand_scale(add=c(0,0.02))) +
+  scale_y_continuous(breaks=seq(0,2,0.1),expand=expand_scale(add=c(0,0.02))) +
   coord_fixed()
 ggsave(here("plots","SFC","SFCnpxGxA90.jpg"))
 
@@ -142,8 +144,9 @@ players %>%
   filter(Gls==0) %>%
   filter(Pos1=="FW" | Pos2=="FW") %>%
   filter(Sh>=6) %>%
-  # filter(Player!="David McGoldrick") %>%
+  filter(Player!="David McGoldrick") %>%
   ggplot(aes(x=npxG,y=Sh)) +
+  # geom_blank(data=data.frame(npxG=0,Sh=0)) +
   geom_text_repel(aes(label=Player),size=2) +
   geom_point(aes(colour=Squad),size=3,shape=4) +
   theme_epl() +
@@ -155,7 +158,7 @@ players %>%
   scale_colour_manual(values=palette_epl()) +
   expand_limits(x=0,y=10) +
   scale_x_continuous(breaks=seq(0,30,0.5),expand=expand_scale(add=c(0,0.2))) +
-  scale_y_continuous(breaks=seq(0,50,5),expand=expand_scale(add=c(0.5,0.5))) #include 0?
+  scale_y_continuous(breaks=seq(0,50,5),expand=expand_scale(add=c(0,0.5)))
 ggsave(here("plots","EPL","NoGoalsxGShots.jpg"))
 ```
 
@@ -258,7 +261,7 @@ players %>%
 
 players %>%
   filter(Squad=="Southampton") %>%
-  pivot_longer(cols=c(ShortCmp,MediumCmp,LongCmp),names_to="PassType",values_to="Cmp") %>% view
+  pivot_longer(cols=c(ShortCmp,MediumCmp,LongCmp),names_to="PassType",values_to="Cmp") %>%
   ggplot(aes(x=Player,y=Cmp,fill=PassType)) +
   geom_bar(stat="identity") +
   coord_flip()
