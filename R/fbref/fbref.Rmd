@@ -91,9 +91,9 @@ players %>%
   filter(xG90+xA90>0) %>%
   ggplot(aes(x=npxG90,y=xA90)) +
   geom_point(shape=21,size=2,alpha=0.8,colour="black",fill=sfc) +
-  geom_text_repel(aes(label=ifelse(npxG90+xA90>0.1,Player,"")),size=rel(4)) +
+  geom_text_repel(aes(label=ifelse(npxG90>0.1|xA90>0.1,Player,"")),size=rel(3)) +
   theme_sfc() +
-  labs(title="Southampton EPL xG/xA per 90 minutes",
+  labs(title="Southampton xG/xA per 90 minutes",
        x="Expected goals per 90 minutes",
        y="Expected assists per 90 minutes",
        caption="statsbomb/fbref") +
