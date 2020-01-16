@@ -3,9 +3,7 @@ tidy[["table"]] <- raw[["table"]] %>%
     -"Top Team Scorer",
     -"Goalkeeper",
     -"Notes",
-    -"Attendance",
   )
-# attendance as number?
 
 tidy[["squad"]][["standard"]] <- raw[["squad"]][["standard"]] %>%
   rename(
@@ -13,6 +11,9 @@ tidy[["squad"]][["standard"]] <- raw[["squad"]][["standard"]] %>%
     "Ast"="Ast...7",
     "Gls90"="Gls...12",
     "Ast90"="Ast...13",
+    "G+A90"="G+A",
+    "G-PK90"="G-PK",
+    "G+A-PK90"="G+A-PK",
     "xG"="xG...17",
     "npxG"="npxG...18",
     "xA"="xA...19",
@@ -21,10 +22,6 @@ tidy[["squad"]][["standard"]] <- raw[["squad"]][["standard"]] %>%
     "xG+xA90"="xG+xA",
     "npxG90"="npxG...23",
     "npxG+xA90"="npxG+xA",
-  ) %>%
-  select(
-    -"MP",
-    -"xG",
   )
 
 tidy[["squad"]][["passing"]] <- raw[["squad"]][["passing"]] %>%
@@ -41,38 +38,29 @@ tidy[["squad"]][["passing"]] <- raw[["squad"]][["passing"]] %>%
     "LongCmp"="Cmp...16",
     "LongAtt"="Att...17",
     "LongCmp%"="Cmp%...18",
-  ) %>% 
-  select(
-    -"# Pl",
-    -"Ast",
-    -"xA",
   )
 
 tidy[["squad"]][["shooting"]] <- raw[["squad"]][["shooting"]] %>%
-  select(
-    -"# Pl",
-    -"Gls",
-    -"PK",
-    -"PKatt",
-    -"xG",
-    -"npxG",
-    -"FK",
+  rename(
+    "Sh90"="Sh/90",
+    "SoT90"="SoT/90",
   )
 
 tidy[["squad"]][["misc"]] <- raw[["squad"]][["misc"]] %>%
-  select(
-    -"# Pl",
-    -"CrdY",
-    -"CrdR",
+  rename(
+    "DribSuc"="Succ",
+    "DribAtt"="Att...16",
+    "Drib#Pl"="#Pl",
+    "DribTkl"="Tkl",
+    "DribCont"="Att...21",
+    "DribTkl%"="Tkl%",
+    "DribPast"="Past",
   )
 
-
 tidy[["squad"]][["playingtime"]] <- raw[["squad"]][["playingtime"]] %>%
-  select(
-    -"# Pl",
-    -"MP",
-    -"Starts",
-    -"Min",
+  rename(
+    "Gls+/-"="+/-",
+    "Gls+/-90"="+/-90",
   )
 
 squad <- tidy[["table"]] %>%
