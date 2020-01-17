@@ -48,7 +48,7 @@ tidy <- list()
 source(here("R","fbref","tidy","fbref-tidy-players.R"))
 source(here("R","fbref","tidy","fbref-tidy-teams.R"))
 source(here("R","fbref","tidy","fbref-tidy-matches.R"))
-rm(raw,tidy)
+# rm(raw,tidy)
 ```
 
 ### Southampton plots
@@ -56,7 +56,8 @@ rm(raw,tidy)
 ```{r plots-sfc}
 players %>%
   filter(Squad=="Southampton") %>%
-  ggplot(aes(x=reorder(Player,Min),y=Min)) +
+  mutate(Player=fct_reorder(Player,Min)) %>%
+  ggplot(aes(x=Player,y=Min)) +
   geom_bar(stat="identity",fill=sfc,width=0.8,alpha=0.6) +
   geom_label(aes(label=Min),colour=sfc_light,size=2) +
   theme_sfc() +
@@ -89,6 +90,7 @@ ggsave(here("plots","SFC","npxGxA.jpg"))
 
 players %>%
   filter(Squad=="Southampton") %>%
+  # mutate(focus=ifelse(xG90+xA90>0.1,TRUE,FALSE)) %>%
   filter(xG90+xA90>0) %>%
   ggplot(aes(x=npxG90,y=xA90)) +
   geom_blank(data=data.frame(npxG90=0,xA90=0)) +
@@ -106,8 +108,9 @@ ggsave(here("plots","SFC","SFCnpxGxA90.jpg"))
 
 players %>%
   filter(Squad=="Southampton") %>%
+  mutate(Player=fct_reorder(Player,`Gls+/-`)) %>%
   mutate(PlusMinusPos=ifelse(`Gls+/-`>=0,TRUE,FALSE)) %>%
-  ggplot(aes(x=reorder(Player,`Gls+/-`),y=`Gls+/-`)) +
+  ggplot(aes(x=Player,y=`Gls+/-`)) +
   geom_bar(aes(fill=PlusMinusPos),stat="identity",width=0.8,alpha=0.6) +
   theme_sfc() +
   theme(axis.text.x=element_text(hjust=0.5)) +
@@ -123,8 +126,9 @@ ggsave(here("plots","SFC","GoalDifference.jpg"))
 players %>%
   filter(Squad=="Southampton") %>%
   filter(!is.na(`xG+/-90`)) %>%
+  mutate(Player=fct_reorder(Player,`xG+/-90`)) %>%
   mutate(PlusMinusPos=ifelse(`xG+/-90`>=0,TRUE,FALSE)) %>%
-  ggplot(aes(x=reorder(Player,`xG+/-90`),y=`xG+/-90`)) +
+  ggplot(aes(x=Player,y=`xG+/-90`)) +
   geom_bar(aes(fill=PlusMinusPos),stat="identity",width=0.8,alpha=0.6) +
   theme_sfc() +
   labs(title="On-pitch expected goals difference\n(per 90 mins)",
@@ -143,15 +147,15 @@ ggsave(here("plots","SFC","xG90GoalDifference.jpg"))
 players %>%
   filter(Gls==0) %>%
   filter(Pos1=="FW" | Pos2=="FW") %>%
-  filter(Sh>=6) %>%
-  filter(Player!="David McGoldrick") %>%
+  filter(Sh>=3) %>%
+  # filter(Player!="David McGoldrick") %>%
   ggplot(aes(x=npxG,y=Sh)) +
-  # geom_blank(data=data.frame(npxG=0,Sh=0)) +
+  geom_blank(data=data.frame(npxG=0,Sh=0)) +
   geom_text_repel(aes(label=Player),size=2) +
   geom_point(aes(colour=Squad),size=3,shape=4) +
   theme_epl() +
   labs(title="Who hasn't scored yet?",
-       subtitle="Forwards with 6+ shots, 0 goals",
+       subtitle="Forwards with 3+ shots, 0 goals",
        x="Expected goals",
        y="Shots",
        caption="statsbomb/fbref") +
@@ -166,7 +170,8 @@ ggsave(here("plots","EPL","NoGoalsxGShots.jpg"))
 
 ```{r plots-epl-teams}
 squad %>%
-  ggplot(aes(x=reorder(Squad,npxG),y=npxG,fill=Squad)) +
+  mutate(Squad=fct_reorder(Squad,npxG)) %>%
+  ggplot(aes(x=Squad,y=npxG,fill=Squad)) +
   geom_bar(stat="identity",alpha=0.8) +
   theme_epl() +
   theme(panel.grid.major.y=element_blank()) +
@@ -180,7 +185,8 @@ squad %>%
 ggsave(here("plots","EPL","npxG.jpg"))
 
 squad %>%
-  ggplot(aes(x=reorder(Squad,-xGA),y=xGA,fill=Squad)) +
+  mutate(Squad=fct_reorder(Squad,xGA,.desc=TRUE)) %>%
+  ggplot(aes(x=Squad,y=xGA,fill=Squad)) +
   geom_bar(stat="identity",alpha=0.8) +
   theme_epl() +
   theme(panel.grid.major.y=element_blank()) +
@@ -207,8 +213,9 @@ squad %>%
 ggsave(here("plots","EPL","npG-xG.jpg"))
 
 squad %>%
-  mutate(`xGA-GA`=round(xGA-GA,digits=1)) %>%
-  ggplot(aes(x=reorder(Squad,`xGA-GA`),y=`xGA-GA`,fill=Squad)) +
+  mutate(`xGA-GA`=xGA-GA) %>%
+  mutate(Squad=fct_reorder(Squad,`xGA-GA`)) %>%
+  ggplot(aes(x=Squad,y=`xGA-GA`,fill=Squad)) +
   geom_bar(stat="identity",alpha=0.8) +
   theme_epl() +
   labs(title="Expected goals allowed over/underperformance",
@@ -221,7 +228,8 @@ squad %>%
 ggsave(here("plots","EPL","npxGA-GA.jpg"))
 
 squad %>%
-  ggplot(aes(x=reorder(Squad,xGDiff),y=xGDiff,fill=Squad)) +
+  mutate(Squad=fct_reorder(Squad,xGDiff)) %>%
+  ggplot(aes(x=Squad,y=xGDiff,fill=Squad)) +
   geom_bar(stat="identity",alpha=0.8) +
   theme_sfc() +
   labs(title="Expected goal difference",
@@ -235,6 +243,7 @@ ggsave(here("plots","EPL","xGD.jpg"))
 ```
 
 ```{r test,eval=F}
+# pass footedness bar
 players %>%
   filter(Squad=="Southampton") %>%
   mutate(PassRatio=(max(Left,Right)/(Left+Right)) %>% abs %>% round(digits=2)) %>%
@@ -250,6 +259,7 @@ players %>%
   scale_fill_manual(values=c(col_medium[[1]],col_medium[[8]])) +
   coord_flip()
 
+# pass footnedness two-sided bar
 players %>%
   filter(Squad=="Southampton") %>%
   mutate(Passes=Left+Right) %>%
@@ -259,6 +269,7 @@ players %>%
   # theme_sfc() +
   coord_flip()
 
+# passes by type
 players %>%
   filter(Squad=="Southampton") %>%
   pivot_longer(cols=c(ShortCmp,MediumCmp,LongCmp),names_to="PassType",values_to="Cmp") %>%
@@ -371,4 +382,28 @@ matches %>%
   ggplot(aes(x=Wk,y=teamxG,colour=team)) +
   geom_point() +
   geom_line()
+
+# df <- data.frame(
+#   Home=c("Team1","Team3","Team5"),
+#   Away=c("Team2","Team4","Team6"),
+#   GoalsHome=c(3,0,1),
+#   GoalsAway=c(0,2,1)
+# )
+
+# df %>%
+#   pivot_longer(
+#     cols=c(Home,Away),
+#     names_to="HomeAway",
+#     values_to="Team"
+#   ) %>%
+#   left_join(
+#     df
+#   )
+
+# df_long <- data.frame(
+#   Team=c("Team1","Team2","Team3","Team4","Team5","Team6"),
+#   Opposition=c("Team2","Team1","Team4","Team3","Team6","Team5"),
+#   GoalsF=c(3,0,0,2,1,1),
+#   GoalsA=c(0,3,2,0,1,1)
+# )
 ```
