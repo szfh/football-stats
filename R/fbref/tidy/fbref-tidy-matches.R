@@ -16,3 +16,20 @@ tidy[["matches"]] <- raw[["matches"]] %>%
   drop_na("Wk")
 
 matches <- tidy[["matches"]]
+
+matches_long <- tidy[["matches"]] %>%
+  pivot_longer(cols=c(Home,Away),
+               names_to="HA",
+               values_to="Team") %>%
+  left_join(matches) %>%
+  mutate(
+    Opposition=ifelse(HA=="Home",Away,Home),
+    GF=ifelse(HA=="Home",GoalsHome,GoalsAway),
+    GA=ifelse(HA=="Home",GoalsAway,GoalsHome),
+    xGF=ifelse(HA=="Home",xGHome,xGAway),
+    xGA=ifelse(HA=="Home",xGAway,xGHome),
+  ) %>%
+  select(
+    -("xGHome":"xGAway"),
+    -("Home":"Away"),
+  )
