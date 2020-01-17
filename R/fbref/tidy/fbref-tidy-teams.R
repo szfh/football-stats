@@ -27,6 +27,13 @@ tidy[["squad"]][["standard"]] <- raw[["squad"]][["standard"]] %>%
     "npxG+xA90"="npxG+xA",
   )
 
+tidy[["squad"]][["shooting"]] <- raw[["squad"]][["shooting"]] %>%
+  rename(
+    "ShotFK"="FK",
+    "Sh90"="Sh/90",
+    "SoT90"="SoT/90",
+  )
+
 tidy[["squad"]][["passing"]] <- raw[["squad"]][["passing"]] %>%
   rename(
     "TotalCmp"="Cmp...7",
@@ -44,11 +51,10 @@ tidy[["squad"]][["passing"]] <- raw[["squad"]][["passing"]] %>%
     "PassFK"="FK",
   )
 
-tidy[["squad"]][["shooting"]] <- raw[["squad"]][["shooting"]] %>%
+tidy[["squad"]][["playingtime"]] <- raw[["squad"]][["playingtime"]] %>%
   rename(
-    "ShotFK"="FK",
-    "Sh90"="Sh/90",
-    "SoT90"="SoT/90",
+    "Gls+/-"="+/-",
+    "Gls+/-90"="+/-90",
   )
 
 tidy[["squad"]][["misc"]] <- raw[["squad"]][["misc"]] %>%
@@ -60,12 +66,6 @@ tidy[["squad"]][["misc"]] <- raw[["squad"]][["misc"]] %>%
     "DribCont"="Att...21",
     "DribTkl%"="Tkl%",
     "DribPast"="Past",
-  )
-
-tidy[["squad"]][["playingtime"]] <- raw[["squad"]][["playingtime"]] %>%
-  rename(
-    "Gls+/-"="+/-",
-    "Gls+/-90"="+/-90",
   )
 
 squad <- tidy[["table"]] %>%

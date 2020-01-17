@@ -20,6 +20,15 @@ tidy[["player"]][["standard"]] <- raw[["player"]][["standard"]] %>%
     -"Rk",
   )
 
+tidy[["player"]][["shooting"]] <- raw[["player"]][["shooting"]] %>%
+  rename(
+    "Sh90"="Sh/90",
+    "SoT90"="SoT/90",
+  ) %>%
+  select(
+    -"Rk",
+  )
+
 tidy[["player"]][["passing"]] <- raw[["player"]][["passing"]] %>%
   rename(
     "TotalCmp"="Cmp...11",
@@ -39,10 +48,12 @@ tidy[["player"]][["passing"]] <- raw[["player"]][["passing"]] %>%
     -"Rk",
   )
 
-tidy[["player"]][["shooting"]] <- raw[["player"]][["shooting"]] %>%
+tidy[["player"]][["playingtime"]] <- raw[["player"]][["playingtime"]] %>%
   rename(
-    "Sh90"="Sh/90",
-    "SoT90"="SoT/90",
+    "Gls+/-"="+/-",
+    "Gls+/-90"="+/-90",
+    "GlsOn-Off"="On-Off...21",
+    "xGOn-Off"="On-Off...26",
   ) %>%
   select(
     -"Rk",
@@ -57,17 +68,6 @@ tidy[["player"]][["misc"]] <- raw[["player"]][["misc"]] %>%
     "DribCont"="Att...25",
     "DribTkl%"="Tkl%",
     "DribPast"="Past",
-  ) %>%
-  select(
-    -"Rk",
-  )
-
-tidy[["player"]][["playingtime"]] <- raw[["player"]][["playingtime"]] %>%
-  rename(
-    "Gls+/-"="+/-",
-    "Gls+/-90"="+/-90",
-    "GlsOn-Off"="On-Off...21",
-    "xGOn-Off"="On-Off...26",
   ) %>%
   select(
     -"Rk",
