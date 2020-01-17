@@ -200,7 +200,8 @@ squad %>%
 ggsave(here("plots","EPL","npxGA.jpg"))
 
 squad %>%
-  ggplot(aes(x=reorder(Squad,`np:G-xG`),y=`np:G-xG`,fill=Squad)) +
+  mutate(Squad=fct_reorder(Squad,`np:G-xG`)) %>%
+  ggplot(aes(x=Squad,y=`np:G-xG`,fill=Squad)) +
   geom_bar(stat="identity",alpha=0.8) +
   theme_epl() +
   labs(title="Expected goals over/underperformance",
