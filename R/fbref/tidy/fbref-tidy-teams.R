@@ -3,6 +3,9 @@ tidy[["table"]] <- raw[["table"]] %>%
     -"Top Team Scorer",
     -"Goalkeeper",
     -"Notes",
+  ) %>%
+  rename(
+    "xGDiff90"="xGDiff/90"
   )
 
 tidy[["squad"]][["standard"]] <- raw[["squad"]][["standard"]] %>%
@@ -38,10 +41,12 @@ tidy[["squad"]][["passing"]] <- raw[["squad"]][["passing"]] %>%
     "LongCmp"="Cmp...16",
     "LongAtt"="Att...17",
     "LongCmp%"="Cmp%...18",
+    "PassFK"="FK",
   )
 
 tidy[["squad"]][["shooting"]] <- raw[["squad"]][["shooting"]] %>%
   rename(
+    "ShotFK"="FK",
     "Sh90"="Sh/90",
     "SoT90"="SoT/90",
   )
