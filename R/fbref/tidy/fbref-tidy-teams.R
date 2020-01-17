@@ -27,6 +27,49 @@ tidy[["squad"]][["standard"]] <- raw[["squad"]][["standard"]] %>%
     "npxG+xA90"="npxG+xA",
   )
 
+tidy[["squad"]][["keepers"]] <- raw[["squad"]][["keepers"]] %>%
+  rename(
+    "GK# Pl"="# Pl",
+    "GKPKatt"="PKatt",
+    "GKPKA"="PKA",
+    "GKPKsv"="PKsv",
+    "GKPKm"="PKm",
+  ) %>%
+  select(
+    -"Starts",
+    -"Min",
+  )
+
+raw[["squad"]][["keepersadv"]] %>% str
+
+tidy[["squad"]][["keepersadv"]] <- raw[["squad"]][["keepersadv"]] %>%
+  rename(
+    "GK# Pl"="# Pl",
+    "GKPKA"="PKA",
+    "GKFK"="FK",
+    "GKCK"="CK",
+    "GKOG"="OG",
+    "GKLCmp"="Cmp",
+    "GKLAtt"="Att...14",
+    "GKLCmp%"="Cmp%",
+    "GKPassAtt"="Att...16",
+    "GKThr"="Thr",
+    "GKLaunch%"="Launch%...18",
+    "GKAvgLen"="AvgLen...19",
+    "GKGKPassAtt"="Att...20",
+    "GKGKLaunch%"="Launch%...21",
+    "GKGKAvgLen"="AvgLen...22",
+    "GKCrsAtt"="Att...23",
+    "GKCrsStp"="Stp",
+    "GKCrsStp%"="Stp%",
+    "GKOPA"="#OPA",
+    "GKOPA90"="#OPA/90",
+    "GKOPAAvgDist"="AvgDist",
+  ) %>%
+  select(
+    -"90s",
+  )
+
 tidy[["squad"]][["shooting"]] <- raw[["squad"]][["shooting"]] %>%
   rename(
     "ShotFK"="FK",
