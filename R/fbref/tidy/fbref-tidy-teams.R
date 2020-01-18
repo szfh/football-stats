@@ -40,8 +40,6 @@ tidy[["squad"]][["keepers"]] <- raw[["squad"]][["keepers"]] %>%
     -"Min",
   )
 
-raw[["squad"]][["keepersadv"]] %>% str
-
 tidy[["squad"]][["keepersadv"]] <- raw[["squad"]][["keepersadv"]] %>%
   rename(
     "GK# Pl"="# Pl",
@@ -49,6 +47,7 @@ tidy[["squad"]][["keepersadv"]] <- raw[["squad"]][["keepersadv"]] %>%
     "GKFK"="FK",
     "GKCK"="CK",
     "GKOG"="OG",
+    "PSxG+/-90"="/90",
     "GKLCmp"="Cmp",
     "GKLAtt"="Att...14",
     "GKLCmp%"="Cmp%",
@@ -112,4 +111,4 @@ tidy[["squad"]][["misc"]] <- raw[["squad"]][["misc"]] %>%
   )
 
 squad <- tidy[["table"]] %>%
-  left_join(reduce(tidy[["squad"]],left_join))
+  full_join(reduce(tidy[["squad"]],full_join))

@@ -20,8 +20,50 @@ tidy[["player"]][["standard"]] <- raw[["player"]][["standard"]] %>%
     -"Rk",
   )
 
+tidy[["player"]][["keepers"]] <- raw[["player"]][["keepers"]] %>%
+  rename(
+    "GKPKatt"="PKatt",
+    "GKPKA"="PKA",
+    "GKPKsv"="PKsv",
+    "GKPKm"="PKm",
+  ) %>%
+  select(
+    -"Rk",
+  )
+
+tidy[["player"]][["keepersadv"]] <- raw[["player"]][["keepersadv"]] %>%
+  rename(
+    "GKGA"="GA",
+    "GKPKA"="PKA",
+    "GKFK"="FK",
+    "GKCK"="CK",
+    "GKOG"="OG",
+    "PSxG+/-90"="/90",
+    "GKLCmp"="Cmp",
+    "GKLAtt"="Att...17",
+    "GKLCmp%"="Cmp%",
+    "GKPassAtt"="Att...19",
+    "GKThr"="Thr",
+    "GKLaunch%"="Launch%...21",
+    "GKAvgLen"="AvgLen...22",
+    "GKGKPassAtt"="Att...23",
+    "GKGKLaunch%"="Launch%...24",
+    "GKGKAvgLen"="AvgLen...25",
+    "GKCrsAtt"="Att...26",
+    "GKCrsStp"="Stp",
+    "GKCrsStp%"="Stp%",
+    "GKOPA"="#OPA",
+    "GKOPA90"="#OPA/90",
+    "GKOPAAvgDist"="AvgDist",
+  ) %>%
+  select(
+    -"Rk",
+    -"90s",
+  )
+
 tidy[["player"]][["shooting"]] <- raw[["player"]][["shooting"]] %>%
   rename(
+    "ShotFK"="FK",
     "Sh90"="Sh/90",
     "SoT90"="SoT/90",
   ) %>%
@@ -43,6 +85,7 @@ tidy[["player"]][["passing"]] <- raw[["player"]][["passing"]] %>%
     "LongCmp"="Cmp...20",
     "LongAtt"="Att...21",
     "LongCmp%"="Cmp%...22",
+    "PassFK"="FK",
   ) %>%
   select(
     -"Rk",
@@ -73,7 +116,7 @@ tidy[["player"]][["misc"]] <- raw[["player"]][["misc"]] %>%
     -"Rk",
   )
 
-players <- reduce(tidy[["player"]],left_join) %>%
+players <- reduce(tidy[["player"]],full_join) %>%
   separate("Player",c("Player",NA),sep="\\\\",fill="right") %>%
   separate("Nation",c(NA,"Nation"),sep=" ",fill="right") %>%
   separate("Pos",c("Pos1",NA,"Pos2"),sep=c(2,3),fill="right")
