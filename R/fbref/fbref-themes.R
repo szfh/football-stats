@@ -13,7 +13,7 @@ theme_sfc <- function(base_size=12,base_family="sans"){
       panel.grid.major=element_line(size=0.4),
       panel.grid.minor=element_blank(),
       
-      plot.title=element_text(size=rel(1.5),face="bold",hjust=0.5),
+      plot.title=element_text(size=rel(1.2),face="bold",hjust=0.5),
       plot.subtitle=element_text(size=rel(1),hjust=0.5),
       plot.caption=element_text(size=rel(0.8)),
       
