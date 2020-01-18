@@ -56,6 +56,7 @@ rm(raw,tidy)
 ```{r plots-sfc}
 players %>%
   filter(Squad=="Southampton") %>%
+  filter(!is.na(Min)) %>%
   mutate(Player=fct_reorder(Player,Min)) %>%
   ggplot(aes(x=Player,y=Min)) +
   geom_bar(stat="identity",fill=sfc,width=0.8,alpha=0.6) +
@@ -73,7 +74,8 @@ ggsave(here("plots","SFC","Minutes.jpg"))
 
 players %>%
   filter(Squad=="Southampton") %>%
-  mutate(focus=ifelse(npxG>1|xA>1,TRUE,FALSE)) %>%
+  filter(!is.na(npxG)|!is.na(xA)) %>%
+  mutate(focus=ifelse(npxG>=1|xA>=1,TRUE,FALSE)) %>%
   ggplot(aes(x=npxG,y=xA)) +
   geom_blank(data=data.frame(npxG=0,xA=0)) +
   geom_point(aes(fill=focus),shape=21,size=3,alpha=0.8,colour="black") +
@@ -91,7 +93,8 @@ ggsave(here("plots","SFC","npxGxA.jpg"))
 
 players %>%
   filter(Squad=="Southampton") %>%
-  mutate(focus=ifelse(xG90+xA90>0.1,TRUE,FALSE)) %>%
+  filter(!is.na(xG90)|!is.na(xA90)) %>%
+  mutate(focus=ifelse(xG90>=0.07|xA90>=0.07,TRUE,FALSE)) %>%
   ggplot(aes(x=npxG90,y=xA90)) +
   geom_blank(data=data.frame(npxG90=0,xA90=0)) +
   geom_point(aes(fill=focus),shape=21,size=2,alpha=0.8,colour="black") +
@@ -109,6 +112,7 @@ ggsave(here("plots","SFC","SFCnpxGxA90.jpg"))
 
 players %>%
   filter(Squad=="Southampton") %>%
+  filter(!is.na(`Gls+/-`)) %>%
   mutate(Player=fct_reorder(Player,`Gls+/-`)) %>%
   mutate(PlusMinusPos=ifelse(`Gls+/-`>=0,TRUE,FALSE)) %>%
   ggplot(aes(x=Player,y=`Gls+/-`)) +
@@ -148,11 +152,11 @@ ggsave(here("plots","SFC","xG90GoalDifference.jpg"))
 players %>%
   filter(Gls==0) %>%
   filter(Pos1=="FW" | Pos2=="FW") %>%
-  filter(Sh>=3) %>%
+  filter(Sh>=3&npxG>=0.3) %>%
   # filter(Player!="David McGoldrick") %>%
   ggplot(aes(x=npxG,y=Sh)) +
   geom_blank(data=data.frame(npxG=0,Sh=0)) +
-  geom_text_repel(aes(label=Player),size=2) +
+  # geom_text_repel(aes(label=Player),size=2) +
   geom_point(aes(colour=Squad),size=3,shape=4) +
   theme_epl() +
   labs(title="Who hasn't scored yet?",
@@ -247,9 +251,9 @@ ggsave(here("plots","EPL","xGD.jpg"))
 ```{r test,eval=F}
 # pass footedness bar
 players %>%
-  filter(Squad=="Southampton") %>%
+  filter(Squad=="Southampton") %>% view
   mutate(PassRatio=(max(Left,Right)/(Left+Right)) %>% abs %>% round(digits=2)) %>%
-  gather("Left","Right",key="PassFoot",value="Passes") %>%
+  gather("Left","Right",key="PassFoot",value="Passes") %>% view
   ggplot(aes(x=reorder(Player,Passes),y=Passes)) +
   geom_bar(aes(fill=PassFoot),stat="identity") +
   # theme_sfc() +
@@ -408,4 +412,44 @@ matches %>%
 #   GoalsF=c(3,0,0,2,1,1),
 #   GoalsA=c(0,3,2,0,1,1)
 # )
+
+# minutes played by position
+players %>%
+  mutate(Pos1=factor(Pos1,levels=c("GK","DF","MF","FW"))) %>%
+  filter(Squad=="Southampton") %>%
+  mutate(Player=fct_reorder(Player,Min)) %>%
+  ggplot(aes(x=Min,y=Player)) +
+  geom_point() +
+  facet_grid(Pos1 ~ .,scales="free",space="free")
+
+# goals by nationality
+players %>%
+  filter(Squad=="Southampton") %>%
+  mutate(Gls=ifelse(Player %in% c("Jan Bednarek","Shane Long"),Gls+1,Gls)) %>%
+  group_by(Nation) %>%
+  tally(Gls) %>%
+  rename("Gls"="n") %>%
+  mutate(Nation=fct_reorder(Nation,Gls)) %>%
+  filter(Gls!=0) %>%
+  ggplot(aes(x=Nation,y=Gls,fill=Nation)) +
+  geom_bar(stat="identity") +
+  theme_sfc() +
+  labs(title="Southampton goals by country",
+       x=element_blank(),
+       y=element_blank()) +
+  scale_fill_manual(values=col_medium) +
+  coord_flip()
+
+# players_new <- players %>%
+#   filter(Squad=="Southampton") %>%
+#   mutate(Gls=ifelse(Player %in% c("Jan Bednarek","Shane Long"),Gls+1,Gls))
+
+# players_new["Player"=="Jan Bednarek","Gls"]
+# players_new[10,"Gls"`:=`100]
+# players_new[,Gls = 100]
+# players_new[, a:=1]
+
+class(players_new)
+# 
+# players_new %>% view
 ```
