@@ -70,7 +70,45 @@ players %>%
        caption="statsbomb/fbref") +
   scale_y_continuous(breaks=seq(0,90*38,180),expand=expand_scale(add=c(0,80))) +
   coord_flip()
-ggsave(here("plots","SFC","Minutes.jpg"))
+ggsave(here("plots","SFC","Minutes1.jpg"))
+
+players %>%
+  filter(Squad=="Southampton") %>%
+  filter(!is.na(Min)) %>%
+  mutate(
+    Min=replace(Min,is.na(Min),0),
+    Subs=replace(Subs,is.na(Subs),0),
+    `Mn/Sub`=replace(`Mn/Sub`,is.na(`Mn/Sub`),0),
+    MinSub=Subs*`Mn/Sub`,
+    MinStart=Min-MinSub,
+    ) %>%
+  mutate(
+    Pos1=ifelse(Player %in% c("Kevin Danso","Jannik Vestergaard","Jan Bednarek","Jack Stephens","Maya Yoshida"),"CB",Pos1),
+    Pos1=ifelse(Player %in% c("Ryan Bertrand","Cédric Soares","Yan Valery"),"FB",Pos1),
+    Pos1=ifelse(Player %in% c("James Ward-Prowse","Pierre Højbjerg","Oriol Romeu","William Smallbone"),"DM",Pos1),
+    Pos1=ifelse(Player %in% c("Nathan Redmond","Stuart Armstrong","Sofiane Boufal","Moussa Djenepo"),"AM",Pos1),
+  ) %>%
+  mutate(Possfc=factor(Pos1,levels=c("GK","CB","FB","DM","AM","FW"))) %>%
+  mutate(Player=fct_reorder(Player,Min)) %>%
+  ggplot(aes(x=Min,y=Player)) +
+  geom_segment(aes(y=Player,yend=Player,x=0,xend=MinStart),colour=col_medium[8],size=2,alpha=0.8) +
+  geom_segment(aes(y=Player,yend=Player,x=MinStart,xend=Min),colour=col_medium[1],size=2,alpha=0.8) +
+  theme_sfc() +
+  labs(title="League minutes (start/sub)",
+       x=element_blank(),
+       y=element_blank(),
+       caption="statsbomb/fbref") +
+  expand_limits(Min=0) +
+  scale_x_continuous(breaks=seq(0,90*38,180),expand=expand_scale(add=c(20,20))) +
+  theme(
+    axis.line=element_blank(),
+    axis.text.x=element_text(size=rel(0.8)),
+    axis.text.y=element_text(size=rel(0.8)),
+    strip.background=element_blank(),
+    strip.text.y=element_text(colour="black",face="bold",angle=0),
+  ) +
+  facet_grid(Possfc ~ .,scales="free",space="free")
+ggsave(here("plots","SFC","Minutes2.jpg"))
 
 players %>%
   filter(Squad=="Southampton") %>%
@@ -156,7 +194,7 @@ players %>%
   # filter(Player!="David McGoldrick") %>%
   ggplot(aes(x=npxG,y=Sh)) +
   geom_blank(data=data.frame(npxG=0,Sh=0)) +
-  # geom_text_repel(aes(label=Player),size=2) +
+  geom_text_repel(aes(label=Player),size=2) +
   geom_point(aes(colour=Squad),size=3,shape=4) +
   theme_epl() +
   labs(title="Who hasn't scored yet?",
@@ -251,9 +289,10 @@ ggsave(here("plots","EPL","xGD.jpg"))
 ```{r test,eval=F}
 # pass footedness bar
 players %>%
-  filter(Squad=="Southampton") %>% view
+  filter(Squad=="Southampton") %>% 
+  filter(!is.na(Left)&!is.na(Right)) %>%
   mutate(PassRatio=(max(Left,Right)/(Left+Right)) %>% abs %>% round(digits=2)) %>%
-  gather("Left","Right",key="PassFoot",value="Passes") %>% view
+  gather("Left","Right",key="PassFoot",value="Passes") %>%
   ggplot(aes(x=reorder(Player,Passes),y=Passes)) +
   geom_bar(aes(fill=PassFoot),stat="identity") +
   # theme_sfc() +
@@ -268,6 +307,7 @@ players %>%
 # pass footnedness two-sided bar
 players %>%
   filter(Squad=="Southampton") %>%
+  filter(!is.na(Left)&!is.na(Right)) %>%
   mutate(Passes=Left+Right) %>%
   ggplot(aes(x=reorder(Player,Passes))) +
   geom_bar(aes(y=Right),stat="identity",fill=col_light[[1]]) +
@@ -414,18 +454,12 @@ matches %>%
 # )
 
 # minutes played by position
-players %>%
-  mutate(Pos1=factor(Pos1,levels=c("GK","DF","MF","FW"))) %>%
-  filter(Squad=="Southampton") %>%
-  mutate(Player=fct_reorder(Player,Min)) %>%
-  ggplot(aes(x=Min,y=Player)) +
-  geom_point() +
-  facet_grid(Pos1 ~ .,scales="free",space="free")
+
 
 # goals by nationality
 players %>%
   filter(Squad=="Southampton") %>%
-  mutate(Gls=ifelse(Player %in% c("Jan Bednarek","Shane Long"),Gls+1,Gls)) %>%
+  # mutate(Gls=ifelse(Player %in% c("Jan Bednarek","Shane Long"),Gls+1,Gls)) %>%
   group_by(Nation) %>%
   tally(Gls) %>%
   rename("Gls"="n") %>%
@@ -449,7 +483,7 @@ players %>%
 # players_new[,Gls = 100]
 # players_new[, a:=1]
 
-class(players_new)
+# class(players_new)
 # 
 # players_new %>% view
 ```
