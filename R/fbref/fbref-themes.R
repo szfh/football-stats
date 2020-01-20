@@ -61,6 +61,7 @@ palette_epl <- function(team_name){
   return(palette_epl[team_name])
 }
 # pie(rep(1, length(palette_epl)), col = palette_epl)
+# colorspace::swatchplot(col_medium)
 
 col_light <- few_pal("Light")(8)
 col_medium <- few_pal("Medium")(8)
