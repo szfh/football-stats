@@ -148,6 +148,21 @@ players %>%
   scale_x_reverse(breaks=seq(-100,100,2),expand=expand_scale(add=0.1))
 ggsave(here("plots","SFC","GoalDifference.jpg"))
 
+# players %>%
+#   filter(Squad=="Southampton") %>%
+#   filter(!is.na(`xG+/-`)) %>%
+#   mutate(Player=fct_reorder(Player,onxGA,.desc=TRUE)) %>%
+#   mutate(Pos=ifelse(onxGA>=0,TRUE,FALSE)) %>%
+#   ggplot(aes(x=onxGA,y=Player,colour=Pos)) +
+#   geom_segment(aes(x=0,xend=onxGA,y=Player,yend=Player),size=4,alpha=0.8) +
+#   theme_sfc() +
+#   labs(title="On-pitch expected goals against",
+#        x="xG difference",
+#        y=element_blank(),
+#        caption="statsbomb/fbref") +
+#   scale_colour_manual(values=c(col_medium[8],col_medium[3]))
+# ggsave(here("plots","SFC","GoalsAgainstxG.jpg"))
+
 players %>%
   filter(Squad=="Southampton") %>%
   filter(!is.na(`xG+/-`)) %>%
@@ -212,17 +227,16 @@ ggsave(here("plots","EPL","NoGoalsxGShots.jpg"))
 ```{r plots-epl-teams}
 squad %>%
   mutate(Squad=fct_reorder(Squad,npxG)) %>%
-  ggplot(aes(x=Squad,y=npxG,fill=Squad)) +
-  geom_bar(stat="identity",alpha=0.8) +
+  ggplot(aes(x=Squad,y=npxG,colour=Squad)) +
+  geom_segment(aes(x=0,xend=npxG,y=Squad,yend=Squad),size=4,alpha=0.8) +
   theme_epl() +
   theme(panel.grid.major.y=element_blank()) +
   labs(title="Premier League expected goals (non-penalty)",
        x=element_blank(),
        y=element_blank(),
        caption="statsbomb/fbref") +
-  scale_fill_manual(values=palette_epl()) +
-  scale_y_continuous(breaks=seq(0,200,5),expand=expand_scale(add=c(0,0.5))) +
-  coord_flip()
+  scale_colour_manual(values=palette_epl()) +
+  scale_x_continuous(breaks=seq(0,200,5),expand=expand_scale(add=c(0,0.5)))
 ggsave(here("plots","EPL","npxG.jpg"))
 
 squad %>%
@@ -554,4 +568,14 @@ players %>%
        caption="statsbomb/fbref") +
   scale_colour_manual(values=c(col_medium[8],col_medium[3])) +
   scale_x_reverse(breaks=seq(-100,100,2),expand=expand_scale(add=0.1))
+
+# match xG plots
+matches_long %>%
+  filter(Team=="Southampton") %>%
+  filter(!is.na(GF)) %>%
+  ggplot(aes(x=xGF,y=Wk)) +
+  geom_segment(aes(x=0,xend=xGF,y=Wk,yend=Wk),size=3,colour="red") +
+  geom_segment(aes(x=0,xend=-xGA,y=Wk,yend=Wk),size=3,colour="green") +
+  theme_epl() +
+  scale_x_reverse(breaks=seq(-10,10,0.5),expand=expand_scale(add=0.1))
 ```
