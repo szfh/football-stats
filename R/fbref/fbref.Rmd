@@ -241,60 +241,57 @@ ggsave(here("plots","EPL","npxG.jpg"))
 
 squad %>%
   mutate(Squad=fct_reorder(Squad,xGA,.desc=TRUE)) %>%
-  ggplot(aes(x=Squad,y=xGA,fill=Squad)) +
-  geom_bar(stat="identity",alpha=0.8) +
+  ggplot(aes(x=Squad,y=xGA,colour=Squad)) +
+  geom_segment(aes(x=0,xend=xGA,y=Squad,yend=Squad),size=4,alpha=0.8) +
   theme_epl() +
   theme(panel.grid.major.y=element_blank()) +
   labs(title="Premier League expected goals allowed (non-penalty)",
        x=element_blank(),
        y=element_blank(),
        caption="statsbomb/fbref") +
-  scale_fill_manual(values=palette_epl()) +
-  scale_y_continuous(breaks=seq(0,200,5),expand=expand_scale(add=c(0,0.5))) +
-  coord_flip()
+  scale_colour_manual(values=palette_epl()) +
+  scale_x_continuous(breaks=seq(0,200,5),expand=expand_scale(add=c(0,0.5)))
 ggsave(here("plots","EPL","npxGA.jpg"))
 
 squad %>%
   mutate(Squad=fct_reorder(Squad,`np:G-xG`)) %>%
-  ggplot(aes(x=Squad,y=`np:G-xG`,fill=Squad)) +
-  geom_bar(stat="identity",alpha=0.8) +
+  ggplot(aes(x=Squad,y=`np:G-xG`,colour=Squad)) +
+  geom_segment(aes(x=0,xend=`np:G-xG`,y=Squad,yend=Squad),size=4,alpha=0.8) +
   theme_epl() +
   labs(title="Expected goals over/underperformance",
        x=element_blank(),
        y=element_blank(),
        caption="statsbomb/fbref") +
-  scale_fill_manual(values=palette_epl()) +
-  scale_y_continuous(breaks=seq(-50,50,2),expand=expand_scale(add=0.1)) +
-  coord_flip()
+  scale_colour_manual(values=palette_epl()) +
+  scale_x_continuous(breaks=seq(-50,50,2),expand=expand_scale(add=0.1))
 ggsave(here("plots","EPL","npG-xG.jpg"))
 
 squad %>%
   mutate(`xGA-GA`=xGA-GA) %>%
   mutate(Squad=fct_reorder(Squad,`xGA-GA`)) %>%
-  ggplot(aes(x=Squad,y=`xGA-GA`,fill=Squad)) +
-  geom_bar(stat="identity",alpha=0.8) +
+  ggplot(aes(x=Squad,y=`xGA-GA`,colour=Squad)) +
+  geom_segment(aes(x=0,xend=`xGA-GA`,y=Squad,yend=Squad),size=4,alpha=0.8) +
   theme_epl() +
   labs(title="Expected goals allowed over/underperformance",
        x=element_blank(),
        y=element_blank(),
        caption="statsbomb/fbref") +
-  scale_fill_manual(values=palette_epl()) +
-  scale_y_continuous(breaks=seq(-50,50,2),expand=expand_scale(add=0.1)) +
-  coord_flip()
+  scale_colour_manual(values=palette_epl()) +
+  scale_x_continuous(breaks=seq(-50,50,2),expand=expand_scale(add=0.1))
 ggsave(here("plots","EPL","npxGA-GA.jpg"))
 
 squad %>%
   mutate(Squad=fct_reorder(Squad,xGDiff)) %>%
-  ggplot(aes(x=Squad,y=xGDiff,fill=Squad)) +
-  geom_bar(stat="identity",alpha=0.8) +
+  ggplot(aes(x=Squad,y=xGDiff,colour=Squad)) +
+  geom_segment(aes(x=0,xend=xGDiff,y=Squad,yend=Squad),size=4,alpha=0.8) +
+  # geom_bar(stat="identity",alpha=0.8) +
   theme_sfc() +
   labs(title="Expected goal difference",
        x=element_blank(),
        y=element_blank(),
        caption="statsbomb/fbref") +
-  scale_fill_manual(values=palette_epl()) +
-  scale_y_continuous(breaks=seq(-50,50,5),expand=expand_scale(add=0.1)) +
-  coord_flip()
+  scale_colour_manual(values=palette_epl()) +
+  scale_x_continuous(breaks=seq(-50,50,5),expand=expand_scale(add=0.1))
 ggsave(here("plots","EPL","xGD.jpg"))
 ```
 
