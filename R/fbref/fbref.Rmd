@@ -295,18 +295,19 @@ squad %>%
 ggsave(here("plots","EPL","xGD.jpg"))
 
 squad %>%
-  ggplot(aes(x=npxG,y=Sh,colour=Squad)) +
-  geom_point() +
-  geom_text_repel(aes(label=Squad),size=3) +
+  ggplot(aes(x=npxG,y=xGA)) +
+  geom_text_repel(aes(label=Squad),size=2) +
+  geom_point(aes(colour=Squad),size=3,shape=4) +
   theme_epl() +
-  scale_colour_manual(values=palette_epl())
-
-squad %>%
-  ggplot(aes(x=PPM,y=`1/3`,colour=Squad)) +
-  geom_point() +
-  geom_text_repel(aes(label=Squad),size=3) +
-  theme_epl() +
-  scale_colour_manual(values=palette_epl())
+  labs(title="EPL Expected goals 19/20",
+       x="xG for",
+       y="xG against",
+       caption=caption[[1]]) +
+  scale_x_continuous(breaks=seq(0,100,5),expand=expand_scale(add=c(4,2))) +
+  scale_y_continuous(breaks=seq(0,100,5),expand=expand_scale(add=c(4,2))) +
+  scale_colour_manual(values=palette_epl()) +
+  coord_fixed()
+ggsave(here("plots","EPL","xGFxGA.jpg"))
 ```
 
 ```{r test,eval=F}
@@ -585,8 +586,22 @@ matches_long %>%
   filter(Team=="Southampton") %>%
   filter(!is.na(GF)) %>%
   ggplot(aes(x=xGF,y=Wk)) +
-  geom_segment(aes(x=0,xend=xGF,y=Wk,yend=Wk),size=3,colour="red") +
-  geom_segment(aes(x=0,xend=-xGA,y=Wk,yend=Wk),size=3,colour="green") +
+  geom_segment(aes(x=0,xend=xGF,y=Wk,yend=Wk),size=3,alpha=0.8,colour=col_medium[8]) +
+  geom_segment(aes(x=0,xend=-xGA,y=Wk,yend=Wk),size=3,alpha=0.8,colour=col_medium[3]) +
   theme_epl() +
   scale_x_reverse(breaks=seq(-10,10,0.5),expand=expand_scale(add=0.1))
+
+squad %>%
+  ggplot(aes(x=npxG,y=Sh,colour=Squad)) +
+  geom_point() +
+  geom_text_repel(aes(label=Squad),size=3) +
+  theme_epl() +
+  scale_colour_manual(values=palette_epl())
+
+squad %>%
+  ggplot(aes(x=PPA,y=`1/3`,colour=Squad)) +
+  geom_point() +
+  geom_text_repel(aes(label=Squad),size=3) +
+  theme_epl() +
+  scale_colour_manual(values=palette_epl())
 ```
