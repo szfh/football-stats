@@ -81,7 +81,7 @@ players %>%
        subtitle="(from start / from bench)",
        x=element_blank(),
        y=element_blank(),
-       caption="statsbomb/fbref") +
+       caption=caption[[1]]) +
   expand_limits(Min=0) +
   scale_x_continuous(breaks=seq(0,90*38,180),expand=expand_scale(add=c(20,20))) +
   theme(
@@ -125,7 +125,7 @@ players %>%
   labs(title="Southampton xG/xA (per 90 mins)",
        x="Expected goals per 90 minutes",
        y="Expected assists per 90 minutes",
-       caption="statsbomb/fbref") +
+       caption=caption[[1]]) +
   scale_x_continuous(breaks=seq(0,2,0.1),expand=expand_scale(add=c(0,0.02))) +
   scale_y_continuous(breaks=seq(0,2,0.1),expand=expand_scale(add=c(0,0.02))) +
   scale_fill_manual(values=c("lightgrey",sfc)) +
@@ -143,7 +143,7 @@ players %>%
   labs(title="On-pitch goal difference",
        x=element_blank(),
        y="Goals scored - Goals conceded",
-       caption="statsbomb/fbref") +
+       caption=caption[[1]]) +
   scale_colour_manual(values=c(col_medium[8],col_medium[3])) +
   scale_x_reverse(breaks=seq(-100,100,2),expand=expand_scale(add=0.1))
 ggsave(here("plots","SFC","GoalDifference.jpg"))
@@ -174,7 +174,7 @@ players %>%
   labs(title="On-pitch expected goals difference",
        x="xG difference",
        y=element_blank(),
-       caption="statsbomb/fbref") +
+       caption=caption[[1]]) +
   scale_colour_manual(values=c(col_medium[8],col_medium[3])) +
   scale_x_reverse(breaks=seq(-100,100,2),expand=expand_scale(add=0.1))
 ggsave(here("plots","SFC","GoalDifferencexG.jpg"))
@@ -191,7 +191,7 @@ players %>%
        subtitle="(per 90 mins)",
        x=element_blank(),
        y="xG difference per 90 minutes",
-       caption="statsbomb/fbref") +
+       caption=caption[[1]]) +
   scale_colour_manual(values=c(col_medium[8],col_medium[3])) +
   scale_x_reverse(breaks=seq(-2,2,0.1),expand=expand_scale(add=0.01))
 ggsave(here("plots","SFC","GoalDifferencexG90.jpg"))
@@ -214,7 +214,7 @@ players %>%
        subtitle="Forwards with 3+ shots, 0 goals",
        x="Expected goals",
        y="Shots",
-       caption="statsbomb/fbref") +
+       caption=caption[[1]]) +
   scale_colour_manual(values=palette_epl()) +
   expand_limits(x=0,y=10) +
   scale_x_continuous(breaks=seq(0,30,0.5),expand=expand_scale(add=c(0,0.2))) +
@@ -234,7 +234,7 @@ squad %>%
   labs(title="Premier League expected goals (non-penalty)",
        x=element_blank(),
        y=element_blank(),
-       caption="statsbomb/fbref") +
+       caption=caption[[1]]) +
   scale_colour_manual(values=palette_epl()) +
   scale_x_continuous(breaks=seq(0,200,5),expand=expand_scale(add=c(0,0.5)))
 ggsave(here("plots","EPL","npxG.jpg"))
@@ -248,7 +248,7 @@ squad %>%
   labs(title="Premier League expected goals allowed (non-penalty)",
        x=element_blank(),
        y=element_blank(),
-       caption="statsbomb/fbref") +
+       caption=caption[[1]]) +
   scale_colour_manual(values=palette_epl()) +
   scale_x_continuous(breaks=seq(0,200,5),expand=expand_scale(add=c(0,0.5)))
 ggsave(here("plots","EPL","npxGA.jpg"))
@@ -261,7 +261,7 @@ squad %>%
   labs(title="Expected goals over/underperformance",
        x=element_blank(),
        y=element_blank(),
-       caption="statsbomb/fbref") +
+       caption=caption[[1]]) +
   scale_colour_manual(values=palette_epl()) +
   scale_x_continuous(breaks=seq(-50,50,2),expand=expand_scale(add=0.1))
 ggsave(here("plots","EPL","npG-xG.jpg"))
@@ -275,7 +275,7 @@ squad %>%
   labs(title="Expected goals allowed over/underperformance",
        x=element_blank(),
        y=element_blank(),
-       caption="statsbomb/fbref") +
+       caption=caption[[1]]) +
   scale_colour_manual(values=palette_epl()) +
   scale_x_continuous(breaks=seq(-50,50,2),expand=expand_scale(add=0.1))
 ggsave(here("plots","EPL","npxGA-GA.jpg"))
@@ -285,14 +285,28 @@ squad %>%
   ggplot(aes(x=Squad,y=xGDiff,colour=Squad)) +
   geom_segment(aes(x=0,xend=xGDiff,y=Squad,yend=Squad),size=4,alpha=0.8) +
   # geom_bar(stat="identity",alpha=0.8) +
-  theme_sfc() +
+  theme_epl() +
   labs(title="Expected goal difference",
        x=element_blank(),
        y=element_blank(),
-       caption="statsbomb/fbref") +
+       caption=caption[[1]]) +
   scale_colour_manual(values=palette_epl()) +
   scale_x_continuous(breaks=seq(-50,50,5),expand=expand_scale(add=0.1))
 ggsave(here("plots","EPL","xGD.jpg"))
+
+squad %>%
+  ggplot(aes(x=npxG,y=Sh,colour=Squad)) +
+  geom_point() +
+  geom_text_repel(aes(label=Squad),size=3) +
+  theme_epl() +
+  scale_colour_manual(values=palette_epl())
+
+squad %>%
+  ggplot(aes(x=PPM,y=`1/3`,colour=Squad)) +
+  geom_point() +
+  geom_text_repel(aes(label=Squad),size=3) +
+  theme_epl() +
+  scale_colour_manual(values=palette_epl())
 ```
 
 ```{r test,eval=F}
@@ -308,7 +322,7 @@ players %>%
   labs(title=element_blank(),
        x=element_blank(),
        y="Total passes",
-       caption="statsbomb/fbref",
+       caption=caption[[1]],
        legend.position="right") +
   scale_fill_manual(values=c(col_medium[[1]],col_medium[[8]])) +
   coord_flip()
@@ -358,7 +372,7 @@ players %>%
   labs(title="Completed passes",
        x=element_blank(),
        y=element_blank(),
-       caption="statsbomb/fbref") +
+       caption=caption[[1]]) +
   scale_x_continuous(limit=c(0,1)) +
   scale_y_continuous()
 
@@ -384,7 +398,7 @@ players %>%
   labs(title="League minutes (MF/FW)",
        x=element_blank(),
        y=element_blank(),
-       caption="statsbomb/fbref") +
+       caption=caption[[1]]) +
   scale_fill_manual(values=c(col_gdocs[[2]],col_gdocs[[4]],col_gdocs[[6]])) +
   scale_y_continuous(breaks=seq(0,90*38,180),expand=expand_scale(add=c(-1000,80))) +
   coord_flip()
@@ -402,7 +416,7 @@ players %>%
        subtitle="Forwards with 6+ shots, 0 goals",
        x="Expected goals",
        y="Shots",
-       caption="statsbomb/fbref") +
+       caption=caption[[1]]) +
   scale_colour_manual(values=palette_epl()) +
   expand_limits(x=0,y=10) +
   scale_x_continuous(breaks=seq(0,30,0.5),expand=expand_scale(add=c(0,0.2))) +
@@ -508,7 +522,7 @@ players %>%
   labs(title="On-pitch goal difference",
        x=element_blank(),
        y="Goals scored - Goals conceded",
-       caption="statsbomb/fbref") +
+       caption=caption[[1]]) +
   scale_fill_manual(values=c(col_gdocs[[2]],col_gdocs[[4]])) +
   scale_y_reverse(breaks=seq(-100,100,2),expand=expand_scale(add=0.2)) +
   coord_flip()
@@ -539,7 +553,7 @@ players %>%
        subtitle="(from start / from bench)",
        x=element_blank(),
        y=element_blank(),
-       caption="statsbomb/fbref") +
+       caption=caption[[1]]) +
   expand_limits(Min=0) +
   scale_x_continuous(breaks=seq(0,90*38,180),expand=expand_scale(add=c(20,20))) +
   theme(
@@ -562,7 +576,7 @@ players %>%
   labs(title="On-pitch goal difference",
        x=element_blank(),
        y="Goals scored - Goals conceded",
-       caption="statsbomb/fbref") +
+       caption=caption[[1]]) +
   scale_colour_manual(values=c(col_medium[8],col_medium[3])) +
   scale_x_reverse(breaks=seq(-100,100,2),expand=expand_scale(add=0.1))
 

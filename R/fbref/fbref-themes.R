@@ -70,3 +70,8 @@ col_gdocs <- gdocs_pal()(10)
 
 sfc <- "#D71920"
 sfc_light <- "#ED5C5C"
+
+caption <- list(
+  "data: statsbomb/@fbref",
+  "data: statsbomb/@fbref\nprepared: @saintsbynumbers"
+)
