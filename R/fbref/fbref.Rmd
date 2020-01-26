@@ -122,7 +122,8 @@ players %>%
   geom_point(aes(fill=focus),shape=21,size=2,alpha=0.8,colour="black") +
   geom_text_repel(aes(label=ifelse(focus,Player,"")),size=rel(3)) +
   theme_sfc() +
-  labs(title="Southampton xG/xA (per 90 mins)",
+  labs(title="Southampton xG/xA",
+       subtitle="(per 90 mins)",
        x="Expected goals per 90 minutes",
        y="Expected assists per 90 minutes",
        caption=caption[[1]]) +
@@ -231,7 +232,7 @@ squad %>%
   geom_segment(aes(x=0,xend=npxG,y=Squad,yend=Squad),size=4,alpha=0.8) +
   theme_epl() +
   theme(panel.grid.major.y=element_blank()) +
-  labs(title="Premier League expected goals (non-penalty)",
+  labs(title="Premier League expected goals",
        x=element_blank(),
        y=element_blank(),
        caption=caption[[1]]) +
@@ -245,7 +246,7 @@ squad %>%
   geom_segment(aes(x=0,xend=xGA,y=Squad,yend=Squad),size=4,alpha=0.8) +
   theme_epl() +
   theme(panel.grid.major.y=element_blank()) +
-  labs(title="Premier League expected goals allowed (non-penalty)",
+  labs(title="Premier League expected goals allowed",
        x=element_blank(),
        y=element_blank(),
        caption=caption[[1]]) +
@@ -299,7 +300,7 @@ squad %>%
   geom_text_repel(aes(label=Squad),size=2) +
   geom_point(aes(colour=Squad),size=3,shape=4) +
   theme_epl() +
-  labs(title="EPL Expected goals 19/20",
+  labs(title="Expected goals",
        x="xG for",
        y="xG against",
        caption=caption[[1]]) +
