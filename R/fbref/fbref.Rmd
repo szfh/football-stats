@@ -115,6 +115,26 @@ ggsave(here("plots","SFC","npxGxA.jpg"))
 
 players %>%
   filter(Squad=="Southampton") %>%
+  filter(!is.na(xG90)|!is.na(xA90)) %>%
+  mutate(focus=ifelse(xG90>=0.07|xA90>=0.07,TRUE,FALSE)) %>%
+  ggplot(aes(x=npxG90,y=xA90)) +
+  geom_blank(data=data.frame(npxG90=0,xA90=0)) +
+  geom_point(aes(fill=focus),shape=21,size=2,alpha=0.8,colour="black") +
+  geom_text_repel(aes(label=ifelse(focus,Player,"")),size=rel(3)) +
+  theme_sfc() +
+  labs(title="Southampton xG/xA",
+       subtitle="(per 90 mins)",
+       x="Expected goals per 90 minutes",
+       y="Expected assists per 90 minutes",
+       caption=caption[[1]]) +
+  scale_x_continuous(breaks=seq(0,2,0.1),expand=expand_scale(add=c(0,0.02))) +
+  scale_y_continuous(breaks=seq(0,2,0.1),expand=expand_scale(add=c(0,0.02))) +
+  scale_fill_manual(values=c("lightgrey",sfc)) +
+  coord_fixed()
+ggsave(here("plots","SFC","SFCnpxGxA90.jpg"))
+
+players %>%
+  filter(Squad=="Southampton") %>%
   filter(!is.na(Sh)|!is.na(KP)) %>%
   mutate(focus=ifelse(Sh>=10|KP>=10,TRUE,FALSE)) %>%
   ggplot(aes(x=Sh,y=KP)) +
@@ -153,26 +173,6 @@ players %>%
   scale_fill_manual(values=c("lightgrey",sfc)) +
   coord_fixed()
 ggsave(here("plots","SFC","ShotsKP90.jpg"))
-
-players %>%
-  filter(Squad=="Southampton") %>%
-  filter(!is.na(xG90)|!is.na(xA90)) %>%
-  mutate(focus=ifelse(xG90>=0.07|xA90>=0.07,TRUE,FALSE)) %>%
-  ggplot(aes(x=npxG90,y=xA90)) +
-  geom_blank(data=data.frame(npxG90=0,xA90=0)) +
-  geom_point(aes(fill=focus),shape=21,size=2,alpha=0.8,colour="black") +
-  geom_text_repel(aes(label=ifelse(focus,Player,"")),size=rel(3)) +
-  theme_sfc() +
-  labs(title="Southampton xG/xA",
-       subtitle="(per 90 mins)",
-       x="Expected goals per 90 minutes",
-       y="Expected assists per 90 minutes",
-       caption=caption[[1]]) +
-  scale_x_continuous(breaks=seq(0,2,0.1),expand=expand_scale(add=c(0,0.02))) +
-  scale_y_continuous(breaks=seq(0,2,0.1),expand=expand_scale(add=c(0,0.02))) +
-  scale_fill_manual(values=c("lightgrey",sfc)) +
-  coord_fixed()
-ggsave(here("plots","SFC","SFCnpxGxA90.jpg"))
 
 players %>%
   filter(Squad=="Southampton") %>%
