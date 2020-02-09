@@ -106,7 +106,7 @@ players %>%
   labs(title="Southampton xG/xA",
        x="Expected goals",
        y="Expected assists",
-       caption="statsbomb/fbref") +
+       caption=caption[[1]]) +
   scale_x_continuous(breaks=seq(0,30,1),expand=expand_scale(add=c(0,0.1))) +
   scale_y_continuous(breaks=seq(0,30,1),expand=expand_scale(add=c(0,0.1))) +
   scale_fill_manual(values=c("lightgrey",sfc)) +
@@ -125,11 +125,12 @@ players %>%
   labs(title="Southampton Shots/Shot assists",
        x="Shots",
        y="Pass leading to shot",
-       caption="statsbomb/fbref") +
+       caption=caption[[1]]) +
   scale_x_continuous(breaks=seq(0,300,10),expand=expand_scale(add=c(0,2))) +
   scale_y_continuous(breaks=seq(0,300,10),expand=expand_scale(add=c(0,2))) +
   scale_fill_manual(values=c("lightgrey",sfc)) +
   coord_fixed()
+ggsave(here("plots","SFC","ShotsKP.jpg"))
 
 players %>%
   filter(Squad=="Southampton") %>%
