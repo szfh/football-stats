@@ -103,7 +103,7 @@ players %>%
   geom_point(aes(fill=focus),shape=21,size=3,alpha=0.8,colour="black") +
   geom_text_repel(aes(label=ifelse(focus,Player,"")),size=rel(4)) +
   theme_sfc() +
-  labs(title="Southampton EPL xG/xA",
+  labs(title="Southampton xG/xA",
        x="Expected goals",
        y="Expected assists",
        caption="statsbomb/fbref") +
