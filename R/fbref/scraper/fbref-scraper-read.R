@@ -1,1 +1,1 @@
-raw <- readRDS(file=here("data","fbref","EPL","2019","raw.rds"))
+raw <- readRDS(file=here("data","fbref","raw.rds"))

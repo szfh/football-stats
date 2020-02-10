@@ -1,1 +1,1 @@
-saveRDS(raw,file=here("data","fbref","EPL","2019","raw.rds"))
+saveRDS(raw,file=here("data","fbref","raw.rds"))
