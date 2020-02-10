@@ -1,0 +1,10 @@
+library(tidyverse)
+library(magrittr)
+library(rvest)
+# library(understatr)
+# library(ggsoccer)
+library(ggrepel)
+library(ggthemes)
+library(here)
+
+set.seed(9999)
