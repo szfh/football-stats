@@ -115,8 +115,3 @@ tidy[["player"]][["misc"]] <- raw[["player"]][["misc"]] %>%
   select(
     -"Rk",
   )
-
-players <- reduce(tidy[["player"]],full_join) %>%
-  separate("Player",c("Player",NA),sep="\\\\",fill="right") %>%
-  separate("Nation",c(NA,"Nation"),sep=" ",fill="right") %>%
-  separate("Pos",c("Pos1",NA,"Pos2"),sep=c(2,3),fill="right")

@@ -109,6 +109,3 @@ tidy[["squad"]][["misc"]] <- raw[["squad"]][["misc"]] %>%
     "DribTkl%"="Tkl%",
     "DribPast"="Past",
   )
-
-squad <- tidy[["table"]] %>%
-  full_join(reduce(tidy[["squad"]],full_join))
