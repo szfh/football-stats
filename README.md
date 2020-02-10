@@ -38,3 +38,8 @@ A repository to keep track of some football stats work.
     States](https://7500toholte.sbnation.com/platform/amp/2019/8/21/20812030/expected-villa-afc-bournemouth-game-states-responsible-analysis)
 3.  [Deserved
     Goals 2.0](https://8yards8feet.wordpress.com/2019/09/07/deserved-goals-2-0/amp/)
+
+### FBRef plots
+
+![](./plots/SFC/Minutes.jpg) ![](./plots/SFC/SFCnpxGxA90.jpg)
+![](./plots/EPL/xGFxGA.jpg)
