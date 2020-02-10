@@ -1,7 +1,9 @@
 ---
 # title: "football-stats"
 # author: "saintsnumbers"
-output: github_document
+output:
+  github_document:
+    fig_height: 3
 # date: 2019-07-28
 ---
 
@@ -44,6 +46,6 @@ file.copy(from="./plots/EPL/npG-xG.jpg",to="./images/plot3.jpg")
 ```
 
 
-![](./images/plot1.jpg)
-![](./images/plot2.jpg)
-![](./images/plot3.jpg)
+![plot1](./images/plot1.jpg)
+![plot2](./images/plot2.jpg)
+![plot3](./images/plot3.jpg)
