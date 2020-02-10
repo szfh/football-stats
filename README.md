@@ -41,4 +41,5 @@ A repository to keep track of some football stats work.
 
 ### FBRef plots
 
-![](./images/plot1.jpg) ![](./images/plot2.jpg) ![](./images/plot3.jpg)
+![plot1](./images/plot1.jpg) ![plot2](./images/plot2.jpg)
+![plot3](./images/plot3.jpg)
