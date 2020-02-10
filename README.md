@@ -41,5 +41,4 @@ A repository to keep track of some football stats work.
 
 ### FBRef plots
 
-![](./plots/SFC/Minutes.jpg) ![](./plots/SFC/SFCnpxGxA90.jpg)
-![](./plots/EPL/xGFxGA.jpg)
+![](./images/plot1.jpg) ![](./images/plot2.jpg) ![](./images/plot3.jpg)
