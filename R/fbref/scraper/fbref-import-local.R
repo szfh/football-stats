@@ -1,5 +1,0 @@
-raw[["player"]][["misc"]] <- fbref_import(here("data","fbref","EPL","2019","player","misc.txt"),skip=1)
-raw[["player"]][["passing"]] <- fbref_import(here("data","fbref","EPL","2019","player","passing.txt"),skip=1)
-raw[["player"]][["playingtime"]] <- fbref_import(here("data","fbref","EPL","2019","player","playingtime.txt"),skip=1)
-raw[["player"]][["shooting"]] <- fbref_import(here("data","fbref","EPL","2019","player","shooting.txt"),skip=0)
-raw[["player"]][["standard"]] <- fbref_import(here("data","fbref","EPL","2019","player","standard.txt"),skip=1)
