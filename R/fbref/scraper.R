@@ -1,3 +1,8 @@
+source(here::here("R","fbref","library.R"))
+source(here("R","fbref","scraper-functions.R"))
+
+raw <- list()
+
 raw[["table"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/Premier-League-Stats",
                                extract=1,fix_columns=FALSE)
 
@@ -33,3 +38,5 @@ raw[["player"]][["playingtime"]] <- fbref_scrape(url="https://fbref.com/en/comps
                                                  comment=TRUE,extract=1,fix_columns=TRUE)
 raw[["player"]][["misc"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/misc/Premier-League-Stats",
                                           comment=TRUE,extract=1,fix_columns=TRUE)
+
+saveRDS(raw,file=here("data","fbref","raw.rds"))
