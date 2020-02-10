@@ -21,7 +21,7 @@ fbref_scrape <- function(url,nodes=NA,comment=FALSE,fix_columns=FALSE,extract=NA
       html_table()
   }
   
-  if(is.na(extract)==FALSE){ # sekect table
+  if(is.na(extract)==FALSE){ # select table
     data_table <- data_table %>%
       extract2(extract)
   }
