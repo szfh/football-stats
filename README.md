@@ -39,16 +39,12 @@ A repository to keep track of some football stats work.
 3.  [Deserved
     Goals 2.0](https://8yards8feet.wordpress.com/2019/09/07/deserved-goals-2-0/amp/)
 
-### FBRef plots
+## fbref plots
 
 <center>
 
-<!-- ![plot1](./images/plot1.jpg){width=100px} -->
-
-<!-- ![plot2](./images/plot2.jpg){width=50%} -->
-
-<!-- ![plot3](./images/plot3.jpg){width=50%} -->
+<img src="./images/plot1.jpg" width="60%">
+<img src="./images/plot2.jpg" width="60%">
+<img src="./images/plot3.jpg" width="60%">
 
 </center>
-
-![](./images/plot1.jpg)<!-- -->
