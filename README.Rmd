@@ -44,7 +44,11 @@ file.copy(from="./plots/EPL/npG-xG.jpg",to="./images/plot3.jpg")
 ```
 
 <center>
-![plot1](./images/plot1.jpg){width=50%}
-![plot2](./images/plot2.jpg){width=50%}
-![plot3](./images/plot3.jpg){width=50%}
+<!-- ![plot1](./images/plot1.jpg){width=100px} -->
+<!-- ![plot2](./images/plot2.jpg){width=50%} -->
+<!-- ![plot3](./images/plot3.jpg){width=50%} -->
 </center>
+
+```{r,echo=F}
+knitr::include_graphics("./images/plot1.jpg",dpi=100)
+```

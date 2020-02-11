@@ -43,7 +43,12 @@ A repository to keep track of some football stats work.
 
 <center>
 
-![plot1](./images/plot1.jpg) ![plot2](./images/plot2.jpg)
-![plot3](./images/plot3.jpg)
+<!-- ![plot1](./images/plot1.jpg){width=100px} -->
+
+<!-- ![plot2](./images/plot2.jpg){width=50%} -->
+
+<!-- ![plot3](./images/plot3.jpg){width=50%} -->
 
 </center>
+
+![](./images/plot1.jpg)<!-- -->
