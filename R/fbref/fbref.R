@@ -66,7 +66,7 @@ players %>%
   scale_y_continuous(breaks=seq(0,30,1),expand=expand_scale(add=c(0,0.1))) +
   scale_fill_manual(values=c("lightgrey",sfc)) +
   coord_fixed()
-ggsave(here("plots","SFC","npxGxA.jpg"))
+ggsave(here("plots","SFC","xGxA.jpg"))
 
 players %>%
   filter(Squad=="Southampton") %>%
@@ -86,7 +86,7 @@ players %>%
   scale_y_continuous(breaks=seq(0,2,0.1),expand=expand_scale(add=c(0,0.02))) +
   scale_fill_manual(values=c("lightgrey",sfc)) +
   coord_fixed()
-ggsave(here("plots","SFC","SFCnpxGxA90.jpg"))
+ggsave(here("plots","SFC","xGxA90.jpg"))
 
 players %>%
   filter(Squad=="Southampton") %>%
@@ -143,7 +143,7 @@ players %>%
        caption=caption[[1]]) +
   scale_colour_manual(values=c(col_medium[8],col_medium[3])) +
   scale_x_reverse(breaks=seq(-100,100,2),expand=expand_scale(add=0.1))
-ggsave(here("plots","SFC","GoalDifference.jpg"))
+ggsave(here("plots","SFC","GD.jpg"))
 
 # players %>%
 #   filter(Squad=="Southampton") %>%
@@ -174,7 +174,7 @@ players %>%
        caption=caption[[1]]) +
   scale_colour_manual(values=c(col_medium[8],col_medium[3])) +
   scale_x_reverse(breaks=seq(-100,100,2),expand=expand_scale(add=0.1))
-ggsave(here("plots","SFC","GoalDifferencexG.jpg"))
+ggsave(here("plots","SFC","xGD.jpg"))
 
 players %>%
   filter(Squad=="Southampton") %>%
@@ -191,10 +191,9 @@ players %>%
        caption=caption[[1]]) +
   scale_colour_manual(values=c(col_medium[8],col_medium[3])) +
   scale_x_reverse(breaks=seq(-2,2,0.1),expand=expand_scale(add=0.01))
-ggsave(here("plots","SFC","GoalDifferencexG90.jpg"))
+ggsave(here("plots","SFC","xGD90.jpg"))
 
 # Premier League player plots
-
 
 players %>%
   filter(Gls==0) %>%
@@ -215,7 +214,7 @@ players %>%
   expand_limits(x=0,y=10) +
   scale_x_continuous(breaks=seq(0,30,0.5),expand=expand_scale(add=c(0,0.2))) +
   scale_y_continuous(breaks=seq(0,50,5),expand=expand_scale(add=c(0,0.5)))
-ggsave(here("plots","EPL","NoGoalsxGShots.jpg"))
+ggsave(here("plots","EPL","NoGoals.jpg"))
 
 # Premier League team plots
 
@@ -231,7 +230,7 @@ squad %>%
        caption=caption[[1]]) +
   scale_colour_manual(values=palette_epl()) +
   scale_x_continuous(breaks=seq(0,200,5),expand=expand_scale(add=c(0,0.5)))
-ggsave(here("plots","EPL","npxG.jpg"))
+ggsave(here("plots","EPL","xG.jpg"))
 
 squad %>%
   mutate(Squad=fct_reorder(Squad,xGA,.desc=TRUE)) %>%
@@ -245,7 +244,7 @@ squad %>%
        caption=caption[[1]]) +
   scale_colour_manual(values=palette_epl()) +
   scale_x_continuous(breaks=seq(0,200,5),expand=expand_scale(add=c(0,0.5)))
-ggsave(here("plots","EPL","npxGA.jpg"))
+ggsave(here("plots","EPL","xGA.jpg"))
 
 squad %>%
   mutate(Squad=fct_reorder(Squad,`np:G-xG`)) %>%
@@ -258,7 +257,7 @@ squad %>%
        caption=caption[[1]]) +
   scale_colour_manual(values=palette_epl()) +
   scale_x_continuous(breaks=seq(-50,50,2),expand=expand_scale(add=0.1))
-ggsave(here("plots","EPL","npG-xG.jpg"))
+ggsave(here("plots","EPL","G-xG.jpg"))
 
 squad %>%
   mutate(`xGA-GA`=xGA-GA) %>%
@@ -272,7 +271,7 @@ squad %>%
        caption=caption[[1]]) +
   scale_colour_manual(values=palette_epl()) +
   scale_x_continuous(breaks=seq(-50,50,2),expand=expand_scale(add=0.1))
-ggsave(here("plots","EPL","npxGA-GA.jpg"))
+ggsave(here("plots","EPL","xGA-GA.jpg"))
 
 squad %>%
   mutate(Squad=fct_reorder(Squad,xGDiff)) %>%
