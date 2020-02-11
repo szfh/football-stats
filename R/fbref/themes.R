@@ -7,6 +7,9 @@ theme_sfc <- function(base_size=12,base_family="sans"){
       
       legend.position="none",
       
+      strip.background=element_blank(),
+      strip.text=element_text(colour="black",face="bold",angle=0),
+      
       panel.border=element_blank(),
       panel.background=element_blank(),
       

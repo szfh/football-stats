@@ -43,8 +43,7 @@ players %>%
     axis.line=element_blank(),
     axis.text.x=element_text(size=rel(0.8),hjust=0.5),
     axis.text.y=element_text(size=rel(0.8)),
-    strip.background=element_blank(),
-    strip.text.y=element_text(colour="black",face="bold",angle=0),
+    strip.text.y=element_text(angle=0),
   ) +
   facet_grid(Possfc ~ .,scales="free",space="free")
 ggsave(here("plots","SFC","Minutes.jpg"))
