@@ -16,12 +16,12 @@ players %>%
     MinSub=Subs*`Mn/Sub`,
     MinStart=Min-MinSub,
     ) %>%
-  mutate(
-    Pos1=ifelse(Player %in% c("Kevin Danso","Jannik Vestergaard","Jan Bednarek","Jack Stephens","Maya Yoshida"),"CB",Pos1),
-    Pos1=ifelse(Player %in% c("Ryan Bertrand","Cédric Soares","Yan Valery"),"FB",Pos1),
-    Pos1=ifelse(Player %in% c("James Ward-Prowse","Pierre Højbjerg","Oriol Romeu","William Smallbone"),"DM",Pos1),
-    Pos1=ifelse(Player %in% c("Nathan Redmond","Stuart Armstrong","Sofiane Boufal","Moussa Djenepo"),"AM",Pos1),
-  ) %>%
+  mutate(Pos1=case_when(
+    Player %in% c("Kevin Danso","Jannik Vestergaard","Jan Bednarek","Jack Stephens","Maya Yoshida") ~ "CB",
+    Player %in% c("Ryan Bertrand","Cédric Soares","Yan Valery") ~ "FB",
+    Player %in% c("James Ward-Prowse","Pierre Højbjerg","Oriol Romeu","William Smallbone") ~ "DM",
+    Player %in% c("Nathan Redmond","Stuart Armstrong","Sofiane Boufal","Moussa Djenepo") ~ "AM",
+    TRUE ~ Pos1)) %>%
   mutate(Possfc=factor(Pos1,levels=c("GK","CB","FB","DM","AM","FW"))) %>%
   mutate(Player=fct_reorder(Player,Min)) %>%
   ggplot(aes(x=Min,y=Player)) +
