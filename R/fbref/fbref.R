@@ -54,15 +54,15 @@ players %>%
   mutate(focus=ifelse(npxG>=1|xA>=1,TRUE,FALSE)) %>%
   ggplot(aes(x=npxG,y=xA)) +
   geom_blank(data=data.frame(npxG=0,xA=0)) +
-  geom_point(aes(fill=focus),shape=21,size=3,alpha=0.8,colour="black") +
+  geom_point(aes(fill=focus),shape=21,size=4,alpha=0.8,colour="black") +
   geom_text_repel(aes(label=ifelse(focus,Player,"")),size=rel(4)) +
   theme_sfc() +
   labs(title="Southampton xG/xA",
        x="Expected goals",
        y="Expected assists",
        caption=caption[[1]]) +
-  scale_x_continuous(breaks=seq(0,30,1),expand=expand_scale(add=c(0,0.1))) +
-  scale_y_continuous(breaks=seq(0,30,1),expand=expand_scale(add=c(0,0.1))) +
+  scale_x_continuous(breaks=seq(0,30,1),expand=expand_scale(add=c(0,0.2))) +
+  scale_y_continuous(breaks=seq(0,30,1),expand=expand_scale(add=c(0,0.2))) +
   scale_fill_manual(values=c("TRUE"=col_sfc[[1]],"FALSE"=col_sfc[[3]])) +
   coord_fixed()
 ggsave(here("plots","SFC","xGxA.jpg"))
