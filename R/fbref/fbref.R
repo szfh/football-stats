@@ -1,13 +1,10 @@
 source(here::here("R","fbref","library.R"))
-source(here("R","fbref","themes.R"))
+source(here("R","fbref","tidy.R"))
 
 # scrape data from fbref and save locally
 # run only this block to scrape data and save
 # (ctrl+shift+F10 :: ctrl+shift+enter)
 # source(here("R","fbref","scrape.R"))
-
-# read from saved fbref data
-source(here("R","fbref","tidy.R"))
 
 players %>%
   filter(Squad=="Southampton") %>%
