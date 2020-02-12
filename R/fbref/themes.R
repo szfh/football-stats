@@ -1,3 +1,4 @@
+# themes
 theme_sfc <- function(base_size=12,base_family="sans"){
   theme_bw(base_size=base_size,base_family=base_family) +
     theme(
@@ -27,6 +28,7 @@ theme_sfc <- function(base_size=12,base_family="sans"){
 
 theme_epl <- theme_sfc
 
+# palettes
 palette_epl <- function(team_name){
   palette_epl <- c(
     `Arsenal` = "#EF0107",
@@ -58,23 +60,43 @@ palette_epl <- function(team_name){
     `Wolves` = "#FDB913"
   )
   
-  if(is.null(palette_epl))
-    return(palette_epl)
+  # if(is.null(palette_epl))
+  #   return(palette_epl)
   
   return(palette_epl[team_name])
 }
-# pie(rep(1, length(palette_epl)), col = palette_epl)
-# colorspace::swatchplot(col_medium)
 
+palette_sfc <- function(p){
+  palette_sfc <- c(
+    `main` = "#D71920", # normal
+    `light` = "#ED5C5C", # light
+    `black` = "#000000",
+    `lightgrey` = "#D3D3D3"
+  )
+  
+  # if(is.null(palette_sfc))
+  #   return(palette_sfc)
+  
+  return(palette_sfc[p])
+}
+
+# colour lists
 col_light <- few_pal("Light")(8)
 col_medium <- few_pal("Medium")(8)
 col_dark <- few_pal("Dark")(8)
 col_gdocs <- gdocs_pal()(10)
-
+col_sfc <- c("#D71920","#ED5C5C","#D3D3D3")
 sfc <- "#D71920"
 sfc_light <- "#ED5C5C"
 
-caption <- list(
+# captions
+caption <- c(
   "data: statsbomb/@fbref",
   "data: statsbomb/@fbref\nprepared: @saintsbynumbers"
 )
+
+# tests
+# colorspace::swatchplot(col_medium)
+# colorspace::swatchplot(col_sfc)
+# colorspace::swatchplot(palette_epl())
+# colorspace::swatchplot(palette_sfc())

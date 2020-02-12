@@ -28,9 +28,9 @@ players %>%
   mutate(Possfc=factor(Pos1,levels=c("GK","CB","FB","DM","AM","FW"))) %>%
   mutate(Player=fct_reorder(Player,Min)) %>%
   ggplot(aes(x=Min,y=Player)) +
-  geom_segment(aes(y=Player,yend=Player,x=0,xend=MinStart),colour=sfc,size=3.5,alpha=0.8) +
-  geom_segment(aes(y=Player,yend=Player,x=MinStart,xend=Min),colour=sfc,size=3.5,alpha=0.3) +
-  # geom_label(aes(label=Min),colour=sfc_light,size=2) +
+  geom_segment(aes(y=Player,yend=Player,x=0,xend=MinStart),colour=col_sfc[[1]],size=3.5,alpha=0.8) +
+  geom_segment(aes(y=Player,yend=Player,x=MinStart,xend=Min),colour=col_sfc[[1]],size=3.5,alpha=0.3) +
+  # geom_label(aes(label=Min),colour=col_sfc[[2]],size=2) +
   theme_sfc() +
   labs(title="League minutes",
        subtitle="(from start / from bench)",
@@ -63,7 +63,7 @@ players %>%
        caption=caption[[1]]) +
   scale_x_continuous(breaks=seq(0,30,1),expand=expand_scale(add=c(0,0.1))) +
   scale_y_continuous(breaks=seq(0,30,1),expand=expand_scale(add=c(0,0.1))) +
-  scale_fill_manual(values=c("lightgrey",sfc)) +
+  scale_fill_manual(values=c("TRUE"=col_sfc[[1]],"FALSE"=col_sfc[[3]])) +
   coord_fixed()
 ggsave(here("plots","SFC","xGxA.jpg"))
 
@@ -83,7 +83,7 @@ players %>%
        caption=caption[[1]]) +
   scale_x_continuous(breaks=seq(0,2,0.1),expand=expand_scale(add=c(0,0.02))) +
   scale_y_continuous(breaks=seq(0,2,0.1),expand=expand_scale(add=c(0,0.02))) +
-  scale_fill_manual(values=c("lightgrey",sfc)) +
+  scale_fill_manual(values=c("TRUE"=col_sfc[[1]],"FALSE"=col_sfc[[3]])) +
   coord_fixed()
 ggsave(here("plots","SFC","xGxA90.jpg"))
 
@@ -102,7 +102,7 @@ players %>%
        caption=caption[[1]]) +
   scale_x_continuous(breaks=seq(0,300,10),expand=expand_scale(add=c(0,2))) +
   scale_y_continuous(breaks=seq(0,300,10),expand=expand_scale(add=c(0,2))) +
-  scale_fill_manual(values=c("lightgrey",sfc)) +
+  scale_fill_manual(values=c("TRUE"=col_sfc[[1]],"FALSE"=col_sfc[[3]])) +
   coord_fixed()
 ggsave(here("plots","SFC","ShotsKP.jpg"))
 
@@ -124,7 +124,7 @@ players %>%
        caption=caption[[1]]) +
   scale_x_continuous(breaks=seq(0,20,0.5),expand=expand_scale(add=c(0,0.2))) +
   scale_y_continuous(breaks=seq(0,20,0.5),expand=expand_scale(add=c(0,0.2))) +
-  scale_fill_manual(values=c("lightgrey",sfc)) +
+  scale_fill_manual(values=c("TRUE"=col_sfc[[1]],"FALSE"=col_sfc[[3]])) +
   coord_fixed()
 ggsave(here("plots","SFC","ShotsKP90.jpg"))
 
@@ -140,7 +140,7 @@ players %>%
        x=element_blank(),
        y="Goals scored - Goals conceded",
        caption=caption[[1]]) +
-  scale_colour_manual(values=c(col_medium[8],col_medium[3])) +
+  scale_colour_manual(values=c("TRUE"=col_medium[[3]],"FALSE"=col_medium[[8]])) +
   scale_x_reverse(breaks=seq(-100,100,2),expand=expand_scale(add=0.1))
 ggsave(here("plots","SFC","GD.jpg"))
 
@@ -156,7 +156,7 @@ ggsave(here("plots","SFC","GD.jpg"))
 #        x="xG difference",
 #        y=element_blank(),
 #        caption="statsbomb/fbref") +
-#   scale_colour_manual(values=c(col_medium[8],col_medium[3]))
+#   scale_colour_manual(values=c("TRUE"=col_medium[[3]],"FALSE"=col_medium[[8]]))
 # ggsave(here("plots","SFC","GoalsAgainstxG.jpg"))
 
 players %>%
@@ -171,7 +171,7 @@ players %>%
        x="xG difference",
        y=element_blank(),
        caption=caption[[1]]) +
-  scale_colour_manual(values=c(col_medium[8],col_medium[3])) +
+  scale_colour_manual(values=c("TRUE"=col_medium[[3]],"FALSE"=col_medium[[8]])) +
   scale_x_reverse(breaks=seq(-100,100,2),expand=expand_scale(add=0.1))
 ggsave(here("plots","SFC","xGD.jpg"))
 
@@ -188,7 +188,7 @@ players %>%
        x=element_blank(),
        y="xG difference per 90 minutes",
        caption=caption[[1]]) +
-  scale_colour_manual(values=c(col_medium[8],col_medium[3])) +
+  scale_colour_manual(values=c("TRUE"=col_medium[[3]],"FALSE"=col_medium[[8]])) +
   scale_x_reverse(breaks=seq(-2,2,0.1),expand=expand_scale(add=0.01))
 ggsave(here("plots","SFC","xGD90.jpg"))
 
