@@ -14,9 +14,7 @@
 #folders
 data/
 plots/
+R/test/
 
 #html
 .html
-
-#test file
-R/fbref/fbref-test.R
