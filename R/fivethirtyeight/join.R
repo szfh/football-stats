@@ -24,11 +24,9 @@ spi_matches_rn <- spi_matches %>%
   filter(league_id==2411) %>%
   mutate(
     "date"=as.Date(date),
-    "team1"=as.character(team1),
-    "team2"=as.character(team2),
-    "team1"=sapply(team1,change_name),
-    "team2"=sapply(team2,change_name),
   ) %>%
+  mutate_at(c("team1","team2"),as.character) %>%
+  mutate_at(c("team1","team2"),change_name) %>%
   rename(
     "Home"="team1",
     "Away"="team2",
