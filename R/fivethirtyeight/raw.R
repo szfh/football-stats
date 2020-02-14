@@ -1,5 +1,3 @@
-source(here::here("R","library.R"))
-
 if (!exists("raw",inherits=FALSE)){
   raw <- list()
 }
