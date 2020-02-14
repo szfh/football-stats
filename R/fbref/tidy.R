@@ -1,5 +1,3 @@
-source(here::here("R","fbref","library.R"))
-
 raw <- readRDS(file=here("data","fbref","raw.rds"))
 tidy <- list()
 source(here("R","fbref","tidy-players.R"))

@@ -1,4 +1,4 @@
-source(here::here("R","fbref","library.R"))
+source(here::here("R","library.R"))
 source(here("R","fbref","tidy.R"))
 
 # scrape data from fbref and save locally
