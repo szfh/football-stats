@@ -1,10 +1,4 @@
-source(here::here("R","library.R"))
-source(here("R","fbref","tidy.R"))
-
-# scrape data from fbref and save locally
-# run only this block to scrape data and save
-# (ctrl+shift+F10 :: ctrl+shift+enter)
-# source(here("R","fbref","scrape.R"))
+# Southampton player plots
 
 players %>%
   filter(Squad=="Southampton") %>%
