@@ -39,28 +39,3 @@ tidy[["fivethirtyeight"]][["matches"]] <- raw[["fivethirtyeight"]][["matches"]] 
     "Date"="date",
   ) %>%
   select (-c("score1","score2","league_id"))
-
-# spi_matches_rn <- spi_matches %>%
-#   filter(league_id==2411) %>%
-#   mutate(
-#     "date"=as.Date(date),
-#   ) %>%
-#   mutate_at(c("team1","team2"),as.character) %>%
-#   mutate_at(c("team1","team2"),change_name) %>%
-#   rename(
-#     "Home"="team1",
-#     "Away"="team2",
-#     "Date"="date",
-#     )
-
-# spi_matches_rn %>%
-#   select(Home) %>%
-#   unique() %>%
-#   view()
-
-matches_join <- matches %>%
-  left_join(spi_matches_rn) %>% 
-  filter(!is.na(score1)) %>%
-  # select(Home) %>%
-  # unique() %>%
-  view
