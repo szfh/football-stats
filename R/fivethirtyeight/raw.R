@@ -9,8 +9,10 @@ spi_rankings <- read.csv("https://projects.fivethirtyeight.com/soccer-api/club/s
 
 
 
-raw[["fivethirtyeight"]][["matches"]] <- read.csv("https://projects.fivethirtyeight.com/soccer-api/club/spi_matches.csv")
-raw[["fivethirtyeight"]][["rankings"]] <- read.csv("https://projects.fivethirtyeight.com/soccer-api/club/spi_global_rankings.csv")
+raw[["fivethirtyeight"]][["matches"]] <- read.csv("https://projects.fivethirtyeight.com/soccer-api/club/spi_matches.csv") %>%
+  as_tibble(.name_repair = "unique")
+raw[["fivethirtyeight"]][["rankings"]] <- read.csv("https://projects.fivethirtyeight.com/soccer-api/club/spi_global_rankings.csv") %>%
+  as_tibble(.name_repair = "unique")
 
 # raw[["fivethirtyeight"]][["matches"]] %>%
 #   select(league,league_id) %>%
