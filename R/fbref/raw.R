@@ -1,5 +1,5 @@
 # function
-fbref_scrape <- function(url,nodes=NA,comment=FALSE,fix_columns=FALSE,extract=NA){
+fbref_scrape <- function(url,comment=FALSE,fix_columns=FALSE,extract=NA){
   
   Sys.sleep(1)
   
