@@ -43,9 +43,7 @@ fbref_scrape <- function(url,comment=FALSE,fix_columns=FALSE,extract=NA){
 }
 
 # scraper
-if (!exists("raw",inherits=FALSE)){
-  raw <- list()
-}
+raw <- list()
 
 raw[["fbref"]][["table"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/Premier-League-Stats",
                                extract=1,fix_columns=FALSE)
