@@ -1,9 +1,12 @@
 raw <- readRDS(file=here("data","fbref","raw.rds"))
-tidy <- list()
+
+if (!exists("tidy",inherits=FALSE)){
+  tidy <- list()
+}
 
 # player
 
-tidy[["player"]][["standard"]] <- raw[["player"]][["standard"]] %>%
+tidy[["fbref"]][["player"]][["standard"]] <- raw[["fbref"]][["player"]][["standard"]] %>%
   rename(
     "Gls"="Gls...11",
     "Ast"="Ast...12",
@@ -25,7 +28,7 @@ tidy[["player"]][["standard"]] <- raw[["player"]][["standard"]] %>%
     -"Rk",
   )
 
-tidy[["player"]][["keepers"]] <- raw[["player"]][["keepers"]] %>%
+tidy[["fbref"]][["player"]][["keepers"]] <- raw[["fbref"]][["player"]][["keepers"]] %>%
   rename(
     "GKPKatt"="PKatt",
     "GKPKA"="PKA",
@@ -36,7 +39,7 @@ tidy[["player"]][["keepers"]] <- raw[["player"]][["keepers"]] %>%
     -"Rk",
   )
 
-tidy[["player"]][["keepersadv"]] <- raw[["player"]][["keepersadv"]] %>%
+tidy[["fbref"]][["player"]][["keepersadv"]] <- raw[["fbref"]][["player"]][["keepersadv"]] %>%
   rename(
     "GKGA"="GA",
     "GKPKA"="PKA",
@@ -66,7 +69,7 @@ tidy[["player"]][["keepersadv"]] <- raw[["player"]][["keepersadv"]] %>%
     -"90s",
   )
 
-tidy[["player"]][["shooting"]] <- raw[["player"]][["shooting"]] %>%
+tidy[["fbref"]][["player"]][["shooting"]] <- raw[["fbref"]][["player"]][["shooting"]] %>%
   rename(
     "ShotFK"="FK",
     "Sh90"="Sh/90",
@@ -76,7 +79,7 @@ tidy[["player"]][["shooting"]] <- raw[["player"]][["shooting"]] %>%
     -"Rk",
   )
 
-tidy[["player"]][["passing"]] <- raw[["player"]][["passing"]] %>%
+tidy[["fbref"]][["player"]][["passing"]] <- raw[["fbref"]][["player"]][["passing"]] %>%
   rename(
     "TotalCmp"="Cmp...11",
     "TotalAtt"="Att...12",
@@ -96,7 +99,7 @@ tidy[["player"]][["passing"]] <- raw[["player"]][["passing"]] %>%
     -"Rk",
   )
 
-tidy[["player"]][["playingtime"]] <- raw[["player"]][["playingtime"]] %>%
+tidy[["fbref"]][["player"]][["playingtime"]] <- raw[["fbref"]][["player"]][["playingtime"]] %>%
   rename(
     "Gls+/-"="+/-",
     "Gls+/-90"="+/-90",
@@ -107,7 +110,7 @@ tidy[["player"]][["playingtime"]] <- raw[["player"]][["playingtime"]] %>%
     -"Rk",
   )
 
-tidy[["player"]][["misc"]] <- raw[["player"]][["misc"]] %>%
+tidy[["fbref"]][["player"]][["misc"]] <- raw[["fbref"]][["player"]][["misc"]] %>%
   rename(
     "DribSuc"="Succ",
     "DribAtt"="Att...20",
@@ -123,7 +126,7 @@ tidy[["player"]][["misc"]] <- raw[["player"]][["misc"]] %>%
 
 # teams
 
-tidy[["table"]] <- raw[["table"]] %>%
+tidy[["fbref"]][["table"]] <- raw[["fbref"]][["table"]] %>%
   select(
     -"Top Team Scorer",
     -"Goalkeeper",
@@ -133,7 +136,7 @@ tidy[["table"]] <- raw[["table"]] %>%
     "xGDiff90"="xGDiff/90"
   )
 
-tidy[["squad"]][["standard"]] <- raw[["squad"]][["standard"]] %>%
+tidy[["fbref"]][["squad"]][["standard"]] <- raw[["fbref"]][["squad"]][["standard"]] %>%
   rename(
     "Gls"="Gls...6",
     "Ast"="Ast...7",
@@ -152,7 +155,7 @@ tidy[["squad"]][["standard"]] <- raw[["squad"]][["standard"]] %>%
     "npxG+xA90"="npxG+xA",
   )
 
-tidy[["squad"]][["keepers"]] <- raw[["squad"]][["keepers"]] %>%
+tidy[["fbref"]][["squad"]][["keepers"]] <- raw[["fbref"]][["squad"]][["keepers"]] %>%
   rename(
     "GK# Pl"="# Pl",
     "GKPKatt"="PKatt",
@@ -165,7 +168,7 @@ tidy[["squad"]][["keepers"]] <- raw[["squad"]][["keepers"]] %>%
     -"Min",
   )
 
-tidy[["squad"]][["keepersadv"]] <- raw[["squad"]][["keepersadv"]] %>%
+tidy[["fbref"]][["squad"]][["keepersadv"]] <- raw[["fbref"]][["squad"]][["keepersadv"]] %>%
   rename(
     "GK# Pl"="# Pl",
     "GKPKA"="PKA",
@@ -194,14 +197,14 @@ tidy[["squad"]][["keepersadv"]] <- raw[["squad"]][["keepersadv"]] %>%
     -"90s",
   )
 
-tidy[["squad"]][["shooting"]] <- raw[["squad"]][["shooting"]] %>%
+tidy[["fbref"]][["squad"]][["shooting"]] <- raw[["fbref"]][["squad"]][["shooting"]] %>%
   rename(
     "ShotFK"="FK",
     "Sh90"="Sh/90",
     "SoT90"="SoT/90",
   )
 
-tidy[["squad"]][["passing"]] <- raw[["squad"]][["passing"]] %>%
+tidy[["fbref"]][["squad"]][["passing"]] <- raw[["fbref"]][["squad"]][["passing"]] %>%
   rename(
     "TotalCmp"="Cmp...7",
     "TotalAtt"="Att...8",
@@ -218,13 +221,13 @@ tidy[["squad"]][["passing"]] <- raw[["squad"]][["passing"]] %>%
     "PassFK"="FK",
   )
 
-tidy[["squad"]][["playingtime"]] <- raw[["squad"]][["playingtime"]] %>%
+tidy[["fbref"]][["squad"]][["playingtime"]] <- raw[["fbref"]][["squad"]][["playingtime"]] %>%
   rename(
     "Gls+/-"="+/-",
     "Gls+/-90"="+/-90",
   )
 
-tidy[["squad"]][["misc"]] <- raw[["squad"]][["misc"]] %>%
+tidy[["fbref"]][["squad"]][["misc"]] <- raw[["fbref"]][["squad"]][["misc"]] %>%
   rename(
     "DribSuc"="Succ",
     "DribAtt"="Att...16",
@@ -237,7 +240,7 @@ tidy[["squad"]][["misc"]] <- raw[["squad"]][["misc"]] %>%
 
 # matches
 
-tidy[["matches"]] <- raw[["matches"]] %>%
+tidy[["fbref"]][["matches"]] <- raw[["fbref"]][["matches"]] %>%
   separate("Score",c("GoalsHome","GoalsAway"),sep="[:punct:]") %>%
   rename(
     "xGHome"="xG...6",
