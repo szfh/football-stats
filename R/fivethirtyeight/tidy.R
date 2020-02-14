@@ -1,6 +1,12 @@
-source(here::here("R","fbref","library.R"))
-source(here("R","fbref","tidy.R"))
-source(here("R","fivethirtyeight","scraper.R"))
+raw <- readRDS(file=here("data","raw-fivethirtyeight.rds"))
+
+if (!exists("tidy",inherits=FALSE)){
+  tidy <- list()
+}
+
+# source(here::here("R","fbref","library.R"))
+# source(here("R","fbref","tidy.R"))
+# source(here("R","fivethirtyeight","scraper.R"))
 
 change_name <- function(team){
   # browser()
