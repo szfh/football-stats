@@ -1,3 +1,6 @@
+raw <- readRDS(file=here("data","fbref","raw.rds"))
+tidy <- list()
+
 # player
 
 tidy[["player"]][["standard"]] <- raw[["player"]][["standard"]] %>%
