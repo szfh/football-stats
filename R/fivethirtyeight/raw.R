@@ -26,3 +26,5 @@ raw[["fivethirtyeight"]][["rankings"]] <- read.csv("https://projects.fivethirtye
 # raw[["fivethirtyeight"]][["matches"]] %>%
 #   filter(team1=="Southampton"|team2=="Southampton") %>%
 #   view()
+
+saveRDS(raw,file=here("data","raw-fivethirtyeight.rds"))
