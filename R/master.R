@@ -8,7 +8,7 @@ source(here("R","themes.R"))
 
 # tidy
 source(here("R","fbref","tidy.R"))
-# source(here("R","fivethirtyeight","tidy.R"))
+source(here("R","fivethirtyeight","tidy.R"))
 
 # join
 source(here("R","join","join.R"))
