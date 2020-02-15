@@ -2,7 +2,10 @@
 players <- reduce(tidy[["fbref"]][["player"]],full_join) %>%
   separate("Player",c("Player",NA),sep="\\\\",fill="right") %>%
   separate("Nation",c(NA,"Nation"),sep=" ",fill="right") %>%
-  separate("Pos",c("Pos1",NA,"Pos2"),sep=c(2,3),fill="right")
+  separate("Pos",c("Pos1",NA,"Pos2"),sep=c(2,3),fill="right") %>%
+  select(
+    -"Matches",
+  )
 
 # squad
 squad <- tidy[["fbref"]][["table"]] %>%
@@ -38,6 +41,9 @@ matches_long <- matches %>%
 
 # rm(raw,tidy)
 
-# matches_long %>%
-#   filter(Team=="Southampton") %>%
-#   view
+matches_long %>%
+  filter(Team=="Southampton") %>%
+  view
+
+players %>% head(20) %>% view
+squad %>% head(10) %>% view
