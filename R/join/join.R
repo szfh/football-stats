@@ -15,10 +15,21 @@ squad <- tidy[["fbref"]][["table"]] %>%
 matches <- tidy[["fbref"]][["matches"]] %>%
   left_join(tidy[["fivethirtyeight"]][["matches"]]) %>%
   rename(
-    xGHfbref=xGHome,
-    xGAfbref=xGAway,
-    xGH538=xg1,
-    xGA538=xg2,
+    xGHomefbref=xGHome,
+    xGAwayfbref=xGAway,
+    xGHome538=xg1,
+    xGAway538=xg2,
+    nsxGHome538=nsxg1,
+    nsxGAway538=nsxg2,
+  ) %>%
+  select(
+    "Wk":"Time",
+    "Home","Away",
+    "GoalsHome","GoalsAway",
+    "xGHomefbref","xGAwayfbref",
+    "xGHome538","xGAway538",
+    "spi1":"adj_score2",
+    everything(),
   )
 
 matches_long <- matches %>%
@@ -28,31 +39,29 @@ matches_long <- matches %>%
   left_join(matches) %>%
   mutate(
     Opposition=ifelse(HA=="Home",Away,Home),
-    GF=ifelse(HA=="Home",GoalsHome,GoalsAway),
-    GA=ifelse(HA=="Home",GoalsAway,GoalsHome),
-    xGFfbref=ifelse(HA=="Home",xGHfbref,xGAfbref),
-    xGAfbref=ifelse(HA=="Home",xGAfbref,xGHfbref),
-    xGF538=ifelse(HA=="Home",xGH538,xGA538),
-    xGA538=ifelse(HA=="Home",xGA538,xGH538),
+    GoalsF=ifelse(HA=="Home",GoalsHome,GoalsAway),
+    GoalsA=ifelse(HA=="Home",GoalsAway,GoalsHome),
+    xGFfbref=ifelse(HA=="Home",xGHomefbref,xGAwayfbref),
+    xGAfbref=ifelse(HA=="Home",xGAwayfbref,xGHomefbref),
+    xGF538=ifelse(HA=="Home",xGHome538,xGAway538),
+    xGA538=ifelse(HA=="Home",xGAway538,xGHome538),
+    spiF=ifelse(HA=="Home",spi1,spi2),
+    spiA=ifelse(HA=="Home",spi2,spi1),
+    probF=ifelse(HA=="Home",prob1,prob2),
+    probA=ifelse(HA=="Home",prob2,prob1),
+    proj_scoreF=ifelse(HA=="Home",proj_score1,proj_score2),
+    proj_scoreA=ifelse(HA=="Home",proj_score2,proj_score1),
+    importanceF=ifelse(HA=="Home",importance1,importance2),
+    importanceA=ifelse(HA=="Home",importance2,importance1),
+    nsxGF538=ifelse(HA=="Home",nsxGHome538,nsxGAway538),
+    nsxGA538=ifelse(HA=="Home",nsxGAway538,nsxGHome538),
+    adj_scoreF=ifelse(HA=="Home",adj_score1,adj_score2),
+    adj_scoreA=ifelse(HA=="Home",adj_score2,adj_score1),
   ) %>%
-  # select(
-    # -("xGH":"xGA"),
-    # -("Home":"Away"),
-  # ) %>%
-  view
+  select(
+    "Wk":"Time",
+    "HA":"adj_scoreA",
+    everything()
+  )
 
-# matches_join <- matches %>%
-#   left_join(spi_matches_rn) %>%
-#   filter(!is.na(score1)) %>%
-#   # select(Home) %>%
-#   # unique() %>%
-#   view
-
-# matches_long %>%
-#   filter(Team=="Southampton") %>%
-#   view
-
-# rm(raw,tidy)
-
-players %>% head(20) %>% view
-squad %>% head(10) %>% view
+rm(raw,tidy)
