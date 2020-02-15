@@ -13,7 +13,13 @@ squad <- tidy[["fbref"]][["table"]] %>%
 
 # matches
 matches <- tidy[["fbref"]][["matches"]] %>%
-  left_join(tidy[["fivethirtyeight"]][["matches"]])
+  left_join(tidy[["fivethirtyeight"]][["matches"]]) %>%
+  rename(
+    xGHfbref=xGHome,
+    xGAfbref=xGAway,
+    xGH538=xg1,
+    xGA538=xg2,
+  )
 
 matches_long <- matches %>%
   pivot_longer(cols=c(Home,Away),
@@ -24,13 +30,16 @@ matches_long <- matches %>%
     Opposition=ifelse(HA=="Home",Away,Home),
     GF=ifelse(HA=="Home",GoalsHome,GoalsAway),
     GA=ifelse(HA=="Home",GoalsAway,GoalsHome),
-    xGF=ifelse(HA=="Home",xGHome,xGAway),
-    xGA=ifelse(HA=="Home",xGAway,xGHome),
+    xGFfbref=ifelse(HA=="Home",xGHfbref,xGAfbref),
+    xGAfbref=ifelse(HA=="Home",xGAfbref,xGHfbref),
+    xGF538=ifelse(HA=="Home",xGH538,xGA538),
+    xGA538=ifelse(HA=="Home",xGA538,xGH538),
   ) %>%
-  select(
-    -("xGHome":"xGAway"),
-    -("Home":"Away"),
-  )
+  # select(
+    # -("xGH":"xGA"),
+    # -("Home":"Away"),
+  # ) %>%
+  view
 
 # matches_join <- matches %>%
 #   left_join(spi_matches_rn) %>%
@@ -39,11 +48,11 @@ matches_long <- matches %>%
 #   # unique() %>%
 #   view
 
-# rm(raw,tidy)
+# matches_long %>%
+#   filter(Team=="Southampton") %>%
+#   view
 
-matches_long %>%
-  filter(Team=="Southampton") %>%
-  view
+# rm(raw,tidy)
 
 players %>% head(20) %>% view
 squad %>% head(10) %>% view
