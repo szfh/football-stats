@@ -1,15 +1,7 @@
 raw <- readRDS(file=here("data","raw-fivethirtyeight.rds"))
 
-if (!exists("tidy",inherits=FALSE)){
-  tidy <- list()
-}
-
-# source(here::here("R","fbref","library.R"))
-# source(here("R","fbref","tidy.R"))
-# source(here("R","fivethirtyeight","scraper.R"))
-
 change_name <- function(team){
-  # browser()
+
   team <- case_when(
     team=="AFC Bournemouth" ~ "Bournemouth",
     team=="Brighton and Hove Albion" ~ "Brighton",
@@ -23,7 +15,10 @@ change_name <- function(team){
   )
   
   return(team)
+}
 
+if (!exists("tidy",inherits=FALSE)){
+  tidy <- list()
 }
 
 tidy[["fivethirtyeight"]][["matches"]] <- raw[["fivethirtyeight"]][["matches"]] %>%
@@ -39,3 +34,5 @@ tidy[["fivethirtyeight"]][["matches"]] <- raw[["fivethirtyeight"]][["matches"]] 
     "Date"="date",
   ) %>%
   select (-c("score1","score2","league_id"))
+
+rm(change_name)
