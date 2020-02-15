@@ -86,8 +86,6 @@ col_medium <- few_pal("Medium")(8)
 col_dark <- few_pal("Dark")(8)
 col_gdocs <- gdocs_pal()(10)
 col_sfc <- c("#D71920","#ED5C5C","#D3D3D3")
-sfc <- "#D71920"
-sfc_light <- "#ED5C5C"
 
 # captions
 caption <- c(
