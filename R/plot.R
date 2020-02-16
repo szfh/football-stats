@@ -339,10 +339,10 @@ squad %>%
   ggplot(aes(x=0,y=xG)) +
   geom_text_repel(
     aes(label=ifelse(focus,Squad,"")),
-    size=4,
+    size=rel(5),
     nudge_x=0.5,
     direction="y",
-    hjust=0,
+    hjust=0.5,
     segment.size=0
   ) +
   geom_point(aes(fill=Squad),size=4,shape=21,colour="black") +
@@ -366,7 +366,7 @@ ggsave(here("plots","EPL","xGFxGA1_focus.jpg"))
 
 squad %>%
   ggplot(aes(x=npxG,y=xGA)) +
-  geom_text_repel(aes(label=Squad),size=2) +
+  geom_text_repel(aes(label=Squad),size=rel(3)) +
   geom_point(aes(colour=Squad),size=3,shape=4) +
   theme_epl() +
   labs(title="Expected goals",
