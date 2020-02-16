@@ -307,7 +307,7 @@ squad %>%
     nudge_x=0.5,
     direction="y",
     hjust=0,
-    segment.size=0
+    segment.size=0.5,
   ) +
   geom_point(aes(fill=Squad),size=4,shape=21,colour="black") +
   theme_epl() +
@@ -343,7 +343,7 @@ squad %>%
     nudge_x=0.5,
     direction="y",
     hjust=0.5,
-    segment.size=0
+    segment.size=0.5,
   ) +
   geom_point(aes(fill=Squad),size=4,shape=21,colour="black") +
   theme_epl() +
