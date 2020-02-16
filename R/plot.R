@@ -183,6 +183,25 @@ players %>%
   scale_x_reverse(breaks=seq(-2,2,0.1),expand=expand_scale(add=0.01))
 ggsave(here("plots","SFC","xGD90.jpg"))
 
+players %>%
+  filter(Squad=="Southampton") %>%
+  filter(!is.na(Left)&!is.na(Right)) %>%
+  mutate(Passes=Left+Right) %>%
+  mutate(Player=fct_reorder(Player,Passes)) %>%
+  mutate(MaxPass=ifelse(Left>Right,Left,Right)) %>%
+  mutate(Ratio=(MaxPass/Passes)) %>%
+  ggplot(aes(y=Player)) +
+  geom_segment(aes(x=0,xend=-Left,y=Player,yend=Player),size=4,alpha=0.8,colour=col_medium[[1]]) +
+  geom_segment(aes(x=0,xend=Right,y=Player,yend=Player),size=4,alpha=0.8,colour=col_medium[[8]]) +
+  geom_label(aes(x=0,y=Player,label=sprintf("%2.0f%%",100*Ratio)),size=2) +
+  theme_sfc() +
+  labs(title="L/R footed passes",
+       x=element_blank(),
+       y=element_blank(),
+       caption=caption[[1]]) +
+  scale_x_continuous(breaks=seq(-2000,2000,200),labels=abs(seq(-2000,2000,200)),expand=expand_scale(add=c(20)))
+ggsave(here("plots","SFC","PassFootedness.jpg"))
+
 # Premier League player plots
 
 players %>%
