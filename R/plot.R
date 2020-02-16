@@ -303,11 +303,13 @@ squad %>%
   ggplot(aes(x=0,y=xG)) +
   geom_text_repel(
     aes(label=Squad),
-    size=4,
+    size=rel(3),
     nudge_x=0.5,
     direction="y",
     hjust=0,
-    segment.size=0.5,
+    segment.size=0.4,
+    segment.alpha=0.8,
+    box.padding=0.05,
   ) +
   geom_point(aes(fill=Squad),size=4,shape=21,colour="black") +
   theme_epl() +
@@ -343,7 +345,8 @@ squad %>%
     nudge_x=0.5,
     direction="y",
     hjust=0.5,
-    segment.size=0.5,
+    segment.size=0.4,
+    box.padding=0.05,
   ) +
   geom_point(aes(fill=Squad),size=4,shape=21,colour="black") +
   theme_epl() +
