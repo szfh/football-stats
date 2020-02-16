@@ -329,6 +329,42 @@ squad %>%
 ggsave(here("plots","EPL","xGFxGA1.jpg"))
 
 squad %>%
+  select(Squad,xG,xGA) %>%
+  mutate(xGA=-xGA) %>%
+  mutate(focus=case_when(Squad %in% c("Southampton") ~ TRUE,
+                         TRUE ~ FALSE)) %>%
+  mutate(Squad=case_when((focus == TRUE) ~ Squad,
+                         TRUE ~ "Other")) %>%
+  pivot_longer(cols=c(xG,xGA),names_to="key",values_to="xG") %>%
+  ggplot(aes(x=0,y=xG)) +
+  geom_text_repel(
+    aes(label=ifelse(focus,Squad,"")),
+    size=4,
+    nudge_x=0.5,
+    direction="y",
+    hjust=0,
+    segment.size=0
+  ) +
+  geom_point(aes(fill=Squad),size=4,shape=21,colour="black") +
+  theme_epl() +
+  theme(
+    strip.text=element_text(size=rel(1.2)),
+    axis.line.x=element_blank(),
+    axis.ticks.x=element_blank(),
+    axis.text.x=element_blank(),
+    panel.grid.major.x=element_blank(),
+  ) +
+  facet_wrap("key",scales="free") +
+  labs(title=element_blank(),
+       x=element_blank(),
+       y=element_blank(),
+       caption=caption[[1]]) +
+  scale_x_continuous(limit=c(0,1)) +
+  scale_y_continuous(breaks=seq(-100,100,5),labels=abs(seq(-100,100,5)),expand=expand_scale(add=c(1))) +
+  scale_fill_manual(values=palette_epl())
+ggsave(here("plots","EPL","xGFxGA1_focus.jpg"))
+
+squad %>%
   ggplot(aes(x=npxG,y=xGA)) +
   geom_text_repel(aes(label=Squad),size=2) +
   geom_point(aes(colour=Squad),size=3,shape=4) +
