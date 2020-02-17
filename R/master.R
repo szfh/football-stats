@@ -3,12 +3,12 @@ source(here::here("R","library.R"))
 source(here("R","themes.R"))
 
 # raw
-# source(here("R","fbref","raw.R"))
-# source(here("R","fivethirtyeight","raw.R"))
+# source(here("R","raw","fbref.R"))
+# source(here("R","raw","fivethirtyeight.R"))
 
 # tidy
-source(here("R","fbref","tidy.R"))
-source(here("R","fivethirtyeight","tidy.R"))
+source(here("R","tidy","fbref.R"))
+source(here("R","tidy","fivethirtyeight.R"))
 
 # join
 source(here("R","join","join.R"))
