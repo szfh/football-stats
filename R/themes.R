@@ -31,6 +31,7 @@ theme_epl <- theme_sfc
 # palettes
 palette_epl <- function(team_name){
   palette_epl <- c(
+    `Other` = "lightgrey",
     `Arsenal` = "#EF0107",
     `Aston Villa` = "#670E36",
     `Brighton & Hove Albion` = "#0057B8",
