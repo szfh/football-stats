@@ -14,4 +14,4 @@ source(here("R","tidy","fivethirtyeight.R"))
 source(here("R","join","join.R"))
 
 # graph
-source(here("R","plot.R"))
+source(here("R","plot_sfc.R"))
