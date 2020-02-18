@@ -2,23 +2,25 @@
 
 players %>%
   filter(Gls==0) %>%
-  filter(Pos1=="FW" | Pos2=="FW") %>%
-  filter(Sh>=3&npxG>=0.3) %>%
-  # filter(Player!="David McGoldrick") %>%
+  select(Player,Squad,Sh,Gls,npxG) %>%
+  mutate(focus=case_when(percent_rank(Sh)>0.9 ~ TRUE,
+                         percent_rank(npxG)>0.9 ~ TRUE,
+                         TRUE ~ FALSE
+  )) %>%
+  mutate(Squad=ifelse(focus,Squad,"Other")) %>%
   ggplot(aes(x=npxG,y=Sh)) +
   geom_blank(data=data.frame(npxG=0,Sh=0)) +
-  geom_text_repel(aes(label=Player),size=2) +
-  geom_point(aes(colour=Squad),size=3,shape=4) +
+  geom_point(aes(fill=Squad),size=3,shape=21,colour="black",position=position_jitter(0.01)) +
+  geom_text_repel(aes(label=ifelse(focus,Player,"")),size=2) +
+  
   theme_epl() +
-  labs(title="Who hasn't scored yet?",
-       subtitle="Forwards with 3+ shots, 0 goals",
+  labs(title="Players with no goals",
        x="Expected goals",
        y="Shots",
        caption=caption[[1]]) +
-  scale_colour_manual(values=palette_epl()) +
-  expand_limits(x=0,y=10) +
-  scale_x_continuous(breaks=seq(0,30,0.5),expand=expand_scale(add=c(0,0.2))) +
-  scale_y_continuous(breaks=seq(0,50,5),expand=expand_scale(add=c(0,0.5)))
+  scale_fill_manual(values=palette_epl()) +
+  scale_x_continuous(breaks=seq(0,50,1),expand=expand_scale(add=c(0,0.2))) +
+  scale_y_continuous(breaks=seq(0,200,5),expand=expand_scale(add=c(0,2)))
 ggsave(here("plots","EPL","NoGoals.jpg"))
 
 # Premier League team plots
