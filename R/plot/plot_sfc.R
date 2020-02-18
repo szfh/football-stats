@@ -43,7 +43,7 @@ players %>%
   mutate(focus=ifelse(npxG>=1|xA>=1,TRUE,FALSE)) %>%
   ggplot(aes(x=npxG,y=xA)) +
   geom_blank(data=data.frame(npxG=0,xA=0)) +
-  geom_point(aes(fill=focus),shape=21,size=4,alpha=0.8,colour="black") +
+  geom_point(aes(fill=focus),shape=21,size=4,alpha=0.8,colour=col_sfc[[4]]) +
   geom_text_repel(aes(label=ifelse(focus,Player,"")),size=rel(4)) +
   theme_sfc() +
   labs(title="Southampton xG/xA",
