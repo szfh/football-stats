@@ -5,18 +5,16 @@ output: github_document
 # date: 2019-07-28
 ---
 
-## Football Statistics
-
-A repository to keep track of some football stats work.
+## Football analytics
 
 ### Resources
 
 1. [**FC rSTATS**: Tracking Data Tutorials](https://github.com/FCrSTATS/TrackingDataTutorials)
 1. [**FC rSTATS**: Scraping Tutorials](https://github.com/FCrSTATS/ScrapingTutorials)
-1. [Possibly useful CSS selector tutorial](http://flukeout.github.io/)
 1. [**Statsbomb Messi data guide**](https://statsbomb.com/2019/07/messi-data-release-part-1-working-with-statsbomb-data-in-r/)
 1. [**Visualise the EPL**](https://ryo-n7.github.io/2019-11-21-visualize-EPL-part-1/) Ryo-n7
-1. [**Scraping fbref**](https://chmartin.github.io/2019/02/18/EPL-History-Scraping.html)
+1. [Game States](https://7500toholte.sbnation.com/platform/amp/2019/8/21/20812030/expected-villa-afc-bournemouth-game-states-responsible-analysis)
+1. [Deserved Goals 2.0](https://8yards8feet.wordpress.com/2019/09/07/deserved-goals-2-0/amp/)
 
 ### Stats websites
 
@@ -27,20 +25,15 @@ A repository to keep track of some football stats work.
 1. Sofascore
 1. Understat
 1. [s2stats](https://s2stats.home.blog/)
-1. [football-data.co.uk](https://www.football-data.co.uk/downloadm.php) Excel download
+1. [football-data.co.uk](https://www.football-data.co.uk/downloadm.php)
 
-### Concepts and resources
-
-1. [Visualise StatsBomb](https://ryo-n7.github.io/2019-08-21-visualize-soccer-statsbomb-part-1/)
-1. [Game States](https://7500toholte.sbnation.com/platform/amp/2019/8/21/20812030/expected-villa-afc-bournemouth-game-states-responsible-analysis)
-1. [Deserved Goals 2.0](https://8yards8feet.wordpress.com/2019/09/07/deserved-goals-2-0/amp/)
-
-## fbref plots
+## fbref data visualisation
 
 ```{r,include=F}
-file.copy(from="./plots/SFC/Minutes.jpg",to="./images/plot1.jpg")
-file.copy(from="./plots/SFC/SFCnpxGxA90.jpg",to="./images/plot2.jpg")
-file.copy(from="./plots/EPL/npG-xG.jpg",to="./images/plot3.jpg")
+# file.copy(from="./plots/SFC/Minutes.jpg",to="./images/plot1.jpg")
+file.copy(from=here::here("plots","SFC","Minutes.jpg"),to=here::here("images","plot1.jpg"))
+file.copy(from=here::here("plots","SFC","PassesCompleted.jpg"),to=here::here("images","plot2.jpg"))
+file.copy(from=here::here("plots","EPL","xG1.jpg"),to=here::here("images","plot3.jpg"))
 ```
 
 <center>
