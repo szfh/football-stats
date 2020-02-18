@@ -183,6 +183,44 @@ ggsave(here("plots","SFC","xGD90.jpg"))
 
 players %>%
   filter(Squad=="Southampton") %>%
+  pivot_longer(cols=c(ShortCmp,MediumCmp,LongCmp),names_to="PassType",values_to="Cmp") %>%
+  mutate(PassType=factor(PassType,labels=c("Short","Medium","Long"))) %>%
+  group_by(PassType) %>%
+  mutate(focus=case_when(percent_rank(Cmp)>0.4 ~ TRUE,
+                         TRUE ~ FALSE)) %>%
+  select(Player,Squad,PassType,Cmp,focus) %>%
+  ggplot(aes(x=0,y=Cmp)) +
+  geom_text_repel(
+    aes(label=ifelse(focus,Player,"")),
+    size=rel(3),
+    nudge_x=0.3,
+    direction="y",
+    hjust=0,
+    segment.size=0.4,
+    box.padding=0.05,
+  ) +
+  geom_point(aes(colour=focus,fill=focus),shape=21,size=2) +
+  theme_sfc() +
+  theme(
+    axis.line.x=element_blank(),
+    axis.ticks.x=element_blank(),
+    axis.text.x=element_blank(),
+    axis.title.x=element_blank(),
+    panel.grid.major.x=element_blank(),
+  ) +
+  facet_wrap("PassType",scales="free") +
+  labs(title="Completed passes",
+       x=element_blank(),
+       y=element_blank(),
+       caption=caption[[1]]) +
+  scale_x_continuous(limit=c(0,1)) +
+  scale_y_continuous() +
+  scale_colour_manual(values=c("TRUE"=col_sfc[[4]],"FALSE"=col_sfc[[3]])) +
+  scale_fill_manual(values=c("TRUE"=col_sfc[[1]],"FALSE"=col_sfc[[3]]))
+ggsave(here("plots","SFC","PassesCompleted.jpg"))
+
+players %>%
+  filter(Squad=="Southampton") %>%
   filter(!is.na(Left)&!is.na(Right)) %>%
   mutate(Passes=Left+Right) %>%
   mutate(Player=fct_reorder(Player,Passes)) %>%
