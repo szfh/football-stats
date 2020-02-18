@@ -1,4 +1,4 @@
-raw <- readRDS(file=here("data","fbref","raw.rds"))
+raw <- readRDS(file=here("data","raw-fbref.rds"))
 
 if (!exists("tidy",inherits=FALSE)){
   tidy <- list()
