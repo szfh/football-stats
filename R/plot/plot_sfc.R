@@ -10,7 +10,7 @@ players %>%
     ) %>%
   mutate(Pos1=case_when(
     Player %in% c("Kevin Danso","Jannik Vestergaard","Jan Bednarek","Jack Stephens","Maya Yoshida") ~ "CB",
-    Player %in% c("Ryan Bertrand","Cédric Soares","Yan Valery") ~ "FB",
+    Player %in% c("Ryan Bertrand","Cédric Soares","Yan Valery","Kyle Walker-Peters") ~ "FB",
     Player %in% c("James Ward-Prowse","Pierre Højbjerg","Oriol Romeu","William Smallbone") ~ "DM",
     Player %in% c("Nathan Redmond","Stuart Armstrong","Sofiane Boufal","Moussa Djenepo") ~ "AM",
     TRUE ~ Pos1)) %>%
