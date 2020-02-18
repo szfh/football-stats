@@ -71,8 +71,8 @@ palette_sfc <- function(p){
   palette_sfc <- c(
     `main` = "#D71920", # normal
     `light` = "#ED5C5C", # light
-    `black` = "#000000",
-    `lightgrey` = "#D3D3D3"
+    `lightgrey` = "#D3D3D3",
+    `black` = "#000000"
   )
   
   # if(is.null(palette_sfc))
@@ -86,7 +86,7 @@ col_light <- few_pal("Light")(8)
 col_medium <- few_pal("Medium")(8)
 col_dark <- few_pal("Dark")(8)
 col_gdocs <- gdocs_pal()(10)
-col_sfc <- c("#D71920","#ED5C5C","#D3D3D3")
+col_sfc <- c("#D71920","#ED5C5C","#D3D3D3","#000000")
 
 # captions
 caption <- c(
