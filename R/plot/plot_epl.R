@@ -10,7 +10,7 @@ players %>%
   mutate(Squad=ifelse(focus,Squad,"Other")) %>%
   ggplot(aes(x=npxG,y=Sh)) +
   geom_blank(data=data.frame(npxG=0,Sh=0)) +
-  geom_point(aes(fill=Squad),size=3,shape=21,colour="black",position=position_jitter(0.01)) +
+  geom_point(aes(fill=Squad),size=3,shape=21,colour="black",position=position_jitter(0.005)) +
   geom_text_repel(aes(label=ifelse(focus,Player,"")),size=2) +
   theme_epl() +
   labs(title="Players with no goals",
