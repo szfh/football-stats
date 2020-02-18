@@ -7,7 +7,7 @@ players %>%
     `Mn/Sub`=replace(`Mn/Sub`,is.na(`Mn/Sub`),0),
     MinSub=Subs*`Mn/Sub`,
     MinStart=Min-MinSub,
-    ) %>%
+  ) %>%
   mutate(Pos1=case_when(
     Player %in% c("Kevin Danso","Jannik Vestergaard","Jan Bednarek","Jack Stephens","Maya Yoshida") ~ "CB",
     Player %in% c("Ryan Bertrand","Cédric Soares","Yan Valery","Kyle Walker-Peters") ~ "FB",
@@ -19,7 +19,6 @@ players %>%
   ggplot(aes(x=Min,y=Player)) +
   geom_segment(aes(y=Player,yend=Player,x=0,xend=MinStart),colour=col_sfc[[1]],size=3.5,alpha=0.8) +
   geom_segment(aes(y=Player,yend=Player,x=MinStart,xend=Min),colour=col_sfc[[1]],size=3.5,alpha=0.3) +
-  # geom_label(aes(label=Min),colour=col_sfc[[2]],size=2) +
   theme_sfc() +
   labs(title="League minutes",
        subtitle="(from start / from bench)",
@@ -78,43 +77,79 @@ ggsave(here("plots","SFC","xGxA90.jpg"))
 
 players %>%
   filter(Squad=="Southampton") %>%
-  filter(!is.na(Sh)|!is.na(KP)) %>%
-  mutate(focus=ifelse(Sh>=10|KP>=10,TRUE,FALSE)) %>%
-  ggplot(aes(x=Sh,y=KP)) +
-  geom_blank(data=data.frame(Sh=0,KP=0)) +
-  geom_point(aes(fill=focus),shape=21,size=3,alpha=0.8,colour="black") +
-  geom_text_repel(aes(label=ifelse(focus,Player,"")),size=rel(4)) +
+  pivot_longer(cols=c(Sh,KP),names_to="ShKP",values_to="n") %>%
+  mutate(ShKP=factor(ShKP,levels=c("Sh","KP"),labels=c("Shot","Pass leading to shot"))) %>%
+  group_by(ShKP) %>%
+  mutate(focus=case_when(percent_rank(n)>0.4 ~ TRUE,
+                         TRUE ~ FALSE)) %>%
+  ggplot(aes(x=0,y=n)) +
+  geom_text_repel(
+    aes(label=ifelse(focus,Player,"")),
+    size=rel(3),
+    nudge_x=0.3,
+    direction="y",
+    hjust=0,
+    segment.size=0.4,
+    box.padding=0.05,
+  ) +
+  geom_point(aes(colour=focus,fill=focus),shape=21,size=2) +
   theme_sfc() +
-  labs(title="Southampton shots/shot assists",
-       x="Shots",
-       y="Passes leading to shot",
+  theme(
+    axis.line.x=element_blank(),
+    axis.ticks.x=element_blank(),
+    axis.text.x=element_blank(),
+    axis.title.x=element_blank(),
+    panel.grid.major.x=element_blank(),
+  ) +
+  facet_wrap("ShKP",scales="free") +
+  labs(title="Shots / Passes",
+       x=element_blank(),
+       y=element_blank(),
        caption=caption[[1]]) +
-  scale_x_continuous(breaks=seq(0,300,10),expand=expand_scale(add=c(0,2))) +
-  scale_y_continuous(breaks=seq(0,300,10),expand=expand_scale(add=c(0,2))) +
-  scale_fill_manual(values=c("TRUE"=col_sfc[[1]],"FALSE"=col_sfc[[3]])) +
-  coord_fixed()
+  scale_x_continuous(limit=c(0,1)) +
+  scale_y_continuous() +
+  scale_colour_manual(values=c("TRUE"=col_sfc[[4]],"FALSE"=col_sfc[[3]])) +
+  scale_fill_manual(values=c("TRUE"=col_sfc[[1]],"FALSE"=col_sfc[[3]]))
 ggsave(here("plots","SFC","ShotsKP.jpg"))
 
 players %>%
   filter(Squad=="Southampton") %>%
-  filter(!is.na(Sh)|!is.na(KP)) %>%
+  filter(Min>0) %>%
   mutate(Sh90=90*Sh/Min) %>%
   mutate(KP90=90*KP/Min) %>%
-  mutate(focus=ifelse(Sh90>=0.5|KP90>=0.5,TRUE,FALSE)) %>%
-  ggplot(aes(x=Sh90,y=KP90)) +
-  geom_blank(data=data.frame(Sh90=0,KP90=0)) +
-  geom_point(aes(fill=focus),shape=21,size=3,alpha=0.8,colour="black") +
-  geom_text_repel(aes(label=ifelse(focus,Player,"")),size=rel(4)) +
+  pivot_longer(cols=c(Sh90,KP90),names_to="ShKP90",values_to="n") %>%
+  mutate(ShKP90=factor(ShKP90,levels=c("Sh90","KP90"),labels=c("Shot","Pass leading to shot"))) %>%
+  group_by(ShKP90) %>%
+  mutate(focus=case_when(percent_rank(n)>0.4 ~ TRUE,
+                         TRUE ~ FALSE)) %>%
+  ggplot(aes(x=0,y=n)) +
+  geom_text_repel(
+    aes(label=ifelse(focus,Player,"")),
+    size=rel(3),
+    nudge_x=0.3,
+    direction="y",
+    hjust=0,
+    segment.size=0.4,
+    box.padding=0.05,
+  ) +
+  geom_point(aes(colour=focus,fill=focus),shape=21,size=2) +
   theme_sfc() +
-  labs(title="Southampton shots/shot assists",
-       subtitle="(per 90 mins)",
-       x="Shots",
-       y="Passes leading to shot",
+  theme(
+    axis.line.x=element_blank(),
+    axis.ticks.x=element_blank(),
+    axis.text.x=element_blank(),
+    axis.title.x=element_blank(),
+    panel.grid.major.x=element_blank(),
+  ) +
+  facet_wrap("ShKP90",scales="free") +
+  labs(title="Shots / Passes per 90 minutes",
+       x=element_blank(),
+       y=element_blank(),
        caption=caption[[1]]) +
-  scale_x_continuous(breaks=seq(0,20,0.5),expand=expand_scale(add=c(0,0.2))) +
-  scale_y_continuous(breaks=seq(0,20,0.5),expand=expand_scale(add=c(0,0.2))) +
-  scale_fill_manual(values=c("TRUE"=col_sfc[[1]],"FALSE"=col_sfc[[3]])) +
-  coord_fixed()
+  scale_x_continuous(limit=c(0,1)) +
+  scale_y_continuous() +
+  scale_colour_manual(values=c("TRUE"=col_sfc[[4]],"FALSE"=col_sfc[[3]])) +
+  scale_fill_manual(values=c("TRUE"=col_sfc[[1]],"FALSE"=col_sfc[[3]]))
 ggsave(here("plots","SFC","ShotsKP90.jpg"))
 
 players %>%
