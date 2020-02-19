@@ -223,21 +223,6 @@ players %>%
   scale_fill_manual(values=c("TRUE"=col_medium[[3]],"FALSE"=col_medium[[8]]))
 ggsave(here("plots","SFC","GD90.jpg"))
 
-# players %>%
-#   filter(Squad=="Southampton") %>%
-#   filter(!is.na(`xG+/-`)) %>%
-#   mutate(Player=fct_reorder(Player,onxGA,.desc=TRUE)) %>%
-#   mutate(Pos=ifelse(onxGA>=0,TRUE,FALSE)) %>%
-#   ggplot(aes(x=onxGA,y=Player,colour=Pos)) +
-#   geom_segment(aes(x=0,xend=onxGA,y=Player,yend=Player),size=4,alpha=0.8) +
-#   theme_sfc() +
-#   labs(title="On-pitch expected goals against",
-#        x="xG difference",
-#        y=element_blank(),
-#        caption="statsbomb/fbref") +
-#   scale_colour_manual(values=c("TRUE"=col_medium[[3]],"FALSE"=col_medium[[8]]))
-# ggsave(here("plots","SFC","GoalsAgainstxG.jpg"))
-
 players %>%
   filter(Squad=="Southampton") %>%
   pivot_longer(cols=c(ShortCmp,MediumCmp,LongCmp),names_to="PassType",values_to="Cmp") %>%
