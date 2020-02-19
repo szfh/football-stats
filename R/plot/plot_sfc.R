@@ -142,7 +142,8 @@ players %>%
     panel.grid.major.x=element_blank(),
   ) +
   facet_wrap("ShKP90",scales="free") +
-  labs(title="Shots / Passes per 90 minutes",
+  labs(title="Shots / Passes",
+       subtitle="(per 90 mins)",
        x=element_blank(),
        y=element_blank(),
        caption=caption[[1]]) +
