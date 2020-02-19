@@ -154,19 +154,74 @@ ggsave(here("plots","SFC","ShotsKP90.jpg"))
 
 players %>%
   filter(Squad=="Southampton") %>%
-  filter(!is.na(`Gls+/-`)) %>%
-  mutate(Player=fct_reorder(Player,`Gls+/-`)) %>%
-  mutate(Pos=ifelse(`Gls+/-`>=0,TRUE,FALSE)) %>%
-  ggplot(aes(x=`Gls+/-`,y=Player,colour=Pos)) +
-  geom_segment(aes(x=0,xend=`Gls+/-`,y=Player,yend=Player),size=4,alpha=0.8) +
+  select(Player,"onG":"xGOn-Off") %>%
+  pivot_longer(cols=c("Gls+/-","xG+/-"),names_to="PM",values_to="n") %>%
+  mutate(PM=factor(PM,levels=c("Gls+/-","xG+/-"),labels=c("Goals +/-","xG +/-"))) %>%
+  mutate(PlusMinus=ifelse(n>=0,TRUE,FALSE)) %>%
+  ggplot(aes(x=0,y=n)) +
+  geom_text_repel(
+    aes(label=Player),
+    size=rel(3),
+    nudge_x=0.4,
+    direction="y",
+    hjust=0,
+    segment.size=0.4,
+    box.padding=0.05,
+  ) +
+  geom_point(aes(colour=PlusMinus,fill=PlusMinus),shape=21,size=3,colour="black") +
   theme_sfc() +
+  theme(
+    axis.line.x=element_blank(),
+    axis.ticks.x=element_blank(),
+    axis.text.x=element_blank(),
+    axis.title.x=element_blank(),
+    panel.grid.major.x=element_blank(),
+  ) +
+  facet_wrap("PM",scales="free") +
   labs(title="On-pitch goal difference",
        x=element_blank(),
-       y="Goals scored - Goals conceded",
+       y=element_blank(),
        caption=caption[[1]]) +
-  scale_colour_manual(values=c("TRUE"=col_medium[[3]],"FALSE"=col_medium[[8]])) +
-  scale_x_reverse(breaks=seq(-100,100,2),expand=expand_scale(add=0.1))
+  scale_x_continuous(limit=c(0,1)) +
+  scale_y_continuous() +
+  scale_fill_manual(values=c("TRUE"=col_medium[[3]],"FALSE"=col_medium[[8]]))
 ggsave(here("plots","SFC","GD.jpg"))
+
+players %>%
+  filter(Squad=="Southampton") %>%
+  select(Player,"onG":"xGOn-Off") %>%
+  pivot_longer(cols=c("Gls+/-90","xG+/-90"),names_to="PM",values_to="n") %>%
+  mutate(PM=factor(PM,levels=c("Gls+/-90","xG+/-90"),labels=c("Goals +/-","xG +/-"))) %>%
+  mutate(PlusMinus=ifelse(n>=0,TRUE,FALSE)) %>%
+  ggplot(aes(x=0,y=n)) +
+  geom_text_repel(
+    aes(label=Player),
+    size=rel(3),
+    nudge_x=0.4,
+    direction="y",
+    hjust=0,
+    segment.size=0.4,
+    box.padding=0.05,
+  ) +
+  geom_point(aes(colour=PlusMinus,fill=PlusMinus),shape=21,size=3,colour="black") +
+  theme_sfc() +
+  theme(
+    axis.line.x=element_blank(),
+    axis.ticks.x=element_blank(),
+    axis.text.x=element_blank(),
+    axis.title.x=element_blank(),
+    panel.grid.major.x=element_blank(),
+  ) +
+  facet_wrap("PM",scales="free") +
+  labs(title="On-pitch goal difference",
+       subtitle="(per 90 mins)",
+       x=element_blank(),
+       y=element_blank(),
+       caption=caption[[1]]) +
+  scale_x_continuous(limit=c(0,1)) +
+  scale_y_continuous() +
+  scale_fill_manual(values=c("TRUE"=col_medium[[3]],"FALSE"=col_medium[[8]]))
+ggsave(here("plots","SFC","GD90.jpg"))
 
 # players %>%
 #   filter(Squad=="Southampton") %>%
@@ -182,39 +237,6 @@ ggsave(here("plots","SFC","GD.jpg"))
 #        caption="statsbomb/fbref") +
 #   scale_colour_manual(values=c("TRUE"=col_medium[[3]],"FALSE"=col_medium[[8]]))
 # ggsave(here("plots","SFC","GoalsAgainstxG.jpg"))
-
-players %>%
-  filter(Squad=="Southampton") %>%
-  filter(!is.na(`xG+/-`)) %>%
-  mutate(Player=fct_reorder(Player,`xG+/-`)) %>%
-  mutate(Pos=ifelse(`xG+/-`>=0,TRUE,FALSE)) %>%
-  ggplot(aes(x=`xG+/-`,y=Player,colour=Pos)) +
-  geom_segment(aes(x=0,xend=`xG+/-`,y=Player,yend=Player),size=4,alpha=0.8) +
-  theme_sfc() +
-  labs(title="On-pitch expected goals difference",
-       x="xG difference",
-       y=element_blank(),
-       caption=caption[[1]]) +
-  scale_colour_manual(values=c("TRUE"=col_medium[[3]],"FALSE"=col_medium[[8]])) +
-  scale_x_reverse(breaks=seq(-100,100,2),expand=expand_scale(add=0.1))
-ggsave(here("plots","SFC","xGD.jpg"))
-
-players %>%
-  filter(Squad=="Southampton") %>%
-  filter(!is.na(`xG+/-90`)) %>%
-  mutate(Player=fct_reorder(Player,`xG+/-90`)) %>%
-  mutate(Pos=ifelse(`xG+/-90`>=0,TRUE,FALSE)) %>%
-  ggplot(aes(x=`xG+/-90`,y=Player,colour=Pos)) +
-  geom_segment(aes(x=0,xend=`xG+/-90`,y=Player,yend=Player),size=4,alpha=0.8) +
-  theme_sfc() +
-  labs(title="On-pitch expected goals difference",
-       subtitle="(per 90 mins)",
-       x=element_blank(),
-       y="xG difference per 90 minutes",
-       caption=caption[[1]]) +
-  scale_colour_manual(values=c("TRUE"=col_medium[[3]],"FALSE"=col_medium[[8]])) +
-  scale_x_reverse(breaks=seq(-2,2,0.1),expand=expand_scale(add=0.01))
-ggsave(here("plots","SFC","xGD90.jpg"))
 
 players %>%
   filter(Squad=="Southampton") %>%
