@@ -227,7 +227,7 @@ ggsave(here("plots","SFC","GD90.jpg"))
 players %>%
   filter(Squad=="Southampton") %>%
   pivot_longer(cols=c(ShortCmp,MediumCmp,LongCmp),names_to="PassType",values_to="Cmp") %>%
-  mutate(PassType=factor(PassType,labels=c("Short","Medium","Long"))) %>%
+  mutate(PassType=factor(PassType,levels=c("ShortCmp","MediumCmp","LongCmp"),labels=c("Short (<5 yards)","Medium (5-25 yards)","Long (>25 yards)"))) %>%
   group_by(PassType) %>%
   mutate(focus=case_when(percent_rank(Cmp)>0.4 ~ TRUE,
                          TRUE ~ FALSE)) %>%
