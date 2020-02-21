@@ -75,28 +75,35 @@ squad %>%
 ggsave(here("plots","EPL","xG2.jpg"))
 
 squad %>%
-  mutate(Squad=fct_reorder(Squad,`np:G-xG`)) %>%
-  ggplot(aes(x=Squad,y=`np:G-xG`,colour=Squad)) +
-  geom_segment(aes(x=0,xend=`np:G-xG`,y=Squad,yend=Squad),size=4,alpha=0.8) +
+  select(Squad,GDiff,xGDiff) %>%
+  pivot_longer(cols=c(GDiff,xGDiff),names_to="key",values_to="GD") %>%
+  mutate(key=factor(key,levels=c("GDiff","xGDiff"),labels=c("Goal Difference","Expected Goal Difference"))) %>%
+  ggplot(aes(x=0,y=GD)) +
+  geom_text_repel(
+    aes(label=Squad),
+    size=rel(3),
+    nudge_x=0.5,
+    direction="y",
+    hjust=0,
+    segment.size=0.4,
+    segment.alpha=0.8,
+    box.padding=0.05,
+  ) +
+  geom_point(aes(fill=Squad),size=4,shape=21,colour="black") +
   theme_epl() +
-  labs(title="Expected goals over/underperformance",
+  theme(
+    strip.text=element_text(size=rel(1.2)),
+    axis.line.x=element_blank(),
+    axis.ticks.x=element_blank(),
+    axis.text.x=element_blank(),
+    panel.grid.major.x=element_blank(),
+  ) +
+  facet_wrap("key",scales="free") +
+  labs(title=element_blank(),
        x=element_blank(),
        y=element_blank(),
        caption=caption[[1]]) +
-  scale_colour_manual(values=palette_epl()) +
-  scale_x_continuous(breaks=seq(-50,50,2),expand=expand_scale(add=0.1))
-ggsave(here("plots","EPL","G-xG.jpg"))
-
-squad %>%
-  mutate(Squad=fct_reorder(Squad,xGDiff)) %>%
-  ggplot(aes(x=Squad,y=xGDiff,colour=Squad)) +
-  geom_segment(aes(x=0,xend=xGDiff,y=Squad,yend=Squad),size=4,alpha=0.8) +
-  # geom_bar(stat="identity",alpha=0.8) +
-  theme_epl() +
-  labs(title="Expected goal difference",
-       x=element_blank(),
-       y=element_blank(),
-       caption=caption[[1]]) +
-  scale_colour_manual(values=palette_epl()) +
-  scale_x_continuous(breaks=seq(-50,50,5),expand=expand_scale(add=0.1))
+  scale_x_continuous(limit=c(0,1)) +
+  scale_y_continuous(breaks=seq(-100,100,5),expand=expand_scale(add=c(3))) +
+  scale_fill_manual(values=palette_epl())
 ggsave(here("plots","EPL","xGD.jpg"))
