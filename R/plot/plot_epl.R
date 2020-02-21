@@ -78,6 +78,44 @@ players %>%
 ggsave(here("plots","EPL","PlayerxGxA.jpg"))
 
 players %>%
+  filter(!is.na(ShortCmp)|!is.na(MediumCmp)|!is.na(LongCmp)) %>%
+  pivot_longer(cols=c(ShortCmp,MediumCmp,LongCmp),names_to="PassType",values_to="Cmp") %>%
+  mutate(PassType=factor(PassType,levels=c("ShortCmp","MediumCmp","LongCmp"),labels=c("Short (<5 yards)","Medium (5-25 yards)","Long (>25 yards)"))) %>%
+  select(Player,Squad,PassType,Cmp) %>%
+  group_by(PassType,Squad) %>%
+  mutate(focus=ifelse(min_rank(desc(Cmp))==1,TRUE,FALSE)) %>%
+  ggplot(aes(x=0,y=Cmp)) +
+  geom_text_repel(
+    aes(label=ifelse(focus,Player,"")),
+    size=rel(3),
+    nudge_x=0.3,
+    direction="y",
+    hjust=0,
+    segment.size=0.4,
+    segment.alpha=0.8,
+    box.padding=0.05,
+  ) +
+  geom_point(aes(fill=Squad,alpha=focus),shape=21,size=2,position=position_jitterdodge(jitter.width=0,jitter.height=0.2,dodge.width=0)) +
+  theme_sfc() +
+  theme(
+    axis.line.x=element_blank(),
+    axis.ticks.x=element_blank(),
+    axis.text.x=element_blank(),
+    axis.title.x=element_blank(),
+    panel.grid.major.x=element_blank(),
+  ) +
+  facet_wrap("PassType",scales="free") +
+  labs(title="Completed passes",
+       x=element_blank(),
+       y=element_blank(),
+       caption=caption[[1]]) +
+  scale_x_continuous(limit=c(0,1)) +
+  scale_y_continuous() +
+  scale_fill_manual(values=palette_epl()) +
+  scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.2))
+ggsave(here("plots","EPL","PlayerCompPasses.jpg"))
+
+players %>%
   filter(Gls==0) %>%
   select(Player,Squad,Sh,Gls,npxG) %>%
   mutate(focus=case_when(percent_rank(Sh)>0.9 ~ TRUE,
