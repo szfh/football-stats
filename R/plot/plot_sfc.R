@@ -77,6 +77,7 @@ ggsave(here("plots","SFC","xGxA90.jpg"))
 
 players %>%
   filter(Squad=="Southampton") %>%
+  filter(!is.na(Sh)|!is.na(KP)) %>%
   pivot_longer(cols=c(Sh,KP),names_to="ShKP",values_to="n") %>%
   mutate(ShKP=factor(ShKP,levels=c("Sh","KP"),labels=c("Shot","Pass leading to shot"))) %>%
   group_by(ShKP) %>%
@@ -114,7 +115,7 @@ ggsave(here("plots","SFC","ShotsKP.jpg"))
 
 players %>%
   filter(Squad=="Southampton") %>%
-  filter(Min>0) %>%
+  filter(!is.na(Sh)|!is.na(KP)) %>%
   mutate(Sh90=90*Sh/Min) %>%
   mutate(KP90=90*KP/Min) %>%
   pivot_longer(cols=c(Sh90,KP90),names_to="ShKP90",values_to="n") %>%
@@ -155,6 +156,7 @@ ggsave(here("plots","SFC","ShotsKP90.jpg"))
 
 players %>%
   filter(Squad=="Southampton") %>%
+  filter(!is.na(`Gls+/-`)|!is.na(`xG+/-`)) %>%
   select(Player,"onG":"xGOn-Off") %>%
   pivot_longer(cols=c("Gls+/-","xG+/-"),names_to="PM",values_to="n") %>%
   mutate(PM=factor(PM,levels=c("Gls+/-","xG+/-"),labels=c("Goals +/-","xG +/-"))) %>%
@@ -190,6 +192,7 @@ ggsave(here("plots","SFC","GD.jpg"))
 
 players %>%
   filter(Squad=="Southampton") %>%
+  filter(!is.na(`Gls+/-`)|!is.na(`xG+/-`)) %>%
   select(Player,"onG":"xGOn-Off") %>%
   pivot_longer(cols=c("Gls+/-90","xG+/-90"),names_to="PM",values_to="n") %>%
   mutate(PM=factor(PM,levels=c("Gls+/-90","xG+/-90"),labels=c("Goals +/-","xG +/-"))) %>%
@@ -226,6 +229,7 @@ ggsave(here("plots","SFC","GD90.jpg"))
 
 players %>%
   filter(Squad=="Southampton") %>%
+  filter(!is.na(ShortCmp)|!is.na(MediumCmp)|!is.na(LongCmp)) %>%
   pivot_longer(cols=c(ShortCmp,MediumCmp,LongCmp),names_to="PassType",values_to="Cmp") %>%
   mutate(PassType=factor(PassType,levels=c("ShortCmp","MediumCmp","LongCmp"),labels=c("Short (<5 yards)","Medium (5-25 yards)","Long (>25 yards)"))) %>%
   group_by(PassType) %>%
@@ -264,7 +268,7 @@ ggsave(here("plots","SFC","PassesCompleted.jpg"))
 
 players %>%
   filter(Squad=="Southampton") %>%
-  filter(!is.na(Left)&!is.na(Right)) %>%
+  filter(!is.na(Left)|!is.na(Right)) %>%
   mutate(Passes=Left+Right) %>%
   mutate(Player=fct_reorder(Player,Passes)) %>%
   mutate(MaxPass=ifelse(Left>Right,Left,Right)) %>%
