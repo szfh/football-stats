@@ -61,7 +61,7 @@ ggsave(here("plots","EPL","xG1.jpg"))
 squad %>%
   ggplot(aes(x=npxG,y=xGA)) +
   geom_text_repel(aes(label=Squad),size=rel(3)) +
-  geom_point(aes(colour=Squad),size=3,shape=4) +
+  geom_point(aes(fill=Squad),shape=21,size=3) +
   theme_epl() +
   labs(title="Expected goals",
        x="xG for",
@@ -69,7 +69,7 @@ squad %>%
        caption=caption[[1]]) +
   scale_x_continuous(breaks=seq(0,100,5),expand=expand_scale(add=c(4,2))) +
   scale_y_continuous(breaks=seq(0,100,5),expand=expand_scale(add=c(4,2))) +
-  scale_colour_manual(values=palette_epl()) +
+  scale_fill_manual(values=palette_epl()) +
   coord_fixed()
 ggsave(here("plots","EPL","xG2.jpg"))
 
