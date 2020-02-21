@@ -87,20 +87,6 @@ squad %>%
 ggsave(here("plots","EPL","G-xG.jpg"))
 
 squad %>%
-  mutate(`xGA-GA`=xGA-GA) %>%
-  mutate(Squad=fct_reorder(Squad,`xGA-GA`)) %>%
-  ggplot(aes(x=Squad,y=`xGA-GA`,colour=Squad)) +
-  geom_segment(aes(x=0,xend=`xGA-GA`,y=Squad,yend=Squad),size=4,alpha=0.8) +
-  theme_epl() +
-  labs(title="Expected goals allowed over/underperformance",
-       x=element_blank(),
-       y=element_blank(),
-       caption=caption[[1]]) +
-  scale_colour_manual(values=palette_epl()) +
-  scale_x_continuous(breaks=seq(-50,50,2),expand=expand_scale(add=0.1))
-ggsave(here("plots","EPL","xGA-GA.jpg"))
-
-squad %>%
   mutate(Squad=fct_reorder(Squad,xGDiff)) %>%
   ggplot(aes(x=Squad,y=xGDiff,colour=Squad)) +
   geom_segment(aes(x=0,xend=xGDiff,y=Squad,yend=Squad),size=4,alpha=0.8) +
