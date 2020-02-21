@@ -284,3 +284,22 @@ players %>%
        caption=caption[[1]]) +
   scale_x_continuous(breaks=seq(-2000,2000,200),labels=abs(seq(-2000,2000,200)),expand=expand_scale(add=c(20)))
 ggsave(here("plots","SFC","PassFootedness.jpg"))
+
+matches_long %>%
+  filter(Team=="Southampton") %>%
+  filter(!is.na(GoalsHome)) %>%
+  mutate(Match=factor(Wk,labels=paste0(Opposition," ",ifelse(HA=="Home","H","A")," ",GoalsF,"-",GoalsA))) %>%
+  mutate(Match=fct_rev(Match)) %>%
+  ggplot(aes(y=Match)) +
+  geom_segment(aes(x=0,xend=xGFfbref,y=Match,yend=Match),colour=col_sfc[[1]],size=3.5,alpha=0.8) +
+  geom_segment(aes(x=0,xend=-xGAfbref,y=Match,yend=Match),colour=col_medium[[1]],size=3.5,alpha=0.8) +
+  theme_sfc() +
+  theme(
+    axis.text.y=element_text(size=rel(0.8))
+  ) +
+  labs(title="              Opposition xG | Southampton xG",
+       x=element_blank(),
+       y=element_blank(),
+       caption=caption[[1]]) +
+  scale_x_continuous(breaks=seq(-10,10,1),labels=abs(seq(-10,10,1)),expand=expand_scale(add=c(0.1)))
+ggsave(here("plots","SFC","MatchxGseg.jpg"))
