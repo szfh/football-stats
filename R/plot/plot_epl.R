@@ -1,6 +1,44 @@
 # Premier League player plots
 
 players %>%
+  filter(!is.na(npxG)|!is.na(xA)) %>%
+  select(Player,Squad,Min:PKatt,xG:xA) %>%
+  pivot_longer(cols=c(npxG,xA),names_to="npxGxA",values_to="n") %>%
+  mutate(npxGxA=factor(npxGxA,levels=c("npxG","xA"),labels=c("xG","xA"))) %>%
+  group_by(npxGxA) %>%
+  mutate(focus=case_when(min_rank(desc(n))<=20 ~ TRUE,
+                         TRUE ~ FALSE)) %>%
+  ggplot(aes(x=0,y=n,alpha=focus)) +
+  geom_text_repel(
+    aes(label=ifelse(focus,Player,"")),
+    size=rel(3),
+    nudge_x=0.3,
+    direction="y",
+    hjust=0,
+    segment.size=0.4,
+    box.padding=0.05,
+  ) +
+  geom_point(aes(fill=Squad),shape=21,size=4) +
+  theme_sfc() +
+  theme(
+    axis.line.x=element_blank(),
+    axis.ticks.x=element_blank(),
+    axis.text.x=element_blank(),
+    axis.title.x=element_blank(),
+    panel.grid.major.x=element_blank(),
+  ) +
+  facet_wrap("npxGxA",scales="free") +
+  labs(title="Expected Goals",
+       x=element_blank(),
+       y=element_blank(),
+       caption=caption[[1]]) +
+  scale_x_continuous(limit=c(0,1)) +
+  scale_y_continuous() +
+  scale_fill_manual(values=palette_epl()) +
+  scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.4))
+ggsave(here("plots","EPL","PlayerxGxA.jpg"))
+
+players %>%
   filter(Gls==0) %>%
   select(Player,Squad,Sh,Gls,npxG) %>%
   mutate(focus=case_when(percent_rank(Sh)>0.9 ~ TRUE,
@@ -20,7 +58,7 @@ players %>%
   scale_fill_manual(values=palette_epl()) +
   scale_x_continuous(breaks=seq(0,50,1),expand=expand_scale(add=c(0,0.2))) +
   scale_y_continuous(breaks=seq(0,200,5),expand=expand_scale(add=c(0,2)))
-ggsave(here("plots","EPL","NoGoals.jpg"))
+ggsave(here("plots","EPL","PlayerNoGoals.jpg"))
 
 # Premier League team plots
 
