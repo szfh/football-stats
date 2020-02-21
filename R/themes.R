@@ -90,8 +90,8 @@ col_sfc <- c("#D71920","#ED5C5C","#D3D3D3","#000000")
 
 # captions
 caption <- c(
-  "data: statsbomb/@fbref",
-  "data: statsbomb/@fbref\nprepared: @saintsbynumbers"
+  "data: statsbomb/fbref",
+  "data: statsbomb/fbref\nprepared by: @saintsbynumbers"
 )
 
 # tests
