@@ -1,6 +1,45 @@
 # Premier League player plots
 
 players %>%
+  filter(!is.na(Gls)|!is.na(xG)) %>%
+  select(Player,Squad,Min:PKatt,xG:xA) %>%
+  mutate(npGls=Gls-PK) %>%
+  pivot_longer(cols=c(npGls,npxG),names_to="key",values_to="n") %>%
+  mutate(key=factor(key,levels=c("npGls","npxG"),labels=c("Goals","Expected Goals"))) %>%
+  group_by(key) %>%
+  mutate(focus=case_when(min_rank(desc(n))<=10 ~ TRUE,
+                         TRUE ~ FALSE)) %>%
+  ggplot(aes(x=0,y=n,alpha=focus)) +
+  geom_text_repel(
+    aes(label=ifelse(focus,Player,"")),
+    size=rel(3),
+    nudge_x=0.3,
+    direction="y",
+    hjust=0,
+    segment.size=0.4,
+    box.padding=0.05,
+  ) +
+  geom_point(aes(fill=Squad),shape=21,size=4,position=position_jitterdodge(jitter.width=0,jitter.height=0.17,dodge.width=0)) +
+  theme_sfc() +
+  theme(
+    axis.line.x=element_blank(),
+    axis.ticks.x=element_blank(),
+    axis.text.x=element_blank(),
+    axis.title.x=element_blank(),
+    panel.grid.major.x=element_blank(),
+  ) +
+  facet_wrap("key",scales="free") +
+  labs(title="Expected Goals (penalties excluded)",
+       x=element_blank(),
+       y=element_blank(),
+       caption=caption[[1]]) +
+  scale_x_continuous(limit=c(0,1)) +
+  scale_y_continuous() +
+  scale_fill_manual(values=palette_epl()) +
+  scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.2))
+ggsave(here("plots","EPL","PlayerGlsxG.jpg"))
+
+players %>%
   filter(!is.na(npxG)|!is.na(xA)) %>%
   select(Player,Squad,Min:PKatt,xG:xA) %>%
   pivot_longer(cols=c(npxG,xA),names_to="npxGxA",values_to="n") %>%
@@ -28,14 +67,14 @@ players %>%
     panel.grid.major.x=element_blank(),
   ) +
   facet_wrap("npxGxA",scales="free") +
-  labs(title="Expected Goals",
+  labs(title="Expected Goals (penalties excluded)",
        x=element_blank(),
        y=element_blank(),
        caption=caption[[1]]) +
   scale_x_continuous(limit=c(0,1)) +
   scale_y_continuous() +
   scale_fill_manual(values=palette_epl()) +
-  scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.4))
+  scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.2))
 ggsave(here("plots","EPL","PlayerxGxA.jpg"))
 
 players %>%
