@@ -82,4 +82,4 @@ raw[["fbref"]][["player"]][["misc"]] <- fbref_scrape(url="https://fbref.com/en/c
                                           comment=TRUE,extract=1,fix_columns=TRUE)
 
 saveRDS(raw,file=here("data","raw-fbref.rds"))
-rm(fbref_scrape)
+rm(raw,fbref_scrape)

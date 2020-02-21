@@ -21,3 +21,4 @@ raw[["fivethirtyeight"]][["rankings"]] <- read.csv("https://projects.fivethirtye
 #   view()
 
 saveRDS(raw,file=here("data","raw-fivethirtyeight.rds"))
+rm(raw)
