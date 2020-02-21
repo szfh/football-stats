@@ -28,6 +28,7 @@ squad %>%
   select(Squad,xG,xGA) %>%
   mutate(xGA=-xGA) %>%
   pivot_longer(cols=c(xG,xGA),names_to="key",values_to="xG") %>%
+  mutate(key=factor(key,levels=c("xG","xGA"),labels=c("xG For","xG Against"))) %>%
   ggplot(aes(x=0,y=xG)) +
   geom_text_repel(
     aes(label=Squad),
