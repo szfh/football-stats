@@ -15,8 +15,6 @@ output: github_document
 1. [Game States](https://7500toholte.sbnation.com/platform/amp/2019/8/21/20812030/expected-villa-afc-bournemouth-game-states-responsible-analysis)
 1. [Deserved Goals 2.0](https://8yards8feet.wordpress.com/2019/09/07/deserved-goals-2-0/amp/)
 1. [s2stats blog](https://s2stats.home.blog/)
-1. [ModernDive](https://moderndive.com/)
-1. [Pranav blog scraping with RSeleium](https://npranav10.github.io/blog/scraping_fbref_data.html#code)
 
 ### Data resources
 
@@ -31,6 +29,8 @@ output: github_document
 1. [football-data](https://www.football-data.co.uk/downloadm.php)
 1. [ClubELO](http://clubelo.com/)
 1. [SoccerSTATS](https://www.soccerstats.com/latest.asp?league=england)
+1. [John Burn-Murdoch clubelo script](https://gist.github.com/johnburnmurdoch/1b3f32aaf7757733bd68a6513ab86226) with
+    [link to Tweet](https://mobile.twitter.com/jburnmurdoch/status/1075088086370013184)
 
 ## fbref data visualisation
 
