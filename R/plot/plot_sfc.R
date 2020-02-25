@@ -77,6 +77,7 @@ ggsave(here("plots","SFC","xGxA90.jpg"))
 
 players %>%
   filter(Squad=="Southampton") %>%
+  filter(!is.na(Sh)|!is.na(KP)) %>%
   pivot_longer(cols=c(Sh,KP),names_to="ShKP",values_to="n") %>%
   mutate(ShKP=factor(ShKP,levels=c("Sh","KP"),labels=c("Shot","Pass leading to shot"))) %>%
   group_by(ShKP) %>%
@@ -114,7 +115,7 @@ ggsave(here("plots","SFC","ShotsKP.jpg"))
 
 players %>%
   filter(Squad=="Southampton") %>%
-  filter(Min>0) %>%
+  filter(!is.na(Sh)|!is.na(KP)) %>%
   mutate(Sh90=90*Sh/Min) %>%
   mutate(KP90=90*KP/Min) %>%
   pivot_longer(cols=c(Sh90,KP90),names_to="ShKP90",values_to="n") %>%
@@ -155,6 +156,7 @@ ggsave(here("plots","SFC","ShotsKP90.jpg"))
 
 players %>%
   filter(Squad=="Southampton") %>%
+  filter(!is.na(`Gls+/-`)|!is.na(`xG+/-`)) %>%
   select(Player,"onG":"xGOn-Off") %>%
   pivot_longer(cols=c("Gls+/-","xG+/-"),names_to="PM",values_to="n") %>%
   mutate(PM=factor(PM,levels=c("Gls+/-","xG+/-"),labels=c("Goals +/-","xG +/-"))) %>%
@@ -190,6 +192,7 @@ ggsave(here("plots","SFC","GD.jpg"))
 
 players %>%
   filter(Squad=="Southampton") %>%
+  filter(!is.na(`Gls+/-`)|!is.na(`xG+/-`)) %>%
   select(Player,"onG":"xGOn-Off") %>%
   pivot_longer(cols=c("Gls+/-90","xG+/-90"),names_to="PM",values_to="n") %>%
   mutate(PM=factor(PM,levels=c("Gls+/-90","xG+/-90"),labels=c("Goals +/-","xG +/-"))) %>%
@@ -226,6 +229,7 @@ ggsave(here("plots","SFC","GD90.jpg"))
 
 players %>%
   filter(Squad=="Southampton") %>%
+  filter(!is.na(ShortCmp)|!is.na(MediumCmp)|!is.na(LongCmp)) %>%
   pivot_longer(cols=c(ShortCmp,MediumCmp,LongCmp),names_to="PassType",values_to="Cmp") %>%
   mutate(PassType=factor(PassType,levels=c("ShortCmp","MediumCmp","LongCmp"),labels=c("Short (<5 yards)","Medium (5-25 yards)","Long (>25 yards)"))) %>%
   group_by(PassType) %>%
@@ -264,7 +268,7 @@ ggsave(here("plots","SFC","PassesCompleted.jpg"))
 
 players %>%
   filter(Squad=="Southampton") %>%
-  filter(!is.na(Left)&!is.na(Right)) %>%
+  filter(!is.na(Left)|!is.na(Right)) %>%
   mutate(Passes=Left+Right) %>%
   mutate(Player=fct_reorder(Player,Passes)) %>%
   mutate(MaxPass=ifelse(Left>Right,Left,Right)) %>%
@@ -280,3 +284,22 @@ players %>%
        caption=caption[[1]]) +
   scale_x_continuous(breaks=seq(-2000,2000,200),labels=abs(seq(-2000,2000,200)),expand=expand_scale(add=c(20)))
 ggsave(here("plots","SFC","PassFootedness.jpg"))
+
+matches_long %>%
+  filter(Team=="Southampton") %>%
+  filter(!is.na(GoalsHome)) %>%
+  mutate(Match=factor(Wk,labels=paste0(Opposition," ",ifelse(HA=="Home","H","A")," ",GoalsF,"-",GoalsA))) %>%
+  mutate(Match=fct_rev(Match)) %>%
+  ggplot(aes(y=Match)) +
+  geom_segment(aes(x=0,xend=xGFfbref,y=Match,yend=Match),colour=col_sfc[[1]],size=3.5,alpha=0.8) +
+  geom_segment(aes(x=0,xend=-xGAfbref,y=Match,yend=Match),colour=col_medium[[1]],size=3.5,alpha=0.8) +
+  theme_sfc() +
+  theme(
+    axis.text.y=element_text(size=rel(0.8))
+  ) +
+  labs(title="              Opposition xG | Southampton xG",
+       x=element_blank(),
+       y=element_blank(),
+       caption=caption[[1]]) +
+  scale_x_continuous(breaks=seq(-10,10,1),labels=abs(seq(-10,10,1)),expand=expand_scale(add=c(0.1)))
+ggsave(here("plots","SFC","MatchxGseg.jpg"))
