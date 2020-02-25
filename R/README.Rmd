@@ -15,6 +15,8 @@ output: github_document
 1. [Game States](https://7500toholte.sbnation.com/platform/amp/2019/8/21/20812030/expected-villa-afc-bournemouth-game-states-responsible-analysis)
 1. [Deserved Goals 2.0](https://8yards8feet.wordpress.com/2019/09/07/deserved-goals-2-0/amp/)
 1. [s2stats blog](https://s2stats.home.blog/)
+1. [ModernDive](https://moderndive.com/)
+1. [Pranav blog scraping with RSeleium](https://npranav10.github.io/blog/scraping_fbref_data.html#code)
 
 ### Data resources
 
