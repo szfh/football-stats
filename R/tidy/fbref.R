@@ -81,18 +81,18 @@ tidy[["fbref"]][["player"]][["shooting"]] <- raw[["fbref"]][["player"]][["shooti
 
 tidy[["fbref"]][["player"]][["passing"]] <- raw[["fbref"]][["player"]][["passing"]] %>%
   rename(
-    "TotalCmp"="Cmp...11",
-    "TotalAtt"="Att...12",
-    "TotalCmp%"="Cmp%...13",
-    "ShortCmp"="Cmp...14",
-    "ShortAtt"="Att...15",
-    "ShortCmp%"="Cmp%...16",
-    "MediumCmp"="Cmp...17",
-    "MediumAtt"="Att...18",
-    "MediumCmp%"="Cmp%...19",
-    "LongCmp"="Cmp...20",
-    "LongAtt"="Att...21",
-    "LongCmp%"="Cmp%...22",
+    "TotalCmp"="Cmp...13",
+    "TotalAtt"="Att...14",
+    "TotalCmp%"="Cmp%...15",
+    "ShortCmp"="Cmp...16",
+    "ShortAtt"="Att...17",
+    "ShortCmp%"="Cmp%...18",
+    "MediumCmp"="Cmp...19",
+    "MediumAtt"="Att...20",
+    "MediumCmp%"="Cmp%...21",
+    "LongCmp"="Cmp...22",
+    "LongAtt"="Att...23",
+    "LongCmp%"="Cmp%...24",
     "PassFK"="FK",
   ) %>%
   select(
