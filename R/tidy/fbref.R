@@ -103,8 +103,8 @@ tidy[["fbref"]][["player"]][["playingtime"]] <- raw[["fbref"]][["player"]][["pla
   rename(
     "Gls+/-"="+/-",
     "Gls+/-90"="+/-90",
-    "GlsOn-Off"="On-Off...21",
-    "xGOn-Off"="On-Off...26",
+    "GlsOn-Off"="On-Off...23",
+    "xGOn-Off"="On-Off...28",
   ) %>%
   select(
     -"Rk",
