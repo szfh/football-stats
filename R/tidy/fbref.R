@@ -113,10 +113,10 @@ tidy[["fbref"]][["player"]][["playingtime"]] <- raw[["fbref"]][["player"]][["pla
 tidy[["fbref"]][["player"]][["misc"]] <- raw[["fbref"]][["player"]][["misc"]] %>%
   rename(
     "DribSuc"="Succ",
-    "DribAtt"="Att...20",
+    "DribAtt"="Att...22",
     "Drib#Pl"="#Pl",
     "DribTkl"="Tkl",
-    "DribCont"="Att...25",
+    "DribCont"="Att...27",
     "DribTkl%"="Tkl%",
     "DribPast"="Past",
   ) %>%
