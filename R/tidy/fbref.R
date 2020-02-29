@@ -124,7 +124,7 @@ tidy[["fbref"]][["player"]][["misc"]] <- raw[["fbref"]][["player"]][["misc"]] %>
     -"Rk",
   )
 
-# teams
+# table
 
 tidy[["fbref"]][["table"]] <- raw[["fbref"]][["table"]] %>%
   select(
@@ -135,6 +135,8 @@ tidy[["fbref"]][["table"]] <- raw[["fbref"]][["table"]] %>%
   rename(
     "xGDiff90"="xGDiff/90"
   )
+
+# squad
 
 tidy[["fbref"]][["squad"]][["standard"]] <- raw[["fbref"]][["squad"]][["standard"]] %>%
   rename(
