@@ -6,6 +6,7 @@ pacman::p_load(
   rvest,
   # understatr,
   # ggsoccer,
+  ggtext,
   ggrepel,
   ggthemes,
   ggfocus
