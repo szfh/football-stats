@@ -14,20 +14,21 @@ players %>%
     Player %in% c("James Ward-Prowse","Pierre Højbjerg","Oriol Romeu","William Smallbone") ~ "DM",
     Player %in% c("Nathan Redmond","Stuart Armstrong","Sofiane Boufal","Moussa Djenepo") ~ "AM",
     TRUE ~ Pos1)) %>%
+  # mutate(Pos1=get_detailed_position(Player)) %>%
   mutate(Possfc=factor(Pos1,levels=c("GK","CB","FB","DM","AM","FW"))) %>%
   mutate(Player=fct_reorder(Player,Min)) %>%
   ggplot(aes(x=Min,y=Player)) +
   geom_segment(aes(y=Player,yend=Player,x=0,xend=MinStart),colour=col_sfc[[1]],size=3.5,alpha=0.8) +
   geom_segment(aes(y=Player,yend=Player,x=MinStart,xend=Min),colour=col_sfc[[1]],size=3.5,alpha=0.3) +
   theme_sfc() +
-  labs(title="League minutes",
-       subtitle="(from start / from bench)",
+  labs(title=paste0("League minutes (","<b style='color:#D71920'>from start</b>","/","<b style='color:#ED5C5C'>from bench</b>",")"),
        x=element_blank(),
        y=element_blank(),
        caption=caption[[1]]) +
   expand_limits(Min=0) +
   scale_x_continuous(breaks=seq(0,90*38,180),expand=expand_scale(add=c(20,20))) +
   theme(
+    plot.title = element_markdown(),
     axis.line=element_blank(),
     axis.text.x=element_text(size=rel(0.8),hjust=0.5),
     axis.text.y=element_text(size=rel(0.8)),
