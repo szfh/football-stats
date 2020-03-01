@@ -35,7 +35,6 @@ output: github_document
 ## fbref data visualisation
 
 ```{r,include=F}
-# file.copy(from="./plots/SFC/Minutes.jpg",to="./images/plot1.jpg")
 file.copy(from=here::here("plots","SFC","Minutes.jpg"),to=here::here("images","plot1.jpg"))
 file.copy(from=here::here("plots","SFC","xGtrend.jpg"),to=here::here("images","plot2.jpg"))
 file.copy(from=here::here("plots","EPL","PlayerCompPasses.jpg"),to=here::here("images","plot3.jpg"))
