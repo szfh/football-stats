@@ -36,6 +36,31 @@ players %>%
   facet_grid(Possfc ~ .,scales="free",space="free")
 ggsave(here("plots","SFC","Minutes.jpg"))
 
+matches_long %>%
+  filter(Team=="Southampton") %>%
+  filter(!is.na(GoalsHome)) %>%
+  select(Wk:xGAfbref) %>%
+  mutate(xGFfbrefmva=get_mva(xGFfbref)) %>%
+  mutate(xGAfbrefmva=get_mva(xGAfbref)) %>%
+  ggplot(aes(x=Date)) +
+  geom_point(aes(y=xGFfbref),colour="darkred",alpha=0.5) +
+  geom_path(aes(y=xGFfbrefmva),colour="darkred",linetype="longdash",size=1) +
+  geom_point(aes(y=xGAfbref),colour="darkblue",alpha=0.5) +
+  geom_path(aes(y=xGAfbrefmva),colour="royalblue",linetype="longdash",size=1) +
+  theme_sfc() +
+  theme(
+    axis.text.x=element_text(size=rel(0.8)),
+    axis.title=element_text(size=rel(0.8)),
+    plot.title = element_markdown(),
+  ) +
+  labs(title=paste0("Southampton ","<b style='color:darkred'>attack</b>","/","<b style='color:royalblue'>defence</b>"," trend"),
+       x=element_blank(),
+       y="Expected goals for/against",
+       caption=paste0("rolling 5 game expected goals average","\n",caption[[1]])) +
+  scale_x_date(date_labels="%d %b",date_breaks="1 month",expand=expand_scale(add=c(2))) +
+  scale_y_continuous(limits=c(0,NA),expand=expand_scale(add=c(0,0.1)))
+ggsave(here("plots","SFC","xGtrend.jpg"))
+
 players %>%
   filter(Squad=="Southampton") %>%
   filter(!is.na(npxG)|!is.na(xA)) %>%
