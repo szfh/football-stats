@@ -29,6 +29,8 @@ output: github_document
 1. [football-data](https://www.football-data.co.uk/downloadm.php)
 1. [ClubELO](http://clubelo.com/)
 1. [SoccerSTATS](https://www.soccerstats.com/latest.asp?league=england)
+1. [John Burn-Murdoch clubelo script](https://gist.github.com/johnburnmurdoch/1b3f32aaf7757733bd68a6513ab86226) with
+    [link to Tweet](https://mobile.twitter.com/jburnmurdoch/status/1075088086370013184)
 
 ## fbref data visualisation
 
@@ -38,4 +40,5 @@ output: github_document
 <img src="./images/plot1.jpg" width="60%">
 <img src="./images/plot2.jpg" width="60%">
 <img src="./images/plot3.jpg" width="60%">
+<img src="./images/plot4.jpg" width="60%">
 </center>
