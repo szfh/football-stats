@@ -1,6 +1,7 @@
 # libraries and themes
 source(here::here("R","library.R"))
 source(here("R","themes.R"))
+source(here("R","utils.R"))
 
 # knit markdown
 # knitr::knit(here::here("R","README.Rmd"))
