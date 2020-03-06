@@ -29,10 +29,11 @@ players %>%
     panel.grid.major.x=element_blank(),
   ) +
   facet_wrap("key",scales="free") +
-  labs(title="Expected Goals (penalties excluded)",
-       x=element_blank(),
-       y=element_blank(),
-       caption=caption[[1]]) +
+  labs(
+    title="Expected Goals (penalties excluded)",
+    x=element_blank(),
+    y=element_blank(),
+    caption=caption[[1]]) +
   scale_x_continuous(limit=c(0,1)) +
   scale_y_continuous() +
   scale_fill_manual(values=palette_epl()) +
@@ -67,10 +68,12 @@ players %>%
     panel.grid.major.x=element_blank(),
   ) +
   facet_wrap("npxGxA",scales="free") +
-  labs(title="Expected Goals (penalties excluded)",
-       x=element_blank(),
-       y=element_blank(),
-       caption=caption[[1]]) +
+  labs(
+    title="Expected Goals (penalties excluded)",
+    x=element_blank(),
+    y=element_blank(),
+    caption=caption[[1]]
+  ) +
   scale_x_continuous(limit=c(0,1)) +
   scale_y_continuous() +
   scale_fill_manual(values=palette_epl()) +
@@ -105,10 +108,12 @@ players %>%
     panel.grid.major.x=element_blank(),
   ) +
   facet_wrap("PassType",scales="free") +
-  labs(title="Completed passes",
-       x=element_blank(),
-       y=element_blank(),
-       caption=caption[[1]]) +
+  labs(
+    title="Completed passes",
+    x=element_blank(),
+    y=element_blank(),
+    caption=caption[[1]]
+  ) +
   scale_x_continuous(limit=c(0,1)) +
   scale_y_continuous() +
   scale_fill_manual(values=palette_epl()) +
@@ -128,10 +133,12 @@ players %>%
   geom_point(aes(fill=Squad),size=3,shape=21,colour="black",position=position_jitter(0.005)) +
   geom_text_repel(aes(label=ifelse(focus,Player,"")),size=2) +
   theme_epl() +
-  labs(title="Players with no goals",
-       x="Expected goals",
-       y="Shots",
-       caption=caption[[1]]) +
+  labs(
+    title="Players with no goals",
+    x="Expected goals",
+    y="Shots",
+    caption=caption[[1]]
+  ) +
   scale_fill_manual(values=palette_epl()) +
   scale_x_continuous(breaks=seq(0,50,1),expand=expansion(add=c(0,0.2))) +
   scale_y_continuous(breaks=seq(0,200,5),expand=expansion(add=c(0,2)))
@@ -165,10 +172,12 @@ squad %>%
     panel.grid.major.x=element_blank(),
   ) +
   facet_wrap("key",scales="free") +
-  labs(title=element_blank(),
-       x=element_blank(),
-       y=element_blank(),
-       caption=caption[[1]]) +
+  labs(
+    title=element_blank(),
+    x=element_blank(),
+    y=element_blank(),
+    caption=caption[[1]]
+  ) +
   scale_x_continuous(limit=c(0,1)) +
   scale_y_continuous(breaks=seq(-100,100,5),labels=abs(seq(-100,100,5)),expand=expansion(add=c(1))) +
   scale_fill_manual(values=palette_epl())
@@ -179,10 +188,12 @@ squad %>%
   geom_text_repel(aes(label=Squad),size=rel(3)) +
   geom_point(aes(fill=Squad),shape=21,size=3) +
   theme_epl() +
-  labs(title="Expected goals",
-       x="xG for",
-       y="xG against",
-       caption=caption[[1]]) +
+  labs(
+    title="Expected goals",
+    x="xG for",
+    y="xG against",
+    caption=caption[[1]]
+  ) +
   scale_x_continuous(breaks=seq(0,100,5),expand=expansion(add=c(4,2))) +
   scale_y_continuous(breaks=seq(0,100,5),expand=expansion(add=c(4,2))) +
   scale_fill_manual(values=palette_epl()) +
@@ -214,10 +225,12 @@ squad %>%
     panel.grid.major.x=element_blank(),
   ) +
   facet_wrap("key",scales="free") +
-  labs(title=element_blank(),
-       x=element_blank(),
-       y=element_blank(),
-       caption=caption[[1]]) +
+  labs(
+    title=element_blank(),
+    x=element_blank(),
+    y=element_blank(),
+    caption=caption[[1]]
+  ) +
   scale_x_continuous(limit=c(0,1)) +
   scale_y_continuous(breaks=seq(-100,100,5),expand=expansion(add=c(3))) +
   scale_fill_manual(values=palette_epl())
