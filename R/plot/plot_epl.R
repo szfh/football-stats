@@ -133,8 +133,8 @@ players %>%
        y="Shots",
        caption=caption[[1]]) +
   scale_fill_manual(values=palette_epl()) +
-  scale_x_continuous(breaks=seq(0,50,1),expand=expand_scale(add=c(0,0.2))) +
-  scale_y_continuous(breaks=seq(0,200,5),expand=expand_scale(add=c(0,2)))
+  scale_x_continuous(breaks=seq(0,50,1),expand=expansion(add=c(0,0.2))) +
+  scale_y_continuous(breaks=seq(0,200,5),expand=expansion(add=c(0,2)))
 ggsave(here("plots","EPL","PlayerNoGoals.jpg"))
 
 # Premier League team plots
@@ -170,7 +170,7 @@ squad %>%
        y=element_blank(),
        caption=caption[[1]]) +
   scale_x_continuous(limit=c(0,1)) +
-  scale_y_continuous(breaks=seq(-100,100,5),labels=abs(seq(-100,100,5)),expand=expand_scale(add=c(1))) +
+  scale_y_continuous(breaks=seq(-100,100,5),labels=abs(seq(-100,100,5)),expand=expansion(add=c(1))) +
   scale_fill_manual(values=palette_epl())
 ggsave(here("plots","EPL","xG1.jpg"))
 
@@ -183,8 +183,8 @@ squad %>%
        x="xG for",
        y="xG against",
        caption=caption[[1]]) +
-  scale_x_continuous(breaks=seq(0,100,5),expand=expand_scale(add=c(4,2))) +
-  scale_y_continuous(breaks=seq(0,100,5),expand=expand_scale(add=c(4,2))) +
+  scale_x_continuous(breaks=seq(0,100,5),expand=expansion(add=c(4,2))) +
+  scale_y_continuous(breaks=seq(0,100,5),expand=expansion(add=c(4,2))) +
   scale_fill_manual(values=palette_epl()) +
   coord_fixed()
 ggsave(here("plots","EPL","xG2.jpg"))
@@ -219,6 +219,6 @@ squad %>%
        y=element_blank(),
        caption=caption[[1]]) +
   scale_x_continuous(limit=c(0,1)) +
-  scale_y_continuous(breaks=seq(-100,100,5),expand=expand_scale(add=c(3))) +
+  scale_y_continuous(breaks=seq(-100,100,5),expand=expansion(add=c(3))) +
   scale_fill_manual(values=palette_epl())
 ggsave(here("plots","EPL","xGD.jpg"))

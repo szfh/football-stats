@@ -26,7 +26,7 @@ players %>%
        y=element_blank(),
        caption=caption[[1]]) +
   expand_limits(Min=0) +
-  scale_x_continuous(breaks=seq(0,90*38,180),expand=expand_scale(add=c(20,20))) +
+  scale_x_continuous(breaks=seq(0,90*38,180),expand=expansion(add=c(20,20))) +
   theme(
     plot.title = element_markdown(),
     axis.line=element_blank(),
@@ -60,8 +60,8 @@ matches_long %>%
        x=element_blank(),
        y="Expected goals for/against",
        caption=paste0("rolling 5 game expected goals average","\n",caption[[1]])) +
-  scale_x_date(date_labels="%d %b",date_breaks="1 month",expand=expand_scale(add=c(2))) +
-  scale_y_continuous(limits=c(0,NA),expand=expand_scale(add=c(0,0.1)))
+  scale_x_date(date_labels="%d %b",date_breaks="1 month",expand=expansion(add=c(2))) +
+  scale_y_continuous(limits=c(0,NA),expand=expansion(add=c(0,0.1)))
 ggsave(here("plots","SFC","xGtrend.jpg"))
 
 players %>%
@@ -77,8 +77,8 @@ players %>%
        x="Expected goals",
        y="Expected assists",
        caption=caption[[1]]) +
-  scale_x_continuous(breaks=seq(0,30,1),expand=expand_scale(add=c(0,0.2))) +
-  scale_y_continuous(breaks=seq(0,30,1),expand=expand_scale(add=c(0,0.2))) +
+  scale_x_continuous(breaks=seq(0,30,1),expand=expansion(add=c(0,0.2))) +
+  scale_y_continuous(breaks=seq(0,30,1),expand=expansion(add=c(0,0.2))) +
   scale_fill_manual(values=c("TRUE"=col_sfc[[1]],"FALSE"=col_sfc[[3]])) +
   coord_fixed()
 ggsave(here("plots","SFC","xGxA.jpg"))
@@ -97,8 +97,8 @@ players %>%
        x="Expected goals per 90 minutes",
        y="Expected assists per 90 minutes",
        caption=caption[[1]]) +
-  scale_x_continuous(breaks=seq(0,2,0.1),expand=expand_scale(add=c(0,0.02))) +
-  scale_y_continuous(breaks=seq(0,2,0.1),expand=expand_scale(add=c(0,0.02))) +
+  scale_x_continuous(breaks=seq(0,2,0.1),expand=expansion(add=c(0,0.02))) +
+  scale_y_continuous(breaks=seq(0,2,0.1),expand=expansion(add=c(0,0.02))) +
   scale_fill_manual(values=c("TRUE"=col_sfc[[1]],"FALSE"=col_sfc[[3]])) +
   coord_fixed()
 ggsave(here("plots","SFC","xGxA90.jpg"))
@@ -310,7 +310,7 @@ players %>%
        x=element_blank(),
        y=element_blank(),
        caption=caption[[1]]) +
-  scale_x_continuous(breaks=seq(-2000,2000,200),labels=abs(seq(-2000,2000,200)),expand=expand_scale(add=c(20)))
+  scale_x_continuous(breaks=seq(-2000,2000,200),labels=abs(seq(-2000,2000,200)),expand=expansion(add=c(20)))
 ggsave(here("plots","SFC","PassFootedness.jpg"))
 
 matches_long %>%
@@ -329,5 +329,5 @@ matches_long %>%
        x=element_blank(),
        y=element_blank(),
        caption=caption[[1]]) +
-  scale_x_continuous(breaks=seq(-10,10,1),labels=abs(seq(-10,10,1)),expand=expand_scale(add=c(0.1)))
+  scale_x_continuous(breaks=seq(-10,10,1),labels=abs(seq(-10,10,1)),expand=expansion(add=c(0.1)))
 ggsave(here("plots","SFC","MatchxGseg.jpg"))
