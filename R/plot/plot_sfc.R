@@ -6,27 +6,21 @@ players %>%
     Subs=replace(Subs,is.na(Subs),0),
     `Mn/Sub`=replace(`Mn/Sub`,is.na(`Mn/Sub`),0),
     MinSub=Subs*`Mn/Sub`,
-    MinStart=Min-MinSub,
+    MinStart=Min-MinSub
   ) %>%
-  mutate(Pos1=case_when(
+  mutate(Posnew=case_when(
     Player %in% c("Kevin Danso","Jannik Vestergaard","Jan Bednarek","Jack Stephens","Maya Yoshida") ~ "CB",
     Player %in% c("Ryan Bertrand","Cédric Soares","Yan Valery","Kyle Walker-Peters") ~ "FB",
     Player %in% c("James Ward-Prowse","Pierre Højbjerg","Oriol Romeu","William Smallbone") ~ "DM",
     Player %in% c("Nathan Redmond","Stuart Armstrong","Sofiane Boufal","Moussa Djenepo") ~ "AM",
     TRUE ~ Pos1)) %>%
   # mutate(Pos1=get_detailed_position(Player)) %>%
-  mutate(Possfc=factor(Pos1,levels=c("GK","CB","FB","DM","AM","FW"))) %>%
+  mutate(Possfc=factor(Posnew,levels=c("GK","CB","FB","DM","AM","FW"))) %>%
   mutate(Player=fct_reorder(Player,Min)) %>%
   ggplot(aes(x=Min,y=Player)) +
   geom_segment(aes(y=Player,yend=Player,x=0,xend=MinStart),colour=col_sfc[[1]],size=3.5,alpha=0.8) +
   geom_segment(aes(y=Player,yend=Player,x=MinStart,xend=Min),colour=col_sfc[[1]],size=3.5,alpha=0.3) +
   theme_sfc() +
-  labs(title=paste0("League minutes (","<b style='color:#D71920'>from start</b>","/","<b style='color:#ED5C5C'>from bench</b>",")"),
-       x=element_blank(),
-       y=element_blank(),
-       caption=caption[[1]]) +
-  expand_limits(Min=0) +
-  scale_x_continuous(breaks=seq(0,90*38,180),expand=expansion(add=c(20,20))) +
   theme(
     plot.title = element_markdown(),
     axis.line=element_blank(),
@@ -34,6 +28,14 @@ players %>%
     axis.text.y=element_text(size=rel(0.8)),
     strip.text.y=element_text(angle=0),
   ) +
+  labs(
+    title=paste0("League minutes (","<b style='color:#D71920'>from start</b>","/","<b style='color:#ED5C5C'>from bench</b>",")"),
+    x=element_blank(),
+    y=element_blank(),
+    caption=caption[[1]]
+  ) +
+  expand_limits(Min=0) +
+  scale_x_continuous(breaks=seq(0,90*38,180),expand=expansion(add=c(20,20))) +
   facet_grid(Possfc ~ .,scales="free",space="free")
 ggsave(here("plots","SFC","Minutes.jpg"))
 
