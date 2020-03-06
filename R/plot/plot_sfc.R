@@ -28,13 +28,13 @@ players %>%
     axis.line=element_blank(),
     axis.text.x=element_text(size=rel(0.8),hjust=0.5),
     axis.text.y=element_text(size=rel(0.8)),
-    strip.text.y=element_text(angle=0),
+    strip.text.y=element_text(angle=0)
   ) +
   labs(
     title=paste0("League minutes (","<b style='color:#D71920'>from start</b>","/","<b style='color:#ED5C5C'>from bench</b>",")"),
     x=element_blank(),
     y=element_blank(),
-    caption=caption[[1]],
+    caption=caption[[1]]
   ) +
   expand_limits(Min=0) +
   scale_x_continuous(breaks=seq(0,90*38,180),expand=expansion(add=c(20,20))) +
@@ -49,11 +49,9 @@ matches_long %>%
   mutate(xGAfbrefmva=get_mva(xGAfbref)) %>%
   ggplot(aes(x=Date)) +
   geom_point(aes(y=xGFfbref),colour="darkred",alpha=0.5) +
-  # geom_path(aes(y=xGFfbrefmva),colour="darkred",linetype="longdash",size=1) +
-  geom_smooth(aes(y=xGFfbref),colour="darkred",se=FALSE) +
+  geom_smooth(aes(y=xGFfbref),formula=y ~ x,method="loess",colour="darkred",linetype="longdash",size=0.8,se=FALSE) +
   geom_point(aes(y=xGAfbref),colour="royalblue",alpha=0.5) +
-  # geom_path(aes(y=xGAfbrefmva),colour="royalblue",linetype="longdash",size=1) +
-  geom_smooth(aes(y=xGAfbref),colour="royalblue",se=FALSE) +
+  geom_smooth(aes(y=xGAfbref),formula=y ~ x,method="loess",colour="royalblue",linetype="longdash",size=0.8,se=FALSE) +
   theme_sfc() +
   theme(
     axis.text.x=element_text(size=rel(0.8)),
