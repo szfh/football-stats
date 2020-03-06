@@ -48,6 +48,9 @@ matches_long %>%
   mutate(xGFfbrefmva=get_mva(xGFfbref)) %>%
   mutate(xGAfbrefmva=get_mva(xGAfbref)) %>%
   ggplot(aes(x=Date)) +
+  # mutate(Match=factor(Wk,labels=paste0(Opposition," ",ifelse(HA=="Home","H","A")," ",GoalsF,"-",GoalsA))) %>%
+  # mutate(Match=fct_rev(Match)) %>%
+  # ggplot(aes(x=Wk)) +
   geom_point(aes(y=xGFfbref),colour="darkred",alpha=0.5) +
   geom_smooth(aes(y=xGFfbref),formula=y ~ x,method="loess",colour="darkred",linetype="longdash",size=0.8,se=FALSE) +
   geom_point(aes(y=xGAfbref),colour="royalblue",alpha=0.5) +
@@ -65,6 +68,7 @@ matches_long %>%
     caption=paste0("rolling 5 game expected goals average","\n",caption[[1]])
   ) +
   scale_x_date(date_labels="%d %b",date_breaks="1 month",expand=expansion(add=c(2))) +
+  # scale_x_continuous(expand=expansion(add=c(0.1))) +
   scale_y_continuous(limits=c(0,NA),expand=expansion(add=c(0,0.1)))
 ggsave(here("plots","SFC","xGtrend.jpg"))
 
