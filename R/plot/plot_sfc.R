@@ -65,7 +65,7 @@ matches_long %>%
     title=paste0("Southampton ","<b style='color:darkred'>attack</b>","/","<b style='color:royalblue'>defence</b>"," trend"),
     x=element_blank(),
     y="Expected goals for/against",
-    caption=paste0("rolling 5 game expected goals average","\n",caption[[1]])
+    caption=caption[[1]]
   ) +
   scale_x_date(date_labels="%d %b",date_breaks="1 month",expand=expansion(add=c(2))) +
   # scale_x_continuous(expand=expansion(add=c(0.1))) +
