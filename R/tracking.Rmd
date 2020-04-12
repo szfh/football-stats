@@ -58,7 +58,7 @@ dtData %>%
 ## Slice
 
 ```{r slice}
-get_tracking_slice <- function(dtData, subtype, n=1, before=0, after=0){
+fGetTrackingSlice <- function(dtData, subtype, n=1, before=0, after=0){
   dtTrackingSlice <- dtData %>%
     filter(
       Frame %in%
@@ -70,14 +70,13 @@ get_tracking_slice <- function(dtData, subtype, n=1, before=0, after=0){
   return(dtTrackingSlice)
 }
 
-dtTrackingSlice <- get_tracking_slice(
+dtTrackingSlice <- fGetTrackingSlice(
   dtData,
-  subtype="CORNER KICK", # event type to slice
-  n=7, # which event in the data set
+  subtype="REFEREE HIT", # event type to slice
+  n=1, # which event in the data set
   before=10, # n frames before event
-  after=150 # n frames after event
+  after=40 # n frames after event
 )
-
 
 # all slices matching subtype
 dtTrackingSliceAll <- dtData %>%
