@@ -16,14 +16,14 @@ pacman::p_load(
   knitr,
   CodaBonito
 )
-```
 
-```{r parsedata, include=F, eval=F}
 cDataRootFolder = here("data","tracking")
 cGameName = "Sample_Game_1"
 nXLimit = 120
 nYLimit = 80
+```
 
+```{r parsedata, include=F, eval=F}
 game1 = fParseTrackingDataBothTeams(
    cRootPath = cDataRootFolder,
    cGameName = cGameName,
@@ -38,14 +38,55 @@ saveRDS(game1, here("data","tracking","Sample_Game_1","game1.rds"))
 
 ```{r load, include=F}
 # run to load saved data
-game1 <- readRDS(here("data","tracking","Sample_Game_1","game1.rds"))
+dtData <- readRDS(here("data","tracking","Sample_Game_1","game1.rds"))
 ```
 
 ## View data
 
-```{r view, include=T}
-game1 %>% str(give.attr=FALSE)
-game1 %>%
+```{r view, include=F}
+dtData %>% str(give.attr=FALSE)
+types <- dtData %>%
   select("Subtype") %>%
   distinct()
+```
+
+```{r}
+# all slices matching subtype
+dtTrackingSliceAll <- dtData %>%
+  filter(
+    Frame %in% outer(
+      (Frame[
+        which(
+          Subtype == "ON TARGET-GOAL")]),
+    -10:10,"+"))
+
+# random slice matching subtype
+dtTrackingSliceRandom <- dtData %>%
+  filter(
+    Frame %in%
+      outer(
+        sample(
+          Frame[which(Subtype=="CORNER KICK")],1
+        ),
+        -2:2,"+")
+  )
+
+# given slice matching subtype
+dtTrackingSliceGiven <- dtData %>%
+  filter(
+    Frame %in%
+      outer(
+        Frame[which(Subtype=="CORNER KICK")][[1]],
+      -2:2,"+")
+  )
+
+voronoiOutput = fDrawVoronoiFromTable(
+   dtTrackingSlice,
+   nXLimit = nXLimit,
+   nYlimit = nYlimit,
+   UseOneFrameEvery = 1
+)
+
+# print(voronoiOutput)
+ggsave((here("plots","tracking","voronoi1.jpg")))
 ```
