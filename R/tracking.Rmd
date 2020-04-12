@@ -18,35 +18,34 @@ pacman::p_load(
 )
 ```
 
-```{r download, include=F, eval=F}
-# run to get data from github
-game1 <- list()
-game1[["events"]] <- read_csv("https://raw.githubusercontent.com/metrica-sports/sample-data/master/data/Sample_Game_1/Sample_Game_1_RawEventsData.csv")
-game1[["home"]] <- read_csv("https://raw.githubusercontent.com/metrica-sports/sample-data/master/data/Sample_Game_1/Sample_Game_1_RawTrackingData_Home_Team.csv", skip=2)
-game1[["away"]] <- read_csv("https://raw.githubusercontent.com/metrica-sports/sample-data/master/data/Sample_Game_1/Sample_Game_1_RawTrackingData_Away_Team.csv", skip=2)
+```{r parsedata, include=F, eval=F}
+cDataRootFolder = here("data","tracking")
+cGameName = "Sample_Game_1"
+nXLimit = 120
+nYLimit = 80
 
-game2 <- list()
-game2[["events"]] <- readr::read_csv("https://raw.githubusercontent.com/metrica-sports/sample-data/master/data/Sample_Game_2/Sample_Game_2_RawEventsData.csv")
-game2[["home"]] <- read_csv("https://raw.githubusercontent.com/metrica-sports/sample-data/master/data/Sample_Game_2/Sample_Game_2_RawTrackingData_Home_Team.csv", skip=2)
-game2[["away"]] <- read_csv("https://raw.githubusercontent.com/metrica-sports/sample-data/master/data/Sample_Game_2/Sample_Game_2_RawTrackingData_Away_Team.csv", skip=2)
+game1 = fParseTrackingDataBothTeams(
+   cRootPath = cDataRootFolder,
+   cGameName = cGameName,
+   nXLimit = nXLimit,
+   nYLimit = nYLimit,
+   xMaxBB = 1,
+   yMaxBB = 1
+)
 
-saveRDS(game1, here("data","tracking","game1.rds"))
-saveRDS(game2, here("data","tracking","game2.rds"))
+saveRDS(game1, here("data","tracking","Sample_Game_1","game1.rds"))
 ```
 
 ```{r load, include=F}
-# run to get saved data
-game1 <- readRDS(here("data","tracking","game1.rds"))
-# game2 <- readRDS(here("data","tracking","game2.rds"))
+# run to load saved data
+game1 <- readRDS(here("data","tracking","Sample_Game_1","game1.rds"))
 ```
 
 ## View data
 
-```{r view}
-game1[["events"]] %>% str(give.attr=FALSE)
-game1[["home"]] %>% str(give.attr=FALSE)
-game1[["away"]] %>% str(give.attr=FALSE)
-game1[["events"]] %>%
+```{r view, include=T}
+game1 %>% str(give.attr=FALSE)
+game1 %>%
   select("Subtype") %>%
   distinct()
 ```
