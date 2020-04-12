@@ -43,12 +43,10 @@ game1 <- readRDS(here("data","tracking","game1.rds"))
 ## View data
 
 ```{r view}
-game1[["events"]] %>% head(20) %>% knitr::kable()
-game1[["home"]] %>% head(10) %>% knitr::kable()
-game1[["away"]] %>% head(10) %>% knitr::kable()
-
-game1[["events"]] %>% str()
-game1[["events"]] %>% summary()
-
-game1[["events"]] %>% skimr::skim() %>% knitr::kable()
+game1[["events"]] %>% str(give.attr=FALSE)
+game1[["home"]] %>% str(give.attr=FALSE)
+game1[["away"]] %>% str(give.attr=FALSE)
+game1[["events"]] %>%
+  select("Subtype") %>%
+  distinct()
 ```
