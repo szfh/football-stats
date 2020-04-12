@@ -21,9 +21,11 @@ cDataRootFolder = here("data","tracking")
 cGameName = "Sample_Game_1"
 nXLimit = 120
 nYLimit = 80
+dtData <- readRDS(here("data","tracking","Sample_Game_1","game1.rds"))
 ```
 
 ```{r parsedata, include=F, eval=F}
+# run to parse data and save locally
 game1 = fParseTrackingDataBothTeams(
    cRootPath = cDataRootFolder,
    cGameName = cGameName,
@@ -34,11 +36,6 @@ game1 = fParseTrackingDataBothTeams(
 )
 
 saveRDS(game1, here("data","tracking","Sample_Game_1","game1.rds"))
-```
-
-```{r load, include=F}
-# run to load saved data
-dtData <- readRDS(here("data","tracking","Sample_Game_1","game1.rds"))
 ```
 
 ## View data
