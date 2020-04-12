@@ -6,7 +6,7 @@ output: github_document
 ---
 
 ```{r setup, include=F}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
 pacman::p_load(
   pacman,
   here,
@@ -14,7 +14,8 @@ pacman::p_load(
   magrittr,
   readr,
   knitr,
-  CodaBonito
+  CodaBonito,
+  ggsoccer
 )
 
 # devtools::install_github("thecomeonman/CodaBonito")
@@ -42,7 +43,7 @@ saveRDS(game1, here("data","tracking","Sample_Game_1","game1.rds"))
 
 ## View data
 
-```{r view, include=F}
+```{r view, echo=F}
 dtData %>% str(give.attr=FALSE)
 types <- dtData %>%
   select("Type") %>%
@@ -104,7 +105,7 @@ dtTrackingSliceGiven <- dtData %>%
   )
 ```
 
-```{r plot}
+```{r voronoi}
 voronoiOutput = fDrawVoronoiFromTable(
   dtTrackingSlice,
   nXLimit = nXLimit,
@@ -112,18 +113,30 @@ voronoiOutput = fDrawVoronoiFromTable(
   UseOneFrameEvery = 4
 )
 
-print(voronoiOutput)
+# print(voronoiOutput)
 # ggsave((here("plots","tracking","voronoi.jpg")))
 # ggsave((here("plots","tracking","voronoi.gif")))
 ```
 
-```{r}
+```{r maps}
 goal_kicks <- dtData %>%
   filter(Frame %in% Frame[which(Subtype=="GOAL KICK")])
 
 corner_kicks <- dtData %>%
   filter(Frame %in% Frame[which(Subtype=="CORNER KICK")])
 
+pPitch <- fAddPitchLines(ggplot()) + theme_pitch()
 
-
+pPitch +
+  geom_segment(data=goal_kicks,aes(x=EventStartX,y=EventStartY,xend=EventEndX,yend=EventEndY,colour=Team),size=1, arrow=arrow(length = unit(0.03, "npc"))) +
+  theme(
+    plot.title=element_text(size=16, hjust=0.5, face="bold"),
+    plot.caption=element_text(size=10, face="bold"),
+    legend.position="none"
+  ) +
+  labs(
+    title="Sample match 1 - Goal kicks",
+    caption="Tracking data: @MetricaSports"
+  )
+# ggsave((here("plots","tracking","goalkicks.jpg")))
 ```
