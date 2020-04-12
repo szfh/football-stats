@@ -13,11 +13,12 @@ pacman::p_load(
   tidyverse,
   magrittr,
   readr,
+  knitr,
   CodaBonito
 )
 ```
 
-```{r download, eval=F}
+```{r download, include=F, eval=F}
 # run to get data from github
 game1 <- list()
 game1[["events"]] <- read_csv("https://raw.githubusercontent.com/metrica-sports/sample-data/master/data/Sample_Game_1/Sample_Game_1_RawEventsData.csv")
@@ -34,6 +35,20 @@ saveRDS(game2, here("data","tracking","game2.rds"))
 ```
 
 ```{r load, include=F}
+# run to get saved data
 game1 <- readRDS(here("data","tracking","game1.rds"))
 # game2 <- readRDS(here("data","tracking","game2.rds"))
+```
+
+## View data
+
+```{r view}
+game1[["events"]] %>% head(20) %>% knitr::kable()
+game1[["home"]] %>% head(10) %>% knitr::kable()
+game1[["away"]] %>% head(10) %>% knitr::kable()
+
+game1[["events"]] %>% str()
+game1[["events"]] %>% summary()
+
+game1[["events"]] %>% skimr::skim() %>% knitr::kable()
 ```
