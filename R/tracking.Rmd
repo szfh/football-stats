@@ -50,7 +50,7 @@ types <- dtData %>%
   distinct()
 ```
 
-```{r}
+```{r slice}
 # all slices matching subtype
 dtTrackingSliceAll <- dtData %>%
   filter(
@@ -79,14 +79,16 @@ dtTrackingSliceGiven <- dtData %>%
         Frame[which(Subtype=="CORNER KICK")][[1]],
       -2:2,"+")
   )
+```
 
+```{r plot}
 voronoiOutput = fDrawVoronoiFromTable(
-   dtTrackingSlice,
+   dtTrackingSliceGiven,
    nXLimit = nXLimit,
    nYlimit = nYlimit,
    UseOneFrameEvery = 1
 )
 
-# print(voronoiOutput)
+print(voronoiOutput)
 ggsave((here("plots","tracking","voronoi1.jpg")))
 ```
