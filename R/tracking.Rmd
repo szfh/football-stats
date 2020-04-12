@@ -29,12 +29,12 @@ dtData <- readRDS(here("data","tracking","Sample_Game_1","game1.rds"))
 ```{r parsedata, include=F, eval=F}
 # run to parse data and save locally
 game1 = fParseTrackingDataBothTeams(
-   cRootPath = cDataRootFolder,
-   cGameName = cGameName,
-   nXLimit = nXLimit,
-   nYLimit = nYLimit,
-   xMaxBB = 1,
-   yMaxBB = 1
+  cRootPath = cDataRootFolder,
+  cGameName = cGameName,
+  nXLimit = nXLimit,
+  nYLimit = nYLimit,
+  xMaxBB = 1,
+  yMaxBB = 1
 )
 
 saveRDS(game1, here("data","tracking","Sample_Game_1","game1.rds"))
@@ -45,19 +45,43 @@ saveRDS(game1, here("data","tracking","Sample_Game_1","game1.rds"))
 ```{r view, include=F}
 dtData %>% str(give.attr=FALSE)
 types <- dtData %>%
+  select("Type") %>%
+  distinct()
+subtypes <- dtData %>%
   select("Subtype") %>%
   distinct()
 ```
 
 ```{r slice}
+get_tracking_slice <- function(dtData, subtype, n=1, before=0, after=0){
+  dtTrackingSlice <- dtData %>%
+    filter(
+      Frame %in%
+        outer(
+          Frame[which(Subtype==subtype)][[n]],
+          -before:after,"+")
+    )
+  
+  return(dtTrackingSlice)
+}
+
+dtTrackingSlice <- get_tracking_slice(
+  dtData,
+  subtype="CORNER KICK", # event type to slice
+  n=7, # which event in the data set
+  before=10, # n frames before event
+  after=150 # n frames after event
+)
+
+
 # all slices matching subtype
 dtTrackingSliceAll <- dtData %>%
   filter(
     Frame %in% outer(
       (Frame[
         which(
-          Subtype == "ON TARGET-GOAL")]),
-    -10:10,"+"))
+          Subtype == "CORNER KICK")]),
+      -10:40,"+"))
 
 # random slice matching subtype
 dtTrackingSliceRandom <- dtData %>%
@@ -67,7 +91,7 @@ dtTrackingSliceRandom <- dtData %>%
         sample(
           Frame[which(Subtype=="CORNER KICK")],1
         ),
-        -2:2,"+")
+        -10:40,"+")
   )
 
 # given slice matching subtype
@@ -76,18 +100,30 @@ dtTrackingSliceGiven <- dtData %>%
     Frame %in%
       outer(
         Frame[which(Subtype=="CORNER KICK")][[1]],
-      -2:2,"+")
+        -10:40,"+")
   )
 ```
 
 ```{r plot}
 voronoiOutput = fDrawVoronoiFromTable(
-   dtTrackingSliceGiven,
-   nXLimit = nXLimit,
-   nYlimit = nYlimit,
-   UseOneFrameEvery = 1
+  dtTrackingSlice,
+  nXLimit = nXLimit,
+  nYlimit = nYlimit,
+  UseOneFrameEvery = 4
 )
 
 print(voronoiOutput)
-ggsave((here("plots","tracking","voronoi1.jpg")))
+# ggsave((here("plots","tracking","voronoi.jpg")))
+# ggsave((here("plots","tracking","voronoi.gif")))
+```
+
+```{r}
+goal_kicks <- dtData %>%
+  filter(Frame %in% Frame[which(Subtype=="GOAL KICK")])
+
+corner_kicks <- dtData %>%
+  filter(Frame %in% Frame[which(Subtype=="CORNER KICK")])
+
+
+
 ```
