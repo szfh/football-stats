@@ -55,6 +55,8 @@ dtData %>%
   distinct()
 ```
 
+## Slice
+
 ```{r slice}
 get_tracking_slice <- function(dtData, subtype, n=1, before=0, after=0){
   dtTrackingSlice <- dtData %>%
@@ -107,6 +109,8 @@ dtTrackingSliceGiven <- dtData %>%
   )
 ```
 
+## Voronoi
+
 ```{r voronoi}
 voronoiOutput = fDrawVoronoiFromTable(
   dtTrackingSlice,
@@ -119,6 +123,8 @@ voronoiOutput = fDrawVoronoiFromTable(
 # ggsave((here("plots","tracking","voronoi.jpg")))
 # ggsave((here("plots","tracking","voronoi.gif")))
 ```
+
+## Maps
 
 ```{r maps}
 goal_kicks <- dtData %>%
