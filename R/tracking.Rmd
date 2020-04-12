@@ -44,11 +44,13 @@ saveRDS(game1, here("data","tracking","Sample_Game_1","game1.rds"))
 ## View data
 
 ```{r view, echo=F}
-dtData %>% str(give.attr=FALSE)
-types <- dtData %>%
+dtData %>%
+  select(Period:EventEndY) %>%
+  str(give.attr=FALSE)
+dtData %>%
   select("Type") %>%
   distinct()
-subtypes <- dtData %>%
+dtData %>%
   select("Subtype") %>%
   distinct()
 ```
