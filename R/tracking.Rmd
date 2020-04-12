@@ -17,6 +17,8 @@ pacman::p_load(
   CodaBonito
 )
 
+# devtools::install_github("thecomeonman/CodaBonito")
+
 cDataRootFolder = here("data","tracking")
 cGameName = "Sample_Game_1"
 nXLimit = 120
