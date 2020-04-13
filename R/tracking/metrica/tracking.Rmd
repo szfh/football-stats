@@ -74,9 +74,17 @@ dtTrackingSlice <- fGetTrackingSlice(
   dtData,
   subtype="REFEREE HIT", # event type to slice
   n=1, # which event in the data set
-  before=10, # n frames before event
-  after=40 # n frames after event
+  before=10, # frames before event
+  after=40 # frames after event
 )
+
+d1 <- dtData %>%
+  filter(Subtype=="REFEREE HIT") %>%
+  tally()
+
+dtData %>%
+  filter(Subtype=="REFEREE HIT") %>%
+  tally() > 0
 
 # all slices matching subtype
 dtTrackingSliceAll <- dtData %>%
