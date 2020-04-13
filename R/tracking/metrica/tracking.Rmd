@@ -43,7 +43,7 @@ saveRDS(game1, here("data","tracking","Sample_Game_1","game1.rds"))
 
 ## View data
 
-```{r view, echo=F}
+```{r view, include=F, echo=F}
 dtData %>%
   select(Period:EventEndY) %>%
   str(give.attr=FALSE)
@@ -63,7 +63,7 @@ fGetTrackingSlice <- function(dtData, subtype, n=1, before=0, after=0){
     filter(
       Frame %in%
         outer(
-          Frame[which(Subtype==subtype)][[n]],
+          Frame[which(Subtype==subtype)][n],
           -before:after,"+")
     )
   
@@ -72,19 +72,27 @@ fGetTrackingSlice <- function(dtData, subtype, n=1, before=0, after=0){
 
 dtTrackingSlice <- fGetTrackingSlice(
   dtData,
-  subtype="REFEREE HIT", # event type to slice
-  n=1, # which event in the data set
+  subtype="GOAL KICK", # event type to slice
+  n=c(1,2), # which event in the data set. use c() for multiple events.
   before=10, # frames before event
   after=40 # frames after event
 )
 
-d1 <- dtData %>%
-  filter(Subtype=="REFEREE HIT") %>%
-  tally()
+# dtTrackingSlice <- fGetTrackingSlice(
+#   dtData,
+#   subtype="REFEREE HIT", # event type to slice
+#   n=1, # which event in the data set
+#   before=10, # frames before event
+#   after=40 # frames after event
+# )
 
-dtData %>%
-  filter(Subtype=="REFEREE HIT") %>%
-  tally() > 0
+# d1 <- dtData %>%
+#   filter(Subtype=="REFEREE HIT") %>%
+#   tally()
+
+# dtData %>%
+#   filter(Subtype=="REFEREE HIT") %>%
+#   tally() > 0
 
 # all slices matching subtype
 dtTrackingSliceAll <- dtData %>%
@@ -119,12 +127,12 @@ dtTrackingSliceGiven <- dtData %>%
 ## Voronoi
 
 ```{r voronoi}
-voronoiOutput = fDrawVoronoiFromTable(
-  dtTrackingSlice,
-  nXLimit = nXLimit,
-  nYlimit = nYlimit,
-  UseOneFrameEvery = 4
-)
+# voronoiOutput = fDrawVoronoiFromTable(
+#   dtTrackingSlice,
+#   nXLimit = nXLimit,
+#   nYlimit = nYlimit,
+#   UseOneFrameEvery = 4
+# )
 
 # print(voronoiOutput)
 # ggsave((here("plots","tracking","voronoi.jpg")))
@@ -154,4 +162,5 @@ pPitch +
     caption="Tracking data: @MetricaSports"
   )
 # ggsave((here("plots","tracking","goalkicks.jpg")))
+
 ```
