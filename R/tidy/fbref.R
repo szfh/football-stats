@@ -1,8 +1,8 @@
-raw <- readRDS(file=here("data","raw-fbref.rds"))
+# raw <- readRDS(file=here("data","raw-fbref.rds"))
 
-if (!exists("tidy",inherits=FALSE)){
-  tidy <- list()
-}
+# if (!exists("tidy",inherits=FALSE)){
+tidy <- list()
+# }
 
 # player
 
@@ -81,22 +81,95 @@ tidy[["fbref"]][["player"]][["shooting"]] <- raw[["fbref"]][["player"]][["shooti
 
 tidy[["fbref"]][["player"]][["passing"]] <- raw[["fbref"]][["player"]][["passing"]] %>%
   rename(
-    "TotalCmp"="Cmp...13",
-    "TotalAtt"="Att...14",
-    "TotalCmp%"="Cmp%...15",
-    "ShortCmp"="Cmp...16",
-    "ShortAtt"="Att...17",
-    "ShortCmp%"="Cmp%...18",
-    "MediumCmp"="Cmp...19",
-    "MediumAtt"="Att...20",
-    "MediumCmp%"="Cmp%...21",
-    "LongCmp"="Cmp...22",
-    "LongAtt"="Att...23",
-    "LongCmp%"="Cmp%...24",
-    "PassFK"="FK",
+    "TotalCmp"="Cmp...9",
+    "TotalAtt"="Att...10",
+    "TotalCmp%"="Cmp%...11",
+    "ShortCmp"="Cmp...14",
+    "ShortAtt"="Att...15",
+    "ShortCmp%"="Cmp%...16",
+    "MediumCmp"="Cmp...17",
+    "MediumAtt"="Att...18",
+    "MediumCmp%"="Cmp%...19",
+    "LongCmp"="Cmp...20",
+    "LongAtt"="Att...21",
+    "LongCmp%"="Cmp%...22",
   ) %>%
   select(
     -"Rk",
+  )
+# 
+tidy[["fbref"]][["player"]][["passsingtypes"]] <- raw[["fbref"]][["player"]][["passsingtypes"]] %>%
+  rename(
+    "PassFK"="FK",
+    "CrsIn"="In",
+    "CrsOut"="Out...19",
+    "CrsStr"="Str",
+    "PassCmp"="Cmp",
+    "PassOff"="Off",
+    "PassOut"="Out...31",
+    "PassInt"="Int",
+    "PassBlocks"="Blocks",
+  ) %>%
+  select(
+    -"Rk",
+  )
+
+tidy[["fbref"]][["player"]][["gca"]] <- raw[["fbref"]][["player"]][["gca"]] %>%
+  rename(
+    "SCAPassLive"="PassLive...11",
+    "SCAPassDead"="PassDead...12",
+    "SCADrib"="Drib...13",
+    "SCASh"="Sh...14",
+    "SCAFld"="Fld...15",
+    "GCAPassLive"="PassLive...18",
+    "GCAPassDead"="PassDead...19",
+    "GCADrib"="Drib...20",
+    "GCASh"="Sh...21",
+    "GCAFld"="Fld...22",
+    "GCAOG"="OG",
+  ) %>%
+  select(
+    -"Rk",
+  )
+
+tidy[["fbref"]][["player"]][["defense"]] <- raw[["fbref"]][["player"]][["defense"]] %>%
+  rename(
+    "PlTkl"="Tkl...9",
+    "TklDef3rd"="Def 3rd...11",
+    "TklMid3rd"="Mid 3rd...12",
+    "TklAtt3rd"="Att 3rd...13",
+    "DribTkl"="Tkl...14",
+    "DribTklAtt"="Att",
+    "DribTkl%"="Tkl%",
+    "DribPast"="Past",
+    "DPress"="Press",
+    "PressSucc"="Succ",
+    "PressSucc%"="%",
+    "PresDef3rd"="Def 3rd...21",
+    "PresMid3rd"="Mid 3rd...22",
+    "PresAtt3rd"="Att 3rd...23",
+    "ShBlk"="Sh",
+    "PassBlk"="Pass",
+  ) %>%
+  select(
+    -"Rk",
+  )
+
+tidy[["fbref"]][["player"]][["possession"]] <- raw[["fbref"]][["player"]][["possession"]] %>%
+  rename(
+    "TouchDef3rd"="Def 3rd",
+    "TouchMid3rd"="Mid 3rd",
+    "TouchAtt3rd"="Att 3rd",
+    "TouchAttPen"="Att Pen",
+    "TouchLive"="Live",
+    "DribSucc"="Succ",
+    "DribAtt"="Att",
+    "DribSucc%"="Succ%",
+    "Drib#Pl"="#Pl",
+  ) %>%
+  select(
+    -"Rk",
+    -("Carries":"PrgDist"),
   )
 
 tidy[["fbref"]][["player"]][["playingtime"]] <- raw[["fbref"]][["player"]][["playingtime"]] %>%
@@ -111,134 +184,148 @@ tidy[["fbref"]][["player"]][["playingtime"]] <- raw[["fbref"]][["player"]][["pla
   )
 
 tidy[["fbref"]][["player"]][["misc"]] <- raw[["fbref"]][["player"]][["misc"]] %>%
-  rename(
-    "DribSuc"="Succ",
-    "DribAtt"="Att...22",
-    "Drib#Pl"="#Pl",
-    "DribTkl"="Tkl",
-    "DribCont"="Att...27",
-    "DribTkl%"="Tkl%",
-    "DribPast"="Past",
-  ) %>%
-  select(
-    -"Rk",
-  )
+rename(
+
+) %>%
+select(
+  -"Rk",
+)
 
 # table
 
-tidy[["fbref"]][["table"]] <- raw[["fbref"]][["table"]] %>%
-  select(
-    -"Top Team Scorer",
-    -"Goalkeeper",
-    -"Notes",
-  ) %>%
-  rename(
-    "xGDiff90"="xGDiff/90"
-  )
-
-# squad
-
-tidy[["fbref"]][["squad"]][["standard"]] <- raw[["fbref"]][["squad"]][["standard"]] %>%
-  rename(
-    "Gls"="Gls...6",
-    "Ast"="Ast...7",
-    "Gls90"="Gls...12",
-    "Ast90"="Ast...13",
-    "G+A90"="G+A",
-    "G-PK90"="G-PK",
-    "G+A-PK90"="G+A-PK",
-    "xG"="xG...17",
-    "npxG"="npxG...18",
-    "xA"="xA...19",
-    "xG90"="xG...20",
-    "xA90"="xA...21",
-    "xG+xA90"="xG+xA",
-    "npxG90"="npxG...23",
-    "npxG+xA90"="npxG+xA",
-  )
-
-tidy[["fbref"]][["squad"]][["keepers"]] <- raw[["fbref"]][["squad"]][["keepers"]] %>%
-  rename(
-    "GK# Pl"="# Pl",
-    "GKPKatt"="PKatt",
-    "GKPKA"="PKA",
-    "GKPKsv"="PKsv",
-    "GKPKm"="PKm",
-  ) %>%
-  select(
-    -"Starts",
-    -"Min",
-  )
-
-tidy[["fbref"]][["squad"]][["keepersadv"]] <- raw[["fbref"]][["squad"]][["keepersadv"]] %>%
-  rename(
-    "GK# Pl"="# Pl",
-    "GKPKA"="PKA",
-    "GKFK"="FK",
-    "GKCK"="CK",
-    "GKOG"="OG",
-    "PSxG+/-90"="/90",
-    "GKLCmp"="Cmp",
-    "GKLAtt"="Att...14",
-    "GKLCmp%"="Cmp%",
-    "GKPassAtt"="Att...16",
-    "GKThr"="Thr",
-    "GKLaunch%"="Launch%...18",
-    "GKAvgLen"="AvgLen...19",
-    "GKGKPassAtt"="Att...20",
-    "GKGKLaunch%"="Launch%...21",
-    "GKGKAvgLen"="AvgLen...22",
-    "GKCrsAtt"="Att...23",
-    "GKCrsStp"="Stp",
-    "GKCrsStp%"="Stp%",
-    "GKOPA"="#OPA",
-    "GKOPA90"="#OPA/90",
-    "GKOPAAvgDist"="AvgDist",
-  ) %>%
-  select(
-    -"90s",
-  )
-
-tidy[["fbref"]][["squad"]][["shooting"]] <- raw[["fbref"]][["squad"]][["shooting"]] %>%
-  rename(
-    "ShotFK"="FK",
-    "Sh90"="Sh/90",
-    "SoT90"="SoT/90",
-  )
-
-tidy[["fbref"]][["squad"]][["passing"]] <- raw[["fbref"]][["squad"]][["passing"]] %>%
-  rename(
-    "TotalCmp"="Cmp...7",
-    "TotalAtt"="Att...8",
-    "TotalCmp%"="Cmp%...9",
-    "ShortCmp"="Cmp...10",
-    "ShortAtt"="Att...11",
-    "ShortCmp%"="Cmp%...12",
-    "MediumCmp"="Cmp...13",
-    "MediumAtt"="Att...14",
-    "MediumCmp%"="Cmp%...15",
-    "LongCmp"="Cmp...16",
-    "LongAtt"="Att...17",
-    "LongCmp%"="Cmp%...18",
-    "PassFK"="FK",
-  )
-
-tidy[["fbref"]][["squad"]][["playingtime"]] <- raw[["fbref"]][["squad"]][["playingtime"]] %>%
-  rename(
-    "Gls+/-"="+/-",
-    "Gls+/-90"="+/-90",
-  )
-
-tidy[["fbref"]][["squad"]][["misc"]] <- raw[["fbref"]][["squad"]][["misc"]] %>%
-  rename(
-    "DribSuc"="Succ",
-    "DribAtt"="Att...16",
-    "Drib#Pl"="#Pl",
-    "DribTkl"="Tkl",
-    "DribCont"="Att...21",
-    "DribTkl%"="Tkl%",
-    "DribPast"="Past",
-  )
+# tidy[["fbref"]][["table"]] <- raw[["fbref"]][["table"]] %>%
+#   select(
+#     -"Top Team Scorer",
+#     -"Goalkeeper",
+#     -"Notes",
+#   ) %>%
+#   rename(
+#     "xGDiff90"="xGDiff/90"
+#   )
+# 
+# # squad
+# 
+# tidy[["fbref"]][["squad"]][["standard"]] <- raw[["fbref"]][["squad"]][["standard"]] %>%
+#   rename(
+#     "Gls"="Gls...6",
+#     "Ast"="Ast...7",
+#     "Gls90"="Gls...12",
+#     "Ast90"="Ast...13",
+#     "G+A90"="G+A",
+#     "G-PK90"="G-PK",
+#     "G+A-PK90"="G+A-PK",
+#     "xG"="xG...17",
+#     "npxG"="npxG...18",
+#     "xA"="xA...19",
+#     "xG90"="xG...20",
+#     "xA90"="xA...21",
+#     "xG+xA90"="xG+xA",
+#     "npxG90"="npxG...23",
+#     "npxG+xA90"="npxG+xA",
+#   )
+# 
+# tidy[["fbref"]][["squad"]][["keepers"]] <- raw[["fbref"]][["squad"]][["keepers"]] %>%
+#   rename(
+#     "GK# Pl"="# Pl",
+#     "GKPKatt"="PKatt",
+#     "GKPKA"="PKA",
+#     "GKPKsv"="PKsv",
+#     "GKPKm"="PKm",
+#   ) %>%
+#   select(
+#     -"Starts",
+#     -"Min",
+#   )
+# 
+# tidy[["fbref"]][["squad"]][["keepersadv"]] <- raw[["fbref"]][["squad"]][["keepersadv"]] %>%
+#   rename(
+#     "GK# Pl"="# Pl",
+#     "GKPKA"="PKA",
+#     "GKFK"="FK",
+#     "GKCK"="CK",
+#     "GKOG"="OG",
+#     "PSxG+/-90"="/90",
+#     "GKLCmp"="Cmp",
+#     "GKLAtt"="Att...14",
+#     "GKLCmp%"="Cmp%",
+#     "GKPassAtt"="Att...16",
+#     "GKThr"="Thr",
+#     "GKLaunch%"="Launch%...18",
+#     "GKAvgLen"="AvgLen...19",
+#     "GKGKPassAtt"="Att...20",
+#     "GKGKLaunch%"="Launch%...21",
+#     "GKGKAvgLen"="AvgLen...22",
+#     "GKCrsAtt"="Att...23",
+#     "GKCrsStp"="Stp",
+#     "GKCrsStp%"="Stp%",
+#     "GKOPA"="#OPA",
+#     "GKOPA90"="#OPA/90",
+#     "GKOPAAvgDist"="AvgDist",
+#   ) %>%
+#   select(
+#     -"90s",
+#   )
+# 
+# tidy[["fbref"]][["squad"]][["shooting"]] <- raw[["fbref"]][["squad"]][["shooting"]] %>%
+#   rename(
+#     "ShotFK"="FK",
+#     "Sh90"="Sh/90",
+#     "SoT90"="SoT/90",
+#   )
+# 
+# tidy[["fbref"]][["squad"]][["passing"]] <- raw[["fbref"]][["squad"]][["passing"]] %>%
+#   rename(
+#     "TotalCmp"="Cmp...7",
+#     "TotalAtt"="Att...8",
+#     "TotalCmp%"="Cmp%...9",
+#     "ShortCmp"="Cmp...10",
+#     "ShortAtt"="Att...11",
+#     "ShortCmp%"="Cmp%...12",
+#     "MediumCmp"="Cmp...13",
+#     "MediumAtt"="Att...14",
+#     "MediumCmp%"="Cmp%...15",
+#     "LongCmp"="Cmp...16",
+#     "LongAtt"="Att...17",
+#     "LongCmp%"="Cmp%...18",
+#     "PassFK"="FK",
+#   )
+# 
+# tidy[["fbref"]][["squad"]][["passsingtypes"]] <- raw[["fbref"]][["squad"]][["passsingtypes"]] %>%
+#   select(
+#     -"Rk",
+#   )
+# 
+# tidy[["fbref"]][["squad"]][["gca"]] <- raw[["fbref"]][["squad"]][["gca"]] %>%
+#   select(
+#     -"Rk",
+#   )
+# 
+# tidy[["fbref"]][["squad"]][["defense"]] <- raw[["fbref"]][["squad"]][["defense"]] %>%
+#   select(
+#     -"Rk",
+#   )
+# 
+# tidy[["fbref"]][["squad"]][["possession"]] <- raw[["fbref"]][["squad"]][["possession"]] %>%
+#   select(
+#     -"Rk",
+#   )
+# 
+# tidy[["fbref"]][["squad"]][["playingtime"]] <- raw[["fbref"]][["squad"]][["playingtime"]] %>%
+#   rename(
+#     "Gls+/-"="+/-",
+#     "Gls+/-90"="+/-90",
+#   )
+# 
+# tidy[["fbref"]][["squad"]][["misc"]] <- raw[["fbref"]][["squad"]][["misc"]] %>%
+#   rename(
+#     "DribSuc"="Succ",
+#     "DribAtt"="Att...16",
+#     "Drib#Pl"="#Pl",
+#     "DribTkl"="Tkl",
+#     "DribCont"="Att...21",
+#     "DribTkl%"="Tkl%",
+#     "DribPast"="Past",
+#   )
 
 # matches
 
