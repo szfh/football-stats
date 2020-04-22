@@ -6,7 +6,7 @@ output: github_document
 ---
 
 ```{r setup, include=F}
-knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
+knitr::opts_chunk$set(echo=TRUE, message=FALSE, warning=FALSE)
 pacman::p_load(
   pacman,
   here,
@@ -15,10 +15,13 @@ pacman::p_load(
   readr,
   knitr,
   CodaBonito,
-  ggsoccer
+  ggsoccer,
+  magick
 )
 
 # devtools::install_github("thecomeonman/CodaBonito")
+# https://github.com/thecomeonman/CodaBonito
+# https://github.com/thecomeonman/MakingFriendsWithTrackingData
 
 cDataRootFolder = here("data","tracking")
 cGameName = "Sample_Game_1"
@@ -29,7 +32,7 @@ dtData <- readRDS(here("data","tracking","Sample_Game_1","game1.rds"))
 
 ```{r parsedata, include=F, eval=F}
 # run to parse data and save locally
-game1 = fParseTrackingDataBothTeams(
+dtData <- fParseTrackingDataBothTeams(
   cRootPath = cDataRootFolder,
   cGameName = cGameName,
   nXLimit = nXLimit,
@@ -43,111 +46,82 @@ saveRDS(game1, here("data","tracking","Sample_Game_1","game1.rds"))
 
 ## View data
 
-```{r view, include=F, echo=F}
-dtData %>%
-  select(Period:EventEndY) %>%
+```{r view, eval=F}
+dtData$dtTrackingData %>%
   str(give.attr=FALSE)
-dtData %>%
+dtData$dtEventsData %>%
+  str(give.attr=FALSE)
+dtData$dtEventsData %>%
   select("Type") %>%
   distinct()
-dtData %>%
+dtData$dtEventsData %>%
   select("Subtype") %>%
   distinct()
+dtData$dtEventsData %>%
+  select("Type","Subtype") %>%
+  distinct()
+```
+
+## Events
+
+```{r events}
+goal_kicks <- dtData$dtEventsData %>%
+  filter(Subtype=="GOAL KICK")
+
+corner_kicks <- dtData$dtEventsData %>%
+  filter(Subtype=="CORNER KICK")
 ```
 
 ## Slice
 
 ```{r slice}
-fGetTrackingSlice <- function(dtData, subtype, n=1, before=0, after=0){
-  dtTrackingSlice <- dtData %>%
-    filter(
-      Frame %in%
-        outer(
-          Frame[which(Subtype==subtype)][n],
-          -before:after,"+")
-    )
+fGetTrackingSlice <- function(dtTrackingData, frame, before=0, after=0){
   
+  dtTrackingSlice <- dtTrackingData %>%
+    filter(Frame %in% outer(frame,-before:after,"+"))
+
   return(dtTrackingSlice)
 }
 
 dtTrackingSlice <- fGetTrackingSlice(
-  dtData,
-  subtype="GOAL KICK", # event type to slice
-  n=c(1,2), # which event in the data set. use c() for multiple events.
-  before=10, # frames before event
-  after=40 # frames after event
+  dtData$dtTrackingData,
+  frame=corner_kicks$StartFrame[c(2)],
+  before=10,
+  after=150
 )
 
-# dtTrackingSlice <- fGetTrackingSlice(
-#   dtData,
-#   subtype="REFEREE HIT", # event type to slice
-#   n=1, # which event in the data set
-#   before=10, # frames before event
-#   after=40 # frames after event
-# )
-
-# d1 <- dtData %>%
-#   filter(Subtype=="REFEREE HIT") %>%
-#   tally()
-
-# dtData %>%
-#   filter(Subtype=="REFEREE HIT") %>%
-#   tally() > 0
-
-# all slices matching subtype
-dtTrackingSliceAll <- dtData %>%
-  filter(
-    Frame %in% outer(
-      (Frame[
-        which(
-          Subtype == "CORNER KICK")]),
-      -10:40,"+"))
-
-# random slice matching subtype
-dtTrackingSliceRandom <- dtData %>%
-  filter(
-    Frame %in%
-      outer(
-        sample(
-          Frame[which(Subtype=="CORNER KICK")],1
-        ),
-        -10:40,"+")
-  )
-
-# given slice matching subtype
-dtTrackingSliceGiven <- dtData %>%
-  filter(
-    Frame %in%
-      outer(
-        Frame[which(Subtype=="CORNER KICK")][[1]],
-        -10:40,"+")
-  )
+# framesinslice <- dtTrackingSlice %>%
+#   select(Frame) %>%
+#   distinct()
 ```
 
 ## Voronoi
 
 ```{r voronoi}
-# voronoiOutput = fDrawVoronoiFromTable(
-#   dtTrackingSlice,
-#   nXLimit = nXLimit,
-#   nYlimit = nYlimit,
-#   UseOneFrameEvery = 4
-# )
-
-# print(voronoiOutput)
-# ggsave((here("plots","tracking","voronoi.jpg")))
-# ggsave((here("plots","tracking","voronoi.gif")))
+voronoiOutput <- fDrawVoronoiFromTable(
+   dtTrackingSlice = dtTrackingSlice,
+   nXLimit = 120,
+   nYLimit = 80,
+   UseOneFrameEvery = 2,
+   DelayBetweenFrames = 4
+)
 ```
+
+```{r save, include=F}
+file.remove(here("plots","tracking","voronoicorner1.gif"))
+file.copy(voronoiOutput, here("plots","tracking","voronoicorner1.gif"))
+
+if (!interactive()) {
+  file.remove(here("R","tracking","metrica","tracking_files","figure-gfm","voronoi-1.gif"))
+  file.copy(voronoiOutput,here("R","tracking","metrica","tracking_files","figure-gfm","voronoi-1.gif"))
+}
+```
+
+<img src="./tracking_files/figure-gfm/voronoi-1.gif" width="60%">
 
 ## Maps
 
 ```{r maps}
-goal_kicks <- dtData %>%
-  filter(Frame %in% Frame[which(Subtype=="GOAL KICK")])
-
-corner_kicks <- dtData %>%
-  filter(Frame %in% Frame[which(Subtype=="CORNER KICK")])
-
 pPitch <- fAddPitchLines(ggplot()) + theme_pitch()
 
 pPitch +
@@ -161,6 +135,5 @@ pPitch +
     title="Sample match 1 - Goal kicks",
     caption="Tracking data: @MetricaSports"
   )
-# ggsave((here("plots","tracking","goalkicks.jpg")))
-
+ggsave((here("plots","tracking","goalkicks.jpg")))
 ```
