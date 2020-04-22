@@ -6,7 +6,7 @@ output: github_document
 ---
 
 ```{r setup, include=F}
-knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
+knitr::opts_chunk$set(echo=TRUE, message=FALSE, warning=FALSE)
 pacman::p_load(
   pacman,
   here,
@@ -46,7 +46,7 @@ saveRDS(game1, here("data","tracking","Sample_Game_1","game1.rds"))
 
 ## View data
 
-```{r view, include=F, echo=F}
+```{r view, eval=F}
 dtData$dtTrackingData %>%
   str(give.attr=FALSE)
 dtData$dtEventsData %>%
@@ -59,7 +59,7 @@ dtData$dtEventsData %>%
   distinct()
 dtData$dtEventsData %>%
   select("Type","Subtype") %>%
-distinct()
+  distinct()
 ```
 
 ## Events
@@ -85,9 +85,9 @@ fGetTrackingSlice <- function(dtTrackingData, frame, before=0, after=0){
 
 dtTrackingSlice <- fGetTrackingSlice(
   dtData$dtTrackingData,
-  frame=goal_kicks$StartFrame[c(10)],
-  before=20, # frames before event
-  after=200 # frames after event
+  frame=corner_kicks$StartFrame[c(2)],
+  before=10,
+  after=150
 )
 
 # framesinslice <- dtTrackingSlice %>%
@@ -102,52 +102,38 @@ voronoiOutput <- fDrawVoronoiFromTable(
    dtTrackingSlice = dtTrackingSlice,
    nXLimit = 120,
    nYLimit = 80,
-   UseOneFrameEvery = 6,
-   DelayBetweenFrames = 12,
-   markTrajectoryFor = c('AwayPlayer18')
+   UseOneFrameEvery = 2,
+   DelayBetweenFrames = 4
 )
-
-file.remove(here("plots","tracking","voronoigk10.gif"))
-file.copy(voronoiOutput, here("plots","tracking","voronoigk10.gif"))
-
-# if ( !interactive() ) {
-#     
-#     qwe = suppressWarnings(
-#         file.remove('./README_files/figure-markdown_strict/Voronoi.gif')
-#     )
-#     rm(qwe)
-# 
-#     qwe = file.copy(
-#         voronoiOutput,
-#         './README_files/figure-markdown_strict/Voronoi.gif'
-#     )
-# 
-#     rm(qwe)
-#     
-# }
 ```
+
+```{r save, include=F}
+file.remove(here("plots","tracking","voronoicorner1.gif"))
+file.copy(voronoiOutput, here("plots","tracking","voronoicorner1.gif"))
+
+if (!interactive()) {
+  file.remove(here("R","tracking","metrica","tracking_files","figure-gfm","voronoi-1.gif"))
+  file.copy(voronoiOutput,here("R","tracking","metrica","tracking_files","figure-gfm","voronoi-1.gif"))
+}
+```
+
+<img src="./tracking_files/figure-gfm/voronoi-1.gif" width="60%">
 
 ## Maps
 
 ```{r maps}
-goal_kicks <- dtData$dtEventsData %>%
-  filter(Subtype=="GOAL KICK")
+pPitch <- fAddPitchLines(ggplot()) + theme_pitch()
 
-corner_kicks <- dtData$dtEventsData %>%
-  filter(Subtype=="CORNER KICK")
-
-# pPitch <- fAddPitchLines(ggplot()) + theme_pitch()
-# 
-# pPitch +
-#   geom_segment(data=goal_kicks,aes(x=EventStartX,y=EventStartY,xend=EventEndX,yend=EventEndY,colour=Team),size=1, arrow=arrow(length = unit(0.03, "npc"))) +
-#   theme(
-#     plot.title=element_text(size=16, hjust=0.5, face="bold"),
-#     plot.caption=element_text(size=10, face="bold"),
-#     legend.position="none"
-#   ) +
-#   labs(
-#     title="Sample match 1 - Goal kicks",
-#     caption="Tracking data: @MetricaSports"
-#   )
-# ggsave((here("plots","tracking","goalkicks.jpg")))
+pPitch +
+  geom_segment(data=goal_kicks,aes(x=EventStartX,y=EventStartY,xend=EventEndX,yend=EventEndY,colour=Team),size=1, arrow=arrow(length = unit(0.03, "npc"))) +
+  theme(
+    plot.title=element_text(size=16, hjust=0.5, face="bold"),
+    plot.caption=element_text(size=10, face="bold"),
+    legend.position="none"
+  ) +
+  labs(
+    title="Sample match 1 - Goal kicks",
+    caption="Tracking data: @MetricaSports"
+  )
+ggsave((here("plots","tracking","goalkicks.jpg")))
 ```
