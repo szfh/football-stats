@@ -4,6 +4,37 @@
 tidy <- list()
 # }
 
+# table
+
+tidy[["fbref"]][["table"]] <- raw[["fbref"]][["table"]] %>%
+  select(
+    -"Top Team Scorer",
+    -"Goalkeeper",
+    -"Notes",
+  ) %>%
+  rename(
+    "xGDiff90"="xGDiff/90"
+  )
+
+# matches
+
+tidy[["fbref"]][["matches"]] <- raw[["fbref"]][["matches"]] %>%
+  separate("Score",c("GoalsHome","GoalsAway"),sep="[:punct:]") %>%
+  rename(
+    "xGHome"="xG...6",
+    "xGAway"="xG...8",
+  ) %>%
+  mutate(
+    GoalsHome=as.numeric(GoalsHome),
+    GoalsAway=as.numeric(GoalsAway),
+    Attendance=as.numeric(gsub("\\,","",Attendance)),
+  ) %>%
+  select(
+    -"Match Report",
+    -"Notes",
+  ) %>%
+  drop_na("Wk")
+
 # player
 
 tidy[["fbref"]][["player"]][["standard"]] <- raw[["fbref"]][["player"]][["standard"]] %>%
@@ -190,18 +221,6 @@ rename(
 select(
   -"Rk",
 )
-
-# table
-
-# tidy[["fbref"]][["table"]] <- raw[["fbref"]][["table"]] %>%
-#   select(
-#     -"Top Team Scorer",
-#     -"Goalkeeper",
-#     -"Notes",
-#   ) %>%
-#   rename(
-#     "xGDiff90"="xGDiff/90"
-#   )
 # 
 # # squad
 # 
@@ -326,22 +345,3 @@ select(
 #     "DribTkl%"="Tkl%",
 #     "DribPast"="Past",
 #   )
-
-# matches
-
-tidy[["fbref"]][["matches"]] <- raw[["fbref"]][["matches"]] %>%
-  separate("Score",c("GoalsHome","GoalsAway"),sep="[:punct:]") %>%
-  rename(
-    "xGHome"="xG...6",
-    "xGAway"="xG...8",
-  ) %>%
-  mutate(
-    GoalsHome=as.numeric(GoalsHome),
-    GoalsAway=as.numeric(GoalsAway),
-    Attendance=as.numeric(gsub("\\,","",Attendance)),
-  ) %>%
-  select(
-    -"Match Report",
-    -"Notes",
-  ) %>%
-  drop_na("Wk")
