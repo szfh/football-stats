@@ -11,15 +11,22 @@ tidy[["fbref"]][["table"]] <- raw[["fbref"]][["table"]] %>%
     -"Top Team Scorer",
     -"Goalkeeper",
     -"Notes",
+    -"xGDiff/90",
   ) %>%
   rename(
-    "xGDiff90"="xGDiff/90"
+    "GD"="GDiff",
+    "xGF"="xG",
+    "xGD"="xGDiff",
   )
 
 # matches
 
 tidy[["fbref"]][["matches"]] <- raw[["fbref"]][["matches"]] %>%
   separate("Score",c("GoalsHome","GoalsAway"),sep="[:punct:]") %>%
+  select(
+    -"Match Report",
+    -"Notes",
+  ) %>%
   rename(
     "xGHome"="xG...6",
     "xGAway"="xG...8",
@@ -29,123 +36,125 @@ tidy[["fbref"]][["matches"]] <- raw[["fbref"]][["matches"]] %>%
     "GoalsAway"=as.numeric(GoalsAway),
     "Attendance"=as.numeric(gsub("\\,","",Attendance)),
   ) %>%
-  select(
-    -"Match Report",
-    -"Notes",
-  ) %>%
   drop_na("Wk")
 
 # player
 
 tidy[["fbref"]][["player"]][["stats"]] <- raw[["fbref"]][["player"]][["stats"]] %>%
+  select(
+    -"Rk",
+    -("Gls...17":"G+A-PK"),
+    -("xG...25":"npxG+xA")
+  ) %>%
   rename(
     "Gls"="Gls...11",
     "Ast"="Ast...12",
-    "Gls90"="Gls...17",
-    "Ast90"="Ast...18",
-    "G+A90"="G+A",
-    "G-PK90"="G-PK",
-    "G+A-PK90"="G+A-PK",
     "xG"="xG...22",
     "npxG"="npxG...23",
     "xA"="xA...24",
-    "xG90"="xG...25",
-    "xA90"="xA...26",
-    "xG+xA90"="xG+xA",
-    "npxG90"="npxG...28",
-    "npxG+xA90"="npxG+xA",
-  ) %>%
-  select(
-    -"Rk",
   )
 
 tidy[["fbref"]][["player"]][["keepers"]] <- raw[["fbref"]][["player"]][["keepers"]] %>%
+  select(
+    -"Rk",
+	-contains("%"),
+	-contains("90"),
+  ) %>%
   rename(
     "GKPKatt"="PKatt",
     "GKPKA"="PKA",
-    "GKPKsv"="PKsv",
-    "GKPKm"="PKm",
-  ) %>%
-  select(
-    -"Rk",
+    "GKPKsaved"="PKsv",
+    "GKPKmissed"="PKm",
   )
+  
 
 tidy[["fbref"]][["player"]][["keepersadv"]] <- raw[["fbref"]][["player"]][["keepersadv"]] %>%
+  select(
+    -"Rk",
+    -"PSxG/SoT",
+    -contains("%"),
+    -contains("90"),
+  ) %>%
   rename(
     "GKGA"="GA",
     "GKPKA"="PKA",
-    "GKFK"="FK",
-    "GKCK"="CK",
-    "GKOG"="OG",
-    "PSxG+/-90"="/90",
+    "GKFKA"="FK",
+    "GKCKA"="CK",
+    "GKOGA"="OG",
+    "PSxGD"="PSxG+/-",
     "GKLCmp"="Cmp",
     "GKLAtt"="Att...19",
-    "GKLCmp%"="Cmp%",
     "GKPassAtt"="Att...21",
-    "GKThr"="Thr",
-    "GKLaunch%"="Launch%...23",
-    "GKAvgLen"="AvgLen...24",
+    "GKPassThr"="Thr",
+    "GKPassAvgLen"="AvgLen...24",
     "GKGKPassAtt"="Att...25",
-    "GKGKLaunch%"="Launch%...26",
     "GKGKAvgLen"="AvgLen...27",
     "GKCrsAtt"="Att...28",
     "GKCrsStp"="Stp",
-    "GKCrsStp%"="Stp%",
     "GKOPA"="#OPA",
-    "GKOPA90"="#OPA/90",
     "GKOPAAvgDist"="AvgDist",
-  ) %>%
-  select(
-    -"Rk",
-    -"90s",
   )
 
 tidy[["fbref"]][["player"]][["shooting"]] <- raw[["fbref"]][["player"]][["shooting"]] %>%
-  rename(
-    "ShotFK"="FK",
-    "Sh90"="Sh/90",
-    "SoT90"="SoT/90",
-  ) %>%
   select(
     -"Rk",
+    -("G/Sh":"G/SoT"),
+    -("npxG/Sh":"np:G-xG"),
+    -contains("%"),
+    -contains("90"),
+  ) %>%
+  rename(
+    "ShFK"="FK",
   )
-
+  
 tidy[["fbref"]][["player"]][["passing"]] <- raw[["fbref"]][["player"]][["passing"]] %>%
+  select(
+    -"Rk",
+    -"A-xA",
+    -contains("%"),
+    -contains("90"),
+  ) %>%
   rename(
     "TotalCmp"="Cmp...9",
     "TotalAtt"="Att...10",
-    "TotalCmp%"="Cmp%...11",
+    "PassTotalDist"="TotDist",
+    "PassPrgDist"="PrgDist",
     "ShortCmp"="Cmp...14",
     "ShortAtt"="Att...15",
-    "ShortCmp%"="Cmp%...16",
     "MediumCmp"="Cmp...17",
     "MediumAtt"="Att...18",
-    "MediumCmp%"="Cmp%...19",
     "LongCmp"="Cmp...20",
     "LongAtt"="Att...21",
-    "LongCmp%"="Cmp%...22",
-  ) %>%
+    "PassProg"="Prog",
+  )
+  
+tidy[["fbref"]][["player"]][["passingtypes"]] <- raw[["fbref"]][["player"]][["passingtypes"]] %>%
   select(
     -"Rk",
-  )
-#
-tidy[["fbref"]][["player"]][["passingtypes"]] <- raw[["fbref"]][["player"]][["passingtypes"]] %>%
+  ) %>%
   rename(
+    "PassAtt"="Att",
+    "PassLive"="Live",
+    "PassDead"="Dead",
     "PassFK"="FK",
+    "PassTB"="TB",
+    "PassPress"="Press",
     "CrsIn"="In",
     "CrsOut"="Out...19",
     "CrsStr"="Str",
+    "PassFK"="FK",
     "PassCmp"="Cmp",
-    "PassOff"="Off",
+    "PassOffside"="Off",
     "PassOut"="Out...31",
     "PassInt"="Int",
     "PassBlocks"="Blocks",
-  ) %>%
-  select(
-    -"Rk",
-  )
+  ) %>% str
 
 tidy[["fbref"]][["player"]][["gca"]] <- raw[["fbref"]][["player"]][["gca"]] %>%
+  select(
+    -"Rk",
+    -contains("90"),
+  ) %>%
   rename(
     "SCAPassLive"="PassLive...11",
     "SCAPassDead"="PassDead...12",
@@ -158,36 +167,40 @@ tidy[["fbref"]][["player"]][["gca"]] <- raw[["fbref"]][["player"]][["gca"]] %>%
     "GCASh"="Sh...21",
     "GCAFld"="Fld...22",
     "GCAOG"="OG",
-  ) %>%
-  select(
-    -"Rk",
   )
+  
 
 tidy[["fbref"]][["player"]][["defense"]] <- raw[["fbref"]][["player"]][["defense"]] %>%
+  select(
+    -"Rk",
+    -contains("%"),
+  ) %>%
   rename(
-    "PlTkl"="Tkl...9",
+    "Tkl"="Tkl...9",
     "TklDef3rd"="Def 3rd...11",
     "TklMid3rd"="Mid 3rd...12",
     "TklAtt3rd"="Att 3rd...13",
     "DribTkl"="Tkl...14",
     "DribTklAtt"="Att",
-    "DribTkl%"="Tkl%",
     "DribPast"="Past",
-    "DPress"="Press",
+    "DribPress"="Press",
     "PressSucc"="Succ",
-    "PressSucc%"="%",
-    "PresDef3rd"="Def 3rd...21",
-    "PresMid3rd"="Mid 3rd...22",
-    "PresAtt3rd"="Att 3rd...23",
-    "ShBlk"="Sh",
-    "PassBlk"="Pass",
-  ) %>%
-  select(
-    -"Rk",
+    "PressDef3rd"="Def 3rd...21",
+    "PressMid3rd"="Mid 3rd...22",
+    "PressAtt3rd"="Att 3rd...23",
+    "Blk"="Blocks",
+    "BlkSh"="Sh",
+    "BlkSoT"="ShSv",
+    "BlkPass"="Pass",
   )
 
 tidy[["fbref"]][["player"]][["possession"]] <- raw[["fbref"]][["player"]][["possession"]] %>%
+  select(
+    -"Rk",
+    -contains("%"),
+  ) %>%
   rename(
+    "TouchDefPen"="Def Pen",
     "TouchDef3rd"="Def 3rd",
     "TouchMid3rd"="Mid 3rd",
     "TouchAtt3rd"="Att 3rd",
@@ -195,130 +208,152 @@ tidy[["fbref"]][["player"]][["possession"]] <- raw[["fbref"]][["player"]][["poss
     "TouchLive"="Live",
     "DribSucc"="Succ",
     "DribAtt"="Att",
-    "DribSucc%"="Succ%",
     "Drib#Pl"="#Pl",
-  ) %>%
-  select(
-    -"Rk",
-    -("Carries":"PrgDist"),
+    "DribTotDist"="TotDist",
+    "DribProgDist"="PrgDist",
+    "PassTarget"="Targ",
+    "PassRec"="Rec",
   )
 
 tidy[["fbref"]][["player"]][["playingtime"]] <- raw[["fbref"]][["player"]][["playingtime"]] %>%
-  rename(
-    "Gls+/-"="+/-",
-    "Gls+/-90"="+/-90",
-    "GlsOn-Off"="On-Off...23",
-    "xGOn-Off"="On-Off...28",
-  ) %>%
   select(
     -"Rk",
+    -("+/-":"+/-90"),
+    -("xG+/-":"xG+/-90"),
+    -contains("%"),
+    -contains("Mn"),
+    -contains("90"),
+  ) %>%
+  rename(
+    "UnusedSub"="unSub",
+    "OnGF"="onG",
+    "OnGA"="onGA",
+    "OnxGF"="onxG",
+    "OnxGA"="onxGA",
+    "On-OffG"="On-Off...23",
+    "On-OffxG"="On-Off...28",
   )
 
 tidy[["fbref"]][["player"]][["misc"]] <- raw[["fbref"]][["player"]][["misc"]] %>%
-  rename(
-    
-  ) %>%
   select(
     -"Rk",
+    -contains("%"),
+  ) %>%
+  rename(
+    "AerialWon"="Won",
+    "AerialLost"="Lost",
   )
 
 # squad
 
 tidy[["fbref"]][["squad"]][["stats"]] <- raw[["fbref"]][["squad"]][["stats"]] %>%
+  select(
+    -("Gls...12":"G+A-PK"),
+    -("xG...20":"npxG+xA"),
+  ) %>%
   rename(
     "Gls"="Gls...6",
     "Ast"="Ast...7",
-    "Gls90"="Gls...12",
-    "Ast90"="Ast...13",
-    "G+A90"="G+A",
-    "G-PK90"="G-PK",
-    "G+A-PK90"="G+A-PK",
     "xG"="xG...17",
     "npxG"="npxG...18",
     "xA"="xA...19",
-    "xG90"="xG...20",
-    "xA90"="xA...21",
-    "xG+xA90"="xG+xA",
-    "npxG90"="npxG...23",
-    "npxG+xA90"="npxG+xA",
   )
 
 tidy[["fbref"]][["squad"]][["keepers"]] <- raw[["fbref"]][["squad"]][["keepers"]] %>%
-  rename(
-    "GK# Pl"="# Pl",
-    "GKPKatt"="PKatt",
-    "GKPKA"="PKA",
-    "GKPKsv"="PKsv",
-    "GKPKm"="PKm",
-  ) %>%
   select(
     -"Starts",
     -"Min",
+    -contains("%"),
+    -contains("90"),
+  ) %>%
+  rename(
+    "# GK"="# Pl",
+    "GKPKatt"="PKatt",
+    "GKPKA"="PKA",
+    "GKPKsaved"="PKsv",
+    "GKPKmissed"="PKm",
   )
 
 tidy[["fbref"]][["squad"]][["keepersadv"]] <- raw[["fbref"]][["squad"]][["keepersadv"]] %>%
+  select(
+    -"PSxG/SoT",
+    -contains("%"),
+    -contains("90"),
+  ) %>%
   rename(
-    "GK# Pl"="# Pl",
+    "# GK"="# Pl",
+    "GKGA"="GA",
     "GKPKA"="PKA",
-    "GKFK"="FK",
-    "GKCK"="CK",
-    "GKOG"="OG",
-    "PSxG+/-90"="/90",
+    "GKFKA"="FK",
+    "GKCKA"="CK",
+    "GKOGA"="OG",
+    "PSxGD"="PSxG+/-",
     "GKLCmp"="Cmp",
     "GKLAtt"="Att...14",
-    "GKLCmp%"="Cmp%",
     "GKPassAtt"="Att...16",
-    "GKThr"="Thr",
-    "GKLaunch%"="Launch%...18",
-    "GKAvgLen"="AvgLen...19",
+    "GKPassThr"="Thr",
+    "GKPassAvgLen"="AvgLen...19",
     "GKGKPassAtt"="Att...20",
-    "GKGKLaunch%"="Launch%...21",
     "GKGKAvgLen"="AvgLen...22",
     "GKCrsAtt"="Att...23",
     "GKCrsStp"="Stp",
-    "GKCrsStp%"="Stp%",
     "GKOPA"="#OPA",
-    "GKOPA90"="#OPA/90",
     "GKOPAAvgDist"="AvgDist",
   )
 
 tidy[["fbref"]][["squad"]][["shooting"]] <- raw[["fbref"]][["squad"]][["shooting"]] %>%
+  select(
+    -("G/Sh":"G/SoT"),
+    -("npxG/Sh":"np:G-xG"),
+    -contains("%"),
+    -contains("90"),
+  ) %>%
   rename(
-    "ShotFK"="FK",
-    "Sh90"="Sh/90",
-    "SoT90"="SoT/90",
+    "ShFK"="FK",
   )
 
 tidy[["fbref"]][["squad"]][["passing"]] <- raw[["fbref"]][["squad"]][["passing"]] %>%
+  select(
+    -"A-xA",
+    -contains("%"),
+  ) %>%
   rename(
     "TotalCmp"="Cmp...3",
     "TotalAtt"="Att...4",
-    "TotalCmp%"="Cmp%...5",
+    "PassTotalDist"="TotDist",
+    "PassPrgDist"="PrgDist",
     "ShortCmp"="Cmp...8",
     "ShortAtt"="Att...9",
-    "ShortCmp%"="Cmp%...10",
     "MediumCmp"="Cmp...11",
     "MediumAtt"="Att...12",
-    "MediumCmp%"="Cmp%...13",
     "LongCmp"="Cmp...14",
     "LongAtt"="Att...15",
-    "LongCmp%"="Cmp%...16",
-  ) 
+    "PassProg"="Prog",
+  )
 
 tidy[["fbref"]][["squad"]][["passingtypes"]] <- raw[["fbref"]][["squad"]][["passingtypes"]] %>%
   rename(
+    "PassAtt"="Att",
+    "PassLive"="Live",
+    "PassDead"="Dead",
     "PassFK"="FK",
+    "PassTB"="TB",
+    "PassPress"="Press",
     "CrsIn"="In",
     "CrsOut"="Out...13",
     "CrsStr"="Str",
+    "PassFK"="FK",
     "PassCmp"="Cmp",
-    "PassOff"="Off",
+    "PassOffside"="Off",
     "PassOut"="Out...25",
     "PassInt"="Int",
     "PassBlocks"="Blocks",
   )
 
 tidy[["fbref"]][["squad"]][["gca"]] <- raw[["fbref"]][["squad"]][["gca"]] %>%
+  select(
+    -contains("90"),
+  ) %>%
   rename(
     "SCAPassLive"="PassLive...5",
     "SCAPassDead"="PassDead...6",
@@ -334,26 +369,33 @@ tidy[["fbref"]][["squad"]][["gca"]] <- raw[["fbref"]][["squad"]][["gca"]] %>%
   )
 
 tidy[["fbref"]][["squad"]][["defense"]] <- raw[["fbref"]][["squad"]][["defense"]] %>%
+  select(
+    # -"Rk",
+    -contains("%"),
+  ) %>%
   rename(
-    "PlTkl"="Tkl...3",
+    "Tkl"="Tkl...3",
     "TklDef3rd"="Def 3rd...5",
     "TklMid3rd"="Mid 3rd...6",
     "TklAtt3rd"="Att 3rd...7",
     "DribTkl"="Tkl...8",
     "DribTklAtt"="Att",
-    "DribTkl%"="Tkl%",
     "DribPast"="Past",
-    "DPress"="Press",
+    "DribPress"="Press",
     "PressSucc"="Succ",
-    "PressSucc%"="%",
-    "PresDef3rd"="Def 3rd...15",
-    "PresMid3rd"="Mid 3rd...16",
-    "PresAtt3rd"="Att 3rd...17",
-    "ShBlk"="Sh",
-    "PassBlk"="Pass",
+    "PressDef3rd"="Def 3rd...15",
+    "PressMid3rd"="Mid 3rd...16",
+    "PressAtt3rd"="Att 3rd...17",
+    "Blk"="Blocks",
+    "BlkSh"="Sh",
+    "BlkSoT"="ShSv",
+    "BlkPass"="Pass",
   )
 
 tidy[["fbref"]][["squad"]][["possession"]] <- raw[["fbref"]][["squad"]][["possession"]] %>%
+  select(
+    -contains("%"),
+  ) %>%
   rename(
     "TouchDefPen"="Def Pen",
     "TouchDef3rd"="Def 3rd",
@@ -363,17 +405,33 @@ tidy[["fbref"]][["squad"]][["possession"]] <- raw[["fbref"]][["squad"]][["posses
     "TouchLive"="Live",
     "DribSucc"="Succ",
     "DribAtt"="Att",
-    "DribSucc%"="Succ%",
     "Drib#Pl"="#Pl",
     "DribTotDist"="TotDist",
     "DribPrgDist"="PrgDist",
+    "PassTarget"="Targ",
+    "PassRec"="Rec",
   )
 
 tidy[["fbref"]][["squad"]][["playingtime"]] <- raw[["fbref"]][["squad"]][["playingtime"]] %>%
+  select(
+    -("+/-":"+/-90"),
+    -("xG+/-":"xG+/-90"),
+    -("onG":"onxGA"),
+    -"Starts",
+    -"PPM",
+    -contains("%"),
+    -contains("Mn"),
+    -contains("90"),
+  ) %>%
   rename(
-    "Gls+/-"="+/-",
-    "Gls+/-90"="+/-90",
+    "UnusedSubs"="unSub",
   )
 
 tidy[["fbref"]][["squad"]][["misc"]] <- raw[["fbref"]][["squad"]][["misc"]] %>%
-  rename()
+  select(
+    -contains("%"),
+  ) %>%
+  rename(
+    "AerialWon"="Won",
+    "AerialLost"="Lost",
+  )
