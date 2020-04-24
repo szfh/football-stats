@@ -61,7 +61,7 @@ raw[["fbref"]][["squad"]][["shooting"]] <- fbref_scrape(url="https://fbref.com/e
                                                         extract=1,fix_columns=TRUE)
 raw[["fbref"]][["squad"]][["passing"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/passing/Premier-League-Stats",
                                                        extract=1,fix_columns=TRUE)
-raw[["fbref"]][["squad"]][["passsingtypes"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/passing_types/Premier-League-Stats",
+raw[["fbref"]][["squad"]][["passingtypes"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/passing_types/Premier-League-Stats",
                                                              extract=1,fix_columns=TRUE)
 raw[["fbref"]][["squad"]][["gca"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/gca/Premier-League-Stats",
                                                    extract=1,fix_columns=TRUE)
@@ -74,7 +74,7 @@ raw[["fbref"]][["squad"]][["playingtime"]] <- fbref_scrape(url="https://fbref.co
 raw[["fbref"]][["squad"]][["misc"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/misc/Premier-League-Stats",
                                                     extract=1,fix_columns=TRUE)
 
-raw[["fbref"]][["player"]][["standard"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/stats/Premier-League-Stats",
+raw[["fbref"]][["player"]][["stats"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/stats/Premier-League-Stats",
                                                          comment=TRUE,extract=1,fix_columns=TRUE)
 raw[["fbref"]][["player"]][["keepers"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/keepers/Premier-League-Stats",
                                                         comment=TRUE,extract=1,fix_columns=TRUE)
@@ -84,7 +84,7 @@ raw[["fbref"]][["player"]][["shooting"]] <- fbref_scrape(url="https://fbref.com/
                                                          comment=TRUE,extract=1,fix_columns=TRUE)
 raw[["fbref"]][["player"]][["passing"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/passing/Premier-League-Stats",
                                                         comment=TRUE,extract=1,fix_columns=TRUE)
-raw[["fbref"]][["player"]][["passsingtypes"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/passing_types/Premier-League-Stats",
+raw[["fbref"]][["player"]][["passingtypes"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/passing_types/Premier-League-Stats",
                                                               comment=TRUE,extract=1,fix_columns=TRUE)
 raw[["fbref"]][["player"]][["gca"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/gca/Premier-League-Stats",
                                                     comment=TRUE,extract=1,fix_columns=TRUE)
