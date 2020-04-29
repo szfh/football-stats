@@ -148,7 +148,7 @@ tidy[["fbref"]][["player"]][["passingtypes"]] <- raw[["fbref"]][["player"]][["pa
     "PassOut"="Out...31",
     "PassInt"="Int",
     "PassBlocks"="Blocks",
-  ) %>% str
+  )
 
 tidy[["fbref"]][["player"]][["gca"]] <- raw[["fbref"]][["player"]][["gca"]] %>%
   select(
@@ -221,10 +221,12 @@ tidy[["fbref"]][["player"]][["playingtime"]] <- raw[["fbref"]][["player"]][["pla
     -("+/-":"+/-90"),
     -("xG+/-":"xG+/-90"),
     -contains("%"),
-    -contains("Mn"),
     -contains("90"),
   ) %>%
   rename(
+    "MinMP"="Mn/MP",
+    "MinStart"="Mn/Start",
+    "MinSub"="Mn/Sub",
     "UnusedSub"="unSub",
     "OnGF"="onG",
     "OnGA"="onGA",
@@ -420,10 +422,12 @@ tidy[["fbref"]][["squad"]][["playingtime"]] <- raw[["fbref"]][["squad"]][["playi
     -"Starts",
     -"PPM",
     -contains("%"),
-    -contains("Mn"),
     -contains("90"),
   ) %>%
   rename(
+    "MinMP"="Mn/MP",
+    "MinStart"="Mn/Start",
+    "MinSub"="Mn/Sub",
     "UnusedSubs"="unSub",
   )
 
