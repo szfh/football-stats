@@ -20,7 +20,7 @@ players %>%
     box.padding=0.05,
   ) +
   geom_point(aes(fill=Squad),shape=21,size=4,position=position_jitterdodge(jitter.width=0,jitter.height=0.17,dodge.width=0)) +
-  theme_sfc() +
+  theme[["solar"]] +
   theme(
     axis.line.x=element_blank(),
     axis.ticks.x=element_blank(),
@@ -36,7 +36,7 @@ players %>%
     caption=caption[[1]]) +
   scale_x_continuous(limit=c(0,1)) +
   scale_y_continuous() +
-  scale_fill_manual(values=palette_epl()) +
+  scale_fill_manual(values=palette[["epl"]]()) +
   scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.2))
 ggsave(here("plots","EPL","PlayerGlsxG.jpg"))
 
@@ -59,7 +59,7 @@ players %>%
     box.padding=0.05,
   ) +
   geom_point(aes(fill=Squad),shape=21,size=4) +
-  theme_sfc() +
+  theme[["solar"]] +
   theme(
     axis.line.x=element_blank(),
     axis.ticks.x=element_blank(),
@@ -76,7 +76,7 @@ players %>%
   ) +
   scale_x_continuous(limit=c(0,1)) +
   scale_y_continuous() +
-  scale_fill_manual(values=palette_epl()) +
+  scale_fill_manual(values=palette[["epl"]]()) +
   scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.2))
 ggsave(here("plots","EPL","PlayerxGxA.jpg"))
 
@@ -99,7 +99,7 @@ players %>%
     box.padding=0.05,
   ) +
   geom_point(aes(fill=Squad,alpha=focus),shape=21,size=2,position=position_jitterdodge(jitter.width=0,jitter.height=0.2,dodge.width=0)) +
-  theme_sfc() +
+  theme[["solar"]] +
   theme(
     axis.line.x=element_blank(),
     axis.ticks.x=element_blank(),
@@ -116,7 +116,7 @@ players %>%
   ) +
   scale_x_continuous(limit=c(0,1)) +
   scale_y_continuous() +
-  scale_fill_manual(values=palette_epl()) +
+  scale_fill_manual(values=palette[["epl"]]()) +
   scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.2))
 ggsave(here("plots","EPL","PlayerCompPasses.jpg"))
 
@@ -132,14 +132,14 @@ players %>%
   geom_blank(data=data.frame(npxG=0,Sh=0)) +
   geom_point(aes(fill=Squad),size=3,shape=21,colour="black",position=position_jitter(0.005)) +
   geom_text_repel(aes(label=ifelse(focus,Player,"")),size=2) +
-  theme_epl() +
+  theme[["solar"]] +
   labs(
     title="Players with no goals",
     x="Expected goals",
     y="Shots",
     caption=caption[[1]]
   ) +
-  scale_fill_manual(values=palette_epl()) +
+  scale_fill_manual(values=palette[["epl"]]()) +
   scale_x_continuous(breaks=seq(0,50,1),expand=expansion(add=c(0,0.2))) +
   scale_y_continuous(breaks=seq(0,200,5),expand=expansion(add=c(0,2)))
 ggsave(here("plots","EPL","PlayerNoGoals.jpg"))
@@ -163,7 +163,7 @@ squad %>%
     box.padding=0.05,
   ) +
   geom_point(aes(fill=Squad),size=4,shape=21,colour="black") +
-  theme_epl() +
+  theme[["solar"]] +
   theme(
     strip.text=element_text(size=rel(1.2)),
     axis.line.x=element_blank(),
@@ -180,14 +180,14 @@ squad %>%
   ) +
   scale_x_continuous(limit=c(0,1)) +
   scale_y_continuous(breaks=seq(-100,100,5),labels=abs(seq(-100,100,5)),expand=expansion(add=c(1))) +
-  scale_fill_manual(values=palette_epl())
+  scale_fill_manual(values=palette[["epl"]]())
 ggsave(here("plots","EPL","xG1.jpg"))
 
 squad %>%
   ggplot(aes(x=npxG,y=xGA)) +
   geom_text_repel(aes(label=Squad),size=rel(3)) +
   geom_point(aes(fill=Squad),shape=21,size=3) +
-  theme_epl() +
+  theme[["solar"]] +
   labs(
     title="Expected goals",
     x="xG for",
@@ -196,7 +196,7 @@ squad %>%
   ) +
   scale_x_continuous(breaks=seq(0,100,5),expand=expansion(add=c(4,2))) +
   scale_y_continuous(breaks=seq(0,100,5),expand=expansion(add=c(4,2))) +
-  scale_fill_manual(values=palette_epl()) +
+  scale_fill_manual(values=palette[["epl"]]()) +
   coord_fixed()
 ggsave(here("plots","EPL","xG2.jpg"))
 
@@ -216,7 +216,7 @@ squad %>%
     box.padding=0.05,
   ) +
   geom_point(aes(fill=Squad),size=4,shape=21,colour="black") +
-  theme_epl() +
+  theme[["solar"]] +
   theme(
     strip.text=element_text(size=rel(1.2)),
     axis.line.x=element_blank(),
@@ -233,5 +233,5 @@ squad %>%
   ) +
   scale_x_continuous(limit=c(0,1)) +
   scale_y_continuous(breaks=seq(-100,100,5),expand=expansion(add=c(3))) +
-  scale_fill_manual(values=palette_epl())
+  scale_fill_manual(values=palette[["epl"]]())
 ggsave(here("plots","EPL","xGD.jpg"))
