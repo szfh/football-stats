@@ -201,9 +201,9 @@ squad %>%
 ggsave(here("plots","EPL","xG2.jpg"))
 
 squad %>%
-  select(Squad,GDiff,xGDiff) %>%
-  pivot_longer(cols=c(GDiff,xGDiff),names_to="key",values_to="GD") %>%
-  mutate(key=factor(key,levels=c("GDiff","xGDiff"),labels=c("Goal Difference","Expected Goal Difference"))) %>%
+  select(Squad,GD,xGD) %>%
+  pivot_longer(cols=c(GD,xGD),names_to="key",values_to="GD") %>%
+  mutate(key=factor(key,levels=c("GD","xGD"),labels=c("Goal Difference","Expected Goal Difference"))) %>%
   ggplot(aes(x=0,y=GD)) +
   geom_text_repel(
     aes(label=Squad),
