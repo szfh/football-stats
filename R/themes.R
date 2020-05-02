@@ -124,10 +124,10 @@ palette[["epl"]] <- function(team_name){
 
 palette[["sfc"]] <- function(p){
   colours <- c(
-    `main` = "#D71920", # normal
-    `light` = "#ED5C5C", # light
-    `lightgrey` = "#D3D3D3",
-    `black` = "#000000"
+    "main" = "#D71920", # normal
+    "light" = "#ED5C5C", # light
+    "lightgrey" = "#D3D3D3",
+    "black" = "#000000"
   )
   
   # if(is.null(colours))
@@ -142,7 +142,12 @@ colour[["light"]] <- few_pal("Light")(8)
 colour[["medium"]] <- few_pal("Medium")(8)
 colour[["dark"]] <- few_pal("Dark")(8)
 colour[["gdocs"]] <- gdocs_pal()(10)
-colour[["sfc"]] <- c("#D71920","#ED5C5C","#D3D3D3","#000000")
+colour[["sfc"]] <- c(
+  "main"="#D71920",
+  "light"="#ED5C5C",
+  "grey"="#D3D3D3",
+  "black"="#000000"
+)
 
 # captions
 caption <- list(

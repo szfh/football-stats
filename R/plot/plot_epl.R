@@ -1,5 +1,4 @@
 # Premier League player plots
-
 players %>%
   filter(!is.na(Gls)|!is.na(xG)) %>%
   select(Player,Squad,Min:PKatt,xG:xA) %>%
@@ -20,7 +19,7 @@ players %>%
     box.padding=0.05,
   ) +
   geom_point(aes(fill=Squad),shape=21,size=4,position=position_jitterdodge(jitter.width=0,jitter.height=0.17,dodge.width=0)) +
-  theme[["solar"]] +
+  theme[["solar"]]() +
   theme(
     axis.line.x=element_blank(),
     axis.ticks.x=element_blank(),
@@ -59,7 +58,7 @@ players %>%
     box.padding=0.05,
   ) +
   geom_point(aes(fill=Squad),shape=21,size=4) +
-  theme[["solar"]] +
+  theme[["solar"]]() +
   theme(
     axis.line.x=element_blank(),
     axis.ticks.x=element_blank(),
@@ -99,7 +98,7 @@ players %>%
     box.padding=0.05,
   ) +
   geom_point(aes(fill=Squad,alpha=focus),shape=21,size=2,position=position_jitterdodge(jitter.width=0,jitter.height=0.2,dodge.width=0)) +
-  theme[["solar"]] +
+  theme[["solar"]]() +
   theme(
     axis.line.x=element_blank(),
     axis.ticks.x=element_blank(),
@@ -132,7 +131,7 @@ players %>%
   geom_blank(data=data.frame(npxG=0,Sh=0)) +
   geom_point(aes(fill=Squad),size=3,shape=21,colour="black",position=position_jitter(0.005)) +
   geom_text_repel(aes(label=ifelse(focus,Player,"")),size=2) +
-  theme[["solar"]] +
+  theme[["solar"]]() +
   labs(
     title="Players with no goals",
     x="Expected goals",
@@ -163,7 +162,7 @@ squad %>%
     box.padding=0.05,
   ) +
   geom_point(aes(fill=Squad),size=4,shape=21,colour="black") +
-  theme[["solar"]] +
+  theme[["solar"]]() +
   theme(
     strip.text=element_text(size=rel(1.2)),
     axis.line.x=element_blank(),
@@ -187,7 +186,7 @@ squad %>%
   ggplot(aes(x=npxG,y=xGA)) +
   geom_text_repel(aes(label=Squad),size=rel(3)) +
   geom_point(aes(fill=Squad),shape=21,size=3) +
-  theme[["solar"]] +
+  theme[["solar"]]() +
   labs(
     title="Expected goals",
     x="xG for",
@@ -216,7 +215,7 @@ squad %>%
     box.padding=0.05,
   ) +
   geom_point(aes(fill=Squad),size=4,shape=21,colour="black") +
-  theme[["solar"]] +
+  theme[["solar"]]() +
   theme(
     strip.text=element_text(size=rel(1.2)),
     axis.line.x=element_blank(),

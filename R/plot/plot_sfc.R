@@ -17,24 +17,23 @@ players %>%
   mutate(Possfc=factor(Posnew,levels=c("GK","CB","FB","DM","AM","FW"))) %>%
   mutate(Player=fct_reorder(Player,Min)) %>%
   ggplot(aes(x=Min,y=Player)) +
-  geom_segment(aes(y=Player,yend=Player,x=0,xend=MinStart),colour=col_sfc[[1]],size=3.5,alpha=0.8) +
-  geom_segment(aes(y=Player,yend=Player,x=MinStart,xend=Min),colour=col_sfc[[1]],size=3.5,alpha=0.3) +
-  theme[["solar"]] +
+  geom_segment(aes(y=Player,yend=Player,x=0,xend=MinStart),colour=colour[["sfc"]][["main"]],size=3.5,alpha=0.8) +
+  geom_segment(aes(y=Player,yend=Player,x=MinStart,xend=Min),colour=colour[["sfc"]][["light"]],size=3.5,alpha=0.3) +
+  theme[["solar"]]() +
   theme(
-    plot.title = element_markdown(),
+    plot.title=element_markdown(),
     axis.line=element_blank(),
     axis.text.x=element_text(size=rel(0.8),hjust=0.5),
     axis.text.y=element_text(size=rel(0.8)),
     strip.text.y=element_text(angle=0)
   ) +
   labs(
-    title=paste0("League minutes (","<b style='color:#D71920'>from start</b>","/","<b style='color:#ED5C5C'>from bench</b>",")"),
+    title=paste0("League minutes (","<b style='color:#D71920'>from start</b>"," / ","<b style='color:#ED5C5C'>from bench</b>",")"),
     x=element_blank(),
     y=element_blank(),
     caption=caption[[1]]
   ) +
-  expand_limits(Min=0) +
-  scale_x_continuous(breaks=seq(0,90*38,180),expand=expansion(add=c(20,20))) +
+  scale_x_continuous(breaks=seq(0,90*38,180),expand=expansion(add=c(0,20))) +
   facet_grid(Possfc ~ .,scales="free",space="free")
 ggsave(here("plots","SFC","Minutes.jpg"))
 
@@ -54,14 +53,14 @@ matches_long %>%
   geom_point(aes(y=xGAfbref),colour="royalblue",alpha=0.5) +
   # geom_smooth(aes(y=xGAfbref),formula=y ~ x,method="loess",colour="royalblue",linetype="longdash",size=0.8,se=FALSE) +
   geom_spline(aes(y=xGAfbref),spar=0.6,colour="royalblue",linetype="longdash",size=0.8) +
-  theme[["solar"]] +
+  theme[["solar"]]() +
   theme(
     axis.text.x=element_text(size=rel(0.8)),
     axis.title=element_text(size=rel(0.8)),
     plot.title = element_markdown(),
   ) +
   labs(
-    title=paste0("Southampton ","<b style='color:darkred'>attack</b>","/","<b style='color:royalblue'>defence</b>"," trend"),
+    title=paste0("Southampton ","<b style='color:darkred'>attack</b>"," / ","<b style='color:royalblue'>defence</b>"," trend"),
     x=element_blank(),
     y="Expected goals for/against",
     caption=caption[[1]]
@@ -76,41 +75,19 @@ players %>%
   filter(!is.na(npxG)|!is.na(xA)) %>%
   mutate(focus=ifelse(npxG>=1|xA>=1,TRUE,FALSE)) %>%
   ggplot(aes(x=npxG,y=xA)) +
-  geom_blank(data=data.frame(npxG=0,xA=0)) +
-  geom_point(aes(fill=focus),shape=21,size=4,alpha=0.8,colour=col_sfc[[4]]) +
+  # geom_blank(data=data.frame(npxG=0,xA=0)) +
+  geom_point(aes(fill=focus),shape=21,size=4,alpha=0.8,colour=colour[["sfc"]][["black"]]) +
   geom_text_repel(aes(label=ifelse(focus,Player,"")),size=rel(4)) +
-  theme[["solar"]] +
+  theme[["solar"]]() +
   labs(title="Southampton xG/xA",
        x="Expected goals",
        y="Expected assists",
        caption=caption[[1]]) +
-  scale_x_continuous(breaks=seq(0,30,1),expand=expansion(add=c(0,0.2))) +
-  scale_y_continuous(breaks=seq(0,30,1),expand=expansion(add=c(0,0.2))) +
-  scale_fill_manual(values=c("TRUE"=col_sfc[[1]],"FALSE"=col_sfc[[3]])) +
+  scale_x_continuous(limits=c(0,NA),breaks=seq(0,30,1),expand=expansion(add=c(0,0.2))) +
+  scale_y_continuous(limits=c(0,NA),breaks=seq(0,30,1),expand=expansion(add=c(0,0.2))) +
+  scale_fill_manual(values=c("TRUE"=colour[["sfc"]][["main"]],"FALSE"=colour[["sfc"]][["grey"]])) +
   coord_fixed()
 ggsave(here("plots","SFC","xGxA.jpg"))
-
-# players %>%
-#   filter(Squad=="Southampton") %>%
-#   filter(!is.na(xG90)|!is.na(xA90)) %>%
-#   mutate(focus=ifelse(xG90>=0.07|xA90>=0.07,TRUE,FALSE)) %>%
-#   ggplot(aes(x=npxG90,y=xA90)) +
-#   geom_blank(data=data.frame(npxG90=0,xA90=0)) +
-#   geom_point(aes(fill=focus),shape=21,size=2,alpha=0.8,colour="black") +
-#   geom_text_repel(aes(label=ifelse(focus,Player,"")),size=rel(3)) +
-#   theme[["solar"]] +
-#   labs(
-#     title="Southampton xG/xA",
-#     subtitle="(per 90 mins)",
-#     x="Expected goals per 90 minutes",
-#     y="Expected assists per 90 minutes",
-#     caption=caption[[1]]
-#   ) +
-#   scale_x_continuous(breaks=seq(0,2,0.1),expand=expansion(add=c(0,0.02))) +
-#   scale_y_continuous(breaks=seq(0,2,0.1),expand=expansion(add=c(0,0.02))) +
-#   scale_fill_manual(values=c("TRUE"=col_sfc[[1]],"FALSE"=col_sfc[[3]])) +
-#   coord_fixed()
-# ggsave(here("plots","SFC","xGxA90.jpg"))
 
 players %>%
   filter(Squad=="Southampton") %>%
@@ -131,7 +108,7 @@ players %>%
     box.padding=0.05,
   ) +
   geom_point(aes(colour=focus,fill=focus),shape=21,size=2) +
-  theme[["solar"]] +
+  theme[["solar"]]() +
   theme(
     axis.line.x=element_blank(),
     axis.ticks.x=element_blank(),
@@ -148,8 +125,8 @@ players %>%
   scale_x_continuous(limit=c(0,1)
   ) +
   scale_y_continuous() +
-  scale_colour_manual(values=c("TRUE"=col_sfc[[4]],"FALSE"=col_sfc[[3]])) +
-  scale_fill_manual(values=c("TRUE"=col_sfc[[1]],"FALSE"=col_sfc[[3]]))
+  scale_colour_manual(values=c("TRUE"=colour[["sfc"]][[4]],"FALSE"=colour[["sfc"]][["grey"]])) +
+  scale_fill_manual(values=c("TRUE"=colour[["sfc"]][["light"]],"FALSE"=colour[["sfc"]][["grey"]]))
 ggsave(here("plots","SFC","ShotsKP.jpg"))
 
 players %>%
@@ -173,7 +150,7 @@ players %>%
     box.padding=0.05,
   ) +
   geom_point(aes(colour=focus,fill=focus),shape=21,size=2) +
-  theme[["solar"]] +
+  theme[["solar"]]() +
   theme(
     axis.line.x=element_blank(),
     axis.ticks.x=element_blank(),
@@ -191,8 +168,8 @@ players %>%
   ) +
   scale_x_continuous(limit=c(0,1)) +
   scale_y_continuous() +
-  scale_colour_manual(values=c("TRUE"=col_sfc[[4]],"FALSE"=col_sfc[[3]])) +
-  scale_fill_manual(values=c("TRUE"=col_sfc[[1]],"FALSE"=col_sfc[[3]]))
+  scale_colour_manual(values=c("TRUE"=colour[["sfc"]][[4]],"FALSE"=colour[["sfc"]][["grey"]])) +
+  scale_fill_manual(values=c("TRUE"=colour[["sfc"]][["light"]],"FALSE"=colour[["sfc"]][["grey"]]))
 ggsave(here("plots","SFC","ShotsKP90.jpg"))
 
 players %>%
@@ -213,7 +190,7 @@ players %>%
     box.padding=0.05,
   ) +
   geom_point(aes(colour=PlusMinus,fill=PlusMinus),shape=21,size=3,colour="black") +
-  theme[["solar"]] +
+  theme[["solar"]]() +
   theme(
     axis.line.x=element_blank(),
     axis.ticks.x=element_blank(),
@@ -230,7 +207,7 @@ players %>%
   ) +
   scale_x_continuous(limit=c(0,1)) +
   scale_y_continuous() +
-  scale_fill_manual(values=c("TRUE"=col_medium[[3]],"FALSE"=col_medium[[8]]))
+  scale_fill_manual(values=c("TRUE"=colour[["medium"]][[3]],"FALSE"=colour[["medium"]][[8]]))
 ggsave(here("plots","SFC","GD.jpg"))
 
 # players %>%
@@ -251,7 +228,7 @@ ggsave(here("plots","SFC","GD.jpg"))
 #     box.padding=0.05,
 #   ) +
 #   geom_point(aes(colour=PlusMinus,fill=PlusMinus),shape=21,size=3,colour="black") +
-#   theme[["solar"]] +
+#   theme[["solar"]]() +
 #   theme(
 #     axis.line.x=element_blank(),
 #     axis.ticks.x=element_blank(),
@@ -269,7 +246,7 @@ ggsave(here("plots","SFC","GD.jpg"))
 #   ) +
 #   scale_x_continuous(limit=c(0,1)) +
 #   scale_y_continuous() +
-#   scale_fill_manual(values=c("TRUE"=col_medium[[3]],"FALSE"=col_medium[[8]]))
+#   scale_fill_manual(values=c("TRUE"=colour[["medium"]][[3]],"FALSE"=colour[["medium"]][[8]]))
 # ggsave(here("plots","SFC","GD90.jpg"))
 
 players %>%
@@ -292,7 +269,7 @@ players %>%
     box.padding=0.05,
   ) +
   geom_point(aes(colour=focus,fill=focus),shape=21,size=2) +
-  theme[["solar"]] +
+  theme[["solar"]]() +
   theme(
     axis.line.x=element_blank(),
     axis.ticks.x=element_blank(),
@@ -309,8 +286,8 @@ players %>%
   ) +
   scale_x_continuous(limit=c(0,1)) +
   scale_y_continuous() +
-  scale_colour_manual(values=c("TRUE"=col_sfc[[4]],"FALSE"=col_sfc[[3]])) +
-  scale_fill_manual(values=c("TRUE"=col_sfc[[1]],"FALSE"=col_sfc[[3]]))
+  scale_colour_manual(values=c("TRUE"=colour[["sfc"]][[4]],"FALSE"=colour[["sfc"]][["grey"]])) +
+  scale_fill_manual(values=c("TRUE"=colour[["sfc"]][["light"]],"FALSE"=colour[["sfc"]][["grey"]]))
 ggsave(here("plots","SFC","PassesCompleted.jpg"))
 
 players %>%
@@ -321,10 +298,10 @@ players %>%
   mutate(MaxPass=ifelse(Left>Right,Left,Right)) %>%
   mutate(Ratio=(MaxPass/Passes)) %>%
   ggplot(aes(y=Player)) +
-  geom_segment(aes(x=0,xend=-Left,y=Player,yend=Player),size=4,alpha=0.8,colour=col_medium[[1]]) +
-  geom_segment(aes(x=0,xend=Right,y=Player,yend=Player),size=4,alpha=0.8,colour=col_medium[[8]]) +
+  geom_segment(aes(x=0,xend=-Left,y=Player,yend=Player),size=4,alpha=0.8,colour=colour[["medium"]][[1]]) +
+  geom_segment(aes(x=0,xend=Right,y=Player,yend=Player),size=4,alpha=0.8,colour=colour[["medium"]][[8]]) +
   geom_label(aes(x=0,y=Player,label=sprintf("%2.0f%%",100*Ratio)),size=2) +
-  theme[["solar"]] +
+  theme[["solar"]]() +
   labs(
     title="L/R footed passes",
     x=element_blank(),
@@ -340,9 +317,9 @@ matches_long %>%
   mutate(Match=factor(Wk,labels=paste0(Opposition," ",ifelse(HA=="Home","H","A")," ",GoalsF,"-",GoalsA))) %>%
   mutate(Match=fct_rev(Match)) %>%
   ggplot(aes(y=Match)) +
-  geom_segment(aes(x=0,xend=xGFfbref,y=Match,yend=Match),colour=col_sfc[[1]],size=3.5,alpha=0.8) +
-  geom_segment(aes(x=0,xend=-xGAfbref,y=Match,yend=Match),colour=col_medium[[1]],size=3.5,alpha=0.8) +
-  theme[["solar"]] +
+  geom_segment(aes(x=0,xend=xGFfbref,y=Match,yend=Match),colour=colour[["sfc"]][["light"]],size=3.5,alpha=0.8) +
+  geom_segment(aes(x=0,xend=-xGAfbref,y=Match,yend=Match),colour=colour[["medium"]][[1]],size=3.5,alpha=0.8) +
+  theme[["solar"]]() +
   theme(
     axis.text.y=element_text(size=rel(0.8))
   ) +
