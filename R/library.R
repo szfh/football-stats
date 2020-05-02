@@ -11,7 +11,7 @@ pacman::p_load(
   ggrepel,
   ggthemes,
   ggfocus
-  )
+)
 
 # pacman::p_functions(pacman)
 # pacman::p_loaded()
