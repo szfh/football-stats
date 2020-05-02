@@ -35,7 +35,8 @@ theme[["solar"]] <- function(base_size=theme[["base_size"]],base_family=theme[["
     theme(
       axis.ticks=element_blank(),
       axis.line=element_line(size=0.6),
-      axis.text=element_text(hjust=0.5,vjust=0.5,size=rel(1)),
+      axis.title=element_text(size=rel(1),face="bold",hjust=0.5,vjust=0.5),
+      axis.text=element_text(size=rel(1),hjust=0.5,vjust=0.5),
       
       legend.position="none",
       
@@ -47,7 +48,7 @@ theme[["solar"]] <- function(base_size=theme[["base_size"]],base_family=theme[["
       
       plot.title=element_text(size=rel(1.2),face="bold",hjust=0.5),
       plot.subtitle=element_text(size=rel(1),hjust=0.5),
-      plot.caption=element_text(size=rel(0.8)),
+      plot.caption=element_text(size=rel(0.8),),
       
       plot.margin=unit(c(0.5,0.5,0.5,0.5),"lines"),
       
@@ -145,7 +146,8 @@ colour[["gdocs"]] <- gdocs_pal()(10)
 colour[["sfc"]] <- c(
   "main"="#D71920",
   "light"="#ED5C5C",
-  "grey"="#D3D3D3",
+  "grey"=ggthemes_data[["solarized"]][["Base"]][["value"]][[5]],
+  "solar"=ggthemes_data[["solarized"]][["Base"]][["value"]][[7]],
   "black"="#000000"
 )
 
@@ -157,3 +159,4 @@ caption <- list(
 
 # tests
 # colorspace::swatchplot(colour[["medium"]])
+# colorspace::swatchplot(ggthemes_data[["solarized"]][["Base"]][["value"]])
