@@ -84,8 +84,8 @@ theme[["dark"]] <- theme_solarized(base_size=theme[["base_size"]],base_family=th
 
 # palettes
 palette <- list()
-palette_epl <- function(team_name){
-  palette_epl <- c(
+palette[["epl"]] <- function(team_name){
+  colours <- c(
     `Other` = "lightgrey",
     `Arsenal` = "#EF0107",
     `Aston Villa` = "#670E36",
@@ -116,24 +116,24 @@ palette_epl <- function(team_name){
     `Wolves` = "#FDB913"
   )
   
-  # if(is.null(palette_epl))
-  #   return(palette_epl)
+  # if(is.null(colours))
+  #   return(colours)
   
-  return(palette_epl[team_name])
+  return(colours[team_name])
 }
 
-palette_sfc <- function(p){
-  palette_sfc <- c(
+palette[["sfc"]] <- function(p){
+  colours <- c(
     `main` = "#D71920", # normal
     `light` = "#ED5C5C", # light
     `lightgrey` = "#D3D3D3",
     `black` = "#000000"
   )
   
-  # if(is.null(palette_sfc))
-  #   return(palette_sfc)
+  # if(is.null(colours))
+  #   return(colours)
   
-  return(palette_sfc[p])
+  return(colours[p])
 }
 
 # colour lists
