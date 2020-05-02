@@ -124,7 +124,7 @@ players %>%
   scale_x_continuous(limit=c(0,1)
   ) +
   scale_y_continuous() +
-  scale_colour_manual(values=c("TRUE"=colour[["sfc"]][[4]],"FALSE"=colour[["sfc"]][["grey"]])) +
+  scale_colour_manual(values=c("TRUE"=colour[["sfc"]][["black"]],"FALSE"=colour[["sfc"]][["grey"]])) +
   scale_fill_manual(values=c("TRUE"=colour[["sfc"]][["light"]],"FALSE"=colour[["sfc"]][["grey"]]))
 ggsave(here("plots","SFC","ShotsKP.jpg"))
 
@@ -167,7 +167,7 @@ players %>%
   ) +
   scale_x_continuous(limit=c(0,1)) +
   scale_y_continuous() +
-  scale_colour_manual(values=c("TRUE"=colour[["sfc"]][[4]],"FALSE"=colour[["sfc"]][["grey"]])) +
+  scale_colour_manual(values=c("TRUE"=colour[["sfc"]][["black"]],"FALSE"=colour[["sfc"]][["grey"]])) +
   scale_fill_manual(values=c("TRUE"=colour[["sfc"]][["light"]],"FALSE"=colour[["sfc"]][["grey"]]))
 ggsave(here("plots","SFC","ShotsKP90.jpg"))
 
@@ -246,7 +246,7 @@ players %>%
   ) +
   scale_x_continuous(limit=c(0,1)) +
   scale_y_continuous() +
-  scale_colour_manual(values=c("TRUE"=colour[["sfc"]][[4]],"FALSE"=colour[["sfc"]][["grey"]])) +
+  scale_colour_manual(values=c("TRUE"=colour[["sfc"]][["black"]],"FALSE"=colour[["sfc"]][["grey"]])) +
   scale_fill_manual(values=c("TRUE"=colour[["sfc"]][["light"]],"FALSE"=colour[["sfc"]][["grey"]]))
 ggsave(here("plots","SFC","PassesCompleted.jpg"))
 
