@@ -4,7 +4,7 @@ players %>%
   filter(!is.na(Min)) %>%
   mutate(
     MinStart=Starts*MinStart,
-    MinSub=Subs*MinSub,
+    MinSub=Subs*MinSub
   ) %>%
   mutate(
     Posnew=case_when(
@@ -23,8 +23,8 @@ players %>%
   theme(
     plot.title=element_markdown(),
     axis.line=element_blank(),
-    axis.text.x=element_text(size=rel(0.8),hjust=0.5),
-    axis.text.y=element_text(size=rel(0.8)),
+    # axis.text.x=element_text(size=rel(0.8),hjust=0.5),
+    # axis.text.y=element_text(size=rel(0.8)),
     strip.text.y=element_text(angle=0)
   ) +
   labs(
@@ -57,7 +57,7 @@ matches_long %>%
   theme(
     axis.text.x=element_text(size=rel(0.8)),
     axis.title=element_text(size=rel(0.8)),
-    plot.title = element_markdown(),
+    plot.title = element_markdown()
   ) +
   labs(
     title=paste0("Southampton ","<b style='color:darkred'>attack</b>"," / ","<b style='color:royalblue'>defence</b>"," trend"),
@@ -75,7 +75,6 @@ players %>%
   filter(!is.na(npxG)|!is.na(xA)) %>%
   mutate(focus=ifelse(npxG>=1|xA>=1,TRUE,FALSE)) %>%
   ggplot(aes(x=npxG,y=xA)) +
-  # geom_blank(data=data.frame(npxG=0,xA=0)) +
   geom_point(aes(fill=focus),shape=21,size=4,alpha=0.8,colour=colour[["sfc"]][["black"]]) +
   geom_text_repel(aes(label=ifelse(focus,Player,"")),size=rel(4)) +
   theme[["solar"]]() +
@@ -209,45 +208,6 @@ players %>%
   scale_y_continuous() +
   scale_fill_manual(values=c("TRUE"=colour[["medium"]][[3]],"FALSE"=colour[["medium"]][[8]]))
 ggsave(here("plots","SFC","GD.jpg"))
-
-# players %>%
-#   filter(Squad=="Southampton") %>%
-#   filter(!is.na(On-OffG)|!is.na(On-OffxG)) %>%
-#   select(Player,"onG":"xGOn-Off") %>%
-#   pivot_longer(cols=c("On-OffG90","On-OffxG90"),names_to="PM",values_to="n") %>%
-#   mutate(PM=factor(PM,levels=c("On-OffG90","On-OffxG90"),labels=c("Goals +/-","xG +/-"))) %>%
-#   mutate(PlusMinus=ifelse(n>=0,TRUE,FALSE)) %>%
-#   ggplot(aes(x=0,y=n)) +
-#   geom_text_repel(
-#     aes(label=Player),
-#     size=rel(3),
-#     nudge_x=0.4,
-#     direction="y",
-#     hjust=0,
-#     segment.size=0.4,
-#     box.padding=0.05,
-#   ) +
-#   geom_point(aes(colour=PlusMinus,fill=PlusMinus),shape=21,size=3,colour="black") +
-#   theme[["solar"]]() +
-#   theme(
-#     axis.line.x=element_blank(),
-#     axis.ticks.x=element_blank(),
-#     axis.text.x=element_blank(),
-#     axis.title.x=element_blank(),
-#     panel.grid.major.x=element_blank(),
-#   ) +
-#   facet_wrap("PM",scales="free") +
-#   labs(
-#     title="On-pitch goal difference",
-#     subtitle="(per 90 mins)",
-#     x=element_blank(),
-#     y=element_blank(),
-#     caption=caption[[1]]
-#   ) +
-#   scale_x_continuous(limit=c(0,1)) +
-#   scale_y_continuous() +
-#   scale_fill_manual(values=c("TRUE"=colour[["medium"]][[3]],"FALSE"=colour[["medium"]][[8]]))
-# ggsave(here("plots","SFC","GD90.jpg"))
 
 players %>%
   filter(Squad=="Southampton") %>%
