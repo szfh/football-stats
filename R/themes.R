@@ -8,21 +8,22 @@ theme[["white"]] <- theme_bw(base_size=theme[["base_size"]],base_family=theme[["
     axis.ticks=element_blank(),
     axis.line=element_line(size=0.6),
     axis.text=element_text(hjust=0.5,vjust=0.5,size=rel(1)),
-
+    
     legend.position="none",
-
+    
     panel.border=element_blank(),
     panel.background=element_blank(),
-
+    
     panel.grid.major=element_line(size=0.4),
     panel.grid.minor=element_blank(),
-
+    
     plot.title=element_text(size=rel(1.2),face="bold",hjust=0.5),
     plot.subtitle=element_text(size=rel(1),hjust=0.5),
     plot.caption=element_text(size=rel(0.8)),
-
+    
     plot.margin=unit(c(0.5,0.5,0.5,0.5),"lines"),
-
+    
+    strip.background=element_blank(),
     strip.text=element_text(colour="black",face="bold",angle=0),
   )
 
@@ -39,13 +40,14 @@ theme[["solar"]] <- theme_solarized(base_size=theme[["base_size"]],base_family=t
     
     panel.grid.major=element_line(size=0.4),
     panel.grid.minor=element_blank(),
-
+    
     plot.title=element_text(size=rel(1.2),face="bold",hjust=0.5),
     plot.subtitle=element_text(size=rel(1),hjust=0.5),
     plot.caption=element_text(size=rel(0.8)),
-
+    
     plot.margin=unit(c(0.5,0.5,0.5,0.5),"lines"),
-
+    
+    strip.background=element_blank(),
     strip.text=element_text(face="bold",angle=0),
   )
 
@@ -69,6 +71,7 @@ theme[["dark"]] <- theme_solarized(base_size=theme[["base_size"]],base_family=th
     
     plot.margin=unit(c(0.5,0.5,0.5,0.5),"lines"),
     
+    strip.background=element_blank(),
     strip.text=element_text(face="bold",angle=0),
   )
 
