@@ -136,22 +136,19 @@ palette[["sfc"]] <- function(p){
   return(colours[p])
 }
 
-# colour lists
+# colours
 colour <- list()
-col_light <- few_pal("Light")(8)
-col_medium <- few_pal("Medium")(8)
-col_dark <- few_pal("Dark")(8)
-col_gdocs <- gdocs_pal()(10)
-col_sfc <- c("#D71920","#ED5C5C","#D3D3D3","#000000")
+colour[["light"]] <- few_pal("Light")(8)
+colour[["medium"]] <- few_pal("Medium")(8)
+colour[["dark"]] <- few_pal("Dark")(8)
+colour[["gdocs"]] <- gdocs_pal()(10)
+colour[["sfc"]] <- c("#D71920","#ED5C5C","#D3D3D3","#000000")
 
 # captions
-caption <- c(
+caption <- list(
   "data: statsbomb/fbref",
   "data: statsbomb/fbref\nprepared by: @saintsbynumbers"
 )
 
 # tests
-# colorspace::swatchplot(col_medium)
-# colorspace::swatchplot(col_sfc)
-# colorspace::swatchplot(palette_epl())
-# colorspace::swatchplot(palette_sfc())
+# colorspace::swatchplot(colour[["medium"]])
