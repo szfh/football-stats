@@ -5,6 +5,7 @@ pacman::p_load(
   magrittr,
   rvest,
   understatr,
+  ggformula,
   ggsoccer,
   ggtext,
   ggrepel,
