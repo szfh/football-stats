@@ -1,34 +1,89 @@
 # themes
-theme_sfc <- function(base_size=12,base_family="sans"){
-  theme_bw(base_size=base_size,base_family=base_family) +
-    theme(
-      axis.ticks=element_blank(),
-      axis.line=element_line(size=0.6),
-      axis.text=element_text(hjust=0.5,vjust=0.5,size=rel(1)),
-      
-      legend.position="none",
-      
-      strip.background=element_blank(),
-      strip.text=element_text(colour="black",face="bold",angle=0),
-      
-      panel.border=element_blank(),
-      panel.background=element_blank(),
-      
-      panel.grid.major=element_line(size=0.4),
-      panel.grid.minor=element_blank(),
-      
-      plot.title=element_text(size=rel(1.2),face="bold",hjust=0.5),
-      plot.subtitle=element_text(size=rel(1),hjust=0.5),
-      plot.caption=element_text(size=rel(0.8)),
-      
-      plot.background=element_blank(),
-      plot.margin=unit(c(1,1,0.5,0.5),"lines"),
-    )
-}
+theme <- list()
+theme[["base_size"]] <- 12
+theme[["base_family"]] <- "sans"
 
-theme_epl <- theme_sfc
+theme[["white"]] <- theme_bw(base_size=theme[["base_size"]],base_family=theme[["base_family"]]) +
+  theme(
+    axis.ticks=element_blank(),
+    axis.line=element_line(size=0.6),
+    axis.text=element_text(hjust=0.5,vjust=0.5,size=rel(1)),
+
+    legend.position="none",
+
+    panel.border=element_blank(),
+    panel.background=element_blank(),
+
+    panel.grid.major=element_line(size=0.4),
+    panel.grid.minor=element_blank(),
+
+    plot.title=element_text(size=rel(1.2),face="bold",hjust=0.5),
+    plot.subtitle=element_text(size=rel(1),hjust=0.5),
+    plot.caption=element_text(size=rel(0.8)),
+
+    plot.margin=unit(c(0.5,0.5,0.5,0.5),"lines"),
+
+    strip.text=element_text(colour="black",face="bold",angle=0),
+  )
+
+theme[["solar"]] <- theme_solarized(base_size=theme[["base_size"]],base_family=theme[["base_family"]], light=TRUE) +
+  theme(
+    axis.ticks=element_blank(),
+    axis.line=element_line(size=0.6),
+    axis.text=element_text(hjust=0.5,vjust=0.5,size=rel(1)),
+    
+    legend.position="none",
+    
+    panel.border=element_blank(),
+    panel.background=element_blank(),
+    
+    panel.grid.major=element_line(size=0.4),
+    panel.grid.minor=element_blank(),
+
+    plot.title=element_text(size=rel(1.2),face="bold",hjust=0.5),
+    plot.subtitle=element_text(size=rel(1),hjust=0.5),
+    plot.caption=element_text(size=rel(0.8)),
+
+    plot.margin=unit(c(0.5,0.5,0.5,0.5),"lines"),
+
+    strip.text=element_text(face="bold",angle=0),
+  )
+
+theme[["dark"]] <- theme_solarized(base_size=theme[["base_size"]],base_family=theme[["base_family"]], light=FALSE) +
+  theme(
+    axis.ticks=element_blank(),
+    axis.line=element_line(size=0.6),
+    axis.text=element_text(hjust=0.5,vjust=0.5,size=rel(1)),
+    
+    legend.position="none",
+    
+    panel.border=element_blank(),
+    panel.background=element_blank(),
+    
+    panel.grid.major=element_line(size=0.4),
+    panel.grid.minor=element_blank(),
+    
+    plot.title=element_text(size=rel(1.2),face="bold",hjust=0.5),
+    plot.subtitle=element_text(size=rel(1),hjust=0.5),
+    plot.caption=element_text(size=rel(0.8)),
+    
+    plot.margin=unit(c(0.5,0.5,0.5,0.5),"lines"),
+    
+    strip.text=element_text(face="bold",angle=0),
+  )
+
+# theme_as_function <- function(base_size=12,base_family="sans"){
+#   theme_bw(base_size=base_size,base_family=base_family) +
+#     theme(
+#     )
+# }
+
+# library(ggdark)
+# theme_dark2 <- dark_mode(.theme=theme_sfc)
+# https://github.com/koundy/ggplot_theme_Publication
 
 # palettes
+palette <- list()
 palette_epl <- function(team_name){
   palette_epl <- c(
     `Other` = "lightgrey",
@@ -82,6 +137,7 @@ palette_sfc <- function(p){
 }
 
 # colour lists
+colour <- list()
 col_light <- few_pal("Light")(8)
 col_medium <- few_pal("Medium")(8)
 col_dark <- few_pal("Dark")(8)
