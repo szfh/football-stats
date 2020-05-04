@@ -48,15 +48,15 @@ tidy[["fbref"]][["matches"]] <-
 tidy[["fbref"]][["player"]][["stats"]] <- raw[["fbref"]][["player"]][["stats"]] %>%
   select(
     -"Rk",
-    -("Gls...17":"G+A-PK"),
-    -("xG...25":"npxG+xA")
+    -("Gls...18":"G+A-PK"),
+    -("xG...26":"npxG+xA")
   ) %>%
   rename(
-    "Gls"="Gls...11",
-    "Ast"="Ast...12",
-    "xG"="xG...22",
-    "npxG"="npxG...23",
-    "xA"="xA...24",
+    "Gls"="Gls...12",
+    "Ast"="Ast...13",
+    "xG"="xG...23",
+    "npxG"="npxG...24",
+    "xA"="xA...25",
   )
 
 tidy[["fbref"]][["player"]][["keepers"]] <- raw[["fbref"]][["player"]][["keepers"]] %>%
@@ -254,15 +254,15 @@ tidy[["fbref"]][["player"]][["misc"]] <- raw[["fbref"]][["player"]][["misc"]] %>
 # squad
 tidy[["fbref"]][["squad"]][["stats"]] <- raw[["fbref"]][["squad"]][["stats"]] %>%
   select(
-    -("Gls...12":"G+A-PK"),
-    -("xG...20":"npxG+xA"),
+    -("Gls...13":"G+A-PK"),
+    -("xG...21":"npxG+xA"),
   ) %>%
   rename(
-    "Gls"="Gls...6",
-    "Ast"="Ast...7",
-    "xG"="xG...17",
-    "npxG"="npxG...18",
-    "xA"="xA...19",
+    "Gls"="Gls...7",
+    "Ast"="Ast...8",
+    "xG"="xG...18",
+    "npxG"="npxG...19",
+    "xA"="xA...20",
   )
 
 tidy[["fbref"]][["squad"]][["keepers"]] <- raw[["fbref"]][["squad"]][["keepers"]] %>%
