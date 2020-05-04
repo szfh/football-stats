@@ -1,6 +1,6 @@
 raw <- readRDS(file=here("data","fbref-static.rds"))
 
-raw[["fbref"]][["table"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/Premier-League-Stats",
+raw[["fbref"]][["table"]][["2019"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/Premier-League-Stats",
                                           extract=1,fix_columns=FALSE)
 
 raw[["fbref"]][["matches"]][["2019"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/schedule/Premier-League-Fixtures",
