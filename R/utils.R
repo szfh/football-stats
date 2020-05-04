@@ -1,7 +1,7 @@
 # scrape fbref
 fbref_scrape <- function(url,comment=FALSE,fix_columns=FALSE,extract=NA){
   
-  Sys.sleep(1)
+  Sys.sleep(0.1)
   
   if(comment==TRUE){ # table is inside html comment
     data_table <-
