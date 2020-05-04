@@ -5,41 +5,46 @@ if (!exists("tidy",inherits=FALSE)){
 }
 
 # table
-
-tidy[["fbref"]][["table"]] <- raw[["fbref"]][["table"]] %>%
-  select(
-    -"Top Team Scorer",
-    -"Goalkeeper",
-    -"Notes",
-    -"xGDiff/90",
-  ) %>%
-  rename(
-    "GD"="GDiff",
-    "xGF"="xG",
-    "xGD"="xGDiff",
+tidy[["fbref"]][["table"]] <-
+  lapply(
+    raw[["fbref"]][["table"]],
+    . %>%
+      select(
+        -"Top Team Scorer",
+        -"Goalkeeper",
+        -"Notes",
+        -"xGDiff/90"
+      ) %>%
+      rename(
+        "GD"="GDiff",
+        "xGF"="xG",
+        "xGD"="xGDiff"
+      )
   )
 
 # matches
-
-tidy[["fbref"]][["matches"]] <- raw[["fbref"]][["matches"]] %>%
-  separate("Score",c("GoalsHome","GoalsAway"),sep="[:punct:]") %>%
-  select(
-    -"Match Report",
-    -"Notes",
-  ) %>%
-  rename(
-    "xGHome"="xG...6",
-    "xGAway"="xG...8",
-  ) %>%
-  mutate(
-    "GoalsHome"=as.numeric(GoalsHome),
-    "GoalsAway"=as.numeric(GoalsAway),
-    "Attendance"=as.numeric(gsub("\\,","",Attendance)),
-  ) %>%
-  drop_na("Wk")
+tidy[["fbref"]][["matches"]] <-
+  lapply(
+    raw[["fbref"]][["matches"]],
+    .%>%
+      separate("Score",c("GoalsHome","GoalsAway"),sep="[:punct:]") %>%
+      select(
+        -"Match Report",
+        -"Notes"
+      ) %>%
+      rename(
+        "xGHome"="xG...6",
+        "xGAway"="xG...8"
+      ) %>%
+      mutate(
+        "GoalsHome"=as.numeric(GoalsHome),
+        "GoalsAway"=as.numeric(GoalsAway),
+        "Attendance"=as.numeric(gsub("\\,","",Attendance))
+      ) %>%
+      drop_na("Wk")
+  )
 
 # player
-
 tidy[["fbref"]][["player"]][["stats"]] <- raw[["fbref"]][["player"]][["stats"]] %>%
   select(
     -"Rk",
@@ -57,8 +62,8 @@ tidy[["fbref"]][["player"]][["stats"]] <- raw[["fbref"]][["player"]][["stats"]] 
 tidy[["fbref"]][["player"]][["keepers"]] <- raw[["fbref"]][["player"]][["keepers"]] %>%
   select(
     -"Rk",
-	-contains("%"),
-	-contains("90"),
+    -contains("%"),
+    -contains("90"),
   ) %>%
   rename(
     "GKPKatt"="PKatt",
@@ -66,7 +71,7 @@ tidy[["fbref"]][["player"]][["keepers"]] <- raw[["fbref"]][["player"]][["keepers
     "GKPKsaved"="PKsv",
     "GKPKmissed"="PKm",
   )
-  
+
 
 tidy[["fbref"]][["player"]][["keepersadv"]] <- raw[["fbref"]][["player"]][["keepersadv"]] %>%
   select(
@@ -106,7 +111,7 @@ tidy[["fbref"]][["player"]][["shooting"]] <- raw[["fbref"]][["player"]][["shooti
   rename(
     "ShFK"="FK",
   )
-  
+
 tidy[["fbref"]][["player"]][["passing"]] <- raw[["fbref"]][["player"]][["passing"]] %>%
   select(
     -"Rk",
@@ -127,7 +132,7 @@ tidy[["fbref"]][["player"]][["passing"]] <- raw[["fbref"]][["player"]][["passing
     "LongAtt"="Att...21",
     "PassProg"="Prog",
   )
-  
+
 tidy[["fbref"]][["player"]][["passingtypes"]] <- raw[["fbref"]][["player"]][["passingtypes"]] %>%
   select(
     -"Rk",
@@ -168,7 +173,7 @@ tidy[["fbref"]][["player"]][["gca"]] <- raw[["fbref"]][["player"]][["gca"]] %>%
     "GCAFld"="Fld...22",
     "GCAOG"="OG",
   )
-  
+
 
 tidy[["fbref"]][["player"]][["defense"]] <- raw[["fbref"]][["player"]][["defense"]] %>%
   select(
@@ -247,7 +252,6 @@ tidy[["fbref"]][["player"]][["misc"]] <- raw[["fbref"]][["player"]][["misc"]] %>
   )
 
 # squad
-
 tidy[["fbref"]][["squad"]][["stats"]] <- raw[["fbref"]][["squad"]][["stats"]] %>%
   select(
     -("Gls...12":"G+A-PK"),
@@ -372,7 +376,6 @@ tidy[["fbref"]][["squad"]][["gca"]] <- raw[["fbref"]][["squad"]][["gca"]] %>%
 
 tidy[["fbref"]][["squad"]][["defense"]] <- raw[["fbref"]][["squad"]][["defense"]] %>%
   select(
-    # -"Rk",
     -contains("%"),
   ) %>%
   rename(
