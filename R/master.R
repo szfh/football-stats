@@ -7,6 +7,7 @@ source(here("R","utils.R"))
 # knitr::knit(here::here("R","README.Rmd"))
 
 # raw
+# source(here("R","raw","fbref-static.R"))
 # source(here("R","raw","fbref.R"))
 # source(here("R","raw","fivethirtyeight.R"))
 
