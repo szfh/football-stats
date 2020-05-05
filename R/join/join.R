@@ -8,11 +8,11 @@ players <- reduce(tidy[["fbref"]][["player"]],full_join) %>%
   )
 
 # squad
-squad <- tidy[["fbref"]][["table"]] %>%
+squad <- tidy[["fbref"]][["table"]][["2019"]] %>%
   full_join(reduce(tidy[["fbref"]][["squad"]],full_join))
 
 # matches
-matches <- tidy[["fbref"]][["matches"]] %>%
+matches <- do.call(rbind,tidy[["fbref"]][["matches"]]) %>%
   left_join(tidy[["fivethirtyeight"]][["matches"]]) %>%
   rename(
     xGHomefbref=xGHome,
