@@ -8,13 +8,18 @@ players <- reduce(tidy[["fbref"]][["player"]],full_join) %>%
   )
 
 # squad
-squad <- tidy[["fbref"]][["table"]][["2019"]] %>%
-  full_join(reduce(tidy[["fbref"]][["squad"]],full_join))
+# squad <- tidy[["fbref"]][["table"]][["2019"]] %>%
+#   full_join(reduce(tidy[["fbref"]][["squad"]],full_join))
+# squad <- tidy[["fbref"]][["squad"]] %>%
+#   bind_rows(.id="Season")
+
+# tables
+table <- tidy[["fbref"]][["table"]] %>%
+  bind_rows(.id="Season")
 
 # matches
-matches <- do.call(rbind,tidy[["fbref"]][["matches"]]) %>%
-  rownames_to_column() %>%
-  separate("rowname",c("Season","Match"),sep="\\.") %>%
+matches <- tidy[["fbref"]][["matches"]] %>%
+  bind_rows(.id="Season") %>%
   left_join(tidy[["fivethirtyeight"]][["matches"]]) %>%
   rename(
     xGHomefbref=xGHome,
