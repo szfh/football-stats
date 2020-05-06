@@ -13,6 +13,8 @@ squad <- tidy[["fbref"]][["table"]][["2019"]] %>%
 
 # matches
 matches <- do.call(rbind,tidy[["fbref"]][["matches"]]) %>%
+  rownames_to_column() %>%
+  separate("rowname",c("Season","Match"),sep="\\.") %>%
   left_join(tidy[["fivethirtyeight"]][["matches"]]) %>%
   rename(
     xGHomefbref=xGHome,
