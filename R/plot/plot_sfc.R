@@ -38,6 +38,7 @@ players %>%
 ggsave(here("plots","SFC","Minutes.jpg"))
 
 matches_long %>%
+  filter(Season=="2019") %>%
   filter(Team=="Southampton") %>%
   filter(!is.na(GoalsHome)) %>%
   select(Wk:xGAfbref) %>%
@@ -272,6 +273,7 @@ players %>%
 ggsave(here("plots","SFC","PassFootedness.jpg"))
 
 matches_long %>%
+  filter(Season=="2019") %>%
   filter(Team=="Southampton") %>%
   filter(!is.na(GoalsHome)) %>%
   mutate(Match=factor(Wk,labels=paste0(Opposition," ",ifelse(HA=="Home","H","A")," ",GoalsF,"-",GoalsA))) %>%
