@@ -29,27 +29,27 @@ raw[["fbref"]][["squad"]][["playingtime"]][["2019"]] <- fbref_scrape(url="https:
 raw[["fbref"]][["squad"]][["misc"]][["2019"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/misc/Premier-League-Stats",
                                                     extract=1,fix_columns=TRUE)
 
-raw[["fbref"]][["player"]][["stats"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/stats/Premier-League-Stats",
+raw[["fbref"]][["player"]][["stats"]][["2019"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/stats/Premier-League-Stats",
                                                       comment=TRUE,extract=1,fix_columns=TRUE)
-raw[["fbref"]][["player"]][["keepers"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/keepers/Premier-League-Stats",
+raw[["fbref"]][["player"]][["keepers"]][["2019"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/keepers/Premier-League-Stats",
                                                         comment=TRUE,extract=1,fix_columns=TRUE)
-raw[["fbref"]][["player"]][["keepersadv"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/keepersadv/Premier-League-Stats",
+raw[["fbref"]][["player"]][["keepersadv"]][["2019"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/keepersadv/Premier-League-Stats",
                                                            comment=TRUE,extract=1,fix_columns=TRUE)
-raw[["fbref"]][["player"]][["shooting"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/shooting/Premier-League-Stats",
+raw[["fbref"]][["player"]][["shooting"]][["2019"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/shooting/Premier-League-Stats",
                                                          comment=TRUE,extract=1,fix_columns=TRUE)
-raw[["fbref"]][["player"]][["passing"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/passing/Premier-League-Stats",
+raw[["fbref"]][["player"]][["passing"]][["2019"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/passing/Premier-League-Stats",
                                                         comment=TRUE,extract=1,fix_columns=TRUE)
-raw[["fbref"]][["player"]][["passingtypes"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/passing_types/Premier-League-Stats",
+raw[["fbref"]][["player"]][["passingtypes"]][["2019"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/passing_types/Premier-League-Stats",
                                                              comment=TRUE,extract=1,fix_columns=TRUE)
-raw[["fbref"]][["player"]][["gca"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/gca/Premier-League-Stats",
+raw[["fbref"]][["player"]][["gca"]][["2019"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/gca/Premier-League-Stats",
                                                     comment=TRUE,extract=1,fix_columns=TRUE)
-raw[["fbref"]][["player"]][["defense"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/defense/Premier-League-Stats",
+raw[["fbref"]][["player"]][["defense"]][["2019"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/defense/Premier-League-Stats",
                                                         comment=TRUE,extract=1,fix_columns=TRUE)
-raw[["fbref"]][["player"]][["possession"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/possession/Premier-League-Stats",
+raw[["fbref"]][["player"]][["possession"]][["2019"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/possession/Premier-League-Stats",
                                                            comment=TRUE,extract=1,fix_columns=TRUE)
-raw[["fbref"]][["player"]][["playingtime"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/playingtime/Premier-League-Stats",
+raw[["fbref"]][["player"]][["playingtime"]][["2019"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/playingtime/Premier-League-Stats",
                                                             comment=TRUE,extract=1,fix_columns=TRUE)
-raw[["fbref"]][["player"]][["misc"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/misc/Premier-League-Stats",
+raw[["fbref"]][["player"]][["misc"]][["2019"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/misc/Premier-League-Stats",
                                                      comment=TRUE,extract=1,fix_columns=TRUE)
 
 saveRDS(raw,file=here("data","raw-fbref.rds"))

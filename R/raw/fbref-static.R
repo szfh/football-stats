@@ -65,6 +65,60 @@ raw[["fbref"]][["squad"]][["misc"]][["2017"]] <- fbref_scrape(url="https://fbref
 raw[["fbref"]][["squad"]][["misc"]][["2018"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1889/misc/",
                                                               extract=1,fix_columns=TRUE)
 
+raw[["fbref"]][["player"]][["stats"]][["2017"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1631/stats/",
+                                                                comment=TRUE,extract=1,fix_columns=TRUE)
+raw[["fbref"]][["player"]][["stats"]][["2018"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1889/stats/",
+                                                                comment=TRUE,extract=1,fix_columns=TRUE)
+
+raw[["fbref"]][["player"]][["keepers"]][["2017"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1631/keepers/",
+                                                                  comment=TRUE,extract=1,fix_columns=TRUE)
+raw[["fbref"]][["player"]][["keepers"]][["2018"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1889/keepers/",
+                                                                  comment=TRUE,extract=1,fix_columns=TRUE)
+
+raw[["fbref"]][["player"]][["keepersadv"]][["2017"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1631/keepersadv/",
+                                                                     comment=TRUE,extract=1,fix_columns=TRUE)
+raw[["fbref"]][["player"]][["keepersadv"]][["2018"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1889/keepersadv/",
+                                                                     comment=TRUE,extract=1,fix_columns=TRUE)
+
+raw[["fbref"]][["player"]][["shooting"]][["2017"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1631/shooting/",
+                                                                   comment=TRUE,extract=1,fix_columns=TRUE)
+raw[["fbref"]][["player"]][["shooting"]][["2018"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1889/shooting/",
+                                                                   comment=TRUE,extract=1,fix_columns=TRUE)
+
+raw[["fbref"]][["player"]][["passing"]][["2017"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1631/passing/",
+                                                                  comment=TRUE,extract=1,fix_columns=TRUE)
+raw[["fbref"]][["player"]][["passing"]][["2018"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1889/passing/",
+                                                                  comment=TRUE,extract=1,fix_columns=TRUE)
+
+raw[["fbref"]][["player"]][["passingtypes"]][["2017"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1631/passing_types/",
+                                                                       comment=TRUE,extract=1,fix_columns=TRUE)
+raw[["fbref"]][["player"]][["passingtypes"]][["2018"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1889/passing_types/",
+                                                                       comment=TRUE,extract=1,fix_columns=TRUE)
+
+raw[["fbref"]][["player"]][["gca"]][["2017"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1631/gca/",
+                                                              comment=TRUE,extract=1,fix_columns=TRUE)
+raw[["fbref"]][["player"]][["gca"]][["2018"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1889/gca/",
+                                                              comment=TRUE,extract=1,fix_columns=TRUE)
+
+raw[["fbref"]][["player"]][["defense"]][["2017"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1631/defense/",
+                                                                  comment=TRUE,extract=1,fix_columns=TRUE)
+raw[["fbref"]][["player"]][["defense"]][["2018"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1889/defense/",
+                                                                  comment=TRUE,extract=1,fix_columns=TRUE)
+
+raw[["fbref"]][["player"]][["possession"]][["2017"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1631/possession/",
+                                                                     comment=TRUE,extract=1,fix_columns=TRUE)
+raw[["fbref"]][["player"]][["possession"]][["2018"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1889/possession/",
+                                                                     comment=TRUE,extract=1,fix_columns=TRUE)
+
+raw[["fbref"]][["player"]][["playingtime"]][["2017"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1631/playingtime/",
+                                                                      comment=TRUE,extract=1,fix_columns=TRUE)
+raw[["fbref"]][["player"]][["playingtime"]][["2018"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1889/playingtime/",
+                                                                      comment=TRUE,extract=1,fix_columns=TRUE)
+
+raw[["fbref"]][["player"]][["misc"]][["2017"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1631/misc/",
+                                                               comment=TRUE,extract=1,fix_columns=TRUE)
+raw[["fbref"]][["player"]][["misc"]][["2018"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1889/misc/",
+                                                               comment=TRUE,extract=1,fix_columns=TRUE)
+
 saveRDS(raw,file=here("data","fbref-static.rds"))
 rm(raw)
-# https://www.mitchhenderson.org/2020/04/how-sports-scientists-can-use-ggplot2-in-r-to-make-better-visualisations/
