@@ -1,17 +1,12 @@
 # players
-players <- reduce(tidy[["fbref"]][["player"]],full_join) %>%
-  separate("Player",c("Player",NA),sep="\\\\",fill="right") %>%
-  separate("Nation",c(NA,"Nation"),sep=" ",fill="right") %>%
-  separate("Pos",c("Pos1",NA,"Pos2"),sep=c(2,3),fill="right") %>%
-  select(
-    -"Matches",
-  )
+players <- tidy[["fbref"]][["player"]] %>%
+  map(bind_rows, .id="Season") %>%
+  reduce(full_join)
 
 # squad
-# squad <- tidy[["fbref"]][["table"]][["2019"]] %>%
-#   full_join(reduce(tidy[["fbref"]][["squad"]],full_join))
-# squad <- tidy[["fbref"]][["squad"]] %>%
-#   bind_rows(.id="Season")
+squad <- tidy[["fbref"]][["squad"]] %>%
+  map(bind_rows, .id="Season") %>%
+  reduce(full_join)
 
 # tables
 table <- tidy[["fbref"]][["table"]] %>%
@@ -27,7 +22,7 @@ matches <- tidy[["fbref"]][["matches"]] %>%
     xGHome538=xg1,
     xGAway538=xg2,
     nsxGHome538=nsxg1,
-    nsxGAway538=nsxg2,
+    nsxGAway538=nsxg2
   ) %>%
   select(
     "Wk":"Time",
@@ -36,7 +31,7 @@ matches <- tidy[["fbref"]][["matches"]] %>%
     "xGHomefbref","xGAwayfbref",
     "xGHome538","xGAway538",
     "spi1":"adj_score2",
-    everything(),
+    everything()
   )
 
 matches_long <- matches %>%
