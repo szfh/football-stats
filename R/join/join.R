@@ -4,13 +4,17 @@ players <- tidy[["fbref"]][["player"]] %>%
   reduce(full_join)
 
 # squad
-squad <- tidy[["fbref"]][["squad"]] %>%
-  map(bind_rows, .id="Season") %>%
-  reduce(full_join)
+squad <- tidy[["fbref"]][["table"]] %>%
+  bind_rows(.id="Season") %>%
+  left_join(
+    tidy[["fbref"]][["squad"]] %>%
+      map(bind_rows, .id="Season") %>%
+      reduce(full_join)
+  )
 
-# tables
-table <- tidy[["fbref"]][["table"]] %>%
-  bind_rows(.id="Season")
+# table
+# table <- tidy[["fbref"]][["table"]] %>%
+#   bind_rows(.id="Season")
 
 # matches
 matches <- tidy[["fbref"]][["matches"]] %>%
