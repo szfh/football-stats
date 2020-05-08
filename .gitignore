@@ -18,3 +18,8 @@ R/test/
 
 #html
 .html
+
+#notes
+notes.R
+notes.Rmd
+notes.md
