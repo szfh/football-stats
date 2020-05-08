@@ -1,5 +1,6 @@
 # Premier League player plots
 players %>%
+  filter(Season=="2019") %>%
   filter(!is.na(Gls)|!is.na(xG)) %>%
   select(Player,Squad,Min:PKatt,xG:xA) %>%
   mutate(npGls=Gls-PK) %>%
@@ -16,7 +17,7 @@ players %>%
     direction="y",
     hjust=0,
     segment.size=0.4,
-    box.padding=0.05,
+    box.padding=0.05
   ) +
   geom_point(aes(fill=Squad),shape=21,size=4,position=position_jitterdodge(jitter.width=0,jitter.height=0.17,dodge.width=0)) +
   theme[["solar"]]() +
@@ -25,7 +26,7 @@ players %>%
     axis.ticks.x=element_blank(),
     axis.text.x=element_blank(),
     axis.title.x=element_blank(),
-    panel.grid.major.x=element_blank(),
+    panel.grid.major.x=element_blank()
   ) +
   facet_wrap("key",scales="free") +
   labs(
@@ -36,10 +37,11 @@ players %>%
   scale_x_continuous(limit=c(0,1)) +
   scale_y_continuous() +
   scale_fill_manual(values=palette[["epl"]]()) +
-  scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.2))
+  scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.1))
 ggsave(here("plots","EPL","PlayerGlsxG.jpg"))
 
 players %>%
+  filter(Season=="2019") %>%
   filter(!is.na(npxG)|!is.na(xA)) %>%
   select(Player,Squad,Min:PKatt,xG:xA) %>%
   pivot_longer(cols=c(npxG,xA),names_to="npxGxA",values_to="n") %>%
@@ -55,7 +57,7 @@ players %>%
     direction="y",
     hjust=0,
     segment.size=0.4,
-    box.padding=0.05,
+    box.padding=0.05
   ) +
   geom_point(aes(fill=Squad),shape=21,size=4) +
   theme[["solar"]]() +
@@ -64,7 +66,7 @@ players %>%
     axis.ticks.x=element_blank(),
     axis.text.x=element_blank(),
     axis.title.x=element_blank(),
-    panel.grid.major.x=element_blank(),
+    panel.grid.major.x=element_blank()
   ) +
   facet_wrap("npxGxA",scales="free") +
   labs(
@@ -80,6 +82,7 @@ players %>%
 ggsave(here("plots","EPL","PlayerxGxA.jpg"))
 
 players %>%
+  filter(Season=="2019") %>%
   filter(!is.na(ShortCmp)|!is.na(MediumCmp)|!is.na(LongCmp)) %>%
   pivot_longer(cols=c(ShortCmp,MediumCmp,LongCmp),names_to="PassType",values_to="Cmp") %>%
   mutate(PassType=factor(PassType,levels=c("ShortCmp","MediumCmp","LongCmp"),labels=c("Short (<5 yards)","Medium (5-25 yards)","Long (>25 yards)"))) %>%
@@ -95,7 +98,7 @@ players %>%
     hjust=0,
     segment.size=0.4,
     segment.alpha=0.8,
-    box.padding=0.05,
+    box.padding=0.05
   ) +
   geom_point(aes(fill=Squad,alpha=focus),shape=21,size=2,position=position_jitterdodge(jitter.width=0,jitter.height=0.2,dodge.width=0)) +
   theme[["solar"]]() +
@@ -104,7 +107,7 @@ players %>%
     axis.ticks.x=element_blank(),
     axis.text.x=element_blank(),
     axis.title.x=element_blank(),
-    panel.grid.major.x=element_blank(),
+    panel.grid.major.x=element_blank()
   ) +
   facet_wrap("PassType",scales="free") +
   labs(
@@ -120,6 +123,7 @@ players %>%
 ggsave(here("plots","EPL","PlayerCompPasses.jpg"))
 
 players %>%
+  filter(Season=="2019") %>%
   filter(Gls==0) %>%
   select(Player,Squad,Sh,Gls,npxG) %>%
   mutate(focus=case_when(percent_rank(Sh)>0.9 ~ TRUE,
@@ -146,6 +150,7 @@ ggsave(here("plots","EPL","PlayerNoGoals.jpg"))
 # Premier League team plots
 
 squad %>%
+  filter(Season=="2019") %>%
   select(Squad,xG,xGA) %>%
   mutate(xGA=-xGA) %>%
   pivot_longer(cols=c(xG,xGA),names_to="key",values_to="xG") %>%
@@ -159,7 +164,7 @@ squad %>%
     hjust=0,
     segment.size=0.4,
     segment.alpha=0.8,
-    box.padding=0.05,
+    box.padding=0.05
   ) +
   geom_point(aes(fill=Squad),size=4,shape=21,colour="black") +
   theme[["solar"]]() +
@@ -168,7 +173,7 @@ squad %>%
     axis.line.x=element_blank(),
     axis.ticks.x=element_blank(),
     axis.text.x=element_blank(),
-    panel.grid.major.x=element_blank(),
+    panel.grid.major.x=element_blank()
   ) +
   facet_wrap("key",scales="free") +
   labs(
@@ -183,6 +188,7 @@ squad %>%
 ggsave(here("plots","EPL","xG1.jpg"))
 
 squad %>%
+  filter(Season=="2019") %>%
   ggplot(aes(x=npxG,y=xGA)) +
   geom_text_repel(aes(label=Squad),size=rel(3)) +
   geom_point(aes(fill=Squad),shape=21,size=3) +
@@ -200,6 +206,7 @@ squad %>%
 ggsave(here("plots","EPL","xG2.jpg"))
 
 squad %>%
+  filter(Season=="2019") %>%
   select(Squad,GD,xGD) %>%
   pivot_longer(cols=c(GD,xGD),names_to="key",values_to="GD") %>%
   mutate(key=factor(key,levels=c("GD","xGD"),labels=c("Goal Difference","Expected Goal Difference"))) %>%
@@ -212,7 +219,7 @@ squad %>%
     hjust=0,
     segment.size=0.4,
     segment.alpha=0.8,
-    box.padding=0.05,
+    box.padding=0.05
   ) +
   geom_point(aes(fill=Squad),size=4,shape=21,colour="black") +
   theme[["solar"]]() +
@@ -221,7 +228,7 @@ squad %>%
     axis.line.x=element_blank(),
     axis.ticks.x=element_blank(),
     axis.text.x=element_blank(),
-    panel.grid.major.x=element_blank(),
+    panel.grid.major.x=element_blank()
   ) +
   facet_wrap("key",scales="free") +
   labs(

@@ -1,6 +1,7 @@
 players %>%
-  select(Player:Min,MinMP:UnusedSub) %>%
+  select(Season:Min,MinMP:UnusedSub) %>%
   filter(Squad=="Southampton") %>%
+  filter(Season=="2019") %>%
   filter(!is.na(Min)) %>%
   mutate(
     MinStart=Starts*MinStart,
@@ -12,7 +13,7 @@ players %>%
       Player %in% c("Ryan Bertrand","Cédric Soares","Yan Valery","Kyle Walker-Peters") ~ "FB",
       Player %in% c("James Ward-Prowse","Pierre Højbjerg","Oriol Romeu","William Smallbone") ~ "DM",
       Player %in% c("Nathan Redmond","Stuart Armstrong","Sofiane Boufal","Moussa Djenepo") ~ "AM",
-      TRUE ~ Pos1)
+      TRUE ~ Pos)
   ) %>%
   mutate(Possfc=factor(Posnew,levels=c("GK","CB","FB","DM","AM","FW"))) %>%
   mutate(Player=fct_reorder(Player,Min)) %>%
@@ -38,8 +39,8 @@ players %>%
 ggsave(here("plots","SFC","Minutes.jpg"))
 
 matches_long %>%
-  filter(Season=="2019") %>%
   filter(Team=="Southampton") %>%
+  filter(Season=="2019") %>%
   filter(!is.na(GoalsHome)) %>%
   select(Wk:xGAfbref) %>%
   mutate(xGFfbrefmva=get_mva(xGFfbref)) %>%
@@ -73,6 +74,7 @@ ggsave(here("plots","SFC","xGtrend.jpg"))
 
 players %>%
   filter(Squad=="Southampton") %>%
+  filter(Season=="2019") %>%
   filter(!is.na(npxG)|!is.na(xA)) %>%
   mutate(focus=ifelse(npxG>=1|xA>=1,TRUE,FALSE)) %>%
   ggplot(aes(x=npxG,y=xA)) +
@@ -91,6 +93,7 @@ ggsave(here("plots","SFC","xGxA.jpg"))
 
 players %>%
   filter(Squad=="Southampton") %>%
+  filter(Season=="2019") %>%
   filter(!is.na(Sh)|!is.na(KP)) %>%
   pivot_longer(cols=c(Sh,KP),names_to="ShKP",values_to="n") %>%
   mutate(ShKP=factor(ShKP,levels=c("Sh","KP"),labels=c("Shot","Pass leading to shot"))) %>%
@@ -105,7 +108,7 @@ players %>%
     direction="y",
     hjust=0,
     segment.size=0.4,
-    box.padding=0.05,
+    box.padding=0.05
   ) +
   geom_point(aes(colour=focus,fill=focus),shape=21,size=2) +
   theme[["solar"]]() +
@@ -114,7 +117,7 @@ players %>%
     axis.ticks.x=element_blank(),
     axis.text.x=element_blank(),
     axis.title.x=element_blank(),
-    panel.grid.major.x=element_blank(),
+    panel.grid.major.x=element_blank()
   ) +
   facet_wrap("ShKP",scales="free") +
   labs(
@@ -131,6 +134,7 @@ ggsave(here("plots","SFC","ShotsKP.jpg"))
 
 players %>%
   filter(Squad=="Southampton") %>%
+  filter(Season=="2019") %>%
   filter(!is.na(Sh)|!is.na(KP)) %>%
   mutate(Sh90=90*Sh/Min) %>%
   mutate(KP90=90*KP/Min) %>%
@@ -147,7 +151,7 @@ players %>%
     direction="y",
     hjust=0,
     segment.size=0.4,
-    box.padding=0.05,
+    box.padding=0.05
   ) +
   geom_point(aes(colour=focus,fill=focus),shape=21,size=2) +
   theme[["solar"]]() +
@@ -156,7 +160,7 @@ players %>%
     axis.ticks.x=element_blank(),
     axis.text.x=element_blank(),
     axis.title.x=element_blank(),
-    panel.grid.major.x=element_blank(),
+    panel.grid.major.x=element_blank()
   ) +
   facet_wrap("ShKP90",scales="free") +
   labs(
@@ -174,6 +178,7 @@ ggsave(here("plots","SFC","ShotsKP90.jpg"))
 
 players %>%
   filter(Squad=="Southampton") %>%
+  filter(Season=="2019") %>%
   filter(!is.na(`On-OffG`)|!is.na(`On-OffxG`)) %>%
   # select(Player,"On-OffG":"xGOn-Off") %>%
   pivot_longer(cols=c("On-OffG","On-OffxG"),names_to="PM",values_to="n") %>%
@@ -187,7 +192,7 @@ players %>%
     direction="y",
     hjust=0,
     segment.size=0.4,
-    box.padding=0.05,
+    box.padding=0.05
   ) +
   geom_point(aes(colour=PlusMinus,fill=PlusMinus),shape=21,size=3,colour="black") +
   theme[["solar"]]() +
@@ -196,7 +201,7 @@ players %>%
     axis.ticks.x=element_blank(),
     axis.text.x=element_blank(),
     axis.title.x=element_blank(),
-    panel.grid.major.x=element_blank(),
+    panel.grid.major.x=element_blank()
   ) +
   facet_wrap("PM",scales="free") +
   labs(
@@ -212,6 +217,7 @@ ggsave(here("plots","SFC","GD.jpg"))
 
 players %>%
   filter(Squad=="Southampton") %>%
+  filter(Season=="2019") %>%
   filter(!is.na(ShortCmp)|!is.na(MediumCmp)|!is.na(LongCmp)) %>%
   pivot_longer(cols=c(ShortCmp,MediumCmp,LongCmp),names_to="PassType",values_to="Cmp") %>%
   mutate(PassType=factor(PassType,levels=c("ShortCmp","MediumCmp","LongCmp"),labels=c("Short (<5 yards)","Medium (5-25 yards)","Long (>25 yards)"))) %>%
@@ -227,7 +233,7 @@ players %>%
     direction="y",
     hjust=0,
     segment.size=0.4,
-    box.padding=0.05,
+    box.padding=0.05
   ) +
   geom_point(aes(colour=focus,fill=focus),shape=21,size=2) +
   theme[["solar"]]() +
@@ -236,7 +242,7 @@ players %>%
     axis.ticks.x=element_blank(),
     axis.text.x=element_blank(),
     axis.title.x=element_blank(),
-    panel.grid.major.x=element_blank(),
+    panel.grid.major.x=element_blank()
   ) +
   facet_wrap("PassType",scales="free") +
   labs(
@@ -253,6 +259,7 @@ ggsave(here("plots","SFC","PassesCompleted.jpg"))
 
 players %>%
   filter(Squad=="Southampton") %>%
+  filter(Season=="2019") %>%
   filter(!is.na(Left)|!is.na(Right)) %>%
   mutate(Passes=Left+Right) %>%
   mutate(Player=fct_reorder(Player,Passes)) %>%
@@ -273,8 +280,8 @@ players %>%
 ggsave(here("plots","SFC","PassFootedness.jpg"))
 
 matches_long %>%
-  filter(Season=="2019") %>%
   filter(Team=="Southampton") %>%
+  filter(Season=="2019") %>%
   filter(!is.na(GoalsHome)) %>%
   mutate(Match=factor(Wk,labels=paste0(Opposition," ",ifelse(HA=="Home","H","A")," ",GoalsF,"-",GoalsA))) %>%
   mutate(Match=fct_rev(Match)) %>%
