@@ -24,15 +24,17 @@ if (!exists("tidy",inherits=FALSE)){
 tidy[["fivethirtyeight"]][["matches"]] <- raw[["fivethirtyeight"]][["matches"]] %>%
   filter(league_id==2411) %>%
   mutate(
-    "date"=as.Date(date),
+    "date"=as.Date(date)
   ) %>%
   mutate_at(c("team1","team2"),as.character) %>%
   mutate_at(c("team1","team2"),change_name) %>%
   rename(
     "Home"="team1",
     "Away"="team2",
-    "Date"="date",
+    "Date"="date"
   ) %>%
   select (-c("score1","score2","league_id"))
 
 rm(change_name)
+saveRDS(tidy,file=here("data","tidy-fivethirtyeight.rds"))
+rm(raw,tidy)

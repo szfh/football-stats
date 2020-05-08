@@ -1,3 +1,9 @@
+# read data
+tidy <- c(
+  readRDS(file=here("data","tidy-fbref.rds")),
+  readRDS(file=here("data","tidy-fivethirtyeight.rds"))
+)
+
 # players
 players <- tidy[["fbref"]][["player"]] %>%
   map(bind_rows, .id="Season") %>%
@@ -62,7 +68,7 @@ matches_long <- matches %>%
     nsxGF538=ifelse(HA=="Home",nsxGHome538,nsxGAway538),
     nsxGA538=ifelse(HA=="Home",nsxGAway538,nsxGHome538),
     adj_scoreF=ifelse(HA=="Home",adj_score1,adj_score2),
-    adj_scoreA=ifelse(HA=="Home",adj_score2,adj_score1),
+    adj_scoreA=ifelse(HA=="Home",adj_score2,adj_score1)
   ) %>%
   select(
     "Wk":"Time",
@@ -70,4 +76,4 @@ matches_long <- matches %>%
     everything()
   )
 
-rm(raw,tidy)
+rm(tidy)

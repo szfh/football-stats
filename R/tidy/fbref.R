@@ -45,7 +45,7 @@ tidy[["fbref"]][["matches"]] <-
   )
 
 # player
-tidy[["fbref"]][["player"]][["stats"]] <- #raw[["fbref"]][["player"]][["stats"]] %>%
+tidy[["fbref"]][["player"]][["stats"]] <-
   lapply(
     raw[["fbref"]][["player"]][["stats"]],
     . %>%
@@ -329,19 +329,6 @@ tidy[["fbref"]][["squad"]][["stats"]] <-
       )
   )
 
-# tidy[["fbref"]][["squad"]][["stats"]] <- raw[["fbref"]][["squad"]][["stats"]] %>%
-#   select(
-#     -("Gls...13":"G+A-PK"),
-#     -("xG...21":"npxG+xA"),
-#   ) %>%
-#   rename(
-#     "Gls"="Gls...7",
-#     "Ast"="Ast...8",
-#     "xG"="xG...18",
-#     "npxG"="npxG...19",
-#     "xA"="xA...20",
-#   )
-
 tidy[["fbref"]][["squad"]][["keepers"]] <-
   lapply(
     raw[["fbref"]][["squad"]][["keepers"]],
@@ -557,3 +544,6 @@ tidy[["fbref"]][["squad"]][["misc"]] <-
         "AerialLost"="Lost"
       )
   )
+
+saveRDS(tidy,file=here("data","tidy-fbref.rds"))
+rm(raw,tidy)
