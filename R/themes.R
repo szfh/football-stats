@@ -25,7 +25,7 @@ theme[["white"]] <- function(base_size=theme[["base_size"]],base_family=theme[["
       plot.margin=unit(c(0.5,0.5,0.5,0.5),"lines"),
       
       strip.background=element_blank(),
-      strip.text=element_text(colour="black",face="bold",angle=0),
+      strip.text=element_text(colour="black",face="bold",angle=0)
     )
 }
 
@@ -35,8 +35,8 @@ theme[["solar"]] <- function(base_size=theme[["base_size"]],base_family=theme[["
     theme(
       axis.ticks=element_blank(),
       axis.line=element_line(size=0.6),
-      axis.title=element_text(size=rel(1),face="bold",hjust=0.5,vjust=0.5),
-      axis.text=element_text(size=rel(1),hjust=0.5,vjust=0.5),
+      axis.title=element_text(size=rel(1),colour="black",face="bold",hjust=0.5,vjust=0.5),
+      axis.text=element_text(size=rel(1),colour="black",hjust=0.5,vjust=0.5),
       
       legend.position="none",
       
@@ -46,14 +46,14 @@ theme[["solar"]] <- function(base_size=theme[["base_size"]],base_family=theme[["
       panel.grid.major=element_line(size=0.4),
       panel.grid.minor=element_blank(),
       
-      plot.title=element_text(size=rel(1.2),face="bold",hjust=0.5),
-      plot.subtitle=element_text(size=rel(1),hjust=0.5),
-      plot.caption=element_text(size=rel(0.8),),
+      plot.title=element_text(size=rel(1.2),colour="black",face="bold",hjust=0.5),
+      plot.subtitle=element_text(size=rel(1),colour="black",hjust=0.5),
+      plot.caption=element_text(size=rel(0.8),colour="black"),
       
       plot.margin=unit(c(0.5,0.5,0.5,0.5),"lines"),
       
       strip.background=element_blank(),
-      strip.text=element_text(face="bold",angle=0),
+      strip.text=element_text(colour="black",face="bold",angle=0)
     )
 }
 
@@ -79,7 +79,7 @@ theme[["dark"]] <- function(base_size=theme[["base_size"]],base_family=theme[["b
       plot.margin=unit(c(0.5,0.5,0.5,0.5),"lines"),
       
       strip.background=element_blank(),
-      strip.text=element_text(face="bold",angle=0),
+      strip.text=element_text(face="bold",angle=0)
     )
 }
 
