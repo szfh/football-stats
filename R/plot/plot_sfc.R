@@ -45,7 +45,8 @@ matches_long %>%
   filter(!is.na(GoalsF)) %>%
   mutate(ShortHA=ifelse(HA=="Home","H","A")) %>%
   mutate(Match=glue::glue("{Opposition} {ShortHA} {GoalsF}-{GoalsA}")) %>%
-  mutate(Match=reorder_within(Match, Date, Season)) %>%ggplot(aes(x=Match)) +
+  mutate(Match=reorder_within(Match, Date, Season)) %>%
+  ggplot(aes(x=Match)) +
   geom_point(aes(y=xGFfbref),colour="darkred",alpha=0.8,shape="x") +
   geom_spline(aes(y=xGFfbref,group=Season),spar=0.6,colour="darkred",linetype="longdash",size=0.7) +
   geom_point(aes(y=xGAfbref),colour="royalblue",alpha=0.8,shape="x") +
