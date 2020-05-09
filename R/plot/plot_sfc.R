@@ -39,37 +39,33 @@ players %>%
 ggsave(here("plots","SFC","Minutes.jpg"))
 
 matches_long %>%
+  select("Wk":"Opposition","GoalsF":"xGAfbref","Season") %>%
   filter(Team=="Southampton") %>%
-  filter(Season=="2019") %>%
-  filter(!is.na(GoalsHome)) %>%
-  select(Wk:xGAfbref) %>%
-  mutate(xGFfbrefmva=get_mva(xGFfbref)) %>%
-  mutate(xGAfbrefmva=get_mva(xGAfbref)) %>%
-  # ggplot(aes(x=Date)) +
-  # mutate(Match=factor(Wk,labels=paste0(Opposition," ",ifelse(HA=="Home","H","A")," ",GoalsF,"-",GoalsA))) %>%
-  # mutate(Match=fct_rev(Match)) %>%
-  ggplot(aes(x=Wk)) +
-  geom_point(aes(y=xGFfbref),colour="darkred",alpha=0.5) +
-  # geom_smooth(aes(y=xGFfbref),formula=y ~ x,method="loess",colour="darkred",linetype="longdash",size=0.8,se=FALSE) +
-  geom_spline(aes(y=xGFfbref),spar=0.6,colour="darkred",linetype="longdash",size=0.8) +
-  geom_point(aes(y=xGAfbref),colour="royalblue",alpha=0.5) +
-  # geom_smooth(aes(y=xGAfbref),formula=y ~ x,method="loess",colour="royalblue",linetype="longdash",size=0.8,se=FALSE) +
-  geom_spline(aes(y=xGAfbref),spar=0.6,colour="royalblue",linetype="longdash",size=0.8) +
+  filter(Season %in% c("2017","2018","2019")) %>%
+  filter(!is.na(GoalsF)) %>%
+  mutate(ShortHA=ifelse(HA=="Home","H","A")) %>%
+  mutate(Match=glue::glue("{Opposition} {ShortHA} {GoalsF}-{GoalsA}")) %>%
+  mutate(Match=reorder_within(Match, Date, Season)) %>%ggplot(aes(x=Match)) +
+  geom_point(aes(y=xGFfbref),colour="darkred",alpha=0.8,shape="x") +
+  geom_spline(aes(y=xGFfbref,group=Season),spar=0.6,colour="darkred",linetype="longdash",size=0.7) +
+  geom_point(aes(y=xGAfbref),colour="royalblue",alpha=0.8,shape="x") +
+  geom_spline(aes(y=xGAfbref,group=Season),spar=0.6,colour="royalblue",linetype="longdash",size=0.7) +
   theme[["solar"]]() +
   theme(
-    axis.text.x=element_text(size=rel(0.8)),
-    axis.title=element_text(size=rel(0.8)),
-    plot.title = element_markdown()
+    axis.text.x=element_text(size=rel(0.4),angle=60,hjust=1),
+    axis.title.y=element_markdown(size=rel(0.8),colour="black"),
+    plot.title=element_markdown(colour="black"),
+    plot.caption=element_text(colour="black")
   ) +
   labs(
     title=paste0("Southampton ","<b style='color:darkred'>attack</b>"," / ","<b style='color:royalblue'>defence</b>"," trend"),
     x=element_blank(),
-    y="Expected goals for/against",
+    y=paste0("Expected goals ","<b style='color:darkred'>for</b>"," / ","<b style='color:royalblue'>against</b>"),
     caption=caption[[1]]
   ) +
-  # scale_x_date(date_labels="%d %b",date_breaks="1 month",expand=expansion(add=c(2))) +
-  scale_x_continuous(expand=expansion(add=c(0.1))) +
-  scale_y_continuous(limits=c(0,NA),expand=expansion(add=c(0,0.1)))
+  scale_x_reordered() +
+  scale_y_continuous(limits=c(0,NA),expand=expansion(add=c(0,0.1))) +
+  facet_grid(. ~ Season, space="free", scales="free_x")
 ggsave(here("plots","SFC","xGtrend.jpg"))
 
 players %>%
