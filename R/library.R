@@ -4,6 +4,8 @@ pacman::p_load(
   tidyverse,
   magrittr,
   rvest,
+  tidytext,
+  glue,
   understatr,
   ggformula,
   ggsoccer,
