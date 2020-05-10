@@ -8,34 +8,34 @@ players %>%
     MinSub=Subs*MinSub
   ) %>%
   mutate(
-    Posnew=case_when(
+    Pos=case_when(
       Player %in% c("Kevin Danso","Jannik Vestergaard","Jan Bednarek","Jack Stephens","Maya Yoshida") ~ "CB",
       Player %in% c("Ryan Bertrand","Cédric Soares","Yan Valery","Kyle Walker-Peters") ~ "FB",
       Player %in% c("James Ward-Prowse","Pierre Højbjerg","Oriol Romeu","William Smallbone") ~ "DM",
       Player %in% c("Nathan Redmond","Stuart Armstrong","Sofiane Boufal","Moussa Djenepo") ~ "AM",
       TRUE ~ Pos)
   ) %>%
-  mutate(Possfc=factor(Posnew,levels=c("GK","CB","FB","DM","AM","FW"))) %>%
+  mutate(Pos=factor(Pos,levels=c("GK","CB","FB","DM","AM","FW"))) %>%
   mutate(Player=fct_reorder(Player,Min)) %>%
   ggplot(aes(x=Min,y=Player)) +
   geom_segment(aes(y=Player,yend=Player,x=0,xend=MinStart),colour=colour[["sfc"]][["main"]],size=3.5,alpha=0.8) +
-  geom_segment(aes(y=Player,yend=Player,x=MinStart,xend=Min),colour=colour[["sfc"]][["light"]],size=3.5,alpha=0.3) +
+  geom_segment(aes(y=Player,yend=Player,x=MinStart,xend=Min),colour=colour[["sfc"]][["light"]],size=3.5,alpha=0.8) +
   theme[["solar"]]() +
   theme(
     plot.title=element_markdown(),
     axis.line=element_blank(),
-    # axis.text.x=element_text(size=rel(0.8),hjust=0.5),
-    # axis.text.y=element_text(size=rel(0.8)),
+    axis.text.x=element_text(size=rel(0.8),hjust=0.5),
+    axis.text.y=element_text(size=rel(0.8)),
     strip.text.y=element_text(angle=0)
   ) +
   labs(
-    title=paste0("League minutes (","<b style='color:#D71920'>from start</b>"," / ","<b style='color:#ED5C5C'>from bench</b>",")"),
+    title=glue("League minutes (<b style='color:#D71920'>from start</b> / <b style='color:#ED5C5C'>from bench</b>)"),
     x=element_blank(),
     y=element_blank(),
     caption=caption[[1]]
   ) +
   scale_x_continuous(breaks=seq(0,90*38,180),expand=expansion(add=c(0,20))) +
-  facet_grid(Possfc ~ .,scales="free",space="free")
+  facet_grid(Pos ~ ., space="free", scales="free_y")
 ggsave(here("plots","SFC","Minutes.jpg"))
 
 matches_long %>%
@@ -60,9 +60,9 @@ matches_long %>%
     plot.caption=element_text(colour="black")
   ) +
   labs(
-    title=paste0("Southampton ","<b style='color:darkred'>attack</b>"," / ","<b style='color:royalblue'>defence</b>"," trend"),
+    title=glue("Southampton <b style='color:darkred'>attack</b> / <b style='color:royalblue'>defence</b> trend"),
     x=element_blank(),
-    y=paste0("Expected goals ","<b style='color:darkred'>for</b>"," / ","<b style='color:royalblue'>against</b>"),
+    y=glue("Expected goals <b style='color:darkred'>for</b> / <b style='color:royalblue'>against</b>"),
     caption=caption[[1]]
   ) +
   scale_x_reordered() +
@@ -178,7 +178,6 @@ players %>%
   filter(Squad=="Southampton") %>%
   filter(Season=="2019") %>%
   filter(!is.na(`On-OffG`)|!is.na(`On-OffxG`)) %>%
-  # select(Player,"On-OffG":"xGOn-Off") %>%
   pivot_longer(cols=c("On-OffG","On-OffxG"),names_to="PM",values_to="n") %>%
   mutate(PM=factor(PM,levels=c("On-OffG","On-OffxG"),labels=c("Goals +/-","xG +/-"))) %>%
   mutate(PlusMinus=ifelse(n>=0,TRUE,FALSE)) %>%
@@ -258,7 +257,7 @@ ggsave(here("plots","SFC","PassesCompleted.jpg"))
 players %>%
   filter(Squad=="Southampton") %>%
   filter(Season=="2019") %>%
-  filter(!is.na(Left)|!is.na(Right)) %>%
+  filter(Left+Right>0) %>%
   mutate(Passes=Left+Right) %>%
   mutate(Player=fct_reorder(Player,Passes)) %>%
   mutate(MaxPass=ifelse(Left>Right,Left,Right)) %>%
@@ -268,8 +267,12 @@ players %>%
   geom_segment(aes(x=0,xend=Right,y=Player,yend=Player),size=4,alpha=0.8,colour=colour[["medium"]][[8]]) +
   geom_label(aes(x=0,y=Player,label=sprintf("%2.0f%%",100*Ratio)),size=2) +
   theme[["solar"]]() +
+  theme(
+    plot.title=element_markdown()
+  ) +
   labs(
-    title="L/R footed passes",
+    # title="Left / Right footed passes",
+    title=glue("<b style='color:#265DAB'>Left foot</b> / <b style='color:#CB2027'>Right foot</b> passes"),
     x=element_blank(),
     y=element_blank(),
     caption=caption[[1]]
@@ -281,20 +284,22 @@ matches_long %>%
   filter(Team=="Southampton") %>%
   filter(Season=="2019") %>%
   filter(!is.na(GoalsHome)) %>%
-  mutate(Match=factor(Wk,labels=paste0(Opposition," ",ifelse(HA=="Home","H","A")," ",GoalsF,"-",GoalsA))) %>%
+  mutate(ShortHA=ifelse(HA=="Home","H","A")) %>%
+  mutate(Match=factor(Wk,labels=glue("{Opposition} {ShortHA} {GoalsF}-{GoalsA}"))) %>%
   mutate(Match=fct_rev(Match)) %>%
   ggplot(aes(y=Match)) +
-  geom_segment(aes(x=0,xend=xGFfbref,y=Match,yend=Match),colour=colour[["sfc"]][["light"]],size=3.5,alpha=0.8) +
-  geom_segment(aes(x=0,xend=-xGAfbref,y=Match,yend=Match),colour=colour[["medium"]][[1]],size=3.5,alpha=0.8) +
+  geom_segment(aes(x=0,xend=xGFfbref,y=Match,yend=Match),colour=colour[["sfc"]][["light"]],size=3.5) +
+  geom_segment(aes(x=0,xend=-xGAfbref,y=Match,yend=Match),colour=colour[["medium"]][[1]],size=3.5) +
   theme[["solar"]]() +
   theme(
+    plot.title=element_markdown(),
     axis.text.y=element_text(size=rel(0.8))
   ) +
   labs(
-    title="              Opposition xG | Southampton xG",
+    title=glue("<b style='color:#265DAB'>Opposition xG</b> | <b style='color:#D71920'>Southampton xG</b>"),
     x=element_blank(),
     y=element_blank(),
     caption=caption[[1]]
   ) +
-  scale_x_continuous(breaks=seq(-10,10,1),labels=abs(seq(-10,10,1)),expand=expansion(add=c(0.1)))
+  scale_x_continuous(breaks=seq(-10,10,1),labels=abs(seq(-10,10,1)),expand=expansion(add=c(0.1,1)))
 ggsave(here("plots","SFC","MatchxGseg.jpg"))
