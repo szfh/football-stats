@@ -259,19 +259,18 @@ players %>%
   filter(Season=="2019") %>%
   filter(Left+Right>0) %>%
   mutate(Passes=Left+Right) %>%
-  mutate(Player=fct_reorder(Player,Passes)) %>%
   mutate(MaxPass=ifelse(Left>Right,Left,Right)) %>%
   mutate(Ratio=(MaxPass/Passes)) %>%
+  mutate(Player=fct_reorder(Player,-Ratio)) %>%
   ggplot(aes(y=Player)) +
   geom_segment(aes(x=0,xend=-Left,y=Player,yend=Player),size=4,alpha=0.8,colour=colour[["medium"]][[1]]) +
   geom_segment(aes(x=0,xend=Right,y=Player,yend=Player),size=4,alpha=0.8,colour=colour[["medium"]][[8]]) +
-  geom_label(aes(x=0,y=Player,label=sprintf("%2.0f%%",100*Ratio)),size=2) +
+  geom_label(aes(x=0,y=Player,label=sprintf("%2.0f%%",100*Ratio)),size=2,label.padding=unit(0.2, "lines"),label.r = unit(0.08, "lines")) +
   theme[["solar"]]() +
   theme(
     plot.title=element_markdown()
   ) +
   labs(
-    # title="Left / Right footed passes",
     title=glue("<b style='color:#265DAB'>Left foot</b> / <b style='color:#CB2027'>Right foot</b> passes"),
     x=element_blank(),
     y=element_blank(),
