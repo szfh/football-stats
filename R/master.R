@@ -6,8 +6,11 @@ source(here("R","utils.R"))
 # knit markdown
 # knitr::knit(here::here("R","README.Rmd"))
 
-# raw
+# raw static
 # source(here("R","raw","fbref-static.R"))
+# source(here("R","raw","understat-static.R"))
+
+# raw dynamic
 # source(here("R","raw","fbref-dynamic.R"))
 # source(here("R","raw","fivethirtyeight.R"))
 
@@ -16,8 +19,8 @@ source(here("R","utils.R"))
 # source(here("R","tidy","fivethirtyeight.R"))
 
 # join
-source(here("R","join","join.R"))
+# source(here("R","join","join.R"))
 
 # graph
-source(here("R","plot","plot_sfc.R"))
-source(here("R","plot","plot_epl.R"))
+# source(here("R","plot","plot_sfc.R"))
+# source(here("R","plot","plot_epl.R"))
