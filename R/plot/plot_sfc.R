@@ -1,7 +1,10 @@
+squad <- c("Southampton")
+season <- c(2019)
+
 players %>%
   select(Season:Min,MinMP:UnusedSub) %>%
-  filter(Squad=="Southampton") %>%
-  filter(Season=="2019") %>%
+  filter(Squad %in% !!squad) %>%
+  filter(Season %in% !!season) %>%
   filter(!is.na(Min)) %>%
   mutate(
     MinStart=Starts*MinStart,
@@ -39,8 +42,8 @@ players %>%
 ggsave(here("plots","SFC","Minutes.jpg"))
 
 players %>%
-  filter(Squad=="Southampton") %>%
-  filter(Season=="2019") %>%
+  filter(Squad %in% !!squad) %>%
+  filter(Season %in% !!season) %>%
   filter(!is.na(npxG)|!is.na(xA)) %>%
   mutate(focus=ifelse(npxG>=1|xA>=1,TRUE,FALSE)) %>%
   ggplot(aes(x=npxG,y=xA)) +
@@ -58,8 +61,8 @@ players %>%
 ggsave(here("plots","SFC","xGxA.jpg"))
 
 players %>%
-  filter(Squad=="Southampton") %>%
-  filter(Season=="2019") %>%
+  filter(Squad %in% !!squad) %>%
+  filter(Season %in% !!season) %>%
   filter(!is.na(Sh)|!is.na(KP)) %>%
   pivot_longer(cols=c(Sh,KP),names_to="ShKP",values_to="n") %>%
   mutate(ShKP=factor(ShKP,levels=c("Sh","KP"),labels=c("Shot","Pass leading to shot"))) %>%
@@ -99,8 +102,8 @@ players %>%
 ggsave(here("plots","SFC","ShotsKP.jpg"))
 
 players %>%
-  filter(Squad=="Southampton") %>%
-  filter(Season=="2019") %>%
+  filter(Squad %in% !!squad) %>%
+  filter(Season %in% !!season) %>%
   filter(!is.na(Sh)|!is.na(KP)) %>%
   mutate(Sh90=90*Sh/Min) %>%
   mutate(KP90=90*KP/Min) %>%
@@ -143,8 +146,8 @@ players %>%
 ggsave(here("plots","SFC","ShotsKP90.jpg"))
 
 players %>%
-  filter(Squad=="Southampton") %>%
-  filter(Season=="2019") %>%
+  filter(Squad %in% !!squad) %>%
+  filter(Season %in% !!season) %>%
   filter(!is.na(`On-OffG`)|!is.na(`On-OffxG`)) %>%
   pivot_longer(cols=c("On-OffG","On-OffxG"),names_to="PM",values_to="n") %>%
   mutate(PM=factor(PM,levels=c("On-OffG","On-OffxG"),labels=c("Goals +/-","xG +/-"))) %>%
@@ -181,8 +184,8 @@ players %>%
 ggsave(here("plots","SFC","GD.jpg"))
 
 players %>%
-  filter(Squad=="Southampton") %>%
-  filter(Season=="2019") %>%
+  filter(Squad %in% !!squad) %>%
+  filter(Season %in% !!season) %>%
   filter(!is.na(ShortCmp)|!is.na(MediumCmp)|!is.na(LongCmp)) %>%
   pivot_longer(cols=c(ShortCmp,MediumCmp,LongCmp),names_to="PassType",values_to="Cmp") %>%
   mutate(PassType=factor(PassType,levels=c("ShortCmp","MediumCmp","LongCmp"),labels=c("Short (<5 yards)","Medium (5-25 yards)","Long (>25 yards)"))) %>%
@@ -223,8 +226,8 @@ players %>%
 ggsave(here("plots","SFC","PassesCompleted.jpg"))
 
 players %>%
-  filter(Squad=="Southampton") %>%
-  filter(Season=="2019") %>%
+  filter(Squad %in% !!squad) %>%
+  filter(Season %in% !!season) %>%
   filter(Left+Right>0) %>%
   mutate(Passes=Left+Right) %>%
   mutate(MaxPass=ifelse(Left>Right,Left,Right)) %>%
@@ -253,8 +256,8 @@ ggsave(here("plots","SFC","PassFootedness.jpg"))
 
 matches_long %>%
   select("Wk":"Opposition","GoalsF":"xGAfbref","Season") %>%
-  filter(Team=="Southampton") %>%
-  filter(Season %in% c("2017","2018","2019")) %>%
+  filter(Team %in% !!squad) %>%
+  filter(Season %in% !!season) %>%
   filter(!is.na(GoalsF)) %>%
   mutate(ShortHA=ifelse(HA=="Home","H","A")) %>%
   mutate(Match=glue::glue("{Opposition} {ShortHA} {GoalsF}-{GoalsA}")) %>%
@@ -284,8 +287,8 @@ matches_long %>%
 ggsave(here("plots","SFC","xGtrend.jpg"))
 
 matches_long %>%
-  filter(Team=="Southampton") %>%
-  filter(Season=="2019") %>%
+  filter(Team %in% !!squad) %>%
+  filter(Season %in% !!season) %>%
   filter(!is.na(GoalsHome)) %>%
   mutate(ShortHA=ifelse(HA=="Home","H","A")) %>%
   mutate(Match=factor(Wk,labels=glue("{Opposition} {ShortHA} {GoalsF}-{GoalsA}"))) %>%
@@ -306,3 +309,5 @@ matches_long %>%
   ) +
   scale_x_continuous(breaks=seq(-10,10,1),labels=abs(seq(-10,10,1)),expand=expansion(add=c(0.1,1)))
 ggsave(here("plots","SFC","MatchxGseg.jpg"))
+
+rm(season, squad)
