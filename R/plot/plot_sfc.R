@@ -260,11 +260,14 @@ players %>%
   filter(Left+Right>0) %>%
   mutate(Passes=Left+Right) %>%
   mutate(MaxPass=ifelse(Left>Right,Left,Right)) %>%
+  mutate(MinPass=ifelse(Left<Right,Left,Right)) %>%
   mutate(Ratio=(MaxPass/Passes)) %>%
+  mutate(MainFoot=ifelse(Left>Right,"Left","Right")) %>%
+  mutate(OtherFoot=ifelse(Left<Right,"Left","Right")) %>%
   mutate(Player=fct_reorder(Player,-Ratio)) %>%
   ggplot(aes(y=Player)) +
-  geom_segment(aes(x=0,xend=-Left,y=Player,yend=Player),size=4,alpha=0.8,colour=colour[["medium"]][[1]]) +
-  geom_segment(aes(x=0,xend=Right,y=Player,yend=Player),size=4,alpha=0.8,colour=colour[["medium"]][[8]]) +
+  geom_segment(aes(x=0,xend=MaxPass,y=Player,yend=Player,colour=MainFoot),size=4,alpha=0.8) +
+  geom_segment(aes(x=0,xend=-MinPass,y=Player,yend=Player,colour=OtherFoot),size=4,alpha=0.8) +
   geom_label(aes(x=0,y=Player,label=sprintf("%2.0f%%",100*Ratio)),size=2,label.padding=unit(0.2, "lines"),label.r = unit(0.08, "lines")) +
   theme[["solar"]]() +
   theme(
@@ -276,7 +279,8 @@ players %>%
     y=element_blank(),
     caption=caption[[1]]
   ) +
-  scale_x_continuous(breaks=seq(-2000,2000,200),labels=abs(seq(-2000,2000,200)),expand=expansion(add=c(20)))
+  scale_x_continuous(breaks=seq(-2000,2000,200),labels=abs(seq(-2000,2000,200)),expand=expansion(add=c(20))) +
+  scale_colour_manual(values=c("Left"=colour[["medium"]][[1]],"Right"=colour[["medium"]][[8]]))
 ggsave(here("plots","SFC","PassFootedness.jpg"))
 
 matches_long %>%
