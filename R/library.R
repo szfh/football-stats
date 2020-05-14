@@ -8,6 +8,8 @@ pacman::p_load(
   glue,
   understatr,
   ggformula,
+  gghighlight,
+  ggforce,
   ggsoccer,
   ggtext,
   ggrepel,
