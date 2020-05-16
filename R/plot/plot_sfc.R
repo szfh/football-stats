@@ -254,6 +254,61 @@ players %>%
   scale_colour_manual(values=c("Left"=colour[["medium"]][[1]],"Right"=colour[["medium"]][[8]]))
 ggsave(here("plots","SFC","PassFootedness.jpg"))
 
+players %>%
+  filter(Squad %in% !!squad) %>%
+  filter(Season %in% !!season) %>%
+  filter(SCA>0) %>%
+  mutate(
+    SCA90=90*SCA/Min,
+    SCAPassLive90=90*SCAPassLive/Min,
+    SCAPassDead90=90*SCAPassDead/Min,
+    SCAPassOther90=90*(SCADrib+SCASh+SCAFld)/Min
+  ) %>%
+  pivot_longer(cols=c(SCAPassLive90,SCAPassDead90,SCAPassOther90),names_to="SCAType",values_to="SCAType90") %>%
+  mutate(SCAType=factor(SCAType,levels=c("SCAPassLive90","SCAPassDead90","SCAPassOther90"),labels=c("Open play pass","Dead ball pass","Dribble/Shot/Fouled"))) %>%
+  group_by(SCAType) %>%
+  mutate(focus=case_when(
+    (SCAType=="Open play pass" & min_rank(desc(SCAType90))<=12) ~ TRUE,
+    (SCAType=="Dead ball pass" & min_rank(desc(SCAType90))<=3) ~ TRUE,
+    (SCAType=="Dribble/Shot/Fouled" & min_rank(desc(SCAType90))<=5) ~ TRUE,
+    TRUE ~ FALSE
+  )) %>%
+  select(Player,Squad,SCAType,SCAType90,focus) %>%
+  ggplot(aes(x=0,y=SCAType90)) +
+  geom_text_repel(
+    aes(label=ifelse(focus,Player,"")),
+    size=rel(3),
+    nudge_x=0.3,
+    direction="y",
+    hjust=0,
+    segment.size=0.4,
+    box.padding=0.05
+  ) +
+  geom_point(aes(colour=focus,fill=focus),shape=21,size=2) +
+  theme[["solar"]]() +
+  theme(
+    axis.line.x=element_blank(),
+    axis.ticks.x=element_blank(),
+    axis.text.x=element_blank(),
+    axis.title.x=element_blank(),
+    panel.grid.major.x=element_blank(),
+    plot.title=element_text(hjust=0),
+    plot.subtitle=element_text(hjust=0, size=rel(0.8), face="bold")
+  ) +
+  facet_wrap("SCAType",scales="free") +
+  labs(
+    title="Southampton Shot Creating Actions (per 90 minutes)",
+    subtitle="Shot Creating Actions are the two actions directly leading to a shot",
+    x=element_blank(),
+    y=element_blank(),
+    caption=caption[[1]]
+  ) +
+  scale_x_continuous(limit=c(0,1)) +
+  scale_y_continuous() +
+  scale_colour_manual(values=c("TRUE"=colour[["sfc"]][["black"]],"FALSE"=colour[["sfc"]][["grey"]])) +
+  scale_fill_manual(values=c("TRUE"=colour[["sfc"]][["light"]],"FALSE"=colour[["sfc"]][["grey"]]))
+ggsave(here("plots","SFC","GCA.jpg"))
+
 matches_long %>%
   select("Wk":"Opposition","GoalsF":"xGAfbref","Season") %>%
   filter(Team %in% !!squad) %>%
