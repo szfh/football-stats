@@ -3,7 +3,7 @@ fbref <- readRDS(file=here("data","fbref-test.rds"))
 fbref %<>% 
   select(-any_of(c("Code","Table","Selector","page_url","content_selector_id"))) %>%
   mutate(data=map(data, fbref_fix_rows)) %>% # add column titles, remove non-data rows, refactor
-  mutate(data=pmap(list(data, page, type), fbref_tidy)) # remove cols not required in data
+  mutate(data=pmap(list(data, Page, Type), fbref_tidy)) # remove cols not required in data
 
 saveRDS(fbref,file=here("data","fbref-tidy.rds"))
 rm(fbref)
