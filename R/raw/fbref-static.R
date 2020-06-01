@@ -1,10 +1,10 @@
-.eplseasons <- tribble(~season, ~code, # advanced/nonadvanced?
+.EPLseasons <- tribble(~Season, ~Code, # advanced/nonadvanced?
                        "2018-19",1889,
                        "2017-18",1631,
                        # "2016-17",1526,
 )
 
-.pages <- tribble(~page, ~table,
+.Pages <- tribble(~Page, ~Table,
                   "stats","standard",
                   "keepers","keeper",
                   "keepersadv","keeper_adv",
@@ -18,17 +18,17 @@
                   "misc","misc",
 )
 
-.datatype <- tribble(~type, ~selector,
+.Datatype <- tribble(~Type, ~Selector,
                      "squad","_squads",
                      "player","")
 
-fbref <- .eplseasons %>%
-  crossing(.pages) %>%
-  crossing(.datatype)
+fbref <- .EPLseasons %>%
+  crossing(.Pages) %>%
+  crossing(.Datatype)
 
 fbref %<>%
-  mutate(page_url=glue("https://fbref.com/en/comps/9/{code}/{page}/")) %>%
-  mutate(content_selector_id=glue("%23stats_{table}{selector}")) %>%
+  mutate(page_url=glue("https://fbref.com/en/comps/9/{Code}/{Page}/")) %>%
+  mutate(content_selector_id=glue("%23stats_{Table}{Selector}")) %>%
   mutate(data = map2(page_url, content_selector_id, possibly(fbref_scrape, otherwise=NA)))
 
 saveRDS(fbref,file=here("data","fbref-test.rds"))
