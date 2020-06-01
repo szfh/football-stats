@@ -6,6 +6,7 @@ pacman::p_load(
   rvest,
   tidytext,
   glue,
+  janitor,
   understatr,
   ggformula,
   gghighlight,
