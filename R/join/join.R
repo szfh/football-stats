@@ -9,22 +9,18 @@ squad <- fbref %>%
   ungroup() %>%
   mutate(data=map(data,remove_empty,which="cols")) %$%
   data %>%
-  reduce(full_join) %>%
-  print
+  reduce(full_join)
 
 players <- fbref %>%
   filter(Type=="player") %>%
-  # filter(Season=="2018-19") %>%
   select(-Type) %>%
   unnest(cols=data) %>%
-  # filter(Squad=="Southampton") %>%
   group_by(Page) %>%
   nest() %>%
   ungroup() %>%
   mutate(data=map(data,remove_empty,which="cols")) %$%
   data %>%
-  reduce(full_join) %>%
-  print
+  reduce(full_join)
 
 # # read data
 # tidy <- c(

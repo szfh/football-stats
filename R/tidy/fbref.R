@@ -1,4 +1,4 @@
-fbref <- readRDS(file=here("data","fbref-test.rds"))
+fbref <- readRDS(file=here("data","fbref-raw.rds"))
 
 fbref %<>% 
   select(-any_of(c("Code","Table","Selector","page_url","content_selector_id"))) %>%
