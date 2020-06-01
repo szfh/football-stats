@@ -1,124 +1,35 @@
-raw <- list()
+.eplseasons <- tribble(~season, ~code, # advanced/nonadvanced?
+                       "2018-19",1889,
+                       "2017-18",1631,
+                       # "2016-17",1526,
+)
 
-raw[["fbref"]][["table"]][["2017"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1631/",
-                                                    extract=1,fix_columns=FALSE)
-raw[["fbref"]][["table"]][["2018"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1889/",
-                                                    extract=1,fix_columns=FALSE)
+.pages <- tribble(~page, ~table,
+                  "stats","standard",
+                  "keepers","keeper",
+                  "keepersadv","keeper_adv",
+                  "shooting","shooting",
+                  "passing","passing",
+                  "passing_types","passing_types",
+                  "gca","gca",
+                  "defense","defense",
+                  "possession","possession",
+                  "playingtime","playing_time",
+                  "misc","misc",
+)
 
-raw[["fbref"]][["matches"]][["2017"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1631/schedule/",
-                                                      extract=1,fix_columns=FALSE)
-raw[["fbref"]][["matches"]][["2018"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1889/schedule/",
-                                                      extract=1,fix_columns=FALSE)
+.datatype <- tribble(~type, ~selector,
+                     "squad","_squads",
+                     "player","")
 
-raw[["fbref"]][["squad"]][["stats"]][["2017"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1631/stats/",
-                                                               extract=1,fix_columns=TRUE)
-raw[["fbref"]][["squad"]][["stats"]][["2018"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1889/stats/",
-                                                               extract=1,fix_columns=TRUE)
+fbref <- .eplseasons %>%
+  crossing(.pages) %>%
+  crossing(.datatype)
 
-raw[["fbref"]][["squad"]][["keepers"]][["2017"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1631/keepers/",
-                                                                 extract=1,fix_columns=TRUE)
-raw[["fbref"]][["squad"]][["keepers"]][["2018"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1889/keepers/",
-                                                                 extract=1,fix_columns=TRUE)
+fbref %<>%
+  mutate(page_url=glue("https://fbref.com/en/comps/9/{code}/{page}/")) %>%
+  mutate(content_selector_id=glue("%23stats_{table}{selector}")) %>%
+  mutate(data = map2(page_url, content_selector_id, possibly(fbref_scrape, otherwise=NA)))
 
-raw[["fbref"]][["squad"]][["keepersadv"]][["2017"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1631/keepersadv/",
-                                                                    extract=1,fix_columns=TRUE)
-raw[["fbref"]][["squad"]][["keepersadv"]][["2018"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1889/keepersadv/",
-                                                                    extract=1,fix_columns=TRUE)
-
-raw[["fbref"]][["squad"]][["shooting"]][["2017"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1631/shooting/",
-                                                                  extract=1,fix_columns=TRUE)
-raw[["fbref"]][["squad"]][["shooting"]][["2018"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1889/shooting/",
-                                                                  extract=1,fix_columns=TRUE)
-
-raw[["fbref"]][["squad"]][["passing"]][["2017"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1631/passing/",
-                                                                 extract=1,fix_columns=TRUE)
-raw[["fbref"]][["squad"]][["passing"]][["2018"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1889/passing/",
-                                                                 extract=1,fix_columns=TRUE)
-
-raw[["fbref"]][["squad"]][["passingtypes"]][["2017"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1631/passing_types/",
-                                                                      extract=1,fix_columns=TRUE)
-raw[["fbref"]][["squad"]][["passingtypes"]][["2018"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1889/passing_types/",
-                                                                      extract=1,fix_columns=TRUE)
-
-raw[["fbref"]][["squad"]][["gca"]][["2017"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1631/gca/",
-                                                             extract=1,fix_columns=TRUE)
-raw[["fbref"]][["squad"]][["gca"]][["2018"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1889/gca/",
-                                                             extract=1,fix_columns=TRUE)
-
-raw[["fbref"]][["squad"]][["defense"]][["2017"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1631/defense/",
-                                                                 extract=1,fix_columns=TRUE)
-raw[["fbref"]][["squad"]][["defense"]][["2018"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1889/defense/",
-                                                                 extract=1,fix_columns=TRUE)
-
-raw[["fbref"]][["squad"]][["possession"]][["2017"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1631/possession/",
-                                                                    extract=1,fix_columns=TRUE)
-raw[["fbref"]][["squad"]][["possession"]][["2018"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1889/possession/",
-                                                                    extract=1,fix_columns=TRUE)
-
-raw[["fbref"]][["squad"]][["playingtime"]][["2017"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1631/playingtime/",
-                                                                     extract=1,fix_columns=TRUE)
-raw[["fbref"]][["squad"]][["playingtime"]][["2018"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1889/playingtime/",
-                                                                     extract=1,fix_columns=TRUE)
-
-raw[["fbref"]][["squad"]][["misc"]][["2017"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1631/misc/",
-                                                              extract=1,fix_columns=TRUE)
-raw[["fbref"]][["squad"]][["misc"]][["2018"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1889/misc/",
-                                                              extract=1,fix_columns=TRUE)
-
-raw[["fbref"]][["player"]][["stats"]][["2017"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1631/stats/",
-                                                                comment=TRUE,extract=1,fix_columns=TRUE)
-raw[["fbref"]][["player"]][["stats"]][["2018"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1889/stats/",
-                                                                comment=TRUE,extract=1,fix_columns=TRUE)
-
-raw[["fbref"]][["player"]][["keepers"]][["2017"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1631/keepers/",
-                                                                  comment=TRUE,extract=1,fix_columns=TRUE)
-raw[["fbref"]][["player"]][["keepers"]][["2018"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1889/keepers/",
-                                                                  comment=TRUE,extract=1,fix_columns=TRUE)
-
-raw[["fbref"]][["player"]][["keepersadv"]][["2017"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1631/keepersadv/",
-                                                                     comment=TRUE,extract=1,fix_columns=TRUE)
-raw[["fbref"]][["player"]][["keepersadv"]][["2018"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1889/keepersadv/",
-                                                                     comment=TRUE,extract=1,fix_columns=TRUE)
-
-raw[["fbref"]][["player"]][["shooting"]][["2017"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1631/shooting/",
-                                                                   comment=TRUE,extract=1,fix_columns=TRUE)
-raw[["fbref"]][["player"]][["shooting"]][["2018"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1889/shooting/",
-                                                                   comment=TRUE,extract=1,fix_columns=TRUE)
-
-raw[["fbref"]][["player"]][["passing"]][["2017"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1631/passing/",
-                                                                  comment=TRUE,extract=1,fix_columns=TRUE)
-raw[["fbref"]][["player"]][["passing"]][["2018"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1889/passing/",
-                                                                  comment=TRUE,extract=1,fix_columns=TRUE)
-
-raw[["fbref"]][["player"]][["passingtypes"]][["2017"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1631/passing_types/",
-                                                                       comment=TRUE,extract=1,fix_columns=TRUE)
-raw[["fbref"]][["player"]][["passingtypes"]][["2018"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1889/passing_types/",
-                                                                       comment=TRUE,extract=1,fix_columns=TRUE)
-
-raw[["fbref"]][["player"]][["gca"]][["2017"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1631/gca/",
-                                                              comment=TRUE,extract=1,fix_columns=TRUE)
-raw[["fbref"]][["player"]][["gca"]][["2018"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1889/gca/",
-                                                              comment=TRUE,extract=1,fix_columns=TRUE)
-
-raw[["fbref"]][["player"]][["defense"]][["2017"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1631/defense/",
-                                                                  comment=TRUE,extract=1,fix_columns=TRUE)
-raw[["fbref"]][["player"]][["defense"]][["2018"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1889/defense/",
-                                                                  comment=TRUE,extract=1,fix_columns=TRUE)
-
-raw[["fbref"]][["player"]][["possession"]][["2017"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1631/possession/",
-                                                                     comment=TRUE,extract=1,fix_columns=TRUE)
-raw[["fbref"]][["player"]][["possession"]][["2018"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1889/possession/",
-                                                                     comment=TRUE,extract=1,fix_columns=TRUE)
-
-raw[["fbref"]][["player"]][["playingtime"]][["2017"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1631/playingtime/",
-                                                                      comment=TRUE,extract=1,fix_columns=TRUE)
-raw[["fbref"]][["player"]][["playingtime"]][["2018"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1889/playingtime/",
-                                                                      comment=TRUE,extract=1,fix_columns=TRUE)
-
-raw[["fbref"]][["player"]][["misc"]][["2017"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1631/misc/",
-                                                               comment=TRUE,extract=1,fix_columns=TRUE)
-raw[["fbref"]][["player"]][["misc"]][["2018"]] <- fbref_scrape(url="https://fbref.com/en/comps/9/1889/misc/",
-                                                               comment=TRUE,extract=1,fix_columns=TRUE)
-
-saveRDS(raw,file=here("data","fbref-static.rds"))
-rm(raw)
+saveRDS(fbref,file=here("data","fbref-test.rds"))
+rm(fbref)
