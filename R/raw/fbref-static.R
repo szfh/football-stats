@@ -31,5 +31,5 @@ fbref %<>%
   mutate(content_selector_id=glue("%23stats_{Table}{Selector}")) %>%
   mutate(data = map2(page_url, content_selector_id, possibly(fbref_scrape, otherwise=NA)))
 
-saveRDS(fbref,file=here("data","fbref-test.rds"))
+saveRDS(fbref,file=here("data","fbref-raw-static.rds"))
 rm(fbref)
