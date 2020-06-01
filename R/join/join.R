@@ -1,10 +1,10 @@
 fbref <- readRDS(file=here("data","fbref-tidy.rds"))
 
 squad <- fbref %>%
-  filter(type=="squad") %>%
-  select(season,table,data) %>%
+  filter(Type=="squad") %>%
+  select(-Type) %>%
   unnest(cols=data) %>%
-  group_by(table) %>%
+  group_by(Page) %>%
   nest() %>%
   ungroup() %>%
   mutate(data=map(data,remove_empty,which="cols")) %$%
@@ -13,12 +13,12 @@ squad <- fbref %>%
   print
 
 players <- fbref %>%
-  filter(type=="player") %>%
-  filter(season=="2018-19") %>%
-  select(season,table,data) %>%
+  filter(Type=="player") %>%
+  # filter(Season=="2018-19") %>%
+  select(-Type) %>%
   unnest(cols=data) %>%
   # filter(Squad=="Southampton") %>%
-  group_by(table) %>%
+  group_by(Page) %>%
   nest() %>%
   ungroup() %>%
   mutate(data=map(data,remove_empty,which="cols")) %$%
