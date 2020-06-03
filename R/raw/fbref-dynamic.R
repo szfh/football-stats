@@ -1,10 +1,8 @@
-fbref_static <- readRDS(file=here("data","fbref-raw-static.rds"))
-
-.EPLseasons <- tribble(~Season, ~Code, # advanced/nonadvanced?
+.eplseasons <- tribble(~season, ~code, # advanced/nonadvanced?
                        "2019-20",NA
 )
 
-.Pages <- tribble(~Page, ~Table,
+.pages <- tribble(~page, ~table,
                   "stats","standard",
                   "keepers","keeper",
                   "keepersadv","keeper_adv",
@@ -18,21 +16,19 @@ fbref_static <- readRDS(file=here("data","fbref-raw-static.rds"))
                   "misc","misc",
 )
 
-.Datatype <- tribble(~Type, ~Selector,
+.datatype <- tribble(~type, ~selector,
                      "squad","_squads",
                      "player","")
 
-fbref <- .EPLseasons %>%
-  crossing(.Pages) %>%
-  crossing(.Datatype)
+fbref <- .eplseasons %>%
+  crossing(.pages) %>%
+  crossing(.datatype)
 
 fbref %<>%
-  mutate(page_url=glue("https://fbref.com/en/comps/9/{Page}/")) %>%
-  mutate(content_selector_id=glue("%23stats_{Table}{Selector}")) %>%
+  mutate(page_url=glue("https://fbref.com/en/comps/9/{page}/")) %>%
+  mutate(content_selector_id=glue("%23stats_{table}{selector}")) %>%
   mutate(data = map2(page_url, content_selector_id, possibly(fbref_scrape, otherwise=NA))) %>%
   print
 
-fbref <- bind_rows(fbref_static,fbref)
-
-saveRDS(fbref,file=here("data","fbref-raw.rds"))
-rm(fbref_static,fbref)
+saveRDS(fbref,file=here("data","fbref-raw-dynamic.rds"))
+rm(fbref)
