@@ -1,4 +1,7 @@
-fbref <- readRDS(file=here("data","fbref-raw.rds"))
+fbref_static <- readRDS(file=here("data","fbref-raw-static.rds"))
+fbref_dynamic <- readRDS(file=here("data","fbref-raw-dynamic.rds"))
+
+fbref <- bind_rows(fbref_static,fbref_dynamic)
 
 fbref %<>% 
   select(-any_of(c("Code","Table","Selector","page_url","content_selector_id"))) %>%
@@ -7,7 +10,7 @@ fbref %<>%
   mutate(data=pmap(list(data, Page, Type), fbref_tidy)) # remove cols not required in data
 
 saveRDS(fbref,file=here("data","fbref-tidy.rds"))
-rm(fbref)
+rm(fbref_static,fbref_dynamic,fbref)
 
 # if (!exists("tidy",inherits=FALSE)){
 #   tidy <- list()
