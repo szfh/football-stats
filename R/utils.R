@@ -11,14 +11,13 @@ fbref_scrape <- function(page_url,content_selector_id){
   return(data)
 }
 
-fbref_fix_rows <- function(data){
+fbref_clean_names <- function(data){
   
-  names(data) <- str_squish(glue("{names(data)} {data[1,]}")) # janitor::row_to_names
-  data <- data %>% slice(-1)
+  names(data) <- make_clean_names(str_squish(glue("{data[1,]} {data[2,]}")))
+  data <- data %>% slice(-1,-2)
   
-  if("Player" %in% names(data)){ # remove duplicated column names from player table
-    data <- data %>%
-      filter(Player != "Player")
+  if("player" %in% names(data)){ # remove duplicated column names from player table
+    data %<>% filter(player != "Player")
   }
   
   data <- type_convert(data) # refactor data types
@@ -29,13 +28,13 @@ fbref_fix_rows <- function(data){
 fbref_tidy <- function(data,page,type,cols){ #all data editing, selecting, renaming in here?
 
   if(type %in% c("squad","player")){
-    data %<>% select(-any_of(c("Rk","Matches")))
+    data %<>% select(-any_of(c("rk","matches")))
   }
   if(page != "stats"){
-    data %<>% select(-any_of("# Pl"))
+    data %<>% select(-any_of("number_pl"))
   }
   if(page %in% c("keepers","keepersadv")){
-    data %<>% select(-any_of(c("Playing Time Starts","Playing Time MP","Playing Time Min")))
+    data %<>% select(-any_of(c("playing_time_starts","playing_time_mp","playing_time_min")))
   }
   return(data)
 }
