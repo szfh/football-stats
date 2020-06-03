@@ -1,4 +1,4 @@
-.eplseasons <- tribble(~season, ~code, # advanced/nonadvanced?
+.eplseasons <- tribble(~season, ~code,
                        "2019-20",NA
 )
 
@@ -27,8 +27,7 @@ fbref <- .eplseasons %>%
 fbref %<>%
   mutate(page_url=glue("https://fbref.com/en/comps/9/{page}/")) %>%
   mutate(content_selector_id=glue("%23stats_{table}{selector}")) %>%
-  mutate(data = map2(page_url, content_selector_id, possibly(fbref_scrape, otherwise=NA))) %>%
-  print
+  mutate(data = map2(page_url, content_selector_id, possibly(fbref_scrape, otherwise=NA)))
 
 saveRDS(fbref,file=here("data","fbref-raw-dynamic.rds"))
 rm(fbref)
