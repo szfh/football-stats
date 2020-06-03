@@ -1,10 +1,10 @@
 fbref <- readRDS(file=here("data","fbref-tidy.rds"))
 
 squad <- fbref %>%
-  filter(Type=="squad") %>%
-  select(-Type) %>%
+  filter(type=="squad") %>%
+  select(-type) %>%
   unnest(cols=data) %>%
-  group_by(Page) %>%
+  group_by(page) %>%
   nest() %>%
   ungroup() %>%
   mutate(data=map(data,remove_empty,which="cols")) %$%
@@ -12,10 +12,10 @@ squad <- fbref %>%
   reduce(full_join)
 
 players <- fbref %>%
-  filter(Type=="player") %>%
-  select(-Type) %>%
+  filter(type=="player") %>%
+  select(-type) %>%
   unnest(cols=data) %>%
-  group_by(Page) %>%
+  group_by(page) %>%
   nest() %>%
   ungroup() %>%
   mutate(data=map(data,remove_empty,which="cols")) %$%
