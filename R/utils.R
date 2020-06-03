@@ -4,8 +4,8 @@ fbref_scrape <- function(page_url,content_selector_id){
   
   data <-
     url %>%
-    read_html() %>% #read_table2()? col_names=FALSE?
-    html_table() %>%
+    read_html() %>%
+    html_table(header=FALSE) %>%
     extract2(1)
   
   return(data)
@@ -26,8 +26,8 @@ fbref_fix_rows <- function(data){
   return(data)
 }
 
-fbref_tidy <- function(data,page,type,cols){ #all data editing, selecting, renaming in here? call it fbref_tidy?
-  # browser()
+fbref_tidy <- function(data,page,type,cols){ #all data editing, selecting, renaming in here?
+
   if(type %in% c("squad","player")){
     data %<>% select(-any_of(c("Rk","Matches")))
   }
