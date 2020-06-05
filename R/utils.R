@@ -37,13 +37,14 @@ fbref_clean_names <- function(data){
 fbref_tidy <- function(data,page,type,cols){ #all data editing, selecting, renaming in here?
   
   if(type %in% c("squad","player")){
-    data %<>% select(-any_of(c("rk","matches")))
-  }
-  if(page != "stats"){
-    data %<>% select(-any_of("n_pl"))
+    data %<>%
+      select(-any_of(c("rk","matches"))) %>%
+      select(-contains(c("pc","90")))
   }
   if(page %in% c("keepers","keepersadv")){
-    data %<>% select(-any_of(c("playing_time_starts","playing_time_mp","playing_time_min")))
+    data %<>%
+      rename("n_pl_gk"=any_of("n_pl")) %>%
+      select(-any_of(c("playing_time_starts","playing_time_mp","playing_time_min")))
   }
   return(data)
 }
