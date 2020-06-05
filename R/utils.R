@@ -17,7 +17,12 @@ fbref_clean_names <- function(data){
   names(data) <-
     glue("{data[1,]} {data[2,]}") %>%
     str_squish %>%
-    make_clean_names
+    make_clean_names(
+      # replace=c(" "="_","%"="pc","#"="n","+"="plus","-"="minus","/"="_","."="_"),
+      replace=c(" "="_","%"="pc","#"="n","/"="_"),
+      parsing_option=0
+    )
+  
   data %<>% slice(-1,-2)
   
   if("player" %in% names(data)){ # remove duplicated column names from player table
@@ -35,7 +40,7 @@ fbref_tidy <- function(data,page,type,cols){ #all data editing, selecting, renam
     data %<>% select(-any_of(c("rk","matches")))
   }
   if(page != "stats"){
-    data %<>% select(-any_of("number_pl"))
+    data %<>% select(-any_of("n_pl"))
   }
   if(page %in% c("keepers","keepersadv")){
     data %<>% select(-any_of(c("playing_time_starts","playing_time_mp","playing_time_min")))
