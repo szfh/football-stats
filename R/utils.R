@@ -13,20 +13,24 @@ fbref_scrape <- function(page_url,content_selector_id){
 
 fbref_clean_names <- function(data){
   
-  names(data) <- make_clean_names(str_squish(glue("{data[1,]} {data[2,]}")))
-  data <- data %>% slice(-1,-2)
+  # names(data) <- make_clean_names(str_squish(glue("{data[1,]} {data[2,]}")))
+  names(data) <-
+    glue("{data[1,]} {data[2,]}") %>%
+    str_squish %>%
+    make_clean_names
+  data %<>% slice(-1,-2)
   
   if("player" %in% names(data)){ # remove duplicated column names from player table
     data %<>% filter(player != "Player")
   }
   
-  data <- type_convert(data) # refactor data types
+  data %<>% type_convert # refactor data types
   
   return(data)
 }
 
 fbref_tidy <- function(data,page,type,cols){ #all data editing, selecting, renaming in here?
-
+  
   if(type %in% c("squad","player")){
     data %<>% select(-any_of(c("rk","matches")))
   }
