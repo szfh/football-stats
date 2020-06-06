@@ -1,28 +1,27 @@
-squad <- c("Southampton")
-season <- c(2019)
+team <- c("Southampton")
+season <- c("2019-20")
 
 players %>%
-  select(Season:Min,MinMP:UnusedSub) %>%
-  filter(Squad %in% !!squad) %>%
-  filter(Season %in% !!season) %>%
-  filter(!is.na(Min)) %>%
+  filter(squad %in% !!team) %>%
+  filter(season %in% !!season) %>%
+  filter(!is.na(playing_time_min)) %>%
   mutate(
-    MinStart=Starts*MinStart,
-    MinSub=Subs*MinSub
+    starts_mn_start=starts_mn_start*starts_starts,
+    subs_mn_sub=subs_mn_sub*subs_subs,
   ) %>%
   mutate(
-    Pos=case_when(
-      Player %in% c("Kevin Danso","Jannik Vestergaard","Jan Bednarek","Jack Stephens","Maya Yoshida") ~ "CB",
-      Player %in% c("Ryan Bertrand","Cédric Soares","Yan Valery","Kyle Walker-Peters") ~ "FB",
-      Player %in% c("James Ward-Prowse","Pierre Højbjerg","Oriol Romeu","William Smallbone") ~ "DM",
-      Player %in% c("Nathan Redmond","Stuart Armstrong","Sofiane Boufal","Moussa Djenepo") ~ "AM",
-      TRUE ~ Pos)
+    pos=case_when(
+      player %in% c("Kevin Danso","Jannik Vestergaard","Jan Bednarek","Jack Stephens","Maya Yoshida") ~ "CB",
+      player %in% c("Ryan Bertrand","Cédric Soares","Yan Valery","Kyle Walker-Peters") ~ "FB",
+      player %in% c("James Ward-Prowse","Pierre Højbjerg","Oriol Romeu","William Smallbone") ~ "DM",
+      player %in% c("Nathan Redmond","Stuart Armstrong","Sofiane Boufal","Moussa Djenepo") ~ "AM",
+      TRUE ~ pos)
   ) %>%
-  mutate(Pos=factor(Pos,levels=c("GK","CB","FB","DM","AM","FW"))) %>%
-  mutate(Player=fct_reorder(Player,Min)) %>%
-  ggplot(aes(x=Min,y=Player)) +
-  geom_segment(aes(y=Player,yend=Player,x=0,xend=MinStart),colour=colour[["sfc"]][["main"]],size=3.5,alpha=0.8) +
-  geom_segment(aes(y=Player,yend=Player,x=MinStart,xend=Min),colour=colour[["sfc"]][["light"]],size=3.5,alpha=0.8) +
+  mutate(pos=factor(pos,levels=c("GK","CB","FB","DM","AM","FW"))) %>%
+  mutate(player=fct_reorder(player,playing_time_min)) %>%
+  ggplot(aes(x=playing_time_min,y=player)) +
+  geom_segment(aes(y=player,yend=player,x=0,xend=starts_mn_start),colour=colour[["sfc"]][["main"]],size=3.5,alpha=0.8) +
+  geom_segment(aes(y=player,yend=player,x=starts_mn_start,xend=playing_time_min),colour=colour[["sfc"]][["light"]],size=3.5,alpha=0.8) +
   theme[["solar"]]() +
   theme(
     plot.title=element_markdown(),
@@ -38,17 +37,17 @@ players %>%
     caption=caption[[1]]
   ) +
   scale_x_continuous(breaks=seq(0,90*38,180),expand=expansion(add=c(0,20))) +
-  facet_grid(Pos ~ ., space="free", scales="free_y")
-ggsave(here("plots","SFC","Minutes.jpg"))
+  facet_grid(pos ~ ., space="free", scales="free_y")
+# ggsave(here("plots","SFC","Minutes.jpg"))
 
 players %>%
-  filter(Squad %in% !!squad) %>%
-  filter(Season %in% !!season) %>%
-  filter(!is.na(npxG)|!is.na(xA)) %>%
-  mutate(focus=ifelse(npxG>=1|xA>=1,TRUE,FALSE)) %>%
-  ggplot(aes(x=npxG,y=xA)) +
+  filter(squad %in% !!team) %>%
+  filter(season %in% !!season) %>%
+  filter(!is.na(expected_npxg)|!is.na(expected_xa)) %>%
+  mutate(focus=ifelse(expected_npxg>=1|expected_xa>=1,TRUE,FALSE)) %>%
+  ggplot(aes(x=expected_npxg,y=expected_xa)) +
   geom_point(aes(fill=focus),shape=21,size=4,alpha=0.8,colour=colour[["sfc"]][["black"]]) +
-  geom_text_repel(aes(label=ifelse(focus,Player,"")),size=rel(4)) +
+  geom_text_repel(aes(label=ifelse(focus,player,"")),size=rel(4)) +
   theme[["solar"]]() +
   labs(title="Southampton xG/xA",
        x="Expected goals",
@@ -58,20 +57,20 @@ players %>%
   scale_y_continuous(limits=c(0,NA),breaks=seq(0,30,1),expand=expansion(add=c(0,0.2))) +
   scale_fill_manual(values=c("TRUE"=colour[["sfc"]][["main"]],"FALSE"=colour[["sfc"]][["grey"]])) +
   coord_fixed()
-ggsave(here("plots","SFC","xGxA.jpg"))
+# ggsave(here("plots","SFC","xGxA.jpg"))
 
 players %>%
-  filter(Squad %in% !!squad) %>%
-  filter(Season %in% !!season) %>%
-  filter(!is.na(Sh)|!is.na(KP)) %>%
-  pivot_longer(cols=c(Sh,KP),names_to="ShKP",values_to="n") %>%
-  mutate(ShKP=factor(ShKP,levels=c("Sh","KP"),labels=c("Shot","Pass leading to shot"))) %>%
-  group_by(ShKP) %>%
+  filter(squad %in% !!team) %>%
+  filter(season %in% !!season) %>%
+  filter(!is.na(standard_sh)|!is.na(kp)) %>%
+  pivot_longer(cols=c(standard_sh,kp),names_to="key",values_to="n") %>%
+  mutate(key=factor(key,levels=c("standard_sh","kp"),labels=c("Shot","Pass leading to shot"))) %>%
+  group_by(key) %>%
   mutate(focus=case_when(percent_rank(n)>0.4 ~ TRUE,
                          TRUE ~ FALSE)) %>%
   ggplot(aes(x=0,y=n)) +
   geom_text_repel(
-    aes(label=ifelse(focus,Player,"")),
+    aes(label=ifelse(focus,player,"")),
     size=rel(3),
     nudge_x=0.3,
     direction="y",
@@ -88,33 +87,30 @@ players %>%
     axis.title.x=element_blank(),
     panel.grid.major.x=element_blank()
   ) +
-  facet_wrap("ShKP",scales="free") +
+  facet_wrap("key",scales="free") +
   labs(
     title="Shots / Passes",
     x=element_blank(),
     y=element_blank(),
     caption=caption[[1]]) +
-  scale_x_continuous(limit=c(0,1)
-  ) +
+  scale_x_continuous(limit=c(0,1)) +
   scale_y_continuous() +
   scale_colour_manual(values=c("TRUE"=colour[["sfc"]][["black"]],"FALSE"=colour[["sfc"]][["grey"]])) +
   scale_fill_manual(values=c("TRUE"=colour[["sfc"]][["light"]],"FALSE"=colour[["sfc"]][["grey"]]))
-ggsave(here("plots","SFC","ShotsKP.jpg"))
+# ggsave(here("plots","SFC","ShotsKP.jpg"))
 
 players %>%
-  filter(Squad %in% !!squad) %>%
-  filter(Season %in% !!season) %>%
-  filter(!is.na(Sh)|!is.na(KP)) %>%
-  mutate(Sh90=90*Sh/Min) %>%
-  mutate(KP90=90*KP/Min) %>%
-  pivot_longer(cols=c(Sh90,KP90),names_to="ShKP90",values_to="n") %>%
-  mutate(ShKP90=factor(ShKP90,levels=c("Sh90","KP90"),labels=c("Shot","Pass leading to shot"))) %>%
-  group_by(ShKP90) %>%
+  filter(squad %in% !!team) %>%
+  filter(season %in% !!season) %>%
+  filter(!is.na(standard_sh)|!is.na(kp)) %>%
+  pivot_longer(cols=c("standard_sh","kp"),names_to="key",values_to="n") %>%
+  mutate(key=factor(key,levels=c("standard_sh","kp"),labels=c("Shot","Pass leading to shot"))) %>%
+  group_by(key) %>%
   mutate(focus=case_when(percent_rank(n)>0.4 ~ TRUE,
                          TRUE ~ FALSE)) %>%
   ggplot(aes(x=0,y=n)) +
   geom_text_repel(
-    aes(label=ifelse(focus,Player,"")),
+    aes(label=ifelse(focus,player,"")),
     size=rel(3),
     nudge_x=0.3,
     direction="y",
@@ -131,10 +127,9 @@ players %>%
     axis.title.x=element_blank(),
     panel.grid.major.x=element_blank()
   ) +
-  facet_wrap("ShKP90",scales="free") +
+  facet_wrap("key",scales="free") +
   labs(
     title="Shots / Passes",
-    subtitle="(per 90 mins)",
     x=element_blank(),
     y=element_blank(),
     caption=caption[[1]]
@@ -143,18 +138,22 @@ players %>%
   scale_y_continuous() +
   scale_colour_manual(values=c("TRUE"=colour[["sfc"]][["black"]],"FALSE"=colour[["sfc"]][["grey"]])) +
   scale_fill_manual(values=c("TRUE"=colour[["sfc"]][["light"]],"FALSE"=colour[["sfc"]][["grey"]]))
-ggsave(here("plots","SFC","ShotsKP90.jpg"))
-
+# ggsave(here("plots","SFC","ShotsKP.jpg"))
+# 
 players %>%
-  filter(Squad %in% !!squad) %>%
-  filter(Season %in% !!season) %>%
-  filter(!is.na(`On-OffG`)|!is.na(`On-OffxG`)) %>%
-  pivot_longer(cols=c("On-OffG","On-OffxG"),names_to="PM",values_to="n") %>%
-  mutate(PM=factor(PM,levels=c("On-OffG","On-OffxG"),labels=c("Goals +/-","xG +/-"))) %>%
+  filter(squad %in% !!team) %>%
+  filter(season %in% !!season) %>%
+  filter(!is.na(`team_success..`)|!is.na(`team_success.xg.xg..`)|!is.na(playing_time_min)) %>%
+  mutate(
+    team_success_pm=`team_success..`/playing_time_min*90,
+    team_success.xg_pm=`team_success.xg.xg..`/playing_time_min*90
+  ) %>%
+  pivot_longer(cols=c("team_success_pm","team_success.xg_pm"),names_to="key",values_to="n") %>%
+  mutate(key=factor(key,levels=c("team_success_pm","team_success.xg_pm"),labels=c("Goals +/-","xG +/-"))) %>%
   mutate(PlusMinus=ifelse(n>=0,TRUE,FALSE)) %>%
   ggplot(aes(x=0,y=n)) +
   geom_text_repel(
-    aes(label=Player),
+    aes(label=player),
     size=rel(3),
     nudge_x=0.4,
     direction="y",
@@ -171,31 +170,30 @@ players %>%
     axis.title.x=element_blank(),
     panel.grid.major.x=element_blank()
   ) +
-  facet_wrap("PM",scales="free") +
+  facet_wrap("key",scales="free") +
   labs(
-    title="On-pitch goal difference",
+    title="On-pitch goal difference (per 90 mins)",
     x=element_blank(),
     y=element_blank(),
-    caption=caption[[1]]
+    caption=glue("Goals/xG for - against while each player is on the pitch\n",caption[[1]])
   ) +
   scale_x_continuous(limit=c(0,1)) +
   scale_y_continuous() +
   scale_fill_manual(values=c("TRUE"=colour[["medium"]][[3]],"FALSE"=colour[["medium"]][[8]]))
-ggsave(here("plots","SFC","GD.jpg"))
+# ggsave(here("plots","SFC","GD.jpg"),dpi=600)
 
 players %>%
-  filter(Squad %in% !!squad) %>%
-  filter(Season %in% !!season) %>%
-  filter(!is.na(ShortCmp)|!is.na(MediumCmp)|!is.na(LongCmp)) %>%
-  pivot_longer(cols=c(ShortCmp,MediumCmp,LongCmp),names_to="PassType",values_to="Cmp") %>%
-  mutate(PassType=factor(PassType,levels=c("ShortCmp","MediumCmp","LongCmp"),labels=c("Short (<5 yards)","Medium (5-25 yards)","Long (>25 yards)"))) %>%
-  group_by(PassType) %>%
-  mutate(focus=case_when(percent_rank(Cmp)>0.4 ~ TRUE,
+  filter(squad %in% !!team) %>%
+  filter(season %in% !!season) %>%
+  filter(!is.na(short_cmp)|!is.na(medium_cmp)|!is.na(long_cmp)) %>%
+  pivot_longer(cols=c(short_cmp,medium_cmp,long_cmp),names_to="key",values_to="n") %>%
+  mutate(key=factor(key,levels=c("short_cmp","medium_cmp","long_cmp"),labels=c("Short (<5 yards)","Medium (5-25 yards)","Long (>25 yards)"))) %>%
+  group_by(key) %>%
+  mutate(focus=case_when(percent_rank(n)>0.4 ~ TRUE,
                          TRUE ~ FALSE)) %>%
-  select(Player,Squad,PassType,Cmp,focus) %>%
-  ggplot(aes(x=0,y=Cmp)) +
+  ggplot(aes(x=0,y=n)) +
   geom_text_repel(
-    aes(label=ifelse(focus,Player,"")),
+    aes(label=ifelse(focus,player,"")),
     size=rel(3),
     nudge_x=0.3,
     direction="y",
@@ -212,7 +210,7 @@ players %>%
     axis.title.x=element_blank(),
     panel.grid.major.x=element_blank()
   ) +
-  facet_wrap("PassType",scales="free") +
+  facet_wrap("key",scales="free") +
   labs(
     title="Completed passes",
     x=element_blank(),
@@ -223,23 +221,23 @@ players %>%
   scale_y_continuous() +
   scale_colour_manual(values=c("TRUE"=colour[["sfc"]][["black"]],"FALSE"=colour[["sfc"]][["grey"]])) +
   scale_fill_manual(values=c("TRUE"=colour[["sfc"]][["light"]],"FALSE"=colour[["sfc"]][["grey"]]))
-ggsave(here("plots","SFC","PassesCompleted.jpg"))
-
+# ggsave(here("plots","SFC","PassesCompleted.jpg"))
+# 
 players %>%
-  filter(Squad %in% !!squad) %>%
-  filter(Season %in% !!season) %>%
-  filter(Left+Right>0) %>%
-  mutate(Passes=Left+Right) %>%
-  mutate(MaxPass=ifelse(Left>Right,Left,Right)) %>%
-  mutate(MinPass=ifelse(Left<Right,Left,Right)) %>%
-  mutate(Ratio=(MaxPass/Passes)) %>%
-  mutate(MainFoot=ifelse(Left>Right,"Left","Right")) %>%
-  mutate(OtherFoot=ifelse(Left<Right,"Left","Right")) %>%
-  mutate(Player=fct_reorder(Player,-Ratio)) %>%
-  ggplot(aes(y=Player)) +
-  geom_segment(aes(x=0,xend=MaxPass,y=Player,yend=Player,colour=MainFoot),size=4,alpha=0.8) +
-  geom_segment(aes(x=0,xend=-MinPass,y=Player,yend=Player,colour=OtherFoot),size=4,alpha=0.8) +
-  geom_label(aes(x=0,y=Player,label=sprintf("%2.0f%%",100*Ratio)),size=2,label.padding=unit(0.2, "lines"),label.r = unit(0.08, "lines")) +
+  filter(squad %in% !!team) %>%
+  filter(season %in% !!season) %>%
+  filter(body_parts_left+body_parts_right>0) %>%
+  mutate(body_parts_tot=body_parts_left+body_parts_right) %>%
+  mutate(body_parts_max=ifelse(body_parts_left>=body_parts_right,body_parts_left,body_parts_right)) %>%
+  mutate(body_parts_min=ifelse(body_parts_left<body_parts_right,body_parts_left,body_parts_right)) %>%
+  mutate(body_parts_ratio=(body_parts_max/body_parts_tot)) %>%
+  mutate(body_parts_main=ifelse(body_parts_left>=body_parts_right,"Left","Right")) %>%
+  mutate(body_parts_other=ifelse(body_parts_left<body_parts_right,"Left","Right")) %>%
+  mutate(player=fct_reorder(player,desc(body_parts_ratio))) %>%
+  ggplot(aes(y=player)) +
+  geom_segment(aes(x=0,xend=body_parts_max,y=player,yend=player,colour=body_parts_main),size=4,alpha=0.8) +
+  geom_segment(aes(x=0,xend=-body_parts_min,y=player,yend=player,colour=body_parts_other),size=4,alpha=0.8) +
+  geom_label(aes(x=0,y=player,label=sprintf("%2.0f%%",100*body_parts_ratio)),size=2,label.padding=unit(0.2, "lines"),label.r = unit(0.08, "lines")) +
   theme[["solar"]]() +
   theme(
     plot.title=element_markdown()
@@ -252,31 +250,27 @@ players %>%
   ) +
   scale_x_continuous(breaks=seq(-2000,2000,200),labels=abs(seq(-2000,2000,200)),expand=expansion(add=c(20))) +
   scale_colour_manual(values=c("Left"=colour[["medium"]][[1]],"Right"=colour[["medium"]][[8]]))
-ggsave(here("plots","SFC","PassFootedness.jpg"))
-
+# ggsave(here("plots","SFC","PassFootedness.jpg"))
+# 
 players %>%
-  filter(Squad %in% !!squad) %>%
-  filter(Season %in% !!season) %>%
-  filter(SCA>0) %>%
+  filter(squad %in% !!team) %>%
+  filter(season %in% !!season) %>%
+  filter(sca_sca>0) %>%
   mutate(
-    SCA90=90*SCA/Min,
-    SCAPassLive90=90*SCAPassLive/Min,
-    SCAPassDead90=90*SCAPassDead/Min,
-    SCAPassOther90=90*(SCADrib+SCASh+SCAFld)/Min
+    sca_types_other=sca_types_drib+sca_types_sh+sca_types_fld
   ) %>%
-  pivot_longer(cols=c(SCAPassLive90,SCAPassDead90,SCAPassOther90),names_to="SCAType",values_to="SCAType90") %>%
-  mutate(SCAType=factor(SCAType,levels=c("SCAPassLive90","SCAPassDead90","SCAPassOther90"),labels=c("Open play pass","Dead ball pass","Dribble/Shot/Fouled"))) %>%
-  group_by(SCAType) %>%
+  pivot_longer(cols=c("sca_types_passlive","sca_types_passdead","sca_types_other"),names_to="key",values_to="n") %>%
+  mutate(key=factor(key,levels=c("sca_types_passlive","sca_types_passdead","sca_types_other"),labels=c("Open play pass","Dead ball pass","Dribble/Shot/Fouled"))) %>%
+  group_by(key) %>%
   mutate(focus=case_when(
-    (SCAType=="Open play pass" & min_rank(desc(SCAType90))<=12) ~ TRUE,
-    (SCAType=="Dead ball pass" & min_rank(desc(SCAType90))<=3) ~ TRUE,
-    (SCAType=="Dribble/Shot/Fouled" & min_rank(desc(SCAType90))<=5) ~ TRUE,
+    (key=="Open play pass" & min_rank(desc(n))<=12) ~ TRUE,
+    (key=="Dead ball pass" & min_rank(desc(n))<=3) ~ TRUE,
+    (key=="Dribble/Shot/Fouled" & min_rank(desc(n))<=5) ~ TRUE,
     TRUE ~ FALSE
   )) %>%
-  select(Player,Squad,SCAType,SCAType90,focus) %>%
-  ggplot(aes(x=0,y=SCAType90)) +
+  ggplot(aes(x=0,y=n)) +
   geom_text_repel(
-    aes(label=ifelse(focus,Player,"")),
+    aes(label=ifelse(focus,player,"")),
     size=rel(3),
     nudge_x=0.3,
     direction="y",
@@ -292,81 +286,79 @@ players %>%
     axis.text.x=element_blank(),
     axis.title.x=element_blank(),
     panel.grid.major.x=element_blank(),
-    plot.title=element_text(hjust=0),
-    plot.subtitle=element_text(hjust=0, size=rel(0.8), face="bold")
+    plot.title=element_text(),
   ) +
-  facet_wrap("SCAType",scales="free") +
+  facet_wrap("key",scales="free") +
   labs(
-    title="Southampton Shot Creating Actions (per 90 minutes)",
-    subtitle="Shot Creating Actions are the two actions directly leading to a shot",
+    title="Shot Creating Actions",
     x=element_blank(),
     y=element_blank(),
-    caption=caption[[1]]
+    caption=glue("Shot Creating Actions are the two actions directly leading to a shot\n",caption[[1]])
   ) +
   scale_x_continuous(limit=c(0,1)) +
   scale_y_continuous() +
   scale_colour_manual(values=c("TRUE"=colour[["sfc"]][["black"]],"FALSE"=colour[["sfc"]][["grey"]])) +
   scale_fill_manual(values=c("TRUE"=colour[["sfc"]][["light"]],"FALSE"=colour[["sfc"]][["grey"]]))
-ggsave(here("plots","SFC","GCA.jpg"))
-
-matches_long %>%
-  select("Wk":"Opposition","GoalsF":"xGAfbref","Season") %>%
-  filter(Team %in% !!squad) %>%
-  filter(Season %in% !!season) %>%
-  filter(!is.na(GoalsF)) %>%
-  mutate(ShortHA=ifelse(HA=="Home","H","A")) %>%
-  mutate(Match=glue::glue("{Opposition} {ShortHA} {GoalsF}-{GoalsA}")) %>%
-  mutate(Match=reorder_within(Match, Date, Season)) %>%
-  ggplot(aes(x=Match)) +
-  geom_point(aes(y=xGFfbref),colour="darkred",alpha=0.8,shape="x") +
-  geom_spline(aes(y=xGFfbref,group=Season),spar=0.6,colour="darkred",linetype="longdash",size=0.7) +
-  geom_point(aes(y=xGAfbref),colour="royalblue",alpha=0.8,shape="x") +
-  geom_spline(aes(y=xGAfbref,group=Season),spar=0.6,colour="royalblue",linetype="longdash",size=0.7) +
-  theme[["solar"]]() +
-  theme(
-    axis.text.x=element_text(size=rel(0.4),angle=60,hjust=1),
-    axis.title.y=element_markdown(size=rel(0.8),colour="black"),
-    axis.text.y=element_text(size=rel(0.8)),
-    plot.title=element_markdown(colour="black"),
-    plot.caption=element_text(colour="black"),
-    strip.text=element_blank()
-  ) +
-  labs(
-    title=glue("Southampton <b style='color:darkred'>attack</b> / <b style='color:royalblue'>defence</b> trend"),
-    x=element_blank(),
-    y=glue("Expected goals <b style='color:darkred'>for</b> / <b style='color:royalblue'>against</b>"),
-    caption=caption[[1]]
-  ) +
-  scale_x_reordered() +
-  scale_y_continuous(limits=c(0,NA),expand=expansion(add=c(0,0.1))) +
-  facet_grid(cols=vars(Season), space="free", scales="free_x")
-ggsave(here("plots","SFC","xGtrend.jpg"))
-
-matches_long %>%
-  filter(Team %in% !!squad) %>%
-  filter(Season %in% !!season) %>%
-  filter(!is.na(GoalsF)) %>%
-  mutate(ShortHA=ifelse(HA=="Home","H","A")) %>%
-  mutate(Match=glue::glue("{Opposition} {ShortHA} {GoalsF}-{GoalsA}")) %>%
-  mutate(Match=reorder_within(Match, desc(Date), Season)) %>%
-  ggplot(aes(y=Match)) +
-  geom_segment(aes(x=0,xend=xGFfbref,y=Match,yend=Match),colour=colour[["sfc"]][["light"]],size=3.5) +
-  geom_segment(aes(x=0,xend=-xGAfbref,y=Match,yend=Match),colour=colour[["medium"]][[1]],size=3.5) +
-  theme[["solar"]]() +
-  theme(
-    plot.title=element_markdown(),
-    axis.text.y=element_text(size=rel(0.8)),
-    strip.text=element_blank()
-  ) +
-  labs(
-    title=glue("<b style='color:#265DAB'>Opposition xG</b> | <b style='color:#D71920'>Southampton xG</b>"),
-    x=element_blank(),
-    y=element_blank(),
-    caption=caption[[1]]
-  ) +
-  scale_x_continuous(breaks=seq(-10,10,1),labels=abs(seq(-10,10,1)),expand=expansion(add=c(0.1,1))) +
-  scale_y_reordered() +
-  facet_grid(rows=vars(Season), space="free", scales="free_y")
-ggsave(here("plots","SFC","MatchxGseg.jpg"))
-
-rm(season, squad)
+# ggsave(here("plots","SFC","SCA.jpg"))
+# 
+# matches_long %>%
+#   select("Wk":"Opposition","GoalsF":"xGAfbref","Season") %>%
+#   filter(Team %in% !!team) %>%
+#   filter(Season %in% !!season) %>%
+#   filter(!is.na(GoalsF)) %>%
+#   mutate(ShortHA=ifelse(HA=="Home","H","A")) %>%
+#   mutate(Match=glue::glue("{Opposition} {ShortHA} {GoalsF}-{GoalsA}")) %>%
+#   mutate(Match=reorder_within(Match, Date, Season)) %>%
+#   ggplot(aes(x=Match)) +
+#   geom_point(aes(y=xGFfbref),colour="darkred",alpha=0.8,shape="x") +
+#   geom_spline(aes(y=xGFfbref,group=Season),spar=0.6,colour="darkred",linetype="longdash",size=0.7) +
+#   geom_point(aes(y=xGAfbref),colour="royalblue",alpha=0.8,shape="x") +
+#   geom_spline(aes(y=xGAfbref,group=Season),spar=0.6,colour="royalblue",linetype="longdash",size=0.7) +
+#   theme[["solar"]]() +
+#   theme(
+#     axis.text.x=element_text(size=rel(0.4),angle=60,hjust=1),
+#     axis.title.y=element_markdown(size=rel(0.8),colour="black"),
+#     axis.text.y=element_text(size=rel(0.8)),
+#     plot.title=element_markdown(colour="black"),
+#     plot.caption=element_text(colour="black"),
+#     strip.text=element_blank()
+#   ) +
+#   labs(
+#     title=glue("Southampton <b style='color:darkred'>attack</b> / <b style='color:royalblue'>defence</b> trend"),
+#     x=element_blank(),
+#     y=glue("Expected goals <b style='color:darkred'>for</b> / <b style='color:royalblue'>against</b>"),
+#     caption=caption[[1]]
+#   ) +
+#   scale_x_reordered() +
+#   scale_y_continuous(limits=c(0,NA),expand=expansion(add=c(0,0.1))) +
+#   facet_grid(cols=vars(Season), space="free", scales="free_x")
+# ggsave(here("plots","SFC","xGtrend.jpg"))
+# 
+# matches_long %>%
+#   filter(Team %in% !!team) %>%
+#   filter(Season %in% !!season) %>%
+#   filter(!is.na(GoalsF)) %>%
+#   mutate(ShortHA=ifelse(HA=="Home","H","A")) %>%
+#   mutate(Match=glue::glue("{Opposition} {ShortHA} {GoalsF}-{GoalsA}")) %>%
+#   mutate(Match=reorder_within(Match, desc(Date), Season)) %>%
+#   ggplot(aes(y=Match)) +
+#   geom_segment(aes(x=0,xend=xGFfbref,y=Match,yend=Match),colour=colour[["sfc"]][["light"]],size=3.5) +
+#   geom_segment(aes(x=0,xend=-xGAfbref,y=Match,yend=Match),colour=colour[["medium"]][[1]],size=3.5) +
+#   theme[["solar"]]() +
+#   theme(
+#     plot.title=element_markdown(),
+#     axis.text.y=element_text(size=rel(0.8)),
+#     strip.text=element_blank()
+#   ) +
+#   labs(
+#     title=glue("<b style='color:#265DAB'>Opposition xG</b> | <b style='color:#D71920'>Southampton xG</b>"),
+#     x=element_blank(),
+#     y=element_blank(),
+#     caption=caption[[1]]
+#   ) +
+#   scale_x_continuous(breaks=seq(-10,10,1),labels=abs(seq(-10,10,1)),expand=expansion(add=c(0.1,1))) +
+#   scale_y_reordered() +
+#   facet_grid(rows=vars(Season), space="free", scales="free_y")
+# ggsave(here("plots","SFC","MatchxGseg.jpg"))
+# 
+# rm(season, squad)
