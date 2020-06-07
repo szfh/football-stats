@@ -93,6 +93,18 @@ fbref_scrape_old <- function(url,comment=FALSE,fix_columns=FALSE,extract=NA){
   return(data_table)
 }
 
+# transform data to long format
+make_long_data <- function(data,levels,labels){
+  
+  data %<>%
+    filter_at(levels,any_vars(!is.na(.))) %>%
+    pivot_longer(cols=levels,names_to="key",values_to="n") %>%
+    mutate(key=factor(key,levels=levels,labels=labels)) %>%
+    group_by(key)
+  
+  return(data)
+}
+
 # windowed average xG
 get_mva <- function(xG,n=6){
   
