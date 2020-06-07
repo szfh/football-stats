@@ -105,6 +105,15 @@ make_long_data <- function(data,levels,labels){
   return(data)
 }
 
+# filter correct season and teams
+filter_season_team <- function(data,season="2019-20",squad="Southampton"){
+  data %<>%
+    filter(season %in% !!season) %>%
+    filter(squad %in% !!squad)
+  
+  return(data)
+}
+
 # windowed average xG
 get_mva <- function(xG,n=6){
   
