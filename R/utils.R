@@ -106,6 +106,14 @@ make_long_data <- function(data,levels,labels){
 }
 
 # filter correct season and teams
+filter_season <- function(data,season="2019-20"){
+  data %<>%
+    filter(season %in% !!season)
+  
+  return(data)
+}
+
+# filter correct season and teams
 filter_season_team <- function(data,season="2019-20",squad="Southampton"){
   data %<>%
     filter(season %in% !!season) %>%
