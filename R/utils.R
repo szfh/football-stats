@@ -114,6 +114,14 @@ filter_season_team <- function(data,season="2019-20",squad="Southampton"){
   return(data)
 }
 
+# filter na
+filter_na <- function(data,cols){
+  data %<>%
+    filter_at(cols,any_vars(!is.na(.)))
+  
+  return(data)
+}
+
 # windowed average xG
 get_mva <- function(xG,n=6){
   
