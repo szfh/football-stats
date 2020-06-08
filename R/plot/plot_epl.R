@@ -217,7 +217,8 @@ players %>%
 players %>%
   select(player,season,pos,squad,touch=touches_att_3rd,pressure=pressures_att_3rd,tackle=tackles_att_3rd) %>%
   filter_season %>%
-  make_long_data(levels=c("touch","pressure","tackle"),labels=c("Touches","Pressures","Tackles")) %>%group_by(key,squad) %>%
+  make_long_data(levels=c("touch","pressure","tackle"),labels=c("Touches","Pressures","Tackles")) %>%
+  group_by(key,squad) %>%
   mutate(focus=ifelse(min_rank(desc(n))==1,TRUE,FALSE)) %>%
   ggplot(aes(x=0,y=n)) +
   geom_text_repel(
