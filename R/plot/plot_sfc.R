@@ -73,14 +73,7 @@ players %>%
     box.padding=0.05
   ) +
   geom_point(aes(colour=focus,fill=focus),shape=21,size=2) +
-  theme[["solar"]]() +
-  theme(
-    axis.line.x=element_blank(),
-    axis.ticks.x=element_blank(),
-    axis.text.x=element_blank(),
-    axis.title.x=element_blank(),
-    panel.grid.major.x=element_blank()
-  ) +
+  theme[["solarfacet"]]() +
   facet_wrap("key",scales="free") +
   labs(
     title="Shots / Passes",
@@ -109,17 +102,10 @@ players %>%
     box.padding=0.05
   ) +
   geom_point(aes(colour=PM,fill=PM),shape=21,size=3,colour="black") +
-  theme[["solar"]]() +
-  theme(
-    axis.line.x=element_blank(),
-    axis.ticks.x=element_blank(),
-    axis.text.x=element_blank(),
-    axis.title.x=element_blank(),
-    panel.grid.major.x=element_blank()
-  ) +
+  theme[["solarfacet"]]() +
   facet_wrap("key",scales="free") +
   labs(
-    title="On-pitch goal difference (per 90 mins)",
+    title="On-pitch goal difference",
     x=element_blank(),
     y=element_blank(),
     caption=glue("Goals/xG for - against while each player is on the pitch\n",caption[[1]])
@@ -146,14 +132,7 @@ players %>%
     box.padding=0.05
   ) +
   geom_point(aes(colour=focus,fill=focus),shape=21,size=2) +
-  theme[["solar"]]() +
-  theme(
-    axis.line.x=element_blank(),
-    axis.ticks.x=element_blank(),
-    axis.text.x=element_blank(),
-    axis.title.x=element_blank(),
-    panel.grid.major.x=element_blank()
-  ) +
+  theme[["solarfacet"]]() +
   facet_wrap("key",scales="free") +
   labs(
     title="Completed passes",
@@ -219,14 +198,9 @@ players %>%
     box.padding=0.05
   ) +
   geom_point(aes(colour=focus,fill=focus),shape=21,size=2) +
-  theme[["solar"]]() +
+  theme[["solarfacet"]]() +
   theme(
-    axis.line.x=element_blank(),
-    axis.ticks.x=element_blank(),
-    axis.text.x=element_blank(),
-    axis.title.x=element_blank(),
-    panel.grid.major.x=element_blank(),
-    plot.title=element_text(),
+    # plot.title=element_text(),
   ) +
   facet_wrap("key",scales="free") +
   labs(

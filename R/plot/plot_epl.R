@@ -17,14 +17,7 @@ players %>%
     box.padding=0.05
   ) +
   geom_point(aes(fill=squad),shape=21,size=4,position=position_jitterdodge(jitter.width=0,jitter.height=0.17,dodge.width=0)) +
-  theme[["solar"]]() +
-  theme(
-    axis.line.x=element_blank(),
-    axis.ticks.x=element_blank(),
-    axis.text.x=element_blank(),
-    axis.title.x=element_blank(),
-    panel.grid.major.x=element_blank()
-  ) +
+  theme[["solarfacet"]]() +
   facet_wrap("key",scales="free") +
   labs(
     title="Expected Goals (penalties excluded)",
@@ -54,14 +47,7 @@ players %>%
     box.padding=0.05
   ) +
   geom_point(aes(fill=squad),shape=21,size=4) +
-  theme[["solar"]]() +
-  theme(
-    axis.line.x=element_blank(),
-    axis.ticks.x=element_blank(),
-    axis.text.x=element_blank(),
-    axis.title.x=element_blank(),
-    panel.grid.major.x=element_blank()
-  ) +
+  theme[["solarfacet"]]() +
   facet_wrap("key",scales="free") +
   labs(
     title="Expected Goals (penalties excluded)",
@@ -93,14 +79,7 @@ players %>%
     box.padding=0.05
   ) +
   geom_point(aes(fill=squad,alpha=focus),shape=21,size=2,position=position_jitterdodge(jitter.width=0,jitter.height=0.2,dodge.width=0)) +
-  theme[["solar"]]() +
-  theme(
-    axis.line.x=element_blank(),
-    axis.ticks.x=element_blank(),
-    axis.text.x=element_blank(),
-    axis.title.x=element_blank(),
-    panel.grid.major.x=element_blank()
-  ) +
+  theme[["solarfacet"]]() +
   facet_wrap("key",scales="free") +
   labs(
     title="Completed passes",
@@ -113,7 +92,7 @@ players %>%
   scale_fill_manual(values=palette[["epl"]]()) +
   scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.2))
 # ggsave(here("plots","EPL","PlayerCompPasses.jpg"))
-# 
+
 players %>%
   filter_season %>% 
   select(player,squad,sh=standard_sh,gls=standard_gls,npxg=expected_npxg) %>%
@@ -252,14 +231,7 @@ players %>%
     box.padding=0.05
   ) +
   geom_point(aes(fill=squad,alpha=focus),shape=21,size=2,position=position_jitterdodge(jitter.width=0,jitter.height=0.2,dodge.width=0)) +
-  theme[["solar"]]() +
-  theme(
-    axis.line.x=element_blank(),
-    axis.ticks.x=element_blank(),
-    axis.text.x=element_blank(),
-    axis.title.x=element_blank(),
-    panel.grid.major.x=element_blank()
-  ) +
+  theme[["solarfacet"]]() +
   facet_wrap("key",scales="free") +
   labs(
     title="2019-20 attacking third actions",
