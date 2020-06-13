@@ -49,20 +49,25 @@ fbref_tidy <- function(data,page,type,cols){ #all data editing, selecting, renam
   return(data)
 }
 
-fbref_get_selector <- function(page,seasoncode){
+fbref_get_selector <- function(page,seasoncode,stattype,statselector){
   
   selector <- case_when(
-    page=="table" ~ glue("%23sched_ks_{seasoncode}_1"),
-    TRUE ~ "error"
+    # page=="player" && stattype=="stats" ~ glue("%23standard"),
+    page=="player" ~ glue("%23stats_{statselector}"),
+    # page=="squad" && stattype=="stats" ~ glue("%23standard_squads"),
+    page=="squad" ~ glue("%23stats_{statselector}_squads"),
+    page=="schedule" ~ glue("%23sched_ks_{seasoncode}_1"),
+    TRUE ~ "NA"
   )
   return(selector)
 }
 
-fbref_get_url <- function(page,seasoncode){
+fbref_get_url <- function(page,seasoncode,stattype,statselector){
   
   url <- case_when(
+    page %in% c("player","squad") ~ glue("https://fbref.com/en/comps/9/{seasoncode}/{stattype}/"),
     page=="schedule" ~ glue("https://fbref.com/en/comps/9/{seasoncode}/schedule/"),
-    TRUE ~ "error"
+    TRUE ~ "NA"
   )
   return(url)
 }
