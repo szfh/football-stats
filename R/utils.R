@@ -49,6 +49,24 @@ fbref_tidy <- function(data,page,type,cols){ #all data editing, selecting, renam
   return(data)
 }
 
+fbref_get_selector <- function(page,seasoncode){
+  
+  selector <- case_when(
+    page=="table" ~ glue("%23sched_ks_{seasoncode}_1"),
+    TRUE ~ "error"
+  )
+  return(selector)
+}
+
+fbref_get_url <- function(page,seasoncode){
+  
+  url <- case_when(
+    page=="schedule" ~ glue("https://fbref.com/en/comps/9/{seasoncode}/schedule/"),
+    TRUE ~ "error"
+  )
+  return(url)
+}
+
 # scrape fbref old
 fbref_scrape_old <- function(url,comment=FALSE,fix_columns=FALSE,extract=NA){
   
