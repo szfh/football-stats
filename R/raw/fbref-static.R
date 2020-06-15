@@ -35,7 +35,7 @@ fbref <- data.frame() %>%
 
 fbref %<>%
   mutate(page_url=fbref_get_url(page,seasoncode,stattype,statselector)) %>%
-  mutate(content_selector_id=fbref_get_selector(page,seasoncode,stattype,statselector))
+  mutate(content_selector_id=fbref_get_selector(page,seasoncode,stattype,statselector)) #possibly?
 
 fbref %<>%
   # mutate(data=fbref_scrape(page_url, content_selector_id)) %>% # doesnt work
