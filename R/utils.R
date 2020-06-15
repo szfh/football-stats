@@ -11,22 +11,38 @@ fbref_scrape <- function(page_url,content_selector_id){
   return(data)
 }
 
-fbref_clean_names <- function(data){
-  
-  # names(data) <- make_clean_names(str_squish(glue("{data[1,]} {data[2,]}")))
-  names(data) <-
-    glue("{data[1,]} {data[2,]}") %>%
-    str_squish %>%
-    make_clean_names(
-      # replace=c(" "="_","%"="pc","#"="n","+"="plus","-"="minus","/"="_","."="_"),
-      replace=c(" "="_","%"="pc","#"="n","/"="_"),
-      parsing_option=0
-    )
-  
-  data %<>% slice(-1,-2)
-  
+fbref_clean_names <- function(data,page){
+  if(page %in% c("squad","player")){
+    # names(data) <- make_clean_names(str_squish(glue("{data[1,]} {data[2,]}")))
+    names(data) <-
+      glue("{data[1,]} {data[2,]}") %>%
+      str_squish %>%
+      make_clean_names(
+        # replace=c(" "="_","%"="pc","#"="n","+"="plus","-"="minus","/"="_","."="_"),
+        replace=c(" "="_","%"="pc","#"="n","/"="_"),
+        parsing_option=0
+      )
+    
+    data %<>% slice(-1,-2)
+  }
+  if(page %in% "schedule"){
+    # names(data) <- make_clean_names(str_squish(glue("{data[1,]} {data[2,]}")))
+    names(data) <-
+      glue("{data[1,]}") %>%
+      str_squish %>%
+      make_clean_names(
+        # replace=c(" "="_","%"="pc","#"="n","+"="plus","-"="minus","/"="_","."="_"),
+        replace=c(" "="_","%"="pc","#"="n","/"="_"),
+        parsing_option=0
+      )
+    
+    data %<>% slice(-1)
+  }
   if("player" %in% names(data)){ # remove duplicated column names from player table
     data %<>% filter(player != "Player")
+  }
+  if("wk" %in% names(data)){ # remove duplicated column names + blank rows from schedule
+    data %<>% filter(wk != "Wk") %>% filter(wk != "")
   }
   
   data %<>% type_convert # refactor data types
