@@ -50,17 +50,20 @@ fbref_clean_names <- function(data,page){
   return(data)
 }
 
-fbref_tidy <- function(data,page,type,cols){ #all data editing, selecting, renaming in here?
+fbref_tidy <- function(data,page,stattype){ #all data editing, selecting, renaming in here?
   
-  if(type %in% c("squad","player")){
+  if(page %in% c("squad","player")){
     data %<>%
       select(-any_of(c("rk","matches"))) %>%
       select(-contains(c("pc","90")))
   }
-  if(page %in% c("keepers","keepersadv")){
+  if(stattype %in% c("keepers","keepersadv")){
     data %<>%
       rename("n_pl_gk"=any_of("n_pl")) %>%
       select(-any_of(c("playing_time_starts","playing_time_mp","playing_time_min")))
+  }
+  if(page=="schedule"){
+    NULL
   }
   return(data)
 }
