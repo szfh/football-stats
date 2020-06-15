@@ -2,7 +2,7 @@
                        #"2019-20",3232
                        "2018-19",1889,
                        "2017-18",1631,
-                       "2016-17",1526,
+                       # "2016-17",1526,
 )
 
 .datatypes_1 <- tribble(~page,
@@ -41,5 +41,5 @@ fbref %<>%
   # mutate(data=fbref_scrape(page_url, content_selector_id)) %>% # doesnt work
   mutate(data = map2(page_url, content_selector_id, possibly(fbref_scrape, otherwise=NA)))
 
-# saveRDS(fbref,file=here("data","fbref-raw-static.rds"))
-# rm(fbref)
+saveRDS(fbref,file=here("data","fbref-raw-static.rds"))
+rm(fbref)
