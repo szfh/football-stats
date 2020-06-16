@@ -87,6 +87,11 @@ fbref_tidy <- function(data,page,stattype){ #all data editing, selecting, renami
       select(-any_of(c("rk","matches"))) %>%
       select(-contains(c("pc","90")))
   }
+  if(page=="player"){
+    data %<>%
+      separate("nation",c(NA,"nation"),sep=" ",fill="right") %>%
+      separate("pos",c("pos1",NA,"pos2"),sep=c(2,3),fill="right")
+  }
   if(stattype %in% c("keepers","keepersadv")){
     data %<>%
       rename("n_pl_gk"=any_of("n_pl")) %>%
