@@ -12,29 +12,53 @@ fbref_scrape <- function(page_url,content_selector_id){
 }
 
 fbref_clean_names <- function(data,page){
+  # browser()
   if(page %in% c("squad","player")){
     # names(data) <- make_clean_names(str_squish(glue("{data[1,]} {data[2,]}")))
+    # names(data) <-
+    #   glue("{data[1,]} {data[2,]}") %>%
+    #   str_squish %>%
+    #   make_clean_names( #don't use this, just use str_replace
+    #     # replace=c(" "="_","%"="pc","#"="n","+"="plus","-"="minus","/"="_","."="_"),
+    #     replace=c(" "="_","%"="pc","#"="n","/"="_"),
+    #     parsing_option=0
+    #   )
+    
     names(data) <-
       glue("{data[1,]} {data[2,]}") %>%
-      str_squish %>%
-      make_clean_names(
-        # replace=c(" "="_","%"="pc","#"="n","+"="plus","-"="minus","/"="_","."="_"),
-        replace=c(" "="_","%"="pc","#"="n","/"="_"),
-        parsing_option=0
-      )
+      str_squish() %>%
+      str_to_lower() %>%
+      str_replace_all(c(" "="_","%"="pc","#"="n")) %>%
+      str_remove_all(c("/")) %>%
+      make.unique(sep="_") %>%
+      print
+    
+    # browser()
     
     data %<>% slice(-1,-2)
   }
   if(page %in% "schedule"){
     # names(data) <- make_clean_names(str_squish(glue("{data[1,]} {data[2,]}")))
+    # names(data) <-
+    #   glue("{data[1,]}") %>%
+    #   str_squish %>%
+    #   make_clean_names(
+    #     # replace=c(" "="_","%"="pc","#"="n","+"="plus","-"="minus","/"="_","."="_"),
+    #     replace=c(" "="_","%"="pc","#"="n","/"="_"),
+    #     parsing_option=0
+    #   )
+    
+    # browser()
+    
     names(data) <-
       glue("{data[1,]}") %>%
-      str_squish %>%
-      make_clean_names(
-        # replace=c(" "="_","%"="pc","#"="n","+"="plus","-"="minus","/"="_","."="_"),
-        replace=c(" "="_","%"="pc","#"="n","/"="_"),
-        parsing_option=0
-      )
+      str_squish() %>%
+      str_to_lower() %>%
+      str_replace_all(c(" "="_","%"="pc")) %>%
+      make.unique(sep="_") %>%
+      print
+    
+    # browser()
     
     data %<>% slice(-1)
   }
@@ -51,6 +75,12 @@ fbref_clean_names <- function(data,page){
 }
 
 fbref_tidy <- function(data,page,stattype){ #all data editing, selecting, renaming in here?
+  
+  #to do:
+  #fix nationality
+  #split score: x-y
+  #remove non required columns
+  #fix names where required
   
   if(page %in% c("squad","player")){
     data %<>%
@@ -145,6 +175,40 @@ make_long_data <- function(data,levels,labels){
     group_by(key)
   
   return(data)
+}
+
+make_long_matches <- function(matches){
+  # browser()
+  
+  # matches %<>%
+  #   pivot_longer(cols=c(Home,Away),
+  #                names_to="HA",
+  #                values_to="Team") %>%
+  #   left_join(matches) %>%
+  #   mutate(
+  #     Opposition=ifelse(HA=="Home",Away,Home),
+  #     GoalsF=ifelse(HA=="Home",GoalsHome,GoalsAway),
+  #     GoalsA=ifelse(HA=="Home",GoalsAway,GoalsHome),
+  #     xGFfbref=ifelse(HA=="Home",xGHomefbref,xGAwayfbref),
+  #     xGAfbref=ifelse(HA=="Home",xGAwayfbref,xGHomefbref),
+  #     xGF538=ifelse(HA=="Home",xGHome538,xGAway538),
+  #     xGA538=ifelse(HA=="Home",xGAway538,xGHome538),
+  #     spiF=ifelse(HA=="Home",spi1,spi2),
+  #     spiA=ifelse(HA=="Home",spi2,spi1),
+  #     probF=ifelse(HA=="Home",prob1,prob2),
+  #     probA=ifelse(HA=="Home",prob2,prob1),
+  #     proj_scoreF=ifelse(HA=="Home",proj_score1,proj_score2),
+  #     proj_scoreA=ifelse(HA=="Home",proj_score2,proj_score1),
+  #     importanceF=ifelse(HA=="Home",importance1,importance2),
+  #     importanceA=ifelse(HA=="Home",importance2,importance1),
+  #     nsxGF538=ifelse(HA=="Home",nsxGHome538,nsxGAway538),
+  #     nsxGA538=ifelse(HA=="Home",nsxGAway538,nsxGHome538),
+  #     adj_scoreF=ifelse(HA=="Home",adj_score1,adj_score2),
+  #     adj_scoreA=ifelse(HA=="Home",adj_score2,adj_score1)
+  #   ) %>%
+  #   print
+  
+  return(matches)
 }
 
 # filter correct season and teams
