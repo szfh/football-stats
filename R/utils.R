@@ -12,53 +12,27 @@ fbref_scrape <- function(page_url,content_selector_id){
 }
 
 fbref_clean_names <- function(data,page){
-  # browser()
   if(page %in% c("squad","player")){
-    # names(data) <- make_clean_names(str_squish(glue("{data[1,]} {data[2,]}")))
-    # names(data) <-
-    #   glue("{data[1,]} {data[2,]}") %>%
-    #   str_squish %>%
-    #   make_clean_names( #don't use this, just use str_replace
-    #     # replace=c(" "="_","%"="pc","#"="n","+"="plus","-"="minus","/"="_","."="_"),
-    #     replace=c(" "="_","%"="pc","#"="n","/"="_"),
-    #     parsing_option=0
-    #   )
-    
     names(data) <-
       glue("{data[1,]} {data[2,]}") %>%
       str_squish() %>%
       str_to_lower() %>%
       str_replace_all(c(" "="_","%"="pc","#"="n")) %>%
-      str_remove_all(c("/")) %>%
+      str_remove_all(c("/","\\(","\\)")) %>%
       make.unique(sep="_") %>%
       print
-    
-    # browser()
     
     data %<>% slice(-1,-2)
   }
   if(page %in% "schedule"){
-    # names(data) <- make_clean_names(str_squish(glue("{data[1,]} {data[2,]}")))
-    # names(data) <-
-    #   glue("{data[1,]}") %>%
-    #   str_squish %>%
-    #   make_clean_names(
-    #     # replace=c(" "="_","%"="pc","#"="n","+"="plus","-"="minus","/"="_","."="_"),
-    #     replace=c(" "="_","%"="pc","#"="n","/"="_"),
-    #     parsing_option=0
-    #   )
-    
-    # browser()
-    
     names(data) <-
       glue("{data[1,]}") %>%
       str_squish() %>%
       str_to_lower() %>%
-      str_replace_all(c(" "="_","%"="pc")) %>%
+      str_replace_all(c(" "="_","%"="pc","#"="n")) %>%
+      str_remove_all(c("/","\\(","\\)")) %>%
       make.unique(sep="_") %>%
       print
-    
-    # browser()
     
     data %<>% slice(-1)
   }
@@ -76,15 +50,9 @@ fbref_clean_names <- function(data,page){
 
 fbref_tidy <- function(data,page,stattype){ #all data editing, selecting, renaming in here?
   
-  #to do:
-  #fix nationality
-  #split score: x-y
-  #remove non required columns
-  #fix names where required
-  
-  if(page %in% c("squad","player")){
+  if(page %in% c("squad","player","schedule")){
     data %<>%
-      select(-any_of(c("rk","matches"))) %>%
+      select(-any_of(c("rk","matches","notes","match_report"))) %>%
       select(-contains(c("pc","90")))
   }
   if(page=="player"){
@@ -92,13 +60,15 @@ fbref_tidy <- function(data,page,stattype){ #all data editing, selecting, renami
       separate("nation",c(NA,"nation"),sep=" ",fill="right") %>%
       separate("pos",c("pos1",NA,"pos2"),sep=c(2,3),fill="right")
   }
+  if(page=="schedule"){
+    data %<>%
+      separate("score",c("homegls","awaygls"),sep="[:punct:]",fill="right") %>%
+      rename("homexg"="xg","awayxg"="xg_1")
+  }
   if(stattype %in% c("keepers","keepersadv")){
     data %<>%
       rename("n_pl_gk"=any_of("n_pl")) %>%
       select(-any_of(c("playing_time_starts","playing_time_mp","playing_time_min")))
-  }
-  if(page=="schedule"){
-    NULL
   }
   return(data)
 }
