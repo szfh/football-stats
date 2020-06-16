@@ -60,7 +60,7 @@ players %>%
   scale_fill_manual(values=palette[["epl"]]()) +
   scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.2))
 # ggsave(here("plots","EPL","PlayerxGxA.jpg"))
-# 
+ 
 players %>%
   filter_season %>%
   select(player,squad,short_cmp,medium_cmp,long_cmp) %>%
@@ -213,9 +213,9 @@ players %>%
 #   scale_y_continuous(breaks=seq(-100,100,5),expand=expansion(add=c(3))) +
 #   scale_fill_manual(values=palette[["epl"]]())
 # ggsave(here("plots","EPL","xGD.jpg"))
-# 
+
 players %>%
-  select(player,season,pos,squad,touch=touches_att_3rd,pressure=pressures_att_3rd,tackle=tackles_att_3rd) %>%
+  select(player,season,squad,touch=touches_att_3rd,pressure=pressures_att_3rd,tackle=tackles_att_3rd) %>%
   filter_season %>%
   make_long_data(levels=c("touch","pressure","tackle"),labels=c("Touches","Pressures","Tackles")) %>%
   group_by(key,squad) %>%

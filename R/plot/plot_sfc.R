@@ -1,6 +1,6 @@
 players %>%
   filter_season_team() %>%
-  select(player,pos,min=playing_time_min,starts=starts_starts,subs=subs_subs,min_start=starts_mn_start,min_sub=subs_mn_sub) %>%
+  select(player,pos=pos1,min=playing_time_min,starts=starts_starts,subs=subs_subs,min_start=starts_mnstart,min_sub=subs_mnsub) %>%
   filter_na("min") %>%
   mutate(
     min_start=min_start*starts,
@@ -88,7 +88,7 @@ players %>%
 
 players %>%
   filter_season_team() %>%
-  select(player,min=playing_time_min,team_gls=team_success..,team_xg=team_success.xg.xg..) %>%
+  select(player,min=playing_time_min,team_gls=`team_success_+-`,team_xg=`team_success_xg_xg+-`) %>%
   make_long_data(levels=c("team_gls","team_xg"),labels=c("Goals +/-","xG +/-")) %>%
   mutate(PM=ifelse(n>=0,TRUE,FALSE)) %>%
   ggplot(aes(x=0,y=n)) +
@@ -214,8 +214,11 @@ players %>%
   scale_colour_manual(values=c("TRUE"=colour[["sfc"]][["black"]],"FALSE"=colour[["sfc"]][["grey"]])) +
   scale_fill_manual(values=c("TRUE"=colour[["sfc"]][["light"]],"FALSE"=colour[["sfc"]][["grey"]]))
 # ggsave(here("plots","SFC","SCA.jpg"))
-# 
-# matches_long %>%
+
+# matches %>%
+#   make_long_matches()
+
+# matches_long %>% # go back to sort out fbref_tidy first
 #   select("Wk":"Opposition","GoalsF":"xGAfbref","Season") %>%
 #   filter(Team %in% !!team) %>%
 #   filter(Season %in% !!season) %>%
