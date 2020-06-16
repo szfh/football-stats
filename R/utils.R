@@ -1,3 +1,26 @@
+fbref_get_selector <- function(page,seasoncode,stattype,statselector){
+  
+  selector <- case_when(
+    # page=="player" && stattype=="stats" ~ glue("%23standard"),
+    page=="player" ~ glue("%23stats_{statselector}"),
+    # page=="squad" && stattype=="stats" ~ glue("%23standard_squads"),
+    page=="squad" ~ glue("%23stats_{statselector}_squads"),
+    page=="schedule" ~ glue("%23sched_ks_{seasoncode}_1"),
+    TRUE ~ glue()
+  )
+  return(selector)
+}
+
+fbref_get_url <- function(page,seasoncode,stattype,statselector){
+  
+  url <- case_when(
+    page %in% c("player","squad") ~ glue("https://fbref.com/en/comps/9/{seasoncode}/{stattype}/"),
+    page=="schedule" ~ glue("https://fbref.com/en/comps/9/{seasoncode}/schedule/"),
+    TRUE ~ glue()
+  )
+  return(url)
+}
+
 fbref_scrape <- function(page_url,content_selector_id){
   url <- glue("http://acciotables.herokuapp.com/?page_url={page_url}&content_selector_id={content_selector_id}")
   print(glue("url: {url}"))
@@ -48,7 +71,7 @@ fbref_clean_names <- function(data,page){
   return(data)
 }
 
-fbref_tidy <- function(data,page,stattype){ #all data editing, selecting, renaming in here?
+fbref_tidy <- function(data,page,stattype){
   
   if(page %in% c("squad","player","schedule")){
     data %<>%
@@ -73,76 +96,7 @@ fbref_tidy <- function(data,page,stattype){ #all data editing, selecting, renami
   return(data)
 }
 
-fbref_get_selector <- function(page,seasoncode,stattype,statselector){
-  
-  selector <- case_when(
-    # page=="player" && stattype=="stats" ~ glue("%23standard"),
-    page=="player" ~ glue("%23stats_{statselector}"),
-    # page=="squad" && stattype=="stats" ~ glue("%23standard_squads"),
-    page=="squad" ~ glue("%23stats_{statselector}_squads"),
-    page=="schedule" ~ glue("%23sched_ks_{seasoncode}_1"),
-    TRUE ~ glue()
-  )
-  return(selector)
-}
-
-fbref_get_url <- function(page,seasoncode,stattype,statselector){
-  
-  url <- case_when(
-    page %in% c("player","squad") ~ glue("https://fbref.com/en/comps/9/{seasoncode}/{stattype}/"),
-    page=="schedule" ~ glue("https://fbref.com/en/comps/9/{seasoncode}/schedule/"),
-    TRUE ~ glue()
-  )
-  return(url)
-}
-
-# scrape fbref old
-fbref_scrape_old <- function(url,comment=FALSE,fix_columns=FALSE,extract=NA){
-  
-  Sys.sleep(0.1)
-  
-  if(comment==TRUE){ # table is inside html comment
-    data_table <-
-      read_html(url) %>%
-      html_nodes(xpath="//comment()") %>%
-      html_text() %>%
-      paste(collapse="") %>%
-      read_html() %>%
-      html_nodes("table") %>%
-      html_table
-  } else { # table not inside html comment
-    data_table <-
-      read_html(url) %>%
-      html_nodes("table") %>%
-      html_table()
-  }
-  
-  if(is.na(extract)==FALSE){ # select table
-    data_table <- data_table %>%
-      extract2(extract)
-  }
-  
-  if(fix_columns==TRUE){
-    names(data_table) <- data_table[1,] # move first row to names
-    data_table <- as_tibble(data_table, .name_repair="unique") # create tibble
-    data_table <- data_table %>% slice(-1) # remove first row
-  } else {
-    data_table <- as_tibble(data_table, .name_repair = "unique") # create tibble
-  }
-  
-  if("Player" %in% names(data_table)){ # remove duplicated column names from player table
-    data_table <- data_table %>%
-      filter(Player != "Player")
-  }
-  
-  data_table <- type_convert(data_table) # reset data types
-  
-  return(data_table)
-}
-
-# transform data to long format
-make_long_data <- function(data,levels,labels){
-  
+make_long_data <- function(data,levels,labels){ # transform data to long format
   data %<>%
     filter_at(levels,any_vars(!is.na(.))) %>%
     pivot_longer(cols=levels,names_to="key",values_to="n") %>%
@@ -152,7 +106,7 @@ make_long_data <- function(data,levels,labels){
   return(data)
 }
 
-make_long_matches <- function(matches){
+make_long_matches <- function(matches){ # transform matches to long format
   # browser()
   
   # matches %<>%
@@ -186,8 +140,7 @@ make_long_matches <- function(matches){
   return(matches)
 }
 
-# filter correct season and teams
-filter_season <- function(data,season="2019-20"){
+filter_season <- function(data,season="2019-20"){ # filter correct season and teams
   data %<>%
     filter(season %in% !!season)
   
@@ -203,16 +156,14 @@ filter_season_team <- function(data,season="2019-20",squad="Southampton"){
   return(data)
 }
 
-# filter na
-filter_na <- function(data,cols){
+filter_na <- function(data,cols){ # filter na
   data %<>%
     filter_at(cols,any_vars(!is.na(.)))
   
   return(data)
 }
 
-# windowed average xG
-get_mva <- function(xG,n=6){
+get_mva <- function(xG,n=6){ # windowed average xG
   
   xGlag <- list()
   xGlag[[1]] <- xG
