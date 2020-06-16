@@ -41,7 +41,7 @@ fbref_clean_names <- function(data,page){
       str_squish() %>%
       str_to_lower() %>%
       str_replace_all(c(" "="_","%"="pc","#"="n")) %>%
-      str_remove_all(c("/","\\(","\\)")) %>%
+      str_remove_all("[/ \\( \\)]") %>%
       make.unique(sep="_") %>%
       print
     
@@ -53,7 +53,7 @@ fbref_clean_names <- function(data,page){
       str_squish() %>%
       str_to_lower() %>%
       str_replace_all(c(" "="_","%"="pc","#"="n")) %>%
-      str_remove_all(c("/","\\(","\\)")) %>%
+      str_remove_all("[/ \\( \\)]") %>%
       make.unique(sep="_") %>%
       print
     
