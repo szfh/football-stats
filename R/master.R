@@ -9,11 +9,10 @@
 # knitr::knit(here::here("R","README.Rmd"))
 
 # raw static
-# source(here("R","raw","fbref-static.R"))
+# source(here("R","raw","fbref.R"))
 # source(here("R","raw","understat-static.R"))
 
 # raw dynamic
-# source(here("R","raw","fbref-dynamic.R"))
 # source(here("R","raw","fivethirtyeight.R"))
 
 # tidy
