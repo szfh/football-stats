@@ -6,6 +6,8 @@ fbref_get_selector <- function(page,seasoncode,stattype,statselector){
     # page=="squad" && stattype=="stats" ~ glue("%23standard_squads"),
     page=="squad" ~ glue("%23stats_{statselector}_squads"),
     page=="schedule" ~ glue("%23sched_ks_{seasoncode}_1"),
+    page=="league" ~ glue("%23results{seasoncode}1_overall"),
+    page=="leagueha" ~ glue("%23results{seasoncode}1_home_away"),
     TRUE ~ glue()
   )
   return(selector)
@@ -16,6 +18,7 @@ fbref_get_url <- function(page,seasoncode,stattype,statselector){
   url <- case_when(
     page %in% c("player","squad") ~ glue("https://fbref.com/en/comps/9/{seasoncode}/{stattype}/"),
     page=="schedule" ~ glue("https://fbref.com/en/comps/9/{seasoncode}/schedule/"),
+    page %in% c("league","leagueha") ~ glue("https://fbref.com/en/comps/9/{seasoncode}/"),
     TRUE ~ glue()
   )
   return(url)
