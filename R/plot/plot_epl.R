@@ -60,7 +60,7 @@ players %>%
   scale_fill_manual(values=palette[["epl"]]()) +
   scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.2))
 # ggsave(here("plots","EPL","PlayerxGxA.jpg"))
- 
+
 players %>%
   filter_season %>%
   select(player,squad,short_cmp,medium_cmp,long_cmp) %>%
@@ -120,98 +120,82 @@ players %>%
 
 # Premier League team plots
 
-# squad %>% # needs to be joined to table?
-# filter_season %>%
-# select(squad,xg=expected_xg,xga=expected_xga) %>%
-# mutate(xga=-xga) %>% glimpse
-# make_long_data()
-#   pivot_longer(cols=c(xG,xGA),names_to="key",values_to="xG") %>%
-#   mutate(key=factor(key,levels=c("xG","xGA"),labels=c("xG For","xG Against"))) %>%
-#   ggplot(aes(x=0,y=xG)) +
-#   geom_text_repel(
-#     aes(label=Squad),
-#     size=rel(3),
-#     nudge_x=0.5,
-#     direction="y",
-#     hjust=0,
-#     segment.size=0.4,
-#     segment.alpha=0.8,
-#     box.padding=0.05
-#   ) +
-#   geom_point(aes(fill=Squad),size=4,shape=21,colour="black") +
-#   theme[["solar"]]() +
-#   theme(
-#     strip.text=element_text(size=rel(1.2)),
-#     axis.line.x=element_blank(),
-#     axis.ticks.x=element_blank(),
-#     axis.text.x=element_blank(),
-#     panel.grid.major.x=element_blank()
-#   ) +
-#   facet_wrap("key",scales="free") +
-#   labs(
-#     title=element_blank(),
-#     x=element_blank(),
-#     y=element_blank(),
-#     caption=caption[[1]]
-#   ) +
-#   scale_x_continuous(limit=c(0,1)) +
-#   scale_y_continuous(breaks=seq(-100,100,5),labels=abs(seq(-100,100,5)),expand=expansion(add=c(1))) +
-#   scale_fill_manual(values=palette[["epl"]]())
+squad %>% # needs to be joined to table?
+  filter_season %>%
+  select(squad,xg,xga) %>%
+  mutate(xga=-xga) %>%
+  make_long_data(levels=c("xg","xga"),labels=c("xG For","xG Against")) %>%
+  ggplot(aes(x=0,y=n)) +
+  geom_text_repel(
+    aes(label=squad),
+    size=rel(3),
+    nudge_x=0.5,
+    direction="y",
+    hjust=0,
+    segment.size=0.4,
+    segment.alpha=0.8,
+    box.padding=0.05
+  ) +
+  geom_point(aes(fill=squad),size=4,shape=21,colour="black") +
+  theme[["solarfacet"]]() +
+  facet_wrap("key",scales="free") +
+  labs(
+    title=element_blank(),
+    x=element_blank(),
+    y=element_blank(),
+    caption=caption[[1]]
+  ) +
+  scale_x_continuous(limit=c(0,1)) +
+  scale_y_continuous(breaks=seq(-100,100,5),labels=abs(seq(-100,100,5)),expand=expansion(add=c(2))) +
+  scale_fill_manual(values=palette[["epl"]]())
 # ggsave(here("plots","EPL","xG1.jpg"))
 # 
-# squad %>%
-#   filter_season %>%
-#   ggplot(aes(x=npxG,y=xGA)) +
-#   geom_text_repel(aes(label=Squad),size=rel(3)) +
-#   geom_point(aes(fill=Squad),shape=21,size=3) +
-#   theme[["solar"]]() +
-#   labs(
-#     title="Expected goals",
-#     x="xG for",
-#     y="xG against",
-#     caption=caption[[1]]
-#   ) +
-#   scale_x_continuous(breaks=seq(0,100,5),expand=expansion(add=c(4,2))) +
-#   scale_y_continuous(breaks=seq(0,100,5),expand=expansion(add=c(4,2))) +
-#   scale_fill_manual(values=palette[["epl"]]()) +
-#   coord_fixed()
+squad %>%
+  filter_season %>%
+  select(squad,xg=expected_npxg,xga) %>%
+  ggplot(aes(x=xg,y=xga)) +
+  geom_text_repel(aes(label=squad),size=rel(3)) +
+  geom_point(aes(fill=squad),shape=21,size=3) +
+  theme[["solar"]]() +
+  labs(
+    title="Expected goals",
+    x="xG for",
+    y="xG against",
+    caption=caption[[1]]
+  ) +
+  scale_x_continuous(breaks=seq(0,100,5),expand=expansion(add=c(4,2))) +
+  scale_y_reverse(breaks=seq(0,100,5),expand=expansion(add=c(4,2))) +
+  scale_fill_manual(values=palette[["epl"]]()) +
+  coord_fixed()
 # ggsave(here("plots","EPL","xG2.jpg"))
 # 
-# squad %>%
-#   filter_season %>%
-#   select(Squad,GD,xGD) %>%
-#   pivot_longer(cols=c(GD,xGD),names_to="key",values_to="GD") %>%
-#   mutate(key=factor(key,levels=c("GD","xGD"),labels=c("Goal Difference","Expected Goal Difference"))) %>%
-#   ggplot(aes(x=0,y=GD)) +
-#   geom_text_repel(
-#     aes(label=Squad),
-#     size=rel(3),
-#     nudge_x=0.5,
-#     direction="y",
-#     hjust=0,
-#     segment.size=0.4,
-#     segment.alpha=0.8,
-#     box.padding=0.05
-#   ) +
-#   geom_point(aes(fill=Squad),size=4,shape=21,colour="black") +
-#   theme[["solar"]]() +
-#   theme(
-#     strip.text=element_text(size=rel(1.2)),
-#     axis.line.x=element_blank(),
-#     axis.ticks.x=element_blank(),
-#     axis.text.x=element_blank(),
-#     panel.grid.major.x=element_blank()
-#   ) +
-#   facet_wrap("key",scales="free") +
-#   labs(
-#     title=element_blank(),
-#     x=element_blank(),
-#     y=element_blank(),
-#     caption=caption[[1]]
-#   ) +
-#   scale_x_continuous(limit=c(0,1)) +
-#   scale_y_continuous(breaks=seq(-100,100,5),expand=expansion(add=c(3))) +
-#   scale_fill_manual(values=palette[["epl"]]())
+squad %>%
+  filter_season %>%
+  select(squad,gd=gdiff,xgd=xgdiff) %>%
+    make_long_data(levels=c("gd","xgd"),labels=c("Goal Difference","Expected Goal Difference")) %>%
+  ggplot(aes(x=0,y=n)) +
+  geom_text_repel(
+    aes(label=squad),
+    size=rel(3),
+    nudge_x=0.5,
+    direction="y",
+    hjust=0,
+    segment.size=0.4,
+    segment.alpha=0.8,
+    box.padding=0.05
+  ) +
+  geom_point(aes(fill=squad),size=4,shape=21,colour="black") +
+  theme[["solarfacet"]]() +
+  facet_wrap("key",scales="free") +
+  labs(
+    title=element_blank(),
+    x=element_blank(),
+    y=element_blank(),
+    caption=caption[[1]]
+  ) +
+  scale_x_continuous(limit=c(0,1)) +
+  scale_y_continuous(breaks=seq(-100,100,5),expand=expansion(add=c(3))) +
+  scale_fill_manual(values=palette[["epl"]]())
 # ggsave(here("plots","EPL","xGD.jpg"))
 
 players %>%
