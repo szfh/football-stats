@@ -38,7 +38,7 @@ fbref_scrape <- function(page_url,content_selector_id){
 }
 
 fbref_clean_names <- function(data,page){
-  if(page %in% c("squad","player")){
+  if(page %in% c("squad","player","leagueha")){
     names(data) <-
       glue("{data[1,]} {data[2,]}") %>%
       str_squish() %>%
@@ -50,7 +50,7 @@ fbref_clean_names <- function(data,page){
     
     data %<>% slice(-1,-2)
   }
-  if(page %in% "schedule"){
+  if(page %in% c("schedule","league")){
     names(data) <-
       glue("{data[1,]}") %>%
       str_squish() %>%
@@ -76,9 +76,9 @@ fbref_clean_names <- function(data,page){
 
 fbref_tidy <- function(data,page,stattype){
   
-  if(page %in% c("squad","player","schedule")){
+  if(page %in% c("squad","player","schedule","league","leagueha")){
     data %<>%
-      select(-any_of(c("rk","matches","notes","match_report"))) %>%
+      select(-any_of(c("rk","matches","notes","match_report","top_team_scorer","goalkeeper"))) %>%
       select(-contains(c("pc","90")))
   }
   if(page=="player"){

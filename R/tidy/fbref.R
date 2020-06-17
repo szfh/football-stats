@@ -1,7 +1,4 @@
-fbref_static <- readRDS(file=here("data","fbref-raw-static.rds"))
-fbref_dynamic <- readRDS(file=here("data","fbref-raw-dynamic.rds"))
-
-fbref <- bind_rows(fbref_static,fbref_dynamic)
+fbref <- readRDS(file=here("data","fbref-raw.rds"))
 
 fbref %<>% 
   select(-any_of(c("statselector","seasoncode","page_url","content_selector_id"))) %>%
@@ -9,4 +6,4 @@ fbref %<>%
   mutate(data=pmap(list(data, page, stattype), fbref_tidy)) # remove cols not required in data
 
 saveRDS(fbref,file=here("data","fbref-tidy.rds"))
-rm(fbref_static,fbref_dynamic,fbref)
+rm(fbref)
