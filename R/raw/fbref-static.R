@@ -1,5 +1,5 @@
 .eplseasons <- tribble(~season, ~seasoncode, #advanced/non-advanced?
-                       #"2019-20",3232
+                       "2019-20",3232,
                        "2018-19",1889,
                        "2017-18",1631,
                        # "2016-17",1526,
@@ -26,20 +26,28 @@
 
 .datatypes_2 <- tribble(~page,
                         "schedule",
+                        "league",
+                        "leagueha",
 )
 
-fbref <- data.frame() %>%
+fbref_saved <- readRDS(here("data","fbref-raw.rds"))
+
+fbref_all <- data.frame() %>% # all data parameters
   bind_rows(crossing(.datatypes_1,.tables_1)) %>% #players and squads * datatypes
   bind_rows(.datatypes_2) %>% #fixtures
   crossing(.eplseasons)
 
-fbref %<>%
-  mutate(page_url=fbref_get_url(page,seasoncode,stattype,statselector)) %>%
-  mutate(content_selector_id=fbref_get_selector(page,seasoncode,stattype,statselector)) #possibly?
+fbref_keep <- fbref_saved %>% # remove data to be scraped from saved
+  filter(season!="2019-20")
 
-fbref %<>%
-  # mutate(data=fbref_scrape(page_url, content_selector_id)) %>% # doesnt work
+fbref_new <-
+  anti_join(fbref_all, fbref_keep) %>%
+  mutate(page_url=fbref_get_url(page,seasoncode,stattype,statselector)) %>%
+  mutate(content_selector_id=fbref_get_selector(page,seasoncode,stattype,statselector)) %>%
   mutate(data = map2(page_url, content_selector_id, possibly(fbref_scrape, otherwise=NA)))
 
-saveRDS(fbref,file=here("data","fbref-raw-static.rds"))
-rm(fbref)
+fbref <- bind_rows(fbref_keep,fbref_new) %>%
+  filter(!is.na(data))
+
+saveRDS(fbref,file=here("data","fbref-raw.rds"))
+rm(fbref,fbref_all,fbref_keep,fbref_new,fbref_saved)
