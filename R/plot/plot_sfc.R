@@ -35,7 +35,7 @@ players %>%
     caption=caption[[1]]
   ) +
   scale_x_continuous(breaks=seq(0,90*38,180),expand=expansion(add=c(0,20)))
-# ggsave(here("plots","SFC","Minutes.jpg"))
+ggsave(here("plots","SFC","Minutes.jpg"),dpi=600)
 
 players %>%
   filter_season_team() %>%
@@ -54,7 +54,7 @@ players %>%
   scale_y_continuous(limits=c(0,NA),breaks=seq(0,30,1),expand=expansion(add=c(0,0.2))) +
   scale_fill_manual(values=c("TRUE"=colour[["sfc"]][["main"]],"FALSE"=colour[["sfc"]][["grey"]])) +
   coord_fixed()
-# ggsave(here("plots","SFC","xGxA.jpg"))
+ggsave(here("plots","SFC","xGxA.jpg"),dpi=600)
 
 players %>%
   filter_season_team() %>%
@@ -84,7 +84,7 @@ players %>%
   scale_y_continuous() +
   scale_colour_manual(values=c("TRUE"=colour[["sfc"]][["black"]],"FALSE"=colour[["sfc"]][["grey"]])) +
   scale_fill_manual(values=c("TRUE"=colour[["sfc"]][["light"]],"FALSE"=colour[["sfc"]][["grey"]]))
-# ggsave(here("plots","SFC","ShotsKP.jpg"))
+ggsave(here("plots","SFC","ShotsKP.jpg"),dpi=600)
 
 players %>%
   filter_season_team() %>%
@@ -113,7 +113,7 @@ players %>%
   scale_x_continuous(limit=c(0,1)) +
   scale_y_continuous() +
   scale_fill_manual(values=c("TRUE"=colour[["medium"]][[3]],"FALSE"=colour[["medium"]][[8]]))
-# ggsave(here("plots","SFC","GD.jpg"),dpi=600)
+ggsave(here("plots","SFC","GD.jpg"),dpi=600)
 
 players %>%
   filter_season_team() %>%
@@ -144,7 +144,7 @@ players %>%
   scale_y_continuous() +
   scale_colour_manual(values=c("TRUE"=colour[["sfc"]][["black"]],"FALSE"=colour[["sfc"]][["grey"]])) +
   scale_fill_manual(values=c("TRUE"=colour[["sfc"]][["light"]],"FALSE"=colour[["sfc"]][["grey"]]))
-# ggsave(here("plots","SFC","PassesCompleted.jpg"))
+ggsave(here("plots","SFC","PassesCompleted.jpg"),dpi=600)
  
 players %>%
   filter_season_team() %>%
@@ -213,7 +213,7 @@ players %>%
   scale_y_continuous() +
   scale_colour_manual(values=c("TRUE"=colour[["sfc"]][["black"]],"FALSE"=colour[["sfc"]][["grey"]])) +
   scale_fill_manual(values=c("TRUE"=colour[["sfc"]][["light"]],"FALSE"=colour[["sfc"]][["grey"]]))
-# ggsave(here("plots","SFC","SCA.jpg"))
+ggsave(here("plots","SFC","SCA.jpg"),dpi=600)
 
 # matches %>%
 #   make_long_matches()

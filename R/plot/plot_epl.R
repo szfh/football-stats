@@ -28,7 +28,7 @@ players %>%
   scale_y_continuous() +
   scale_fill_manual(values=palette[["epl"]]()) +
   scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.1))
-# ggsave(here("plots","EPL","PlayerGlsxG.jpg"))
+ggsave(here("plots","EPL","PlayerGlsxG.jpg"),dpi=600)
 
 players %>%
   filter_season %>%
@@ -59,7 +59,7 @@ players %>%
   scale_y_continuous() +
   scale_fill_manual(values=palette[["epl"]]()) +
   scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.2))
-# ggsave(here("plots","EPL","PlayerxGxA.jpg"))
+ggsave(here("plots","EPL","PlayerxGxA.jpg"),dpi=600)
 
 players %>%
   filter_season %>%
@@ -91,7 +91,7 @@ players %>%
   scale_y_continuous() +
   scale_fill_manual(values=palette[["epl"]]()) +
   scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.2))
-# ggsave(here("plots","EPL","PlayerCompPasses.jpg"))
+ggsave(here("plots","EPL","PlayerCompPasses.jpg"),dpi=600)
 
 players %>%
   filter_season %>% 
@@ -116,7 +116,7 @@ players %>%
   scale_fill_manual(values=palette[["epl"]]()) +
   scale_x_continuous(breaks=seq(0,50,1),expand=expansion(add=c(0,0.2))) +
   scale_y_continuous(breaks=seq(0,200,5),expand=expansion(add=c(0,2)))
-# ggsave(here("plots","EPL","PlayerNoGoals.jpg"))
+ggsave(here("plots","EPL","PlayerNoGoals.jpg"),dpi=600)
 
 # Premier League team plots
 
@@ -148,7 +148,7 @@ squad %>% # needs to be joined to table?
   scale_x_continuous(limit=c(0,1)) +
   scale_y_continuous(breaks=seq(-100,100,5),labels=abs(seq(-100,100,5)),expand=expansion(add=c(2))) +
   scale_fill_manual(values=palette[["epl"]]())
-# ggsave(here("plots","EPL","xG1.jpg"))
+ggsave(here("plots","EPL","xG1.jpg"),dpi=600)
 # 
 squad %>%
   filter_season %>%
@@ -167,7 +167,7 @@ squad %>%
   scale_y_reverse(breaks=seq(0,100,5),expand=expansion(add=c(4,2))) +
   scale_fill_manual(values=palette[["epl"]]()) +
   coord_fixed()
-# ggsave(here("plots","EPL","xG2.jpg"))
+ggsave(here("plots","EPL","xG2.jpg"),dpi=600)
 # 
 squad %>%
   filter_season %>%
@@ -196,7 +196,7 @@ squad %>%
   scale_x_continuous(limit=c(0,1)) +
   scale_y_continuous(breaks=seq(-100,100,5),expand=expansion(add=c(3))) +
   scale_fill_manual(values=palette[["epl"]]())
-# ggsave(here("plots","EPL","xGD.jpg"))
+ggsave(here("plots","EPL","xGD.jpg"),dpi=600)
 
 players %>%
   select(player,season,squad,touch=touches_att_3rd,pressure=pressures_att_3rd,tackle=tackles_att_3rd) %>%
@@ -228,4 +228,4 @@ players %>%
   scale_y_continuous() +
   scale_fill_manual(values=palette[["epl"]]()) +
   scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.2))
-# ggsave(here("plots","EPL","Att3rdActions.jpg"))
+ggsave(here("plots","EPL","Att3rdActions.jpg"),dpi=600)
