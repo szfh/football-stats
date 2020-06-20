@@ -172,7 +172,7 @@ players %>%
   ) +
   scale_x_continuous(breaks=seq(-2000,2000,200),labels=abs(seq(-2000,2000,200)),expand=expansion(add=c(20))) +
   scale_colour_manual(values=c("Left"=colour[["medium"]][[1]],"Right"=colour[["medium"]][[8]]))
-# ggsave(here("plots","SFC","PassFootedness.jpg"))
+ggsave(here("plots","SFC","PassFootedness.jpg"))
  
 players %>%
   filter_season_team() %>%
@@ -215,65 +215,61 @@ players %>%
   scale_fill_manual(values=c("TRUE"=colour[["sfc"]][["light"]],"FALSE"=colour[["sfc"]][["grey"]]))
 ggsave(here("plots","SFC","SCA.jpg"),dpi=600)
 
-# matches %>%
-#   make_long_matches()
+matches %>%
+  make_long_matches() %>%
+  filter_season_team() %>%
+  filter(!is.na(homegls)) %>%
+  mutate(shortha=ifelse(ha=="home","H","A")) %>%
+  mutate(match=glue::glue("{opposition} {shortha} {glsf}-{glsa}")) %>%
+  mutate(match=reorder_within(match, date, season)) %>%
+  ggplot(aes(x=match)) +
+  geom_point(aes(y=xgf),colour="darkred",alpha=0.8,shape="x") +
+  geom_spline(aes(y=xgf,group=season),spar=0.6,colour="darkred",linetype="longdash",size=0.7) +
+  geom_point(aes(y=xga),colour="royalblue",alpha=0.8,shape="x") +
+  geom_spline(aes(y=xga,group=season),spar=0.6,colour="royalblue",linetype="longdash",size=0.7) +
+  theme[["solar"]]() +
+  theme(
+    axis.text.x=element_text(size=rel(0.6),angle=60,hjust=1),
+    axis.title.y=element_markdown(size=rel(0.8),colour="black"),
+    axis.text.y=element_text(size=rel(0.8)),
+    plot.title=element_markdown(colour="black"),
+    plot.caption=element_text(colour="black"),
+    strip.text=element_blank()
+  ) +
+  labs(
+    title=glue("Southampton <b style='color:darkred'>attack</b> / <b style='color:royalblue'>defence</b> trend"),
+    x=element_blank(),
+    y=glue("Expected goals <b style='color:darkred'>for</b> / <b style='color:royalblue'>against</b>"),
+    caption=caption[[1]]
+  ) +
+  scale_x_reordered() +
+  scale_y_continuous(limits=c(0,NA),expand=expansion(add=c(0,0.1))) +
+  facet_grid(cols=vars(season), space="free", scales="free_x")
+ggsave(here("plots","SFC","xGtrend.jpg"))
 
-# matches_long %>% # go back to sort out fbref_tidy first
-#   select("Wk":"Opposition","GoalsF":"xGAfbref","Season") %>%
-#   filter(Team %in% !!team) %>%
-#   filter(Season %in% !!season) %>%
-#   filter(!is.na(GoalsF)) %>%
-#   mutate(ShortHA=ifelse(HA=="Home","H","A")) %>%
-#   mutate(Match=glue::glue("{Opposition} {ShortHA} {GoalsF}-{GoalsA}")) %>%
-#   mutate(Match=reorder_within(Match, Date, Season)) %>%
-#   ggplot(aes(x=Match)) +
-#   geom_point(aes(y=xGFfbref),colour="darkred",alpha=0.8,shape="x") +
-#   geom_spline(aes(y=xGFfbref,group=Season),spar=0.6,colour="darkred",linetype="longdash",size=0.7) +
-#   geom_point(aes(y=xGAfbref),colour="royalblue",alpha=0.8,shape="x") +
-#   geom_spline(aes(y=xGAfbref,group=Season),spar=0.6,colour="royalblue",linetype="longdash",size=0.7) +
-#   theme[["solar"]]() +
-#   theme(
-#     axis.text.x=element_text(size=rel(0.4),angle=60,hjust=1),
-#     axis.title.y=element_markdown(size=rel(0.8),colour="black"),
-#     axis.text.y=element_text(size=rel(0.8)),
-#     plot.title=element_markdown(colour="black"),
-#     plot.caption=element_text(colour="black"),
-#     strip.text=element_blank()
-#   ) +
-#   labs(
-#     title=glue("Southampton <b style='color:darkred'>attack</b> / <b style='color:royalblue'>defence</b> trend"),
-#     x=element_blank(),
-#     y=glue("Expected goals <b style='color:darkred'>for</b> / <b style='color:royalblue'>against</b>"),
-#     caption=caption[[1]]
-#   ) +
-#   scale_x_reordered() +
-#   scale_y_continuous(limits=c(0,NA),expand=expansion(add=c(0,0.1))) +
-#   facet_grid(cols=vars(Season), space="free", scales="free_x")
-# ggsave(here("plots","SFC","xGtrend.jpg"))
-# 
-# matches_long %>%
-#   filter(Team %in% !!team) %>%
-#   filter(Season %in% !!season) %>%
-#   filter(!is.na(GoalsF)) %>%
-#   mutate(ShortHA=ifelse(HA=="Home","H","A")) %>%
-#   mutate(Match=glue::glue("{Opposition} {ShortHA} {GoalsF}-{GoalsA}")) %>%
-#   mutate(Match=reorder_within(Match, desc(Date), Season)) %>%
-#   ggplot(aes(y=Match)) +
-#   geom_segment(aes(x=0,xend=xGFfbref,y=Match,yend=Match),colour=colour[["sfc"]][["light"]],size=3.5) +
-#   geom_segment(aes(x=0,xend=-xGAfbref,y=Match,yend=Match),colour=colour[["medium"]][[1]],size=3.5) +
-#   theme[["solar"]]() +
-#   theme(
-#     plot.title=element_markdown(),
-#     axis.text.y=element_text(size=rel(0.8)),
-#     strip.text=element_blank()
-#   ) +
-#   labs(
-#     title=glue("<b style='color:#265DAB'>Opposition xG</b> | <b style='color:#D71920'>Southampton xG</b>"),
-#     x=element_blank(),
-#     y=element_blank(),
-#     caption=caption[[1]]
-#   ) +
-#   scale_x_continuous(breaks=seq(-10,10,1),labels=abs(seq(-10,10,1)),expand=expansion(add=c(0.1,1))) +
-#   scale_y_reordered() +
-#   facet_grid(rows=vars(Season), space="free", scales="free_y")
-# ggsave(here("plots","SFC","MatchxGseg.jpg"))
+matches %>%
+  make_long_matches() %>%
+  filter_season_team() %>%
+  filter(!is.na(homegls)) %>%
+  mutate(shortha=ifelse(ha=="home","H","A")) %>%
+  mutate(match=glue::glue("{opposition} {shortha} {glsf}-{glsa}")) %>%
+  mutate(match=reorder_within(match, desc(date), season)) %>%
+  ggplot(aes(y=match)) +
+  geom_segment(aes(x=0,xend=xgf,y=match,yend=match),colour=colour[["sfc"]][["light"]],size=3.5) +
+  geom_segment(aes(x=0,xend=-xga,y=match,yend=match),colour=colour[["medium"]][[1]],size=3.5) +
+  theme[["solar"]]() +
+  theme(
+    plot.title=element_markdown(),
+    axis.text.y=element_text(size=rel(0.8)),
+    strip.text=element_blank()
+  ) +
+  labs(
+    title=glue("<b style='color:#265DAB'>Opposition xG</b> | <b style='color:#D71920'>Southampton xG</b>"),
+    x=element_blank(),
+    y=element_blank(),
+    caption=caption[[1]]
+  ) +
+  scale_x_continuous(breaks=seq(-10,10,1),labels=abs(seq(-10,10,1)),expand=expansion(add=c(0.1,1))) +
+  scale_y_reordered() +
+  facet_grid(rows=vars(season), space="free", scales="free_y")
+ggsave(here("plots","SFC","xGseg.jpg"),dpi=600)
