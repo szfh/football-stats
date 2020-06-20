@@ -114,7 +114,7 @@ make_long_matches <- function(matches){ # transform matches to long format
   matches %<>%
     pivot_longer(cols=c(home,away),
                  names_to="ha",
-                 values_to="team") %>%
+                 values_to="squad") %>%
     left_join(matches) %>%
     mutate(
       opposition=ifelse(ha=="home",away,home),
