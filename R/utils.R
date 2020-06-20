@@ -110,35 +110,33 @@ make_long_data <- function(data,levels,labels){ # transform data to long format
 }
 
 make_long_matches <- function(matches){ # transform matches to long format
-  # browser()
-  
-  # matches %<>%
-  #   pivot_longer(cols=c(Home,Away),
-  #                names_to="HA",
-  #                values_to="Team") %>%
-  #   left_join(matches) %>%
-  #   mutate(
-  #     Opposition=ifelse(HA=="Home",Away,Home),
-  #     GoalsF=ifelse(HA=="Home",GoalsHome,GoalsAway),
-  #     GoalsA=ifelse(HA=="Home",GoalsAway,GoalsHome),
-  #     xGFfbref=ifelse(HA=="Home",xGHomefbref,xGAwayfbref),
-  #     xGAfbref=ifelse(HA=="Home",xGAwayfbref,xGHomefbref),
-  #     xGF538=ifelse(HA=="Home",xGHome538,xGAway538),
-  #     xGA538=ifelse(HA=="Home",xGAway538,xGHome538),
-  #     spiF=ifelse(HA=="Home",spi1,spi2),
-  #     spiA=ifelse(HA=="Home",spi2,spi1),
-  #     probF=ifelse(HA=="Home",prob1,prob2),
-  #     probA=ifelse(HA=="Home",prob2,prob1),
-  #     proj_scoreF=ifelse(HA=="Home",proj_score1,proj_score2),
-  #     proj_scoreA=ifelse(HA=="Home",proj_score2,proj_score1),
-  #     importanceF=ifelse(HA=="Home",importance1,importance2),
-  #     importanceA=ifelse(HA=="Home",importance2,importance1),
-  #     nsxGF538=ifelse(HA=="Home",nsxGHome538,nsxGAway538),
-  #     nsxGA538=ifelse(HA=="Home",nsxGAway538,nsxGHome538),
-  #     adj_scoreF=ifelse(HA=="Home",adj_score1,adj_score2),
-  #     adj_scoreA=ifelse(HA=="Home",adj_score2,adj_score1)
-  #   ) %>%
-  #   print
+
+  matches %<>%
+    pivot_longer(cols=c(home,away),
+                 names_to="ha",
+                 values_to="team") %>%
+    left_join(matches) %>%
+    mutate(
+      opposition=ifelse(ha=="home",away,home),
+      glsf=ifelse(ha=="home",homegls,awaygls),
+      glsa=ifelse(ha=="home",awaygls,homegls),
+      xgf=ifelse(ha=="home",homexg,awayxg),
+      xga=ifelse(ha=="home",awayxg,homexg),
+    #   xGF538=ifelse(ha=="home",xGHome538,xGAway538),
+    #   xGA538=ifelse(ha=="home",xGAway538,xGHome538),
+    #   spiF=ifelse(ha=="Home",spi1,spi2),
+    #   spiA=ifelse(ha=="Home",spi2,spi1),
+    #   probF=ifelse(ha=="Home",prob1,prob2),
+    #   probA=ifelse(ha=="Home",prob2,prob1),
+    #   proj_scoreF=ifelse(ha=="Home",proj_score1,proj_score2),
+    #   proj_scoreA=ifelse(ha=="Home",proj_score2,proj_score1),
+    #   importanceF=ifelse(ha=="Home",importance1,importance2),
+    #   importanceA=ifelse(ha=="Home",importance2,importance1),
+    #   nsxGF538=ifelse(ha=="Home",nsxGHome538,nsxGAway538),
+    #   nsxGA538=ifelse(ha=="Home",nsxGAway538,nsxGHome538),
+    #   adj_scoreF=ifelse(ha=="Home",adj_score1,adj_score2),
+    #   adj_scoreA=ifelse(ha=="Home",adj_score2,adj_score1)
+    )
   
   return(matches)
 }
