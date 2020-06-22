@@ -1,6 +1,6 @@
 # libraries
 # source(here::here("R","library.R"))
-# source(here("R","utils-master.R"))
+# source(here("R","master-utils.R"))
 
 # themes
 # source(here("R","themes.R"))
@@ -16,7 +16,7 @@
 # source(here("R","raw","fivethirtyeight.R"))
 
 # tidy
-# source(here("R","tidy","raw-fbref.R"))
+# source(here("R","tidy","tidy-fbref.R"))
 # source(here("R","tidy","fivethirtyeight.R"))
 
 # join
