@@ -36,3 +36,20 @@ fbref_scrape <- function(page_url,content_selector_id){
   
   return(data)
 }
+
+understat_scrape_league <- function(league="EPL", year="2019", str){
+  url <- glue("https://understat.com/league/{league}/{year}")
+  print(glue("url: {url}"))
+  
+  data <-
+    url %>%
+    read_html() %>%
+    html_nodes("script") %>%
+    as.character() %>%
+    stringr::str_subset(str) %>%
+    stringi::stri_unescape_unicode() %>%
+    stringr::str_extract("\\[.+\\]") %>%
+    jsonlite::fromJSON(simplifyVector=TRUE)
+  
+  return(data)
+}
