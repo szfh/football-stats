@@ -1,27 +1,26 @@
-raw <- list()
+source(here::here("R","library.R"))
+source(here("R","raw","raw-utils.R"))
 
-league <- c("EPL")
-year <- c(2017,2018)
+eplseasons <- tribble(~season,
+                       "2019",
+                       "2018",
+)
 
-raw[["understat"]][["teams"]] <- 
-  expand_grid(league,year) %>% 
-  transmute(
-    data = map2(league, year, understatr::get_league_teams_stats)
-  ) %>%
-  unnest(data)
+datatypes_1 <- tribble(~datatype,
+                       "league",
+)
 
-raw[["understat"]][["teamssum"]] <- raw[["understat"]][["teams"]] %>%
-  group_by(team_name, year) %>%
-  summarise_if(is.numeric, sum, na.rm = TRUE)
+tables_1 <- tribble(~stattype, ~statselector,
+                     "schedule","datesData",
+                     "players","playersData",
+                    #"teams","teamsData"
+)
 
-raw[["understat"]][["players"]] <-
-  raw[["understat"]][["teams"]] %>%
-  distinct(league_name, year, team_name) %>% 
-  # top_n(2) %>%
-  transmute(
-    data = map2(team_name, year, understatr::get_team_players_stats)
-  ) %>%
-  unnest(data)
+understat <- data.frame() %>%
+  bind_rows(crossing(datatypes_1,tables_1)) %>%
+  crossing(eplseasons) %>%
+  print
 
-saveRDS(raw,file=here("data","understat-static.rds"))
-rm(raw)
+understat %<>%
+  mutate(data=pmap(list("EPL",season,statselector),possibly(understat_scrape_league, otherwise=NA))) %>%
+  print
