@@ -10,7 +10,7 @@
 
 # raw static
 # source(here("R","raw","raw-fbref.R"))
-# source(here("R","raw","understat-static.R"))
+# source(here("R","raw","raw-understat.R"))
 
 # raw dynamic
 # source(here("R","raw","fivethirtyeight.R"))
