@@ -1,9 +1,8 @@
-source(here::here("R","library.R"))
 source(here("R","raw","raw-utils.R"))
 
 .eplseasons <- tribble(~season,
                        "2019",
-                       "2018",
+                       # "2018",
 )
 
 .datatypes_1 <- tribble(~datatype,
@@ -13,7 +12,7 @@ source(here("R","raw","raw-utils.R"))
 .tables_1 <- tribble(~stattype, ~statselector,
                      "schedule","datesData",
                      "players","playersData",
-                    #"teams","teamsData"
+                     # "teams","teamsData",
 )
 
 understat <- data.frame() %>%
