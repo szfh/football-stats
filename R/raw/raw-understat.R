@@ -15,6 +15,8 @@ source(here("R","raw","raw-utils.R"))
                      # "teams","teamsData",
 )
 
+understat_saved <- readRDS(here("data","understat-raw.rds"))
+
 understat <- data.frame() %>%
   bind_rows(crossing(.datatypes_1,.tables_1)) %>%
   crossing(.eplseasons) %>%
@@ -23,3 +25,5 @@ understat <- data.frame() %>%
 understat %<>%
   mutate(data=pmap(list("EPL",season,statselector),possibly(understat_scrape_league, otherwise=NA))) %>%
   print
+
+saveRDS(understat,here("data","understat-raw.rds"))
