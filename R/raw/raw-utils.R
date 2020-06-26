@@ -36,3 +36,16 @@ fbref_scrape <- function(page_url,content_selector_id){
   
   return(data)
 }
+
+fbref_get_table_href <- function(url){
+  
+  data <-
+    url %>%
+    read_html() %>%
+    html_nodes("a") %>%
+    html_attr("href") %>%
+    as_tibble() %>%
+    print
+  
+  return(data)
+}
