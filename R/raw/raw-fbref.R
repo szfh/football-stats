@@ -7,36 +7,40 @@ source(here("R","raw","raw-utils.R"))
                        # "2016-17",1526,
 )
 
-.datatypes_1 <- tribble(~page,
-                        "player",
-                        "squad",
+.data_types_ps <- tribble(~page,
+                          "player",
+                          "squad",
 )
 
-.tables_1 <- tribble(~stattype, ~statselector,
-                     "stats","standard",
-                     "keepers","keeper",
-                     "keepersadv","keeper_adv",
-                     "shooting","shooting",
-                     "passing","passing",
-                     "passing_types","passing_types",
-                     "gca","gca",
-                     "defense","defense",
-                     "possession","possession",
-                     "playingtime","playing_time",
-                     "misc","misc",
+.tables_ps <- tribble(~stattype, ~statselector,
+                      "stats","standard",
+                      "keepers","keeper",
+                      "keepersadv","keeper_adv",
+                      "shooting","shooting",
+                      "passing","passing",
+                      "passing_types","passing_types",
+                      "gca","gca",
+                      "defense","defense",
+                      "possession","possession",
+                      "playingtime","playing_time",
+                      "misc","misc",
 )
 
-.datatypes_2 <- tribble(~page,
-                        "schedule",
-                        "league",
-                        "leagueha",
+.data_types_league <- tribble(~page,
+                              "league",
+)
+
+.data_types_league_all <- tribble(~page,
+                                  "schedule",
+                                  "league",
+                                  "leagueha",
 )
 
 fbref_saved <- readRDS(here("data","fbref-raw.rds"))
 
 fbref_all <- data.frame() %>% # all data parameters
-  bind_rows(crossing(.datatypes_1,.tables_1)) %>% #players and squads * datatypes
-  bind_rows(.datatypes_2) %>% #fixtures
+  bind_rows(crossing(.data_types_ps,.tables_ps)) %>% #players and squads * datatypes
+  bind_rows(.data_types_league_all) %>% #fixtures
   crossing(.eplseasons)
 
 fbref_keep <- fbref_saved %>% # remove data to be scraped from saved
