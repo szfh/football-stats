@@ -1,4 +1,4 @@
-fbref_get_selector <- function(page,seasoncode,stattype,statselector){
+fbref_get_selector <- function(page,seasoncode=NA,stattype=NA,statselector=NA){
   
   selector <- case_when(
     # page=="player" && stattype=="stats" ~ glue("%23standard"),
@@ -13,7 +13,7 @@ fbref_get_selector <- function(page,seasoncode,stattype,statselector){
   return(selector)
 }
 
-fbref_get_url <- function(page,seasoncode,stattype,statselector){
+fbref_get_url <- function(page,seasoncode=NA,stattype=NA,statselector=NA){
   
   url <- case_when(
     page %in% c("player","squad") ~ glue("https://fbref.com/en/comps/9/{seasoncode}/{stattype}/"),
@@ -37,7 +37,7 @@ fbref_scrape <- function(page_url,content_selector_id){
   return(data)
 }
 
-fbref_get_table_href <- function(url){
+fbref_scrape_href <- function(page_url,content_selector_id){
   
   data <-
     url %>%
