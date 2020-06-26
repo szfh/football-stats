@@ -38,7 +38,7 @@ source(here("R","raw","raw-utils.R"))
 
 fbref_saved <- readRDS(here("data","fbref-raw.rds"))
 
-fbref_all <- data.frame() %>% # all data parameters
+fbref_all <- tibble() %>% # all data parameters
   bind_rows(crossing(.data_types_ps,.tables_ps)) %>% #players and squads * datatypes
   bind_rows(.data_types_league_all) %>% #fixtures
   crossing(.eplseasons)
