@@ -37,6 +37,7 @@ source(here("R","raw","raw-utils.R"))
 )
 
 team_codes <- fbref_get_codes_squads(.eplseasons)
+match_codes <- fbref_get_codes_matches(.eplseasons)
 
 fbref_saved <- readRDS(here("data","fbref-raw.rds"))
 
