@@ -38,6 +38,8 @@ fbref_scrape <- function(page_url,content_selector_id){
 }
 
 fbref_scrape_href <- function(page_url,content_selector_id){
+  url <- glue("http://acciotables.herokuapp.com/?page_url={page_url}&content_selector_id={content_selector_id}")
+  print(glue("url: {url}"))
   
   data <-
     url %>%
@@ -46,6 +48,22 @@ fbref_scrape_href <- function(page_url,content_selector_id){
     html_attr("href") %>%
     as_tibble() %>%
     print
+  
+  return(data)
+}
+
+fbref_get_codes_squads <- function(eplseasons){
+  
+  data <- tibble(page="league") %>%
+    crossing(.eplseasons) %>%
+    mutate(page_url=fbref_get_url(page,seasoncode)) %>%
+    mutate(content_selector_id=fbref_get_selector(page,seasoncode)) %>%
+    mutate(data=map2(page_url,content_selector_id,fbref_scrape_href)) %>%
+    unnest(cols=data) %>%
+    separate(value,c(NA,NA,"datatype","code","data"),sep="/",extra="merge",fill="right") %>%
+    separate(data,c(NA,"data"),sep="/",fill="left") %>%
+    filter(datatype=="squads") %>%
+    select(c(season,code,data))
   
   return(data)
 }

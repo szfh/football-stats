@@ -36,6 +36,8 @@ source(here("R","raw","raw-utils.R"))
                                   "leagueha",
 )
 
+team_codes <- fbref_get_codes_squads(.eplseasons)
+
 fbref_saved <- readRDS(here("data","fbref-raw.rds"))
 
 fbref_all <- tibble() %>% # all data parameters
