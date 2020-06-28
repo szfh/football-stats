@@ -40,6 +40,7 @@ fbref_saved <- readRDS(here("data","fbref-raw.rds"))
 codes <- readRDS(here("data","fbref-raw-codes.rds"))
 
 # codes <- list(team=fbref_get_codes_squads(.eplseasons),match=fbref_get_codes_matches(.eplseasons))
+codes <- bind_rows(team=fbref_get_codes_squads(.eplseasons),match=fbref_get_codes_matches(.eplseasons))
 
 fbref_all <- tibble() %>% # all data parameters
   bind_rows(crossing(.data_types_ps,.tables_ps)) %>% #players and squads * datatypes

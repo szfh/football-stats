@@ -65,7 +65,7 @@ fbref_get_codes_squads <- function(eplseasons){
     separate(value,c(NA,NA,"datatype","code","desc"),sep="/",extra="merge",fill="right") %>%
     separate(desc,c(NA,"desc"),sep="/",fill="left") %>%
     filter(datatype=="squads") %>%
-    select(season,code,desc)
+    select(season,datatype,code,desc)
   
   return(data)
 }
@@ -87,7 +87,7 @@ fbref_get_codes_matches <- function(eplseasons){
     filter(datatype=="matches") %>%
     unique() %>%
     # print
-    select(c(season,code,desc)) %>%
+    select(season,datatype,code,desc) %>%
     print
   
   return(data)
