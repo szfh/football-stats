@@ -103,3 +103,10 @@ add_watermark <- function(plots,path){
   }
   return(plots_wm)
 }
+
+save_plots <- function(plots){
+  for(i in 1:length(plots)){
+    name <- names(plots[i])
+    save_plot(here("plots",glue("plot_{name}.jpg")),plots[[i]])
+  }
+}
