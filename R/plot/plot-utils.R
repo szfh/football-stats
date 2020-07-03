@@ -83,3 +83,23 @@ get_mva <- function(xG,n=6){ # windowed average xG
 #   filter(!is.na(GoalsHome)&!is.na(GoalsAway)) %>%
 #   summarise(last(Date)) %>%
 #   extract2(1)
+
+add_watermark <- function(plots,path){
+  
+  plots_wm <- list()
+  
+  for(i in 1:length(plots)){
+    name <- names(plots[i])
+    plots_wm[[name]] <- 
+      plots[[i]] %>%
+      ggdraw() +
+      draw_image(path,
+                 x=0.9,
+                 y=0,
+                 hjust=0.55,
+                 vjust=0.1,
+                 width=0.2,
+                 height=0.1)
+  }
+  return(plots_wm)
+}
