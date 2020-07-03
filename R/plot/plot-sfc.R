@@ -277,3 +277,5 @@ plots$xgsegment <-
   scale_x_continuous(breaks=seq(-10,10,1),labels=abs(seq(-10,10,1)),expand=expansion(add=c(0.1,1))) +
   scale_y_reordered() +
   facet_grid(rows=vars(season), space="free", scales="free_y")
+
+save_plots(plots,path=here("plots","SFC"))
