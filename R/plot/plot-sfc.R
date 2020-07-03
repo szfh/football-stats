@@ -1,6 +1,9 @@
 source(here("R","plot","plot-utils.R"))
 
-players %>%
+plots <- list()
+
+plots$minutes <-
+  players %>%
   filter_season_team() %>%
   select(player,pos=pos1,min=playing_time_min,starts=starts_starts,subs=subs_subs,min_start=starts_mnstart,min_sub=subs_mnsub) %>%
   filter_na("min") %>%
@@ -37,9 +40,9 @@ players %>%
     caption=caption[[1]]
   ) +
   scale_x_continuous(breaks=seq(0,90*38,180),expand=expansion(add=c(0,20)))
-ggsave(here("plots","SFC","Minutes.jpg"),dpi=600)
 
-players %>%
+plots$xgxa <-
+  players %>%
   filter_season_team() %>%
   select(player,npxg=expected_npxg,xa=expected_xa) %>%
   filter_na(c("npxg","xa")) %>%
@@ -56,9 +59,9 @@ players %>%
   scale_y_continuous(limits=c(0,NA),breaks=seq(0,30,1),expand=expansion(add=c(0,0.2))) +
   scale_fill_manual(values=c("TRUE"=colour[["sfc"]][["main"]],"FALSE"=colour[["sfc"]][["grey"]])) +
   coord_fixed()
-ggsave(here("plots","SFC","xGxA.jpg"),dpi=600)
 
-players %>%
+plots$shotskp <-
+  players %>%
   filter_season_team() %>%
   select(player,sh=standard_sh,kp) %>%
   make_long_data(levels=c("sh","kp"),labels=c("Shot","Pass leading to shot")) %>%
@@ -86,9 +89,9 @@ players %>%
   scale_y_continuous() +
   scale_colour_manual(values=c("TRUE"=colour[["sfc"]][["black"]],"FALSE"=colour[["sfc"]][["grey"]])) +
   scale_fill_manual(values=c("TRUE"=colour[["sfc"]][["light"]],"FALSE"=colour[["sfc"]][["grey"]]))
-ggsave(here("plots","SFC","ShotsKP.jpg"),dpi=600)
 
-players %>%
+plots$gd <-
+  players %>%
   filter_season_team() %>%
   select(player,min=playing_time_min,team_gls=`team_success_+-`,team_xg=`team_success_xg_xg+-`) %>%
   make_long_data(levels=c("team_gls","team_xg"),labels=c("Goals +/-","xG +/-")) %>%
@@ -115,9 +118,9 @@ players %>%
   scale_x_continuous(limit=c(0,1)) +
   scale_y_continuous() +
   scale_fill_manual(values=c("TRUE"=colour[["medium"]][[3]],"FALSE"=colour[["medium"]][[8]]))
-ggsave(here("plots","SFC","GD.jpg"),dpi=600)
 
-players %>%
+plots$passescompleted <-
+  players %>%
   filter_season_team() %>%
   select(player,short_cmp,medium_cmp,long_cmp) %>%
   make_long_data(levels=c("short_cmp","medium_cmp","long_cmp"),labels=c("Short (<5 yards)","Medium (5-25 yards)","Long (>25 yards)")) %>%
@@ -146,9 +149,9 @@ players %>%
   scale_y_continuous() +
   scale_colour_manual(values=c("TRUE"=colour[["sfc"]][["black"]],"FALSE"=colour[["sfc"]][["grey"]])) +
   scale_fill_manual(values=c("TRUE"=colour[["sfc"]][["light"]],"FALSE"=colour[["sfc"]][["grey"]]))
-ggsave(here("plots","SFC","PassesCompleted.jpg"),dpi=600)
- 
-players %>%
+
+plots$passfootedness <-
+  players %>%
   filter_season_team() %>%
   filter(body_parts_left+body_parts_right>0) %>%
   mutate(body_parts_tot=body_parts_left+body_parts_right) %>%
@@ -174,9 +177,9 @@ players %>%
   ) +
   scale_x_continuous(breaks=seq(-2000,2000,200),labels=abs(seq(-2000,2000,200)),expand=expansion(add=c(20))) +
   scale_colour_manual(values=c("Left"=colour[["medium"]][[1]],"Right"=colour[["medium"]][[8]]))
-ggsave(here("plots","SFC","PassFootedness.jpg"))
- 
-players %>%
+
+plots$sca <-
+  players %>%
   filter_season_team() %>%
   select(player,sca=sca_sca,sca_passlive=sca_types_passlive,sca_passdead=sca_types_passdead,
          sca_drib=sca_types_drib,sca_sh=sca_types_sh,sca_fld=sca_types_fld) %>%
@@ -215,9 +218,9 @@ players %>%
   scale_y_continuous() +
   scale_colour_manual(values=c("TRUE"=colour[["sfc"]][["black"]],"FALSE"=colour[["sfc"]][["grey"]])) +
   scale_fill_manual(values=c("TRUE"=colour[["sfc"]][["light"]],"FALSE"=colour[["sfc"]][["grey"]]))
-ggsave(here("plots","SFC","SCA.jpg"),dpi=600)
 
-matches %>%
+plots$xgtrend <-
+  matches %>%
   make_long_matches() %>%
   filter_season_team() %>%
   filter(!is.na(homegls)) %>%
@@ -247,9 +250,9 @@ matches %>%
   scale_x_reordered() +
   scale_y_continuous(limits=c(0,NA),expand=expansion(add=c(0,0.1))) +
   facet_grid(cols=vars(season), space="free", scales="free_x")
-ggsave(here("plots","SFC","xGtrend.jpg"))
 
-matches %>%
+plots$xgsegment <-
+  matches %>%
   make_long_matches() %>%
   filter_season_team() %>%
   filter(!is.na(homegls)) %>%
@@ -274,4 +277,3 @@ matches %>%
   scale_x_continuous(breaks=seq(-10,10,1),labels=abs(seq(-10,10,1)),expand=expansion(add=c(0.1,1))) +
   scale_y_reordered() +
   facet_grid(rows=vars(season), space="free", scales="free_y")
-ggsave(here("plots","SFC","xGseg.jpg"),dpi=600)
