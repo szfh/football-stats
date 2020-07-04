@@ -33,7 +33,6 @@ plots$glsxg <-
   scale_y_continuous() +
   scale_fill_manual(values=palette[["epl"]]()) +
   scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.1))
-# ggsave(here("plots","EPL","PlayerGlsxG.jpg"),dpi=600)
 
 plots$playerxgxa <-
   players %>%
@@ -65,7 +64,6 @@ plots$playerxgxa <-
   scale_y_continuous() +
   scale_fill_manual(values=palette[["epl"]]()) +
   scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.2))
-# ggsave(here("plots","EPL","PlayerxGxA.jpg"),dpi=600)
 
 plots$playercomppasses <-
   players %>%
@@ -98,7 +96,6 @@ plots$playercomppasses <-
   scale_y_continuous() +
   scale_fill_manual(values=palette[["epl"]]()) +
   scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.2))
-# ggsave(here("plots","EPL","PlayerCompPasses.jpg"),dpi=600)
 
 plots$playernogoals <-
   players %>%
@@ -124,7 +121,6 @@ plots$playernogoals <-
   scale_fill_manual(values=palette[["epl"]]()) +
   scale_x_continuous(breaks=seq(0,50,1),expand=expansion(add=c(0,0.2))) +
   scale_y_continuous(breaks=seq(0,200,5),expand=expansion(add=c(0,2)))
-# ggsave(here("plots","EPL","PlayerNoGoals.jpg"),dpi=600)
 
 # Premier League team plots
 
@@ -157,7 +153,6 @@ plots$squadxg1 <-
   scale_x_continuous(limit=c(0,1)) +
   scale_y_continuous(breaks=seq(-100,100,5),labels=abs(seq(-100,100,5)),expand=expansion(add=c(2))) +
   scale_fill_manual(values=palette[["epl"]]())
-# ggsave(here("plots","EPL","xG1.jpg"),dpi=600)
 
 plots$squadxg2 <-
   squad %>%
@@ -177,7 +172,6 @@ plots$squadxg2 <-
   scale_y_reverse(breaks=seq(0,100,5),expand=expansion(add=c(4,2))) +
   scale_fill_manual(values=palette[["epl"]]()) +
   coord_fixed()
-# ggsave(here("plots","EPL","xG2.jpg"),dpi=600)
 
 plots$squadxgd <-
   squad %>%
@@ -207,7 +201,6 @@ plots$squadxgd <-
   scale_x_continuous(limit=c(0,1)) +
   scale_y_continuous(breaks=seq(-100,100,5),expand=expansion(add=c(3))) +
   scale_fill_manual(values=palette[["epl"]]())
-# ggsave(here("plots","EPL","xGD.jpg"),dpi=600)
 
 plots$att3rdactions <-
   players %>%
@@ -240,6 +233,5 @@ plots$att3rdactions <-
   scale_y_continuous() +
   scale_fill_manual(values=palette[["epl"]]()) +
   scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.2))
-# ggsave(here("plots","EPL","Att3rdActions.jpg"),dpi=600)
 
 save_plots(plots,path=here("plots","EPL"))
