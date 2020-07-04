@@ -241,3 +241,5 @@ plots$att3rdactions <-
   scale_fill_manual(values=palette[["epl"]]()) +
   scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.2))
 # ggsave(here("plots","EPL","Att3rdActions.jpg"),dpi=600)
+
+save_plots(plots,path=here("plots","EPL"))
