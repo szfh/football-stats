@@ -48,7 +48,7 @@ theme[["solar"]] <- function(base_size=theme[["base_size"]],base_family=theme[["
       
       plot.title=element_text(size=rel(1.2),colour="black",face="bold",hjust=0.5),
       plot.subtitle=element_text(size=rel(1),colour="black",hjust=0.5),
-      plot.caption=element_text(size=rel(0.8),colour="black"),
+      plot.caption=element_text(size=rel(0.8),colour="black",hjust=0),
       
       plot.margin=unit(c(0.5,0.5,0.5,0.5),"lines"),
       
