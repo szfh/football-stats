@@ -95,9 +95,9 @@ add_watermark <- function(plots,path){
       ggdraw() +
       draw_image(path,
                  x=1,
-                 y=0,
+                 y=1,
                  hjust=1.1,
-                 vjust=0,
+                 vjust=1,
                  width=0.2,
                  height=0.1,
                  scale=1)
