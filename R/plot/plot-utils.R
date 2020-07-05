@@ -94,12 +94,13 @@ add_watermark <- function(plots,path){
       plots[[i]] %>%
       ggdraw() +
       draw_image(path,
-                 x=0.9,
+                 x=1,
                  y=0,
-                 hjust=0.55,
-                 vjust=0.1,
+                 hjust=1.1,
+                 vjust=0,
                  width=0.2,
-                 height=0.1)
+                 height=0.1,
+                 scale=1)
   }
   return(plots_wm)
 }
