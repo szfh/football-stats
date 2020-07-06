@@ -8,7 +8,8 @@ theme[["white"]] <- function(base_size=theme[["base_size"]],base_family=theme[["
     theme(
       axis.ticks=element_blank(),
       axis.line=element_line(size=0.6),
-      axis.text=element_text(hjust=0.5,vjust=0.5,size=rel(1)),
+      axis.text.x=element_text(hjust=0.5,vjust=0.5,size=6),
+      axis.text.x=element_text(hjust=0.5,vjust=0.5,size=6),
       
       legend.position="none",
       
@@ -18,9 +19,9 @@ theme[["white"]] <- function(base_size=theme[["base_size"]],base_family=theme[["
       panel.grid.major=element_line(size=0.4),
       panel.grid.minor=element_blank(),
       
-      plot.title=element_text(size=rel(1.2),face="bold",hjust=0.5),
-      plot.subtitle=element_text(size=rel(1),hjust=0.5),
-      plot.caption=element_text(size=rel(0.8)),
+      plot.title=element_text(size=12,face="bold",hjust=0.5),
+      plot.subtitle=element_text(size=10,hjust=0.5),
+      plot.caption=element_text(size=6),
       
       plot.margin=unit(c(0.5,0.5,0.5,0.5),"lines"),
       
@@ -35,8 +36,8 @@ theme[["solar"]] <- function(base_size=theme[["base_size"]],base_family=theme[["
     theme(
       axis.ticks=element_blank(),
       axis.line=element_line(size=0.6),
-      axis.title=element_text(size=rel(1),colour="black",face="bold",hjust=0.5,vjust=0.5),
-      axis.text=element_text(size=rel(1),colour="black",hjust=0.5,vjust=0.5),
+      axis.title=element_text(size=10,colour="black",face="bold",hjust=0.5,vjust=0.5),
+      axis.text=element_text(size=8,colour="black",hjust=0.5,vjust=0.5),
       
       legend.position="none",
       
@@ -46,9 +47,9 @@ theme[["solar"]] <- function(base_size=theme[["base_size"]],base_family=theme[["
       panel.grid.major=element_line(size=0.4),
       panel.grid.minor=element_blank(),
       
-      plot.title=element_text(size=rel(1.2),colour="black",face="bold",hjust=0),
-      plot.subtitle=element_text(size=rel(1),colour="black",hjust=0),
-      plot.caption=element_text(size=rel(0.8),colour="black",hjust=0),
+      plot.title=element_text(size=12,colour="black",face="bold",hjust=0),
+      plot.subtitle=element_text(size=8,colour="black",hjust=0),
+      plot.caption=element_text(size=6,colour="black",hjust=0),
       
       plot.margin=unit(c(0.5,0.5,0.5,0.5),"lines"),
       
