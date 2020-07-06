@@ -14,21 +14,20 @@ plots$glsxg <-
   ggplot(aes(x=0,y=n,alpha=focus)) +
   geom_text_repel(
     aes(label=ifelse(focus,player,"")),
-    size=rel(3),
+    size=2.5,
     nudge_x=0.3,
     direction="y",
     hjust=0,
     segment.size=0.4,
     box.padding=0.05
   ) +
-  geom_point(aes(fill=squad),shape=21,size=4,position=position_jitterdodge(jitter.width=0,jitter.height=0.17,dodge.width=0)) +
+  geom_point(aes(fill=squad),shape=21,size=3,position=position_jitterdodge(jitter.width=0,jitter.height=0.17,dodge.width=0)) +
   theme[["solarfacet"]]() +
   facet_wrap("key",scales="free") +
   labs(
     title="Expected Goals (penalties excluded)",
     x=element_blank(),
-    y=element_blank(),
-    caption=caption[[1]]) +
+    y=element_blank()) +
   scale_x_continuous(limit=c(0,1)) +
   scale_y_continuous() +
   scale_fill_manual(values=palette[["epl"]]()) +
@@ -44,21 +43,20 @@ plots$playerxgxa <-
   ggplot(aes(x=0,y=n,alpha=focus)) +
   geom_text_repel(
     aes(label=ifelse(focus,player,"")),
-    size=rel(3),
+    size=2.5,
     nudge_x=0.3,
     direction="y",
     hjust=0,
     segment.size=0.4,
     box.padding=0.05
   ) +
-  geom_point(aes(fill=squad),shape=21,size=4) +
+  geom_point(aes(fill=squad),shape=21,size=3) +
   theme[["solarfacet"]]() +
   facet_wrap("key",scales="free") +
   labs(
     title="Expected Goals (penalties excluded)",
     x=element_blank(),
-    y=element_blank(),
-    caption=caption[[1]]
+    y=element_blank()
   ) +
   scale_x_continuous(limit=c(0,1)) +
   scale_y_continuous() +
@@ -75,7 +73,7 @@ plots$playercomppasses <-
   ggplot(aes(x=0,y=n)) +
   geom_text_repel(
     aes(label=ifelse(focus,player,"")),
-    size=rel(3),
+    size=2.5,
     nudge_x=0.3,
     direction="y",
     hjust=0,
@@ -89,8 +87,7 @@ plots$playercomppasses <-
   labs(
     title="Completed passes",
     x=element_blank(),
-    y=element_blank(),
-    caption=caption[[1]]
+    y=element_blank()
   ) +
   scale_x_continuous(limit=c(0,1)) +
   scale_y_continuous() +
@@ -108,15 +105,13 @@ plots$playernogoals <-
   )) %>%
   mutate(squad=ifelse(focus,squad,"Other")) %>%
   ggplot(aes(x=npxg,y=sh)) +
-  geom_blank(data=data.frame(npxg=0,sh=0)) + # maybe delete?
-  geom_point(aes(fill=squad),size=3,shape=21,colour="black",position=position_jitter(0.005)) +
-  geom_text_repel(aes(label=ifelse(focus,player,"")),size=2) +
+  geom_text_repel(aes(label=ifelse(focus,player,"")),size=2.5) +
+  geom_point(aes(fill=squad),size=2,shape=23,colour="black",position=position_jitter(width=0.05,height=0.2)) +
   theme[["solar"]]() +
   labs(
-    title="Players with no goals",
+    title="Who hasn't scored yet?",
     x="Expected goals",
-    y="Shots",
-    caption=caption[[1]]
+    y="Shots"
   ) +
   scale_fill_manual(values=palette[["epl"]]()) +
   scale_x_continuous(breaks=seq(0,50,1),expand=expansion(add=c(0,0.2))) +
@@ -125,7 +120,7 @@ plots$playernogoals <-
 # Premier League team plots
 
 plots$squadxg1 <-
-  squad %>% # needs to be joined to table?
+  squad %>%
   filter_season %>%
   select(squad,xg,xga) %>%
   mutate(xga=-xga) %>%
@@ -133,7 +128,7 @@ plots$squadxg1 <-
   ggplot(aes(x=0,y=n)) +
   geom_text_repel(
     aes(label=squad),
-    size=rel(3),
+    size=2.5,
     nudge_x=0.5,
     direction="y",
     hjust=0,
@@ -141,14 +136,13 @@ plots$squadxg1 <-
     segment.alpha=0.8,
     box.padding=0.05
   ) +
-  geom_point(aes(fill=squad),size=4,shape=21,colour="black") +
+  geom_point(aes(fill=squad),size=3,shape=21,colour="black") +
   theme[["solarfacet"]]() +
   facet_wrap("key",scales="free") +
   labs(
     title=element_blank(),
     x=element_blank(),
-    y=element_blank(),
-    caption=caption[[1]]
+    y=element_blank()
   ) +
   scale_x_continuous(limit=c(0,1)) +
   scale_y_continuous(breaks=seq(-100,100,5),labels=abs(seq(-100,100,5)),expand=expansion(add=c(2))) +
@@ -159,17 +153,16 @@ plots$squadxg2 <-
   filter_season %>%
   select(squad,xg=expected_npxg,xga) %>%
   ggplot(aes(x=xg,y=xga)) +
-  geom_text_repel(aes(label=squad),size=rel(3)) +
-  geom_point(aes(fill=squad),shape=21,size=3) +
+  geom_text_repel(aes(label=squad),size=2) +
+  geom_point(aes(fill=squad),shape=23,size=2.5) +
   theme[["solar"]]() +
   labs(
     title="Expected goals",
     x="xG for",
-    y="xG against",
-    caption=caption[[1]]
+    y="xG against"
   ) +
-  scale_x_continuous(breaks=seq(0,100,5),expand=expansion(add=c(4,2))) +
-  scale_y_reverse(breaks=seq(0,100,5),expand=expansion(add=c(4,2))) +
+  scale_x_continuous(breaks=seq(0,100,5),expand=expansion(add=c(3,1))) +
+  scale_y_reverse(breaks=seq(0,100,5),expand=expansion(add=c(3,1))) +
   scale_fill_manual(values=palette[["epl"]]()) +
   coord_fixed()
 
@@ -177,11 +170,11 @@ plots$squadxgd <-
   squad %>%
   filter_season %>%
   select(squad,gd=gdiff,xgd=xgdiff) %>%
-  make_long_data(levels=c("gd","xgd"),labels=c("Goal Difference","Expected Goal Difference")) %>%
+  make_long_data(levels=c("gd","xgd"),labels=c("Goal difference","Expected goal difference")) %>%
   ggplot(aes(x=0,y=n)) +
   geom_text_repel(
     aes(label=squad),
-    size=rel(3),
+    size=2,
     nudge_x=0.5,
     direction="y",
     hjust=0,
@@ -189,20 +182,19 @@ plots$squadxgd <-
     segment.alpha=0.8,
     box.padding=0.05
   ) +
-  geom_point(aes(fill=squad),size=4,shape=21,colour="black") +
+  geom_point(aes(fill=squad),size=3,shape=21,colour="black") +
   theme[["solarfacet"]]() +
   facet_wrap("key",scales="free") +
   labs(
     title=element_blank(),
     x=element_blank(),
-    y=element_blank(),
-    caption=caption[[1]]
+    y=element_blank()
   ) +
   scale_x_continuous(limit=c(0,1)) +
-  scale_y_continuous(breaks=seq(-100,100,5),expand=expansion(add=c(3))) +
+  scale_y_continuous(breaks=seq(-100,100,5),expand=expansion(add=3)) +
   scale_fill_manual(values=palette[["epl"]]())
 
-plots$att3rdactions <-
+plots$playeratt3rdactions <-
   players %>%
   select(player,season,squad,touch=touches_att_3rd,pressure=pressures_att_3rd,tackle=tackles_att_3rd) %>%
   filter_season %>%
@@ -212,7 +204,7 @@ plots$att3rdactions <-
   ggplot(aes(x=0,y=n)) +
   geom_text_repel(
     aes(label=ifelse(focus,player,"")),
-    size=rel(3),
+    size=2,
     nudge_x=0.3,
     direction="y",
     hjust=0,
@@ -220,18 +212,18 @@ plots$att3rdactions <-
     segment.alpha=0.8,
     box.padding=0.05
   ) +
-  geom_point(aes(fill=squad,alpha=focus),shape=21,size=2,position=position_jitterdodge(jitter.width=0,jitter.height=0.2,dodge.width=0)) +
+  geom_point(aes(fill=squad,alpha=focus),shape=21,size=2,position=position_jitter(width=0,height=0.1)) +
   theme[["solarfacet"]]() +
   facet_wrap("key",scales="free") +
   labs(
     title="2019-20 attacking third actions",
     x=element_blank(),
-    y=element_blank(),
-    caption=caption[[1]]
+    y=element_blank()
   ) +
   scale_x_continuous(limit=c(0,1)) +
   scale_y_continuous() +
   scale_fill_manual(values=palette[["epl"]]()) +
-  scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.2))
+  scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.1))
 
-save_plots(plots,path=here("plots","EPL"))
+plots_wm <- add_watermark(plots,path=here("images","SB_Regular.png"))
+save_plots(plots_wm,path=here("plots","EPL"))

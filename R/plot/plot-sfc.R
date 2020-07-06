@@ -22,22 +22,19 @@ plots$minutes <-
   mutate(pos=factor(pos,levels=c("GK","CB","FB","DM","AM","FW"))) %>%
   mutate(player=fct_reorder(player,min)) %>%
   ggplot(aes(x=min,y=player)) +
-  geom_segment(aes(y=player,yend=player,x=0,xend=min_start),colour=colour[["sfc"]][["main"]],size=3.5,alpha=0.8) +
-  geom_segment(aes(y=player,yend=player,x=min_start,xend=min),colour=colour[["sfc"]][["light"]],size=3.5,alpha=0.8) +
+  geom_segment(aes(y=player,yend=player,x=0,xend=min_start),colour=colour[["sfc"]][["main"]],size=2.5,alpha=0.8) +
+  geom_segment(aes(y=player,yend=player,x=min_start,xend=min),colour=colour[["sfc"]][["light"]],size=2.5,alpha=0.8) +
   theme[["solar"]]() +
   theme(
     plot.title=element_markdown(),
     axis.line=element_blank(),
-    axis.text.x=element_text(size=rel(0.8),hjust=0.5),
-    axis.text.y=element_text(size=rel(0.8)),
     strip.text.y=element_text(angle=0)
   ) +
   facet_grid(pos ~ ., space="free", scales="free_y") +
   labs(
-    title=glue("League minutes (<b style='color:#D71920'>from start</b> / <b style='color:#ED5C5C'>from bench</b>)"),
+    title=glue("League minutes<br />(<b style='color:#D71920'>from start</b> | <b style='color:#ED5C5C'>from bench</b>)"),
     x=element_blank(),
-    y=element_blank(),
-    caption=caption[[1]]
+    y=element_blank()
   ) +
   scale_x_continuous(breaks=seq(0,90*38,180),expand=expansion(add=c(0,20)))
 
@@ -48,17 +45,17 @@ plots$xgxa <-
   filter_na(c("npxg","xa")) %>%
   mutate(focus=ifelse(npxg>=1|xa>=1,TRUE,FALSE)) %>%
   ggplot(aes(x=npxg,y=xa)) +
-  geom_point(aes(fill=focus),shape=21,size=4,alpha=0.8,colour=colour[["sfc"]][["black"]]) +
-  geom_text_repel(aes(label=ifelse(focus,player,"")),size=rel(4)) +
+  geom_point(aes(fill=focus),shape=23,size=2.5,alpha=0.8,colour=colour[["sfc"]][["black"]]) +
+  geom_text_repel(aes(label=ifelse(focus,player,"")),size=rel(2.5)) +
   theme[["solar"]]() +
-  labs(title="Southampton xG/xA",
-       x="Expected goals",
-       y="Expected assists",
-       caption=caption[[1]]) +
+  labs(
+    title="Southampton xG/xA",
+    x="Expected goals",
+    y="Expected assists"
+  ) +
   scale_x_continuous(limits=c(0,NA),breaks=seq(0,30,1),expand=expansion(add=c(0,0.2))) +
   scale_y_continuous(limits=c(0,NA),breaks=seq(0,30,1),expand=expansion(add=c(0,0.2))) +
-  scale_fill_manual(values=c("TRUE"=colour[["sfc"]][["main"]],"FALSE"=colour[["sfc"]][["grey"]])) +
-  coord_fixed()
+  scale_fill_manual(values=c("TRUE"=colour[["sfc"]][["main"]],"FALSE"=colour[["sfc"]][["grey"]]))
 
 plots$shotskp <-
   players %>%
@@ -83,8 +80,8 @@ plots$shotskp <-
   labs(
     title="Shots / Passes",
     x=element_blank(),
-    y=element_blank(),
-    caption=caption[[1]]) +
+    y=element_blank()
+  ) +
   scale_x_continuous(limit=c(0,1)) +
   scale_y_continuous() +
   scale_colour_manual(values=c("TRUE"=colour[["sfc"]][["black"]],"FALSE"=colour[["sfc"]][["grey"]])) +
@@ -99,7 +96,7 @@ plots$gd <-
   ggplot(aes(x=0,y=n)) +
   geom_text_repel(
     aes(label=player),
-    size=rel(3),
+    size=2.5,
     nudge_x=0.4,
     direction="y",
     hjust=0,
@@ -113,7 +110,7 @@ plots$gd <-
     title="On-pitch goal difference",
     x=element_blank(),
     y=element_blank(),
-    caption=glue("Goals/xG for - against while each player is on the pitch\n",caption[[1]])
+    caption=glue("Goals/xG for minus against while each player is on the pitch")
   ) +
   scale_x_continuous(limit=c(0,1)) +
   scale_y_continuous() +
@@ -142,8 +139,7 @@ plots$passescompleted <-
   labs(
     title="Completed passes",
     x=element_blank(),
-    y=element_blank(),
-    caption=caption[[1]]
+    y=element_blank()
   ) +
   scale_x_continuous(limit=c(0,1)) +
   scale_y_continuous() +
@@ -162,9 +158,9 @@ plots$passfootedness <-
   mutate(body_parts_other=ifelse(body_parts_left<body_parts_right,"Left","Right")) %>%
   mutate(player=fct_reorder(player,desc(body_parts_ratio))) %>%
   ggplot(aes(y=player)) +
-  geom_segment(aes(x=0,xend=body_parts_max,y=player,yend=player,colour=body_parts_main),size=4,alpha=0.8) +
-  geom_segment(aes(x=0,xend=-body_parts_min,y=player,yend=player,colour=body_parts_other),size=4,alpha=0.8) +
-  geom_label(aes(x=0,y=player,label=sprintf("%2.0f%%",100*body_parts_ratio)),size=2,label.padding=unit(0.2, "lines"),label.r = unit(0.08, "lines")) +
+  geom_segment(aes(x=0,xend=body_parts_max,y=player,yend=player,colour=body_parts_main),size=2.5,alpha=0.8) +
+  geom_segment(aes(x=0,xend=-body_parts_min,y=player,yend=player,colour=body_parts_other),size=2.5,alpha=0.8) +
+  geom_label(aes(x=0,y=player,label=sprintf("%2.0f%%",100*body_parts_ratio)),size=1.6,label.padding=unit(0.16, "lines"),label.r = unit(0.08, "lines")) +
   theme[["solar"]]() +
   theme(
     plot.title=element_markdown()
@@ -172,10 +168,9 @@ plots$passfootedness <-
   labs(
     title=glue("<b style='color:#265DAB'>Left foot</b> / <b style='color:#CB2027'>Right foot</b> passes"),
     x=element_blank(),
-    y=element_blank(),
-    caption=caption[[1]]
+    y=element_blank()
   ) +
-  scale_x_continuous(breaks=seq(-2000,2000,200),labels=abs(seq(-2000,2000,200)),expand=expansion(add=c(20))) +
+  scale_x_continuous(breaks=seq(-2000,2000,200),labels=abs(seq(-2000,2000,200)),expand=expansion(add=c(10))) +
   scale_colour_manual(values=c("Left"=colour[["medium"]][[1]],"Right"=colour[["medium"]][[8]]))
 
 plots$sca <-
@@ -187,15 +182,15 @@ plots$sca <-
   mutate(sca_other=sca_drib+sca_sh+sca_fld) %>%
   make_long_data(levels=c("sca_passlive","sca_passdead","sca_other"),labels=c("Open play pass","Dead ball pass","Dribble/Shot/Fouled")) %>%
   mutate(focus=case_when(
-    (key=="Open play pass" & min_rank(desc(n))<=11) ~ TRUE,
+    (key=="Open play pass" & min_rank(desc(n))<=15) ~ TRUE,
     (key=="Dead ball pass" & min_rank(desc(n))<=2) ~ TRUE,
-    (key=="Dribble/Shot/Fouled" & min_rank(desc(n))<=5) ~ TRUE,
+    (key=="Dribble/Shot/Fouled" & min_rank(desc(n))<=8) ~ TRUE,
     TRUE ~ FALSE
   )) %>%
   ggplot(aes(x=0,y=n)) +
   geom_text_repel(
     aes(label=ifelse(focus,player,"")),
-    size=rel(3),
+    size=rel(2.5),
     nudge_x=0.3,
     direction="y",
     hjust=0,
@@ -212,7 +207,7 @@ plots$sca <-
     title="Shot Creating Actions",
     x=element_blank(),
     y=element_blank(),
-    caption=glue("Shot Creating Actions are the two actions directly leading to a shot\n",caption[[1]])
+    caption=glue("Shot Creating Actions are the two actions directly leading to a shot")
   ) +
   scale_x_continuous(limit=c(0,1)) +
   scale_y_continuous() +
@@ -228,24 +223,23 @@ plots$xgtrend <-
   mutate(match=glue::glue("{opposition} {shortha} {glsf}-{glsa}")) %>%
   mutate(match=reorder_within(match, date, season)) %>%
   ggplot(aes(x=match)) +
-  geom_point(aes(y=xgf),colour="darkred",alpha=0.8,shape="x") +
+  geom_point(aes(y=xgf),size=1,colour="darkred",fill="darkred",alpha=0.5,shape=23) +
   geom_spline(aes(y=xgf,group=season),spar=0.6,colour="darkred",linetype="longdash",size=0.7) +
-  geom_point(aes(y=xga),colour="royalblue",alpha=0.8,shape="x") +
+  geom_point(aes(y=xga),size=1,colour="royalblue",fill="royalblue",alpha=0.5,shape=23) +
   geom_spline(aes(y=xga,group=season),spar=0.6,colour="royalblue",linetype="longdash",size=0.7) +
   theme[["solar"]]() +
   theme(
-    axis.text.x=element_text(size=rel(0.6),angle=60,hjust=1),
-    axis.title.y=element_markdown(size=rel(0.8),colour="black"),
-    axis.text.y=element_text(size=rel(0.8)),
-    plot.title=element_markdown(colour="black"),
-    plot.caption=element_text(colour="black"),
+    axis.text.x=element_text(size=6,angle=60,hjust=1),
+    axis.title.y=element_markdown(),
+    axis.text.y=element_text(),
+    plot.title=element_markdown(),
+    plot.caption=element_text(),
     strip.text=element_blank()
   ) +
   labs(
-    title=glue("Southampton <b style='color:darkred'>attack</b> / <b style='color:royalblue'>defence</b> trend"),
+    title=glue("Southampton <b style='color:darkred'>attack</b> / <b style='color:royalblue'>defence</b> xG trend"),
     x=element_blank(),
-    y=glue("Expected goals <b style='color:darkred'>for</b> / <b style='color:royalblue'>against</b>"),
-    caption=caption[[1]]
+    y=glue("Expected goals <b style='color:darkred'>for</b> / <b style='color:royalblue'>against</b>")
   ) +
   scale_x_reordered() +
   scale_y_continuous(limits=c(0,NA),expand=expansion(add=c(0,0.1))) +
@@ -260,22 +254,23 @@ plots$xgsegment <-
   mutate(match=glue::glue("{opposition} {shortha} {glsf}-{glsa}")) %>%
   mutate(match=reorder_within(match, desc(date), season)) %>%
   ggplot(aes(y=match)) +
-  geom_segment(aes(x=0,xend=xgf,y=match,yend=match),colour=colour[["sfc"]][["light"]],size=3.5) +
-  geom_segment(aes(x=0,xend=-xga,y=match,yend=match),colour=colour[["medium"]][[1]],size=3.5) +
+  geom_segment(aes(x=0,xend=xgf,y=match,yend=match),colour=colour[["sfc"]][["light"]],size=2.5) +
+  geom_segment(aes(x=0,xend=-xga,y=match,yend=match),colour=colour[["medium"]][[1]],size=2.5) +
   theme[["solar"]]() +
   theme(
-    plot.title=element_markdown(),
-    axis.text.y=element_text(size=rel(0.8)),
+    plot.title=element_markdown(size=8,hjust=0.5),
+    axis.text.x=element_text(),
+    axis.text.y=element_text(size=6),
     strip.text=element_blank()
   ) +
   labs(
     title=glue("<b style='color:#265DAB'>Opposition xG</b> | <b style='color:#D71920'>Southampton xG</b>"),
     x=element_blank(),
-    y=element_blank(),
-    caption=caption[[1]]
+    y=element_blank()
   ) +
   scale_x_continuous(breaks=seq(-10,10,1),labels=abs(seq(-10,10,1)),expand=expansion(add=c(0.1,1))) +
   scale_y_reordered() +
   facet_grid(rows=vars(season), space="free", scales="free_y")
 
-save_plots(plots,path=here("plots","SFC"))
+plots_wm <- add_watermark(plots,path=here("images","SB_Regular.png"))
+save_plots(plots_wm,path=here("plots","SFC"))
