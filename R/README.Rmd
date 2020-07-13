@@ -1,6 +1,6 @@
 ---
 # title: "football-stats"
-# author: "saintsnumbers"
+# author: "saintsbynumbers"
 output: github_document
 # date: 2019-07-28
 ---
@@ -57,10 +57,10 @@ file.remove(here::here("images","plot1.jpg"))
 file.remove(here::here("images","plot2.jpg"))
 file.remove(here::here("images","plot3.jpg"))
 file.remove(here::here("images","plot4.jpg"))
-file.copy(from=here::here("plots","SFC","Minutes.jpg"),to=here::here("images","plot1.jpg"))
-file.copy(from=here::here("plots","SFC","xGtrend.jpg"),to=here::here("images","plot2.jpg"))
-file.copy(from=here::here("plots","EPL","PlayerCompPasses.jpg"),to=here::here("images","plot3.jpg"))
-file.copy(from=here::here("plots","EPL","PlayerNoGoals.jpg"),to=here::here("images","plot4.jpg"))
+file.copy(from=here::here("plots","SFC","minutes.jpg"),to=here::here("images","plot1.jpg"))
+file.copy(from=here::here("plots","SFC","xgtrend.jpg"),to=here::here("images","plot2.jpg"))
+file.copy(from=here::here("plots","EPL","playercomppasses.jpg"),to=here::here("images","plot3.jpg"))
+file.copy(from=here::here("plots","EPL","playernogoals.jpg"),to=here::here("images","plot4.jpg"))
 ```
 
 <center>
