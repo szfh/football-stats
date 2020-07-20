@@ -26,10 +26,6 @@ source(here("R","raw","raw-utils.R"))
                       "misc","misc",
 )
 
-.data_types_league <- tribble(~page,
-                              "league",
-)
-
 .data_types_league_all <- tribble(~page,
                                   "schedule",
                                   "league",
