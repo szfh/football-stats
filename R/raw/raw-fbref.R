@@ -26,12 +26,6 @@ source(here("R","raw","raw-utils.R"))
                       "misc","misc",
 )
 
-# .data_types_league_all <- tribble(~page,
-#                                   "schedule",
-#                                   "league",
-#                                   "leagueha",
-# )
-
 .data_types_league_all <- tribble(~page,
                                   "schedule",
                                   "league",
@@ -40,10 +34,6 @@ source(here("R","raw","raw-utils.R"))
 
 
 fbref_saved <- readRDS(here("data","fbref-raw.rds"))
-# codes <- readRDS(here("data","fbref-raw-codes.rds"))
-
-# codes <- list(team=fbref_get_codes_squads(.eplseasons),match=fbref_get_codes_matches(.eplseasons))
-# codes <- bind_rows(team=fbref_get_codes_squads(.eplseasons),match=fbref_get_codes_matches(.eplseasons))
 
 fbref_all <- tibble() %>% # all data parameters
   bind_rows(crossing(.data_types_ps,.tables_ps)) %>% #players and squads * datatypes
@@ -57,7 +47,6 @@ fbref_new <-
   anti_join(fbref_all, fbref_keep) %>%
   mutate(page_url=fbref_get_url(page,seasoncode,stattype,statselector)) %>%
   mutate(content_selector_id=fbref_get_selector(page,seasoncode,stattype,statselector)) %>%
-  # slice(1:3) %>%
   mutate(data=pmap(list(page_url, content_selector_id, page, stattype), possibly(fbref_scrape, otherwise=NA)))
 
 fbref <- bind_rows(fbref_keep,fbref_new) %>%
