@@ -34,6 +34,7 @@ output: github_document
 1. [fbref pressure (Python)](https://mplsoccer.readthedocs.io/en/latest/gallery/plots/plot_fbref.html)
 1. [Abhi Sharma passmaps](https://sharmaabhishekk.github.io/projects/)
 1. [The Significant Game](https://thesignificantgame.com/portfolio/)
+1. [How sports scientists can use ggplot2](https://www.mitchhenderson.org/2020/04/how-sports-scientists-can-use-ggplot2-in-r-to-make-better-visualisations/)
 
 ### Data resources
 
