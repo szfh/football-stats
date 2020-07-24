@@ -49,6 +49,7 @@ output: github_document
 1. [ClubELO](http://clubelo.com/)
 1. [SoccerSTATS](https://www.soccerstats.com/latest.asp?league=england)
 1. [FootballGeek](https://www.footballgeek.io/)
+1. [Canadian PL data](https://twitter.com/CharlieNData/status/1286677071448748034)
 
 ## fbref data visualisation
 
