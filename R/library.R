@@ -7,6 +7,7 @@ pacman::p_load(
   tidytext,
   glue,
   janitor,
+  polite,
   understatr,
   ggformula,
   gghighlight,
