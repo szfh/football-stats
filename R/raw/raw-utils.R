@@ -36,11 +36,20 @@ fbref_scrape <- function(page_url=NA,content_selector_id=NA,page=NA,stattype=NA)
     read_html()
   
   # read table
-  data_table <-
-    data_html %>%
+  # data_table <-
+  #   data_html %>%
+  #   html_table(header=FALSE) %>%
+  #   extract2(1)
+  
+  # browser()
+  session <- polite::bow(url,user_agent="@saintsbynumbers")
+  data_html <- polite::scrape(session)
+  
+  data_table <- data_html %>%
     html_table(header=FALSE) %>%
     extract2(1)
   
+  # browser()
   # clean names
   data_table <- fbref_clean_names(data_table,page)
   
