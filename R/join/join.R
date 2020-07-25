@@ -1,4 +1,4 @@
-fbref <- readRDS(file=here("data","fbref-tidy.rds"))
+fbref <- readRDS(file=here("data","fbref-raw.rds"))
 
 table <- fbref %>%
   filter(page=="league") %>%
