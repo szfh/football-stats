@@ -105,8 +105,8 @@ plots$playernogoals <-
   )) %>%
   mutate(squad=ifelse(focus,squad,"Other")) %>%
   ggplot(aes(x=npxg,y=sh)) +
-  geom_text_repel(aes(label=ifelse(focus,player,"")),size=2.5) +
-  geom_point(aes(fill=squad),size=2,shape=23,colour="black",position=position_jitter(width=0.05,height=0.2)) +
+  geom_text_repel(aes(label=ifelse(focus,player,"")),size=2,position=position_jitter(width=0.05,height=0.2,seed=2)) +
+  geom_point(aes(fill=squad),size=2,shape=23,colour="black",position=position_jitter(width=0.05,height=0.2,seed=2)) +
   theme[["solar"]]() +
   labs(
     title="Who hasn't scored yet?",
