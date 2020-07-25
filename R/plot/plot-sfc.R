@@ -218,6 +218,7 @@ plots$xgtrend <-
   matches %>%
   make_long_matches() %>%
   filter_season_team() %>%
+  mutate(season=ifelse(date<as.Date("2020-03-10"),"2019-20 part 1","2019-20 part 2")) %>%
   filter(!is.na(homegls)) %>%
   mutate(shortha=ifelse(ha=="home","H","A")) %>%
   mutate(match=glue::glue("{opposition} {shortha} {glsf}-{glsa}")) %>%
@@ -249,6 +250,7 @@ plots$xgsegment <-
   matches %>%
   make_long_matches() %>%
   filter_season_team() %>%
+  mutate(season=ifelse(date<as.Date("2020-03-10"),"2019-20 part 1","2019-20 part 2")) %>%
   filter(!is.na(homegls)) %>%
   mutate(shortha=ifelse(ha=="home","H","A")) %>%
   mutate(match=glue::glue("{opposition} {shortha} {glsf}-{glsa}")) %>%
