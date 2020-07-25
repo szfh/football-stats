@@ -1,4 +1,9 @@
+source(here("R","raw","raw-utils.R"))
 fbref <- readRDS(file=here("data","fbref-raw.rds"))
+
+fbref <- fbref %>%
+  mutate(data=pmap(list(data,page,stattype), possibly(fbref_tidy, otherwise=NA))) %>%
+  select(-any_of(c("statselector","seasoncode","page_url","content_selector_id")))
 
 table <-
   fbref %>%
