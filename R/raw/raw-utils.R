@@ -48,14 +48,10 @@ fbref_scrape <- function(page_url=NA,content_selector_id=NA,page=NA,stattype=NA)
   data_table <- data_html %>%
     html_table(header=FALSE) %>%
     extract2(1)
-  
-  # browser()
-  # clean names
+
+  # clean names and remove non-data rows
   data_table <- fbref_clean_names(data_table,page)
-  
-  # tidy
-  data_table <- fbref_tidy(data_table,page,stattype)
-  
+
   # add url codes
   data <- fbref_scrape_href(data_html,data_table,page)
   
@@ -224,10 +220,13 @@ fbref_clean_names <- function(data,page){
 
 fbref_tidy <- function(data,page,stattype){
   
-  if(page %in% c("squad","player","schedule","league","leagueha")){
+  # browser()
+  
+  if(page %in% c("squad","player","schedule","league","leagueha")){ # everything
     data %<>%
       select(-any_of(c("rk","matches","notes","match_report","top_team_scorer","goalkeeper"))) %>%
-      select(-contains(c("pc","90")))
+      select(-contains(c("pc","90"))) %>%
+      select(-any_of(c("datatype","desc")))
   }
   if(page=="player"){
     data %<>%
