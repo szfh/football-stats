@@ -91,9 +91,10 @@ fbref_scrape_href <- function(data_html,data_table,page=NA){
     
     # d <- nrow(data_table) - nrow(data_href)
     
-    data_href <- data_href %>%
-      add_row(code=(rep(NA,nrow(data_table) - nrow(data_href)))) #extend df
-    
+    if(nrow(data_table) - nrow(data_href) > 0){
+      data_href <- data_href %>%
+        add_row(code=(rep(NA,nrow(data_table) - nrow(data_href)))) #extend df
+    }
     data <- cbind(data_table,data_href)
   } else {
     data <- data_table
