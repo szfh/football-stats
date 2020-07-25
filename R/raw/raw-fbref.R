@@ -32,12 +32,11 @@ source(here("R","raw","raw-utils.R"))
                                   "leagueha",
 )
 
-
 fbref_saved <- readRDS(here("data","fbref-raw.rds"))
 
 fbref_all <- tibble() %>% # all data parameters
-  bind_rows(crossing(.data_types_ps,.tables_ps)) %>% #players and squads * datatypes
-  bind_rows(.data_types_league_all) %>% #fixtures
+  bind_rows(crossing(.data_types_ps,.tables_ps)) %>% # players + squads * datatypes
+  bind_rows(.data_types_league_all) %>% # fixtures
   crossing(.eplseasons)
 
 fbref_keep <- fbref_saved %>% # remove data to be scraped from saved
@@ -47,6 +46,9 @@ fbref_new <-
   anti_join(fbref_all, fbref_keep) %>%
   mutate(page_url=fbref_get_url(page,seasoncode,stattype,statselector)) %>%
   mutate(content_selector_id=fbref_get_selector(page,seasoncode,stattype,statselector)) %>%
+  print
+
+fbref_new %<>%
   mutate(data=pmap(list(page_url, content_selector_id, page, stattype), possibly(fbref_scrape, otherwise=NA)))
 
 fbref <- bind_rows(fbref_keep,fbref_new) %>%
