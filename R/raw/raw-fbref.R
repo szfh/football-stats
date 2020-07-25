@@ -26,15 +26,12 @@ source(here("R","raw","raw-utils.R"))
                       "misc","misc",
 )
 
-.data_types_league <- tribble(~page,
-                              "league",
-)
-
 .data_types_league_all <- tribble(~page,
                                   "schedule",
                                   "league",
                                   "leagueha",
 )
+
 
 fbref_saved <- readRDS(here("data","fbref-raw.rds"))
 
@@ -50,10 +47,11 @@ fbref_new <-
   anti_join(fbref_all, fbref_keep) %>%
   mutate(page_url=fbref_get_url(page,seasoncode,stattype,statselector)) %>%
   mutate(content_selector_id=fbref_get_selector(page,seasoncode,stattype,statselector)) %>%
-  mutate(data = map2(page_url, content_selector_id, possibly(fbref_scrape, otherwise=NA)))
+  mutate(data=pmap(list(page_url, content_selector_id, page, stattype), possibly(fbref_scrape, otherwise=NA)))
 
 fbref <- bind_rows(fbref_keep,fbref_new) %>%
   filter(!is.na(data))
 
 saveRDS(fbref,file=here("data","fbref-raw.rds"))
-rm(fbref,fbref_all,fbref_keep,fbref_new,fbref_saved)
+# saveRDS(codes,file=here("data","fbref-raw-codes.rds"))
+# rm(fbref,fbref_all,fbref_keep,fbref_new,fbref_saved)

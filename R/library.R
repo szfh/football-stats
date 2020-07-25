@@ -8,6 +8,7 @@ pacman::p_load(
   glue,
   janitor,
   cowplot,
+  polite,
   understatr,
   ggformula,
   gghighlight,
