@@ -1,11 +1,13 @@
 fbref <- readRDS(file=here("data","fbref-raw.rds"))
 
-table <- fbref %>%
+table <-
+  fbref %>%
   filter(page=="league") %>%
   select(-page,-stattype) %>%
   unnest(cols=data)
 
-squad <- fbref %>%
+squad <-
+  fbref %>%
   filter(page=="squad") %>%
   select(-page) %>%
   unnest(cols=data) %>%
@@ -15,9 +17,12 @@ squad <- fbref %>%
   data %>%
   reduce(full_join)
 
-squad <- table %>% left_join(squad)
+squad <-
+  table %>%
+  left_join(squad)
 
-players <- fbref %>%
+players <-
+  fbref %>%
   filter(page=="player") %>%
   select(-page) %>%
   unnest(cols=data) %>%
@@ -27,7 +32,8 @@ players <- fbref %>%
   data %>%
   reduce(full_join)
 
-matches <- fbref %>%
+matches <-
+  fbref %>%
   filter(page=="schedule") %>%
   select(-page,-stattype) %>%
   unnest(cols=data)
