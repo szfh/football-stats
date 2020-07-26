@@ -14,7 +14,7 @@ plots$minutes <-
   mutate(
     pos=case_when(
       player %in% c("Kevin Danso","Jannik Vestergaard","Jan Bednarek","Jack Stephens","Maya Yoshida") ~ "CB",
-      player %in% c("Ryan Bertrand","Cédric Soares","Yan Valery","Kyle Walker-Peters") ~ "FB",
+      player %in% c("Ryan Bertrand","Cédric Soares","Yan Valery","Kyle Walker-Peters","Jake Vokins") ~ "FB",
       player %in% c("James Ward-Prowse","Pierre Højbjerg","Oriol Romeu","William Smallbone") ~ "DM",
       player %in% c("Nathan Redmond","Stuart Armstrong","Sofiane Boufal","Moussa Djenepo","Nathan Tella") ~ "AM",
       TRUE ~ pos)
@@ -218,6 +218,7 @@ plots$xgtrend <-
   matches %>%
   make_long_matches() %>%
   filter_season_team() %>%
+  mutate(season=ifelse(date<as.Date("2020-03-10"),"2019-20 part 1","2019-20 part 2")) %>%
   filter(!is.na(homegls)) %>%
   mutate(shortha=ifelse(ha=="home","H","A")) %>%
   mutate(match=glue::glue("{opposition} {shortha} {glsf}-{glsa}")) %>%
@@ -249,6 +250,7 @@ plots$xgsegment <-
   matches %>%
   make_long_matches() %>%
   filter_season_team() %>%
+  mutate(season=ifelse(date<as.Date("2020-03-10"),"2019-20 part 1","2019-20 part 2")) %>%
   filter(!is.na(homegls)) %>%
   mutate(shortha=ifelse(ha=="home","H","A")) %>%
   mutate(match=glue::glue("{opposition} {shortha} {glsf}-{glsa}")) %>%
