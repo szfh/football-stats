@@ -99,8 +99,8 @@ plots$playernogoals <-
   filter_season %>% 
   select(player,squad,sh=standard_sh,gls=standard_gls,npxg=expected_npxg) %>%
   filter(gls==0) %>%
-  mutate(focus=case_when(percent_rank(sh)>0.9 ~ TRUE,
-                         percent_rank(npxg)>0.9 ~ TRUE,
+  mutate(focus=case_when(percent_rank(sh)>0.92 ~ TRUE,
+                         percent_rank(npxg)>0.92 ~ TRUE,
                          TRUE ~ FALSE
   )) %>%
   mutate(squad=ifelse(focus,squad,"Other")) %>%
