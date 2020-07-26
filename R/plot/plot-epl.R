@@ -117,6 +117,34 @@ plots$playernogoals <-
   scale_x_continuous(breaks=seq(0,50,1),expand=expansion(add=c(0,0.2))) +
   scale_y_continuous(breaks=seq(0,200,5),expand=expansion(add=c(0,2)))
 
+plots$playernogoalsallseasons <-
+  players %>%
+  select(player,squad,season,sh=standard_sh,gls=standard_gls,npxg=expected_npxg) %>%
+  filter(gls==0) %>%
+  mutate(focus=case_when(percent_rank(sh)>0.96 ~ TRUE,
+                         percent_rank(npxg)>0.94 ~ TRUE,
+                         TRUE ~ FALSE
+  )) %>%
+  mutate(season=ifelse(focus,season,"Other")) %>%
+  ggplot(aes(x=npxg,y=sh)) +
+  geom_text_repel(aes(label=ifelse(focus,player,"")),size=1.5,position=position_jitter(width=0.05,height=0.2,seed=2)) +
+  geom_point(aes(fill=season),size=2,shape=23,colour="black",position=position_jitter(width=0.05,height=0.2,seed=2)) +
+  theme[["solar"]]() +
+  theme(
+    legend.position=c(0.9,0.15),
+    legend.title=element_blank(),
+    legend.text=element_text(colour="black"),
+    legend.key=element_rect(fill=NA)
+  ) + 
+  labs(
+    title="Who didn't score all season?",
+    x="Expected goals",
+    y="Shots"
+  ) +
+  scale_fill_manual(breaks=c("2017-18","2018-19","2019-20"),values=c("2017-18"=colour$dark[3],"2018-19"=colour$dark[1],"2019-20"=colour$dark[8],"Other"="lightgrey")) +
+  scale_x_continuous(breaks=seq(0,50,1),expand=expansion(add=c(0,0.2))) +
+  scale_y_continuous(breaks=seq(0,200,5),expand=expansion(add=c(0,2)))
+
 # Premier League team plots
 
 plots$squadxg1 <-
