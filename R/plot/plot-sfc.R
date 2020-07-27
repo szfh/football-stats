@@ -28,6 +28,7 @@ plots$minutes <-
   theme(
     plot.title=element_markdown(),
     axis.line=element_blank(),
+    axis.text=element_text(size=7),
     strip.text.y=element_text(angle=0)
   ) +
   facet_grid(pos ~ ., space="free", scales="free_y") +
