@@ -106,7 +106,7 @@ plots$playernogoals <-
   mutate(squad=ifelse(focus,squad,"Other")) %>%
   ggplot(aes(x=npxg,y=sh)) +
   geom_text_repel(aes(label=ifelse(focus,player,"")),size=2,position=position_jitter(width=0.05,height=0.2,seed=2)) +
-  geom_point(aes(fill=squad),size=2,shape=23,colour="black",position=position_jitter(width=0.05,height=0.2,seed=2)) +
+  geom_point(aes(fill=squad,alpha=focus),size=2,shape=23,colour="black",position=position_jitter(width=0.05,height=0.2,seed=2)) +
   theme[["solar"]]() +
   labs(
     title="Who hasn't scored yet?",
@@ -115,7 +115,8 @@ plots$playernogoals <-
   ) +
   scale_fill_manual(values=palette[["epl"]]()) +
   scale_x_continuous(breaks=seq(0,50,1),expand=expansion(add=c(0,0.2))) +
-  scale_y_continuous(breaks=seq(0,200,5),expand=expansion(add=c(0,2)))
+  scale_y_continuous(breaks=seq(0,200,5),expand=expansion(add=c(0,2))) +
+  scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.2))
 
 plots$playernogoalsallseasons <-
   players %>%
@@ -128,10 +129,10 @@ plots$playernogoalsallseasons <-
   mutate(season=ifelse(focus,season,"Other")) %>%
   ggplot(aes(x=npxg,y=sh)) +
   geom_text_repel(aes(label=ifelse(focus,player,"")),size=1.5,position=position_jitter(width=0.05,height=0.2,seed=2)) +
-  geom_point(aes(fill=season),size=2,shape=23,colour="black",position=position_jitter(width=0.05,height=0.2,seed=2)) +
+  geom_point(aes(fill=season,alpha=focus),size=2,shape=23,colour="black",position=position_jitter(width=0.05,height=0.2,seed=2)) +
   theme[["solar"]]() +
   theme(
-    legend.position=c(0.9,0.15),
+    legend.position=c(0.9,0.18),
     legend.title=element_blank(),
     legend.text=element_text(colour="black"),
     legend.key=element_rect(fill=NA)
@@ -143,7 +144,8 @@ plots$playernogoalsallseasons <-
   ) +
   scale_fill_manual(breaks=c("2017-18","2018-19","2019-20"),values=c("2017-18"=colour$dark[3],"2018-19"=colour$dark[1],"2019-20"=colour$dark[8],"Other"="lightgrey")) +
   scale_x_continuous(breaks=seq(0,50,1),expand=expansion(add=c(0,0.2))) +
-  scale_y_continuous(breaks=seq(0,200,5),expand=expansion(add=c(0,2)))
+  scale_y_continuous(breaks=seq(0,200,5),expand=expansion(add=c(0,2))) +
+  scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.2),guide="none")
 
 # Premier League team plots
 
