@@ -40,7 +40,8 @@ fbref_all <- tibble() %>% # all data parameters
   crossing(.eplseasons)
 
 fbref_keep <- fbref_saved %>% # remove data to be scraped from saved
-  filter(season!="2019-20")
+  # filter(season!="2019-20")
+  filter(season!="2020-21")
 
 fbref_new <-
   anti_join(fbref_all, fbref_keep) %>%
