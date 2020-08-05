@@ -53,3 +53,15 @@ understat_scrape_league <- function(league="EPL", year="2019", str){
   
   return(data)
 }
+
+understat_scrape_match <- function(datatype,id){
+
+  if(datatype=="stats"){
+    data <- get_match_stats(id)
+  }
+  if(datatype=="shots"){
+    data <- get_match_shots(id)
+  }
+  
+  return(data)
+}
