@@ -55,11 +55,12 @@ understat_all2 <- data.frame() %>%
   glimpse
 
 understat_keep2 <- understat_all2 %>%
-  filter(season!=2019)
+  filter(season!=2020)
 
 understat_new2 <-
   anti_join(understat_all2, understat_keep2) %>%
-  slice(1:10)
+  # slice(1:10) %>%
+  glimpse
 
 understat_new2 <- understat_new2 %>%
   mutate(data=pmap(list(datatype,id),possibly(understat_scrape_match, otherwise=NA)))
