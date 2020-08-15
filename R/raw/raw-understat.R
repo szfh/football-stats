@@ -5,11 +5,11 @@ source(here("R","raw","raw-utils.R"))
                        "2018",
 )
 
-.datatypes_1 <- tribble(~datatype,
+.datatypes_league <- tribble(~datatype,
                        "league",
 )
 
-.tables_1 <- tribble(~stattype, ~statselector,
+.tables_league <- tribble(~stattype, ~statselector,
                      "schedule","datesData",
                      "players","playersData",
                      # "teams","teamsData",
@@ -18,7 +18,7 @@ source(here("R","raw","raw-utils.R"))
 understat_saved <- readRDS(here("data","understat-raw.rds"))
 
 understat_all <- data.frame() %>%
-  bind_rows(crossing(.datatypes_1,.tables_1)) %>%
+  bind_rows(crossing(.datatypes_league,.tables_league)) %>%
   crossing(.eplseasons) %>%
   print
 
@@ -38,7 +38,7 @@ understat_new <-
   # select(-c(datatype,stattype,statselector)) %>%
   glimpse
 
-.match_data <- tribble(~datatype,
+.datatypes_match <- tribble(~datatype,
                        "stats",
                        "shots"
 )
@@ -49,7 +49,7 @@ understat_new <-
 #   filter(isResult==TRUE)
 
 understat_all2 <- data.frame() %>%
-  bind_rows(crossing(.match_id,.match_data) %>%
+  bind_rows(crossing(.match_id,.datatypes_match) %>%
               filter(isResult==TRUE)) %>%
   glimpse
 
