@@ -1,5 +1,5 @@
 # libraries
-# source(here::here("R","library.R"))
+source(here::here("R","library.R"))
 
 # knit markdown
 # knitr::knit(here::here("R","README.Rmd"))

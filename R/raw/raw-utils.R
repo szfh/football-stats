@@ -48,10 +48,10 @@ fbref_scrape <- function(page_url=NA,content_selector_id=NA,page=NA,stattype=NA)
   data_table <- data_html %>%
     html_table(header=FALSE) %>%
     extract2(1)
-
+  
   # clean names and remove non-data rows
   data_table <- fbref_clean_names(data_table,page)
-
+  
   # add url codes
   data <- fbref_scrape_href(data_html,data_table,page)
   
@@ -214,6 +214,7 @@ fbref_clean_names <- function(data,page){
   }
   
   data %<>% type_convert # refactor data types
+}
 
 understat_scrape_league <- function(league="EPL", year="2019", str){
   url <- glue("https://understat.com/league/{league}/{year}")
@@ -261,7 +262,7 @@ fbref_tidy <- function(data,page,stattype){
 }
 
 understat_scrape_match <- function(datatype,id){
-
+  
   if(datatype=="stats"){
     data <- get_match_stats(id)
   }
