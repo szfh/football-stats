@@ -1,5 +1,6 @@
 source(here("R","raw","raw-utils.R"))
 fbref <- readRDS(file=here("data","fbref-raw.rds"))
+understat <- readRDS(file=here("data","understat-raw.rds"))
 
 fbref <- fbref %>%
   mutate(data=pmap(list(data,page,stattype), possibly(fbref_tidy, otherwise=NA))) %>%
