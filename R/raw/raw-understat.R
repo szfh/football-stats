@@ -1,27 +1,76 @@
-raw <- list()
+source(here("R","raw","raw-utils.R"))
 
-league <- c("EPL")
-year <- c(2017,2018)
+.eplseasons <- tribble(~season,
+                       "2019",
+                       "2018",
+)
 
-raw[["understat"]][["teams"]] <- 
-  expand_grid(league,year) %>% 
-  transmute(
-    data = map2(league, year, understatr::get_league_teams_stats)
-  ) %>%
-  unnest(data)
+.datatypes_1 <- tribble(~datatype,
+                       "league",
+)
 
-raw[["understat"]][["teamssum"]] <- raw[["understat"]][["teams"]] %>%
-  group_by(team_name, year) %>%
-  summarise_if(is.numeric, sum, na.rm = TRUE)
+.tables_1 <- tribble(~stattype, ~statselector,
+                     "schedule","datesData",
+                     "players","playersData",
+                     # "teams","teamsData",
+)
 
-raw[["understat"]][["players"]] <-
-  raw[["understat"]][["teams"]] %>%
-  distinct(league_name, year, team_name) %>% 
-  # top_n(2) %>%
-  transmute(
-    data = map2(team_name, year, understatr::get_team_players_stats)
-  ) %>%
-  unnest(data)
+understat_saved <- readRDS(here("data","understat-raw.rds"))
 
-saveRDS(raw,file=here("data","understat-static.rds"))
-rm(raw)
+understat_all <- data.frame() %>%
+  bind_rows(crossing(.datatypes_1,.tables_1)) %>%
+  crossing(.eplseasons) %>%
+  print
+
+understat_keep <- understat_saved %>%
+  filter(season!=2020)
+
+understat_new <-
+  anti_join(understat_all, understat_keep) %>%
+  mutate(data=pmap(list("EPL",season,statselector),possibly(understat_scrape_league, otherwise=NA))) %>%
+  print
+
+###
+.match_id <- understat_saved %>%
+  filter(stattype=="schedule") %>%
+  unnest(cols=data) %>%
+  select(season,id,isResult) %>%
+  # select(-c(datatype,stattype,statselector)) %>%
+  glimpse
+
+.match_data <- tribble(~datatype,
+                       "stats",
+                       "shots"
+)
+
+# match_id_scrape <-
+#   crossing(.match_id,.match_data) %>%
+#   filter(datatype=="stats") %>%
+#   filter(isResult==TRUE)
+
+understat_all2 <- data.frame() %>%
+  bind_rows(crossing(.match_id,.match_data) %>%
+              filter(isResult==TRUE)) %>%
+  glimpse
+
+understat_keep2 <- understat_all2 %>%
+  filter(season!=2019)
+
+understat_new2 <-
+  anti_join(understat_all2, understat_keep2) %>%
+  slice(1:20)
+
+understat_new2 <- understat_new2 %>%
+  mutate(data=pmap(list(datatype,id),possibly(understat_scrape_match, otherwise=NA)))
+# saveRDS(match_id_scrape,file=here("data","understat-test1.rds"))
+
+###
+
+understat <- bind_rows(understat_keep, understat_new, understat_new2) %>%
+  filter(!is.na(data)) %>%
+  relocate(data,.after=last_col())
+
+# understat <- bind_rows(understat_keep, understat_new) %>%
+#   filter(!is.na(data))
+
+saveRDS(understat,here("data","understat-raw.rds"))
