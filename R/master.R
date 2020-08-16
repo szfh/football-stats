@@ -6,6 +6,9 @@ source(here::here("R","library.R"))
 
 # raw
 # source(here("R","raw","raw-fbref.R"))
+# scrape_fbref()
+# source(here("R","raw","raw-understat.R"))
+# scrape_understat()
 
 # plot
 # source(here("R","join","join.R"))
