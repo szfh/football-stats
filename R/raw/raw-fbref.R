@@ -60,5 +60,3 @@ scrape_fbref <- function(save_path=here("data","fbref-raw.rds")){
   
   return(fbref)
 }
-
-
