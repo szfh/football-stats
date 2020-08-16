@@ -1,4 +1,3 @@
-source(here::here("R","library.R"))
 source(here("R","raw","raw-utils.R"))
 
 scrape_understat <- function(save_path=here("data","understat-raw.rds")){
@@ -25,6 +24,7 @@ scrape_understat <- function(save_path=here("data","understat-raw.rds")){
     crossing(eplseasons)
   
   understat_keep1 <- understat_saved %>%
+    filter(datatype=="league") %>%
     filter(season!=2020)
   
   understat_new1 <-
@@ -50,10 +50,10 @@ scrape_understat <- function(save_path=here("data","understat-raw.rds")){
   
   understat_all2 <- data.frame() %>%
     bind_rows(crossing(match_id,data_types_match) %>%
-                filter(isResult==TRUE)) %>%
-    glimpse
+                filter(isResult==TRUE))
   
-  understat_keep2 <- understat_all2 %>%
+  understat_keep2 <- understat_saved %>%
+    filter(datatype %in% c("stats","shots")) %>%
     filter(season!=2020)
   
   understat_new2 <-
