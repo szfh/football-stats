@@ -1,5 +1,9 @@
 source(here("R","raw","raw-utils.R"))
 
+scrape_understat <- function(){
+  NULL
+}
+
 .eplseasons <- tribble(~season,
                        "2019",
                        "2018",
