@@ -8,7 +8,7 @@ import_canpl <- function(save_path=here("data","canpl-raw.rds")){
   )
   
   canpl %<>%
-    mutate(data=map(url,googlesheets4::read_sheet))
+    mutate(data=map(url,possibly(googlesheets4::read_sheet,otherwise=NA)))
   
 }
 
