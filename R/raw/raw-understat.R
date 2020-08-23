@@ -1,5 +1,3 @@
-source(here("R","raw","raw-utils.R"))
-
 scrape_understat <- function(save_path=here("data","understat-raw.rds")){
   
   understat_saved <- readRDS(save_path)
@@ -71,4 +69,16 @@ scrape_understat <- function(save_path=here("data","understat-raw.rds")){
   saveRDS(understat,file=save_path)
   
   return(understat)
+}
+
+understat_scrape_match <- function(datatype,id){
+  
+  if(datatype=="stats"){
+    data <- get_match_stats(id)
+  }
+  if(datatype=="shots"){
+    data <- get_match_shots(id)
+  }
+  
+  return(data)
 }
