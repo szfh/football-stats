@@ -1,4 +1,4 @@
-source(here("R","raw","raw-utils.R"))
+source(here("R","tidy","tidy-utils.R"))
 fbref <- readRDS(file=here("data","fbref-raw.rds"))
 understat <- readRDS(file=here("data","understat-raw.rds"))
 
