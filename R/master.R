@@ -12,10 +12,11 @@
 
 # plot
 # source(here("R","join","join.R"))
-# data <- join()
 # source(here("R","themes.R"))
 # source(here("R","plot","plot-sfc.R"))
+# plot_team(data=join())
 # source(here("R","plot","plot-epl.R"))
+# plot_league(data=join())
 
 # old
 # source(here("R","master-utils.R"))
