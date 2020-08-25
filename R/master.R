@@ -1,9 +1,6 @@
 # libraries
 # source(here::here("R","library.R"))
 
-# knit markdown
-# knitr::knit(here::here("R","README.Rmd"))
-
 # raw
 # source(here("R","raw","raw-fbref.R"))
 # scrape_fbref()
@@ -17,6 +14,9 @@
 # plot_team(data=join())
 # source(here("R","plot","plot-epl.R"))
 # plot_league(data=join())
+
+# knit markdown
+# knitr::knit(here::here("R","README.Rmd"))
 
 # old
 # source(here("R","master-utils.R"))
