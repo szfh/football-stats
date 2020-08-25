@@ -1,4 +1,4 @@
-source(here("R","tidy","tidy-utils.R"))
+source(here("R","join","join-utils.R"))
 # fbref <- readRDS(file=here("data","fbref-raw.rds"))
 # understat <- readRDS(file=here("data","understat-raw.rds"))
 
@@ -66,7 +66,6 @@ join <- function(){
     select(data) %>%
     unnest(data)
   
-  browser()
   data <- list("table"=table,"squad"=squad,"players"=players,"matches"=matches,"shots"=shots,"match_stats"=match_stats)
   return(data)
 }
