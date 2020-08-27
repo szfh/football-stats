@@ -6,6 +6,8 @@
 # scrape_fbref()
 # source(here("R","raw","raw-understat.R"))
 # scrape_understat()
+# source(here("R","raw","raw-canpl.R"))
+# import_canpl()
 
 # plot
 # source(here("R","join","join.R"))
