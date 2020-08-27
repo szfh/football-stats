@@ -1,15 +1,20 @@
 source(here("R","raw","raw-utils.R"))
-library(googlesheets4)
+library(googledrive)
 
-import_canpl <- function(save_path=here("data","canpl-raw.rds")){
+import_canpl <- function(save_folder=here("data","CPL")){
   
-  canpl <- tribble(~season, ~table, ~url,
-                   "2020","Team Totals","1QaFAXjW6O68gpMFLRIBVf-EdIYeKznqvNQQy6cc5DNM",
-  )
+  find_cc <- drive_find(pattern="Centre Circle") #auto select account?
+  get_cc <- drive_get(as_id(find_cc[1,]))
   
-  canpl %<>%
-    mutate(data=map(url,possibly(googlesheets4::read_sheet,otherwise=NA)))
+  csv_files <- drive_ls(get_cc, type = "csv") %>%
+    mutate(path=glue({"{save_folder}/{name}"}))
   
+  for(i in 1:dim(csv_files)[1]){
+    drive_download(file=csv_files[i,],path=as.character(csv_files[i,"path"]),overwrite=TRUE)
+  }
 }
 
-canpl <- import_canpl()
+# csv_files %>%
+#   pwalk(list(.$id),~drive_download(as_id(.x)))
+
+# walk(csv_files$id, ~ drive_download(as_id(.x),path=glue("{path}/{csv_files$id}"),overwrite=TRUE))
