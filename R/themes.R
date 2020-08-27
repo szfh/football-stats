@@ -9,7 +9,7 @@ theme[["white"]] <- function(base_size=theme[["base_size"]],base_family=theme[["
       axis.ticks=element_blank(),
       axis.line=element_line(size=0.6),
       axis.text.x=element_text(hjust=0.5,vjust=0.5,size=6),
-      axis.text.x=element_text(hjust=0.5,vjust=0.5,size=6),
+      axis.text.y=element_text(hjust=0.5,vjust=0.5,size=6),
       
       legend.position="none",
       
