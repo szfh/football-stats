@@ -1,6 +1,6 @@
 import_canpl <- function(save_folder=here("data","CPL"),save_path=here("data","canpl-raw.rds")){
-  
-  find_cc <- drive_find(pattern="Centre Circle") #auto select account?
+
+  find_cc <- drive_find(pattern="Centre Circle Data & Info") #auto select account?
   get_cc <- drive_get(as_id(find_cc[1,]))
   
   csv_files <- drive_ls(get_cc, type = "csv") %>%
