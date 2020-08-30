@@ -135,6 +135,25 @@ palette[["epl"]] <- function(team_name){
   return(colours[team_name])
 }
 
+palette[["cpl"]] <- function(team_name){
+  colours <- c(
+    `Other` = "lightgrey",
+    `Pacific` = "#8c1aff",
+    `Edmonton` = "#4d79ff",
+    `Cavalry` = "#ff4d4d",
+    `Valour` = "#990000",
+    `Forge` = "#ffa64d",
+    `York9` = "#66cc00",
+    `Atlético Ottawa` = "#",
+    `Atletico Ottawa` = "#",
+  )
+  
+  # if(is.null(colours))
+  #   return(colours)
+  
+  return(colours[team_name])
+}
+
 palette[["sfc"]] <- function(p){
   colours <- c(
     "main" = "#D71920", # normal
