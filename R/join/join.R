@@ -5,6 +5,7 @@ source(here("R","join","join-utils.R"))
 join <- function(){
   fbref <- readRDS(file=here("data","fbref-raw.rds"))
   understat <- readRDS(file=here("data","understat-raw.rds"))
+  canpl <- readRDS(file=here("data","canpl-raw.rds"))
   
   # tidy  
   fbref <- fbref %>%
@@ -66,6 +67,6 @@ join <- function(){
     select(data) %>%
     unnest(data)
   
-  data <- list("table"=table,"squad"=squad,"players"=players,"matches"=matches,"shots"=shots,"match_stats"=match_stats)
+  data <- list("table"=table,"squad"=squad,"players"=players,"matches"=matches,"shots"=shots,"match_stats"=match_stats,"canpl"=canpl)
   return(data)
 }
