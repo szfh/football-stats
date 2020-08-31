@@ -17,7 +17,7 @@
 # source(here("R","plot","plot-epl.R"))
 # plot_league(data=join())
 # source(here("R","plot","plot-cpl.R"))
-# plot_cpl(data=join())
+# plot_cpl(data=join()["canpl"])
 
 # knit markdown
 # knitr::knit(here::here("R","README.Rmd"))
