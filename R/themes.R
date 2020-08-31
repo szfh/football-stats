@@ -144,14 +144,35 @@ palette[["cpl"]] <- function(team_name){
     `Valour` = "#990000",
     `Forge` = "#ffa64d",
     `York9` = "#66cc00",
-    `Atlético Ottawa` = "#",
-    `Atletico Ottawa` = "#",
+    `HFX Wanderers` = "#80bfff",
+    `Atlético Ottawa` = "#e62e00",
+    `Atletico Ottawa` = "#e62e00"
   )
   
   # if(is.null(colours))
   #   return(colours)
   
   return(colours[team_name])
+}
+
+palette[["cpl2"]] <- function(team_id){
+  colours <- c(
+    `Other` = "lightgrey",
+    `15380` = "#8c1aff",
+    `6925` = "#4d79ff",
+    `15381` = "#ff4d4d",
+    `15378` = "#990000",
+    `15377` = "#ffa64d",
+    `15382` = "#66cc00",
+    `15376` = "#80bfff",
+    # `Atlético Ottawa` = "#e62e00",
+    `16614` = "#e62e00"
+  )
+  
+  # if(is.null(colours))
+  #   return(colours)
+  
+  return(colours[team_id])
 }
 
 palette[["sfc"]] <- function(p){
