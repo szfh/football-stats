@@ -1,6 +1,6 @@
 source(here("R","plot","plot-utils.R"))
 
-plot_cpl <- function(data){
+plot_cpl <- function(data,team="all"){
   plots <- list()
   
   player20 <- data$canpl %>%
@@ -32,8 +32,6 @@ plot_cpl <- function(data){
       x="Expected Goals",
       y="Goals scored (non-penalties)") +
     scale_fill_manual(values=palette[["cpl2"]]())
-  
-  team <- "Cavalry"
   
   plots$xgtrend <-
     matches1920 %>%
