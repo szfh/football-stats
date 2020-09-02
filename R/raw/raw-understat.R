@@ -1,4 +1,4 @@
-scrape_understat <- function(save_path=here("data","understat-raw.rds")){
+scrape_understat <- function(save_path=here("data","understat-raw.rds"),current_season="2020"){
   
   understat_saved <- readRDS(save_path)
   
@@ -23,7 +23,7 @@ scrape_understat <- function(save_path=here("data","understat-raw.rds")){
   
   understat_keep1 <- understat_saved %>%
     filter(datatype=="league") %>%
-    filter(season!=2020)
+    filter(season!=current_season)
   
   understat_new1 <-
     anti_join(understat_all1, understat_keep1)
