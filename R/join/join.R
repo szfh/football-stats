@@ -1,7 +1,3 @@
-# source(here("R","join","join-utils.R"))
-# fbref <- readRDS(file=here("data","fbref-raw.rds"))
-# understat <- readRDS(file=here("data","understat-raw.rds"))
-
 join <- function(){
   fbref <- readRDS(file=here("data","fbref-raw.rds"))
   understat <- readRDS(file=here("data","understat-raw.rds"))
