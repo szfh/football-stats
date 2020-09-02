@@ -1,4 +1,4 @@
-scrape_fbref <- function(save_path=here("data","fbref-raw.rds")){
+scrape_fbref <- function(save_path=here("data","fbref-raw.rds"),current_season="2020-21"){
   
   fbref_saved <- readRDS(save_path)
   
@@ -40,7 +40,7 @@ scrape_fbref <- function(save_path=here("data","fbref-raw.rds")){
     crossing(eplseasons)
   
   fbref_keep <- fbref_saved %>% # remove data to be scraped from saved
-    filter(season!="2020-21")
+    filter(season!=current_season)
   
   fbref_new <-
     anti_join(fbref_all, fbref_keep) %>%
