@@ -17,7 +17,7 @@ scrape_understat <- function(save_path=here("data","understat-raw.rds")){
                            # "teams","teamsData",
   )
   
-  understat_all1 <- data.frame() %>%
+  understat_all1 <- data.frame() %>% # schedule and player data
     bind_rows(crossing(data_types_league,tables_league)) %>%
     crossing(eplseasons)
   
@@ -46,7 +46,7 @@ scrape_understat <- function(save_path=here("data","understat-raw.rds")){
                               "shots"
   )
   
-  understat_all2 <- data.frame() %>%
+  understat_all2 <- data.frame() %>% # match stat + shot data
     bind_rows(crossing(match_id,data_types_match) %>%
                 filter(isResult==TRUE))
   
