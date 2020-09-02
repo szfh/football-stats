@@ -19,7 +19,6 @@ import_canpl <- function(save_folder=here("data","CPL"),save_path=here("data","c
   saveRDS(canpl,file=save_path)
   
   return(canpl)
-  
 }
 
 # csv_files %>%
