@@ -175,6 +175,34 @@ plot_team <- function(data,team="Southampton",season="2019-20"){
     scale_x_continuous(breaks=seq(-2000,2000,200),labels=abs(seq(-2000,2000,200)),expand=expansion(add=c(10))) +
     scale_colour_manual(values=c("Left"=colour[["medium"]][[1]],"Right"=colour[["medium"]][[8]]))
   
+  plots$passfootednessall <-
+    data$players %>%
+    filter_season() %>%
+    filter(body_parts_left+body_parts_right>200) %>%
+    mutate(body_parts_tot=body_parts_left+body_parts_right) %>%
+    mutate(body_parts_max=ifelse(body_parts_left>=body_parts_right,body_parts_left,body_parts_right)) %>%
+    mutate(body_parts_min=ifelse(body_parts_left<body_parts_right,body_parts_left,body_parts_right)) %>%
+    mutate(body_parts_ratio=(body_parts_max/body_parts_tot)) %>%
+    mutate(body_parts_main=ifelse(body_parts_left>=body_parts_right,"Left","Right")) %>%
+    mutate(body_parts_other=ifelse(body_parts_left<body_parts_right,"Left","Right")) %>%
+    mutate(player=fct_reorder(player,desc(body_parts_ratio))) %>%
+    slice_min(body_parts_ratio,n=30) %>%
+    ggplot(aes(y=player)) +
+    geom_segment(aes(x=0,xend=body_parts_max,y=player,yend=player,colour=body_parts_main),size=2.5,alpha=0.8) +
+    geom_segment(aes(x=0,xend=-body_parts_min,y=player,yend=player,colour=body_parts_other),size=2.5,alpha=0.8) +
+    geom_label(aes(x=0,y=player,label=sprintf("%2.0f%%",100*body_parts_ratio)),size=1.6,label.padding=unit(0.16, "lines"),label.r = unit(0.08, "lines")) +
+    theme[["solar"]]() +
+    theme(
+      plot.title=element_markdown()
+    ) +
+    labs(
+      title=glue("<b style='color:#265DAB'>Left foot</b> / <b style='color:#CB2027'>Right foot</b> passes"),
+      x=element_blank(),
+      y=element_blank()
+    ) +
+    scale_x_continuous(breaks=seq(-2000,2000,200),labels=abs(seq(-2000,2000,200)),expand=expansion(add=c(10))) +
+    scale_colour_manual(values=c("Left"=colour[["medium"]][[1]],"Right"=colour[["medium"]][[8]]))
+  
   plots$sca <-
     data$players %>%
     filter_season_team() %>%
