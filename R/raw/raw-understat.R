@@ -1,5 +1,5 @@
 scrape_understat <- function(save_path=here("data","understat-raw.rds"),current_season="2020"){
-  
+  browser()
   understat_saved <- readRDS(save_path)
   
   eplseasons <- tribble(~season,
@@ -33,7 +33,7 @@ scrape_understat <- function(save_path=here("data","understat-raw.rds"),current_
   
   ###
   
-  match_id <- understat_saved %>%
+  match_id <- bind_rows(understat_keep1, understat_new1) %>%
     filter(stattype=="schedule") %>%
     select(season,data) %>%
     unnest(cols=data) %>%
