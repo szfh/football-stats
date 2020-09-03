@@ -1,11 +1,8 @@
 scrape_understat <- function(save_path=here("data","understat-raw.rds"),current_season="2020"){
-  browser()
+  
   understat_saved <- readRDS(save_path)
   
-  eplseasons <- tribble(~season,
-                        "2019",
-                        "2018",
-  )
+  eplseasons <- tibble(season=as.character(2014:2019))
   
   data_types_league <- tribble(~datatype,
                                "league",
@@ -52,7 +49,7 @@ scrape_understat <- function(save_path=here("data","understat-raw.rds"),current_
   
   understat_keep2 <- understat_saved %>%
     filter(datatype %in% c("stats","shots")) %>%
-    filter(season!=2020)
+    filter(season!=current_season)
   
   understat_new2 <-
     anti_join(understat_all2, understat_keep2)
