@@ -128,4 +128,3 @@ fbref_tidy <- function(data,page,stattype){
   }
   return(data)
 }
-
