@@ -3,6 +3,8 @@ join <- function(){
   understat <- readRDS(file=here("data","understat-raw.rds"))
   canpl <- readRDS(file=here("data","canpl-raw.rds"))
   
+  data <- list()
+  
   # tidy  
   fbref <- fbref %>%
     mutate(data=pmap(list(data,page,stattype), possibly(fbref_tidy, otherwise=NA))) %>%
@@ -13,13 +15,13 @@ join <- function(){
   # select() # delete non-required columns
   
   # join
-  table <-
+  data$table <-
     fbref %>%
     filter(page=="league") %>%
     select(-page,-stattype) %>%
     unnest(cols=data)
-
-  squad <-
+  
+  data$squad <-
     fbref %>%
     filter(page=="squad") %>%
     select(-page) %>%
@@ -29,12 +31,12 @@ join <- function(){
     mutate(data=map(data,remove_empty,which="cols")) %$%
     data %>%
     reduce(full_join)
-
-  squad <-
-    table %>%
-    left_join(squad)
-
-  players <-
+  
+  data$squad <-
+    data$table %>%
+    left_join(data$squad)
+  
+  data$players <-
     fbref %>%
     filter(page=="player") %>%
     select(-page) %>%
@@ -44,26 +46,25 @@ join <- function(){
     mutate(data=map(data,remove_empty,which="cols")) %$%
     data %>%
     reduce(full_join)
-
-  matches <-
+  
+  data$matches <-
     fbref %>%
     filter(page=="schedule") %>%
     select(-page,-stattype) %>%
     unnest(cols=data)
-
-  shots <-
+  
+  data$shots <-
     understat %>%
     filter(datatype=="shots") %>%
     select(data) %>%
     unnest(data)
-
-  match_stats <-
+  
+  data$match_stats <-
     understat %>%
     filter(datatype=="stats") %>%
     select(data) %>%
     unnest(data)
   
-  data <- list("table"=table,"squad"=squad,"players"=players,"matches"=matches,"shots"=shots,"match_stats"=match_stats,"canpl"=canpl)
   return(data)
 }
 
