@@ -10,9 +10,11 @@ join <- function(){
     mutate(data=pmap(list(data,page,stattype), possibly(fbref_tidy, otherwise=NA))) %>%
     select(-any_of(c("statselector","seasoncode","page_url","content_selector_id")))
   
-  understat <- understat
+  # understat <- understat
   # mutate(data=pmap(function_here)) %>% # make understat_tidy?
   # select() # delete non-required columns
+  
+  # canpl <- canpl
   
   # join
   data$table <-
@@ -64,6 +66,8 @@ join <- function(){
     filter(datatype=="stats") %>%
     select(data) %>%
     unnest(data)
+  
+  data$canpl <- canpl
   
   return(data)
 }
