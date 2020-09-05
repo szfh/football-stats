@@ -84,7 +84,7 @@ get_mva <- function(xG,n=6){ # windowed average xG
 #   summarise(last(Date)) %>%
 #   extract2(1)
 
-add_watermark <- function(plots,path){
+add_watermark <- function(plots,path,x,y,hjust=1,vjust=1,width=0.1,height=0.1,scale=1){
   
   plots_wm <- list()
   
@@ -94,13 +94,13 @@ add_watermark <- function(plots,path){
       plots[[i]] %>%
       ggdraw() +
       draw_image(path,
-                 x=1,
-                 y=1,
-                 hjust=1.1,
-                 vjust=1,
-                 width=0.2,
-                 height=0.1,
-                 scale=1)
+                 x=x,
+                 y=y,
+                 hjust=hjust,
+                 vjust=vjust,
+                 width=width,
+                 height=height,
+                 scale=scale)
   }
   return(plots_wm)
 }
