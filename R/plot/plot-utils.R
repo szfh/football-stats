@@ -105,27 +105,6 @@ add_watermark <- function(plots,path,x,y,hjust=1,vjust=1,width=0.1,height=0.1,sc
   return(plots_wm)
 }
 
-add_watermark_cpl <- function(plots,path,x,y){ # to be merged with add_watermark later
-  
-  plots_wm <- list()
-  
-  for(i in 1:length(plots)){
-    name <- names(plots[i])
-    plots_wm[[name]] <- 
-      plots[[i]] %>%
-      ggdraw() +
-      draw_image(path,
-                 x=x,
-                 y=y,
-                 hjust=1,
-                 vjust=1,
-                 width=0.1,
-                 height=0.1,
-                 scale=1)
-  }
-  return(plots_wm)
-}
-
 save_plots <- function(plots,path){
   for(i in 1:length(plots)){
     name <- names(plots[i])
