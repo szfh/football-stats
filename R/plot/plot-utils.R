@@ -84,13 +84,13 @@ get_mva <- function(xG,n=6){ # windowed average xG
 #   summarise(last(Date)) %>%
 #   extract2(1)
 
-add_watermark <- function(plots,path,x,y,hjust=1,vjust=1,width=0.1,height=0.1,scale=1){
+add_logo <- function(plots,path,x,y,hjust=1,vjust=1,width=0.1,height=0.1,scale=1){
   
-  plots_wm <- list()
+  plots_logo <- list()
   
   for(i in 1:length(plots)){
     name <- names(plots[i])
-    plots_wm[[name]] <- 
+    plots_logo[[name]] <- 
       plots[[i]] %>%
       ggdraw() +
       draw_image(path,
@@ -102,7 +102,7 @@ add_watermark <- function(plots,path,x,y,hjust=1,vjust=1,width=0.1,height=0.1,sc
                  height=height,
                  scale=scale)
   }
-  return(plots_wm)
+  return(plots_logo)
 }
 
 save_plots <- function(plots,path){
