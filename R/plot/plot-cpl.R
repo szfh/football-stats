@@ -2,7 +2,6 @@ source(here("R","plot","plot-utils.R"))
 
 plot_cpl <- function(data,team="all"){
   plots <- list()
-  
   player20 <- data$canpl %>%
     slice(4) %>%
     select(data) %>%
@@ -66,8 +65,8 @@ plot_cpl <- function(data,team="all"){
     scale_y_continuous(limits=c(0,NA),expand=expansion(add=c(0,0.1))) +
     facet_grid(cols=vars(season), space="free", scales="free_x")
   
-  plots_wm <- add_watermark_cpl(plots,here("images","StatsPerformLogo.png"),x=0.9,y=1)
-  plots_wm <- add_watermark_cpl(plots_wm,here("images","CPL.png"),x=1,y=1)
+  plots_logo <- add_logo(plots,here("images","StatsPerformLogo.png"),x=0.9,y=1)
+  plots_logo <- add_logo(plots_logo,here("images","CPL.png"),x=1,y=1)
   
-  save_plots(plots_wm,path=here("plots","CPL"))
+  save_plots(plots_logo,path=here("plots","CPL"))
 }

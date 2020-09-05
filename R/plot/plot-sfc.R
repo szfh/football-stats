@@ -304,6 +304,6 @@ plot_team <- function(data,team="Southampton",season="2019-20"){
     scale_y_reordered() +
     facet_grid(rows=vars(season), space="free", scales="free_y")
   
-  plots_wm <- add_watermark(plots,path=here("images","SB_Regular.png"))
-  save_plots(plots_wm,path=here("plots","SFC"))
+  plots_logo <- add_logo(plots,path=here("images","SB_Regular.png"),x=1,y=1,hjust=1.1,width=0.2)
+  save_plots(plots_logo,path=here("plots","SFC"))
 }
