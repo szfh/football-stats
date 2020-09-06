@@ -1,7 +1,9 @@
 source(here("R","plot","plot-utils.R"))
 
 plot_cpl <- function(data,team="all"){
+  
   plots <- list()
+  
   player20 <- data$canpl %>%
     slice(4) %>%
     select(data) %>%
@@ -17,19 +19,36 @@ plot_cpl <- function(data,team="all"){
     select(name,data) %>%
     unnest(cols=data)
   
-  plots$xg <-
+  plots$goalsxg <-
     team20 %>%
     select(team,team_id=optaTeamId,goal=Goal,pg=PenGoal,npxg=NonPenxG) %>%
     mutate(team_id=as.character(team_id)) %>%
     mutate(npg=goal-pg) %>%
     ggplot(aes(x=npxg,y=npg)) +
-    geom_point(aes(fill=team_id),colour="black",shape=23,size=3,position=position_jitter(width=0.2,height=0.05)) +
-    geom_text_repel(aes(label=team),size=4) +
+    geom_point(aes(fill=team_id),colour="black",shape=23,size=3,position=position_jitter(width=0.2,height=0.05,seed=999)) +
+    geom_text_repel(aes(label=team),size=4,position=position_jitter(width=0.2,height=0.05,seed=999)) +
     theme[["solar"]]() +
     labs(
       title="Canadian Premier League Goals/xG 2020",
       x="Expected Goals",
       y="Goals scored (non-penalties)") +
+    scale_fill_manual(values=palette[["cpl2"]]())
+  
+  plots$xg <-
+    team20 %>%
+    select(team,team_id=optaTeamId,goal=Goal,pg=PenGoal,xg=ExpG,npxg=NonPenxG,xga=ExpGAg) %>%
+    mutate(team_id=as.character(team_id)) %>%
+    mutate(npg=goal-pg) %>%
+    ggplot(aes(x=xg,y=xga)) +
+    geom_point(aes(fill=team_id),colour="black",shape=23,size=4,alpha=0.8,position=position_jitter(width=0.1,height=0.1,seed=999)) +
+    geom_text_repel(aes(label=team),size=4,position=position_jitter(width=0.1,height=0.1,seed=999)) +
+    theme[["solar"]]() +
+    labs(
+      title="Canadian Premier League xG 2020",
+      x="Expected Goals",
+      y="xG A") +
+    scale_x_continuous(breaks=seq(0,100,2),expand=expansion(add=c(0.5))) +
+    scale_y_reverse(breaks=seq(0,100,2),expand=expansion(add=c(0.5))) +
     scale_fill_manual(values=palette[["cpl2"]]())
   
   plots$xgtrend <-
