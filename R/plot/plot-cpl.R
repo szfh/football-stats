@@ -84,6 +84,38 @@ plot_cpl <- function(data,team="all"){
     scale_y_continuous(limits=c(0,NA),expand=expansion(add=c(0,0.1))) +
     facet_grid(cols=vars(season), space="free", scales="free_x")
   
+  plots$xgsegment <-
+  matches1920 %>%
+    filter(team==!!team) %>%
+    mutate(season=case_when(
+      date<lubridate::as_date("2019-7-2") ~ "2019\nSpring Season",
+      date<lubridate::as_date("2019-10-20") ~ "2019\nFall Season",
+      TRUE ~ "2020\nIsland Games")) %>%
+    mutate(season=factor(season,levels=c("2019\nSpring Season","2019\nFall Season","2020\nIsland Games"))) %>%
+    mutate(game=reorder_within(scatterExtra, date, season)) %>%
+    # filter(!is.na(homegls)) %>%
+    # mutate(shortha=ifelse(ha=="home","H","A")) %>%
+    # mutate(match=glue::glue("{opposition} {shortha} {glsf}-{glsa}")) %>%
+    # mutate(match=reorder_within(match, desc(date), season)) %>%
+    ggplot(aes(y=game)) +
+    geom_segment(aes(x=0,xend=ExpG,y=game,yend=game),colour=colour[["sfc"]][["light"]],size=2.5) +
+    geom_segment(aes(x=0,xend=-ExpGAg,y=game,yend=game),colour=colour[["medium"]][[1]],size=2.5) +
+    theme[["solar"]]() +
+    theme(
+      plot.title=element_markdown(size=12),
+      axis.text.x=element_text(),
+      axis.text.y=element_text(size=6),
+      strip.text=element_blank()
+    ) +
+    labs(
+      title=glue("<b style='color:#265DAB'>Opposition xG</b> | <b style='color:#D71920'>{team} xG</b>"),
+      x=element_blank(),
+      y=element_blank()
+    ) +
+    scale_x_continuous(breaks=seq(-10,10,1),labels=abs(seq(-10,10,1)),expand=expansion(add=c(0.1,1))) +
+    scale_y_reordered() +
+    facet_grid(rows=vars(season), space="free", scales="free_y")
+  
   plots_logo <- add_logo(plots,here("images","StatsPerformLogo.png"),x=0.9,y=1)
   plots_logo <- add_logo(plots_logo,here("images","CPL.png"),x=1,y=1)
   
