@@ -121,33 +121,43 @@ plot_cpl <- function(data,team="all"){
     select(team,team_id=optaTeamId,goal=Goal,pg=PenGoal,xg=ExpG,npxg=NonPenxG,xga=ExpGAg) %>%
     mutate(team_id=as.character(team_id)) %>%
     mutate(xga=-xga) %>%
+    # mutate(team=ifelse(team %in% c("Cavalry","HFX Wanderers","Forge","Pacific"),
+    #                    glue("<b style='color:#265DAB'>{team}</b>"),
+    #                    glue("<b style='color:#D71920'>{team}</b>"))) %>%
+    mutate(through=ifelse(team %in% c("Cavalry","HFX Wanderers","Forge","Pacific"),TRUE,FALSE)) %>%
     # mutate(season=case_when(
     # date<lubridate::as_date("2019-7-2") ~ "2019\nSpring Season",
     # date<lubridate::as_date("2019-10-20") ~ "2019\nFall Season",
     # TRUE ~ "2020\nIsland Games")) %>%
-    make_long_data(levels=c("xg","xga"),labels=c("Expected Goals For","Expected Goals Against")) %>%
+    make_long_data(levels=c("xg","xga"),labels=c("<b style='color:#1B365D'>Expected Goals For</b>","<b style='color:#1B365D'>Expected Goals Against</b>")) %>%
     ggplot(aes(x=0,y=n)) +
     geom_text_repel(
-      aes(label=team),
-      size=4,
+      aes(label=team,colour=through),
+      size=3.5,
       nudge_x=0.5,
       direction="y",
       hjust=0,
       segment.size=0.4,
       segment.alpha=0.8,
-      box.padding=0.05
+      box.padding=0.05,
+      fontface="bold"
     ) +
     geom_point(aes(fill=team_id),size=3.5,shape=23,colour="black") +
     theme[["solarfacet"]]() +
     facet_wrap("key",scales="free") +
+    theme(
+      plot.title=element_markdown(),
+      strip.text.x=element_markdown()
+    ) +
     labs(
-      title="2020 Island Games - First Stage",
+      title="<b style='color:#1B365D'>2020 CanPL Island Games - group stage qualifiers</b>",
       x=element_blank(),
       y=element_blank()
     ) +
     scale_x_continuous(limit=c(0,1)) +
     scale_y_continuous(breaks=seq(-100,100,1),labels=abs(seq(-100,100,1)),expand=expansion(add=c(0.5))) +
-    scale_fill_manual(values=palette[["cpl2"]]())
+    scale_fill_manual(values=palette[["cpl2"]]()) +
+    scale_colour_manual(values=c("TRUE"="#1B365D","FALSE"="#DA291C"))
   
   plots_logo <- add_logo(plots,here("images","StatsPerformLogo.png"),x=0.9,y=1)
   plots_logo <- add_logo(plots_logo,here("images","CPL.png"),x=1,y=1)
