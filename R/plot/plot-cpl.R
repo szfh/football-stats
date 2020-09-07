@@ -85,7 +85,7 @@ plot_cpl <- function(data,team="all"){
     facet_grid(cols=vars(season), space="free", scales="free_x")
   
   plots$xgsegment <-
-  matches1920 %>%
+    matches1920 %>%
     filter(team==!!team) %>%
     mutate(season=case_when(
       date<lubridate::as_date("2019-7-2") ~ "2019\nSpring Season",
@@ -115,6 +115,39 @@ plot_cpl <- function(data,team="all"){
     scale_x_continuous(breaks=seq(-10,10,1),labels=abs(seq(-10,10,1)),expand=expansion(add=c(0.1,1))) +
     scale_y_reordered() +
     facet_grid(rows=vars(season), space="free", scales="free_y")
+  
+  plots$squadxg <-
+    team20 %>%
+    select(team,team_id=optaTeamId,goal=Goal,pg=PenGoal,xg=ExpG,npxg=NonPenxG,xga=ExpGAg) %>%
+    mutate(team_id=as.character(team_id)) %>%
+    mutate(xga=-xga) %>%
+    # mutate(season=case_when(
+    # date<lubridate::as_date("2019-7-2") ~ "2019\nSpring Season",
+    # date<lubridate::as_date("2019-10-20") ~ "2019\nFall Season",
+    # TRUE ~ "2020\nIsland Games")) %>%
+    make_long_data(levels=c("xg","xga"),labels=c("Expected Goals For","Expected Goals Against")) %>%
+    ggplot(aes(x=0,y=n)) +
+    geom_text_repel(
+      aes(label=team),
+      size=4,
+      nudge_x=0.5,
+      direction="y",
+      hjust=0,
+      segment.size=0.4,
+      segment.alpha=0.8,
+      box.padding=0.05
+    ) +
+    geom_point(aes(fill=team_id),size=3.5,shape=23,colour="black") +
+    theme[["solarfacet"]]() +
+    facet_wrap("key",scales="free") +
+    labs(
+      title="2020 Island Games - First Stage",
+      x=element_blank(),
+      y=element_blank()
+    ) +
+    scale_x_continuous(limit=c(0,1)) +
+    scale_y_continuous(breaks=seq(-100,100,1),labels=abs(seq(-100,100,1)),expand=expansion(add=c(0.5))) +
+    scale_fill_manual(values=palette[["cpl2"]]())
   
   plots_logo <- add_logo(plots,here("images","StatsPerformLogo.png"),x=0.9,y=1)
   plots_logo <- add_logo(plots_logo,here("images","CPL.png"),x=1,y=1)
