@@ -150,7 +150,7 @@ plot_cpl <- function(data,team="all"){
       strip.text.x=element_markdown()
     ) +
     labs(
-      title="<b style='color:#1B365D'>2020 CanPL Island Games - group stage qualifiers</b>",
+      title="<b style='color:#1B365D'>2020 Canadian Premier League - first round</b>",
       x=element_blank(),
       y=element_blank()
     ) +
