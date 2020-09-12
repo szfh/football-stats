@@ -34,9 +34,9 @@ scrape_understat <- function(save_path=here("data","understat-raw.rds"),current_
     filter(stattype=="schedule") %>%
     select(season,data) %>%
     unnest(cols=data) %>%
-    select(season,id,isResult) %>%
+    select(season,id,isResult) #%>%
     # select(-c(datatype,stattype,statselector)) %>%
-    glimpse
+    # glimpse
   
   data_types_match <- tribble(~datatype,
                               "stats",
