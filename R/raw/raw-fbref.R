@@ -3,6 +3,7 @@ scrape_fbref <- function(save_path=here("data","fbref-raw.rds"),current_season="
   fbref_saved <- readRDS(save_path)
   
   eplseasons <- tribble(~season, ~seasoncode, #advanced/non-advanced?
+                        "2020-21",10728,
                         "2019-20",3232,
                         "2018-19",1889,
                         "2017-18",1631,
