@@ -2,7 +2,7 @@ scrape_understat <- function(save_path=here("data","understat-raw.rds"),current_
   
   understat_saved <- readRDS(save_path)
   
-  eplseasons <- tibble(season=as.character(2014:2019))
+  eplseasons <- tibble(season=as.character(2014:2020))
   
   data_types_league <- tribble(~datatype,
                                "league",
