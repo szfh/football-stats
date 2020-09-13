@@ -1,11 +1,12 @@
 source(here("R","plot","plot-utils.R"))
 
-plot_team <- function(data,team="Southampton",season="2019-20"){
+plot_team <- function(data,squad="Southampton",season="2019-20"){
   plots <- list()
   
   plots$minutes <-
     data$players %>%
-    filter_season_team() %>%
+    filter(season %in% !!season) %>%
+    filter(squad %in% !!squad) %>%
     select(player,pos=pos1,min=playing_time_min,starts=starts_starts,subs=subs_subs,min_start=starts_mnstart,min_sub=subs_mnsub) %>%
     filter_na("min") %>%
     mutate(
@@ -42,7 +43,8 @@ plot_team <- function(data,team="Southampton",season="2019-20"){
   
   plots$xgxa <-
     data$players %>%
-    filter_season_team() %>%
+    filter(season %in% !!season) %>%
+    filter(squad %in% !!squad) %>%
     select(player,npxg=expected_npxg,xa=expected_xa) %>%
     filter_na(c("npxg","xa")) %>%
     mutate(focus=ifelse(npxg>=1|xa>=1,TRUE,FALSE)) %>%
@@ -61,7 +63,8 @@ plot_team <- function(data,team="Southampton",season="2019-20"){
   
   plots$shotskp <-
     data$players %>%
-    filter_season_team() %>%
+    filter(season %in% !!season) %>%
+    filter(squad %in% !!squad) %>%
     select(player,sh=standard_sh,kp) %>%
     make_long_data(levels=c("sh","kp"),labels=c("Shot","Pass leading to shot")) %>%
     mutate(focus=case_when(percent_rank(n)>0.4 ~ TRUE,
@@ -91,7 +94,8 @@ plot_team <- function(data,team="Southampton",season="2019-20"){
   
   plots$gd <-
     data$players %>%
-    filter_season_team() %>%
+    filter(season %in% !!season) %>%
+    filter(squad %in% !!squad) %>%
     select(player,min=playing_time_min,team_gls=`team_success_+-`,team_xg=`team_success_xg_xg+-`) %>%
     make_long_data(levels=c("team_gls","team_xg"),labels=c("Goals +/-","xG +/-")) %>%
     mutate(PM=ifelse(n>=0,TRUE,FALSE)) %>%
@@ -120,7 +124,8 @@ plot_team <- function(data,team="Southampton",season="2019-20"){
   
   plots$passescompleted <-
     data$players %>%
-    filter_season_team() %>%
+    filter(season %in% !!season) %>%
+    filter(squad %in% !!squad) %>%
     select(player,short_cmp,medium_cmp,long_cmp) %>%
     make_long_data(levels=c("short_cmp","medium_cmp","long_cmp"),labels=c("Short (<5 yards)","Medium (5-25 yards)","Long (>25 yards)")) %>%
     mutate(focus=case_when(percent_rank(n)>0.4 ~ TRUE,
@@ -150,7 +155,8 @@ plot_team <- function(data,team="Southampton",season="2019-20"){
   
   plots$passfootedness <-
     data$players %>%
-    filter_season_team() %>%
+    filter(season %in% !!season) %>%
+    filter(squad %in% !!squad) %>%
     filter(body_parts_left+body_parts_right>0) %>%
     mutate(body_parts_tot=body_parts_left+body_parts_right) %>%
     mutate(body_parts_max=ifelse(body_parts_left>=body_parts_right,body_parts_left,body_parts_right)) %>%
@@ -177,7 +183,8 @@ plot_team <- function(data,team="Southampton",season="2019-20"){
   
   plots$passfootednessall <-
     data$players %>%
-    filter_season() %>%
+    filter(season %in% !!season) %>%
+    filter(squad %in% !!squad) %>%
     filter(body_parts_left+body_parts_right>200) %>%
     mutate(body_parts_tot=body_parts_left+body_parts_right) %>%
     mutate(body_parts_max=ifelse(body_parts_left>=body_parts_right,body_parts_left,body_parts_right)) %>%
@@ -205,7 +212,8 @@ plot_team <- function(data,team="Southampton",season="2019-20"){
   
   plots$sca <-
     data$players %>%
-    filter_season_team() %>%
+    filter(season %in% !!season) %>%
+    filter(squad %in% !!squad) %>%
     select(player,sca=sca_sca,sca_passlive=sca_types_passlive,sca_passdead=sca_types_passdead,
            sca_drib=sca_types_drib,sca_sh=sca_types_sh,sca_fld=sca_types_fld) %>%
     filter(sca>0) %>%
@@ -247,7 +255,8 @@ plot_team <- function(data,team="Southampton",season="2019-20"){
   plots$xgtrend <-
     data$matches %>%
     make_long_matches() %>%
-    filter_season_team() %>%
+    filter(season %in% !!season) %>%
+    filter(squad %in% !!squad) %>%
     mutate(season=ifelse(date<as.Date("2020-03-10"),"2019-20 part 1","2019-20 part 2")) %>%
     filter(!is.na(homegls)) %>%
     mutate(shortha=ifelse(ha=="home","H","A")) %>%
@@ -279,7 +288,8 @@ plot_team <- function(data,team="Southampton",season="2019-20"){
   plots$xgsegment <-
     data$matches %>%
     make_long_matches() %>%
-    filter_season_team() %>%
+    filter(season %in% !!season) %>%
+    filter(squad %in% !!squad) %>%
     mutate(season=ifelse(date<as.Date("2020-03-10"),"2019-20 part 1","2019-20 part 2")) %>%
     filter(!is.na(homegls)) %>%
     mutate(shortha=ifelse(ha=="home","H","A")) %>%

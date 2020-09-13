@@ -6,7 +6,7 @@ plot_league <- function(data,league="EPL",season="2019-20"){
   # Premier League player plots
   plots$glsxg <-
     data$players %>%
-    filter_season %>%
+    filter(season %in% !!season) %>%
     select(player,squad,gls=standard_gls,pk=performance_pk,npxg=expected_npxg) %>%
     mutate(npgls=gls-pk) %>%
     make_long_data(levels=c("npgls","npxg"),labels=c("Goals","Expected Goals")) %>%
@@ -36,7 +36,7 @@ plot_league <- function(data,league="EPL",season="2019-20"){
   
   plots$playerxgxa <-
     data$players %>%
-    filter_season %>%
+    filter(season %in% !!season) %>%
     select(player,squad,npxg=expected_npxg,xa=expected_xa) %>%
     make_long_data(levels=c("npxg","xa"),labels=c("xG","xA")) %>%
     mutate(focus=case_when(min_rank(desc(n))<=20 ~ TRUE,
@@ -66,7 +66,7 @@ plot_league <- function(data,league="EPL",season="2019-20"){
   
   plots$playercomppasses <-
     data$players %>%
-    filter_season %>%
+    filter(season %in% !!season) %>%
     select(player,squad,short_cmp,medium_cmp,long_cmp) %>%
     make_long_data(levels=c("short_cmp","medium_cmp","long_cmp"),labels=c("Short (<5 yards)","Medium (5-25 yards)","Long (>25 yards)")) %>%
     group_by(key,squad) %>%
@@ -97,7 +97,7 @@ plot_league <- function(data,league="EPL",season="2019-20"){
   
   plots$playernogoals <-
     data$players %>%
-    filter_season %>% 
+    filter(season %in% !!season) %>%
     select(player,squad,sh=standard_sh,gls=standard_gls,npxg=expected_npxg) %>%
     filter(gls==0) %>%
     mutate(focus=case_when(percent_rank(sh)>0.92 ~ TRUE,
@@ -152,7 +152,7 @@ plot_league <- function(data,league="EPL",season="2019-20"){
   
   plots$squadxg1 <-
     data$squad %>%
-    filter_season %>%
+    filter(season %in% !!season) %>%
     select(squad,xg,xga) %>%
     mutate(xga=-xga) %>%
     make_long_data(levels=c("xg","xga"),labels=c("xG For","xG Against")) %>%
@@ -181,7 +181,7 @@ plot_league <- function(data,league="EPL",season="2019-20"){
   
   plots$squadxg2 <-
     data$squad %>%
-    filter_season %>%
+    filter(season %in% !!season) %>%
     select(squad,xg=expected_npxg,xga) %>%
     ggplot(aes(x=xg,y=xga)) +
     geom_text_repel(aes(label=squad),size=2) +
@@ -199,7 +199,7 @@ plot_league <- function(data,league="EPL",season="2019-20"){
   
   plots$squadxgd <-
     data$squad %>%
-    filter_season %>%
+    filter(season %in% !!season) %>%
     select(squad,gd=gdiff,xgd=xgdiff) %>%
     make_long_data(levels=c("gd","xgd"),labels=c("Goal difference","Expected goal difference")) %>%
     ggplot(aes(x=0,y=n)) +
@@ -228,7 +228,7 @@ plot_league <- function(data,league="EPL",season="2019-20"){
   plots$playeratt3rdactions <-
     data$players %>%
     select(player,season,squad,touch=touches_att_3rd,pressure=pressures_att_3rd,tackle=tackles_att_3rd) %>%
-    filter_season %>%
+    filter(season %in% !!season) %>%
     make_long_data(levels=c("touch","pressure","tackle"),labels=c("Touches","Pressures","Tackles")) %>%
     group_by(key,squad) %>%
     mutate(focus=ifelse(min_rank(desc(n))==1,TRUE,FALSE)) %>%
