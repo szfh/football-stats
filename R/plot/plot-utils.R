@@ -40,22 +40,6 @@ make_long_matches <- function(matches){ # transform matches to long format
   return(matches)
 }
 
-filter_season <- function(data,season="2019-20"){ # filter correct season and teams
-  data %<>%
-    filter(season %in% !!season)
-  
-  return(data)
-}
-
-# filter correct season and teams
-filter_season_team <- function(data,season="2019-20",squad="Southampton"){
-  data %<>%
-    filter(season %in% !!season) %>%
-    filter(squad %in% !!squad)
-  
-  return(data)
-}
-
 filter_na <- function(data,cols){ # filter na
   data %<>%
     filter_at(cols,any_vars(!is.na(.)))
