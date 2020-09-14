@@ -53,7 +53,7 @@ plot_team <- function(data,squad="Southampton",season="2019-20"){
     geom_text_repel(aes(label=ifelse(focus,player,"")),size=rel(2.5)) +
     theme[["solar"]]() +
     labs(
-      title="Southampton xG/xA",
+      title=glue("{squad} xG/xA"),
       x="Expected goals",
       y="Expected assists"
     ) +
@@ -277,7 +277,7 @@ plot_team <- function(data,squad="Southampton",season="2019-20"){
       strip.text=element_blank()
     ) +
     labs(
-      title=glue("Southampton <b style='color:darkred'>attack</b> / <b style='color:royalblue'>defence</b> xG trend"),
+      title=glue("{squad} <b style='color:darkred'>attack</b> / <b style='color:royalblue'>defence</b> xG trend"),
       x=element_blank(),
       y=glue("Expected goals <b style='color:darkred'>for</b> / <b style='color:royalblue'>against</b>")
     ) +
@@ -293,7 +293,7 @@ plot_team <- function(data,squad="Southampton",season="2019-20"){
     mutate(season=ifelse(date<as.Date("2020-03-10"),"2019-20 part 1","2019-20 part 2")) %>%
     filter(!is.na(homegls)) %>%
     mutate(shortha=ifelse(ha=="home","H","A")) %>%
-    mutate(match=glue::glue("{opposition} {shortha} {glsf}-{glsa}")) %>%
+    mutate(match=glue("{opposition} {shortha} {glsf}-{glsa}")) %>%
     mutate(match=reorder_within(match, desc(date), season)) %>%
     ggplot(aes(y=match)) +
     geom_segment(aes(x=0,xend=xgf,y=match,yend=match),colour=colour[["sfc"]][["light"]],size=2.5) +
@@ -306,7 +306,7 @@ plot_team <- function(data,squad="Southampton",season="2019-20"){
       strip.text=element_blank()
     ) +
     labs(
-      title=glue("<b style='color:#265DAB'>Opposition xG</b> | <b style='color:#D71920'>Southampton xG</b>"),
+      title=glue("<b style='color:#265DAB'>Opposition xG</b> | <b style='color:#D71920'>{squad} xG</b>"),
       x=element_blank(),
       y=element_blank()
     ) +
