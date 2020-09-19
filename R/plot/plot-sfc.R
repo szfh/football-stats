@@ -257,16 +257,20 @@ plot_team <- function(data,squad="Southampton",season="2019-20"){
     make_long_matches() %>%
     filter(season %in% !!season) %>%
     filter(squad %in% !!squad) %>%
-    mutate(season=ifelse(date<as.Date("2020-03-10"),"2019-20 part 1","2019-20 part 2")) %>%
+    # mutate(season=ifelse(date<as.Date("2020-03-10"),"2019-20 part 1","2019-20 part 2")) %>%
+    mutate(season=case_when(
+      date>as.Date("2019-08-01") & date<as.Date("2020-03-31") ~ "2019-20 part 1",
+      date>as.Date("2019-04-01") & date<as.Date("2020-07-30") ~ "2019-20 part 2",
+      TRUE ~ season)) %>%
     filter(!is.na(homegls)) %>%
     mutate(shortha=ifelse(ha=="home","H","A")) %>%
     mutate(match=glue::glue("{opposition} {shortha} {glsf}-{glsa}")) %>%
     mutate(match=reorder_within(match, date, season)) %>%
     ggplot(aes(x=match)) +
     geom_point(aes(y=xgf),size=1,colour="darkred",fill="darkred",alpha=0.5,shape=23) +
-    geom_spline(aes(y=xgf,group=season),spar=0.6,colour="darkred",linetype="longdash",size=0.7) +
+    geom_spline(aes(y=xgf,group=season),spar=0.5,colour="darkred",linetype="longdash",size=0.7) +
     geom_point(aes(y=xga),size=1,colour="royalblue",fill="royalblue",alpha=0.5,shape=23) +
-    geom_spline(aes(y=xga,group=season),spar=0.6,colour="royalblue",linetype="longdash",size=0.7) +
+    geom_spline(aes(y=xga,group=season),spar=0.5,colour="royalblue",linetype="longdash",size=0.7) +
     theme[["solar"]]() +
     theme(
       axis.text.x=element_text(size=6,angle=60,hjust=1),
@@ -290,14 +294,18 @@ plot_team <- function(data,squad="Southampton",season="2019-20"){
     make_long_matches() %>%
     filter(season %in% !!season) %>%
     filter(squad %in% !!squad) %>%
-    mutate(season=ifelse(date<as.Date("2020-03-10"),"2019-20 part 1","2019-20 part 2")) %>%
+    # mutate(season=ifelse(date<as.Date("2020-03-10"),"2019-20 part 1","2019-20 part 2")) %>%
+    mutate(season=case_when(
+      date>as.Date("2019-08-01") & date<as.Date("2020-03-31") ~ "2019-20 part 1",
+      date>as.Date("2019-04-01") & date<as.Date("2020-07-30") ~ "2019-20 part 2",
+      TRUE ~ season)) %>%
     filter(!is.na(homegls)) %>%
     mutate(shortha=ifelse(ha=="home","H","A")) %>%
     mutate(match=glue("{opposition} {shortha} {glsf}-{glsa}")) %>%
     mutate(match=reorder_within(match, desc(date), season)) %>%
     ggplot(aes(y=match)) +
-    geom_segment(aes(x=0,xend=xgf,y=match,yend=match),colour=colour[["sfc"]][["light"]],size=2.5) +
-    geom_segment(aes(x=0,xend=-xga,y=match,yend=match),colour=colour[["medium"]][[1]],size=2.5) +
+    geom_segment(aes(x=0,xend=xgf,y=match,yend=match),colour=colour[["sfc"]][["light"]],size=2) +
+    geom_segment(aes(x=0,xend=-xga,y=match,yend=match),colour=colour[["medium"]][[1]],size=2) +
     theme[["solar"]]() +
     theme(
       plot.title=element_markdown(size=8,hjust=0.5),
