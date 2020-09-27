@@ -67,6 +67,14 @@ join <- function(){
     select(data) %>%
     unnest(data)
   
+  data$us_schedule <- 
+    understat %>%
+    filter(stattype=="schedule") %>%
+    select(-id,-isResult) %>%
+    unnest(cols="data") %>%
+    mutate(match_id=id) %>%
+    type_convert()
+  
   data$canpl <- canpl
   
   return(data)
