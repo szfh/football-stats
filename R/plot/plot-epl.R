@@ -9,6 +9,8 @@ plot_league <- function(data,league="EPL",season="2019-20"){
     filter(season %in% !!season) %>%
     select(player,squad,gls=standard_gls,pk=performance_pk,npxg=expected_npxg) %>%
     mutate(npgls=gls-pk) %>%
+    group_by(player,squad) %>%
+    summarise(npgls=sum(npgls,na.rm=TRUE),npxg=sum(npxg,na.rm=TRUE)) %>%
     make_long_data(levels=c("npgls","npxg"),labels=c("Goals","Expected Goals")) %>%
     mutate(focus=case_when(min_rank(desc(n))<=10 ~ TRUE,
                            TRUE ~ FALSE)) %>%
