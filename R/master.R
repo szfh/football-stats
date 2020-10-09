@@ -12,9 +12,9 @@
 # plot
 # source(here("R","join","join.R"))
 # source(here("R","themes.R"))
-# source(here("R","plot","plot-sfc.R"))
+# source(here("R","plot","plot-team.R"))
 # plot_team(data=join())
-# source(here("R","plot","plot-epl.R"))
+# source(here("R","plot","plot-league.R"))
 # plot_league(data=join())
 # source(here("R","plot","plot-cpl.R"))
 # plot_cpl(data=join()["canpl"])
