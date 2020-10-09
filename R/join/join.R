@@ -1,7 +1,7 @@
 join <- function(){
-  fbref <- readRDS(file=here("data","fbref-raw.rds"))
-  understat <- readRDS(file=here("data","understat-raw.rds"))
-  canpl <- readRDS(file=here("data","canpl-raw.rds"))
+  fbref <- readRDS(file=here("data","fbref.rds"))
+  understat <- readRDS(file=here("data","understat.rds"))
+  canpl <- readRDS(file=here("data","canpl.rds"))
   
   data <- list()
   
@@ -15,6 +15,8 @@ join <- function(){
   # select() # delete non-required columns
   
   # canpl <- canpl
+  
+  browser()
   
   # join
   data$table <-
