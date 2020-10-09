@@ -1,4 +1,4 @@
-scrape_understat <- function(save_path=here("data","understat-raw.rds"),current_season="2020"){
+scrape_understat <- function(save_path=here("data","understat.rds"),current_season="2020"){
   
   understat_saved <- readRDS(save_path)
   

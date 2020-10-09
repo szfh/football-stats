@@ -1,4 +1,4 @@
-scrape_fbref <- function(save_path=here("data","fbref-raw.rds"),current_season="2020-21"){
+scrape_fbref <- function(save_path=here("data","fbref.rds"),current_season="2020-21"){
   
   fbref_saved <- readRDS(save_path)
   
