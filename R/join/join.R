@@ -89,43 +89,6 @@ join <- function(){
   return(data)
 }
 
-fbref_clean_names <- function(data,page){
-  if(page %in% c("squad","player","leagueha")){
-    names(data) <-
-      glue("{data[1,]} {data[2,]}") %>%
-      str_squish() %>%
-      str_to_lower() %>%
-      str_replace_all(c(" "="_","%"="pc","#"="n")) %>%
-      str_remove_all("[/ \\( \\)]") %>%
-      make.unique(sep="_") %>%
-      print
-    
-    data %<>% slice(-1,-2)
-  }
-  if(page %in% c("schedule","league")){
-    names(data) <-
-      glue("{data[1,]}") %>%
-      str_squish() %>%
-      str_to_lower() %>%
-      str_replace_all(c(" "="_","%"="pc","#"="n")) %>%
-      str_remove_all("[/ \\( \\)]") %>%
-      make.unique(sep="_") %>%
-      print
-    
-    data %<>% slice(-1)
-  }
-  if("player" %in% names(data)){ # remove duplicated column names from player table
-    data %<>% filter(player != "Player")
-  }
-  if("wk" %in% names(data)){ # remove duplicated column names + blank rows from schedule
-    data %<>% filter(wk != "Wk") %>% filter(wk != "")
-  }
-  
-  data %<>% type_convert # refactor data types
-  
-  return(data)
-}
-
 fbref_tidy <- function(data,page,stattype){
   
   if(page %in% c("squad","player","schedule","league","leagueha")){
