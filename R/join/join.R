@@ -4,20 +4,22 @@ join <- function(){
   canpl <- readRDS(file=here("data","canpl.rds"))
   
   data <- list()
-  
+
   # tidy  
-  fbref <- fbref %>%
+  fbref <-
+    fbref %>%
     mutate(data=pmap(list(data,page,stattype), possibly(fbref_tidy, otherwise=NA))) %>%
     select(-any_of(c("statselector","seasoncode","page_url","content_selector_id")))
   
-  # understat <- understat
-  # mutate(data=pmap(function_here)) %>% # make understat_tidy?
-  # select() # delete non-required columns
+  understat <-
+    understat %>%
+    # mutate(data=pmap(function_here)) %>% # make understat_tidy?
+    select(-any_of(c("statselector")))
   
-  # canpl <- canpl
-  
-  browser()
-  
+  canpl <-
+    canpl %>%
+    select(-any_of(c("path")))
+
   # join
   data$table <-
     fbref %>%
