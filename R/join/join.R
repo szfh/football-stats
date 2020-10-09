@@ -4,7 +4,7 @@ join <- function(){
   canpl <- readRDS(file=here("data","canpl.rds"))
   
   data <- list()
-
+  
   # tidy  
   fbref <-
     fbref %>%
@@ -19,7 +19,7 @@ join <- function(){
   canpl <-
     canpl %>%
     select(-any_of(c("path")))
-
+  
   # join
   data$table <-
     fbref %>%
@@ -76,10 +76,15 @@ join <- function(){
     filter(stattype=="schedule") %>%
     select(-id,-isResult) %>%
     unnest(cols="data") %>%
-    mutate(match_id=id) %>%
-    type_convert()
+    mutate(match_id=id)
   
-  data$canpl <- canpl
+  data$canpl <-
+    canpl
+  
+  #type convert
+  data <-
+    data %>%
+    map(type_convert)
   
   return(data)
 }
