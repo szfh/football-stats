@@ -9,6 +9,7 @@ pacman::p_load(
   janitor,
   cowplot,
   polite,
+  beeswarm,
   understatr,
   ggformula,
   gghighlight,
