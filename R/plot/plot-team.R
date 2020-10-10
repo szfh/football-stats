@@ -323,5 +323,5 @@ plot_team <- function(data,squad="Southampton",season="2019-20"){
     facet_grid(rows=vars(season), space="free", scales="free_y")
   
   plots_logo <- add_logo(plots,path=here("images","SB_Regular.png"),x=1,y=1,hjust=1.1,width=0.2)
-  save_plots(plots_logo,path=here("plots","SFC"))
+  save_plots(plots_logo,path=here("plots","team"))
 }

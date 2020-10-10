@@ -259,5 +259,5 @@ plot_league <- function(data,league="EPL",season="2019-20"){
     scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.1))
   
   plots_logo <- add_logo(plots,path=here("images","SB_Regular.png"),x=1,y=1,hjust=1.1,width=0.2)
-  save_plots(plots_logo,path=here("plots","EPL"))
+  save_plots(plots_logo,path=here("plots","league"))
 }
