@@ -2,7 +2,7 @@ source(here("R","plot","plot-utils.R"))
 
 plot_team <- function(data,squad="Southampton",season="2019-20"){
   plots <- list()
-  
+
   plots$minutes <-
     data$players %>%
     filter(season %in% !!season) %>%
@@ -13,6 +13,10 @@ plot_team <- function(data,squad="Southampton",season="2019-20"){
       min_start=min_start*starts,
       min_sub=min_sub*subs
     ) %>%
+    mutate(
+      min_start = ifelse(is.na(min_start),0,min_start),
+      min_sub = ifelse(is.na(min_sub),0,min_sub)
+      ) %>%
     mutate(
       pos=case_when(
         player %in% c("Kevin Danso","Jannik Vestergaard","Jan Bednarek","Jack Stephens","Maya Yoshida") ~ "CB",
@@ -25,7 +29,7 @@ plot_team <- function(data,squad="Southampton",season="2019-20"){
     mutate(player=fct_reorder(player,min)) %>%
     ggplot(aes(x=min,y=player)) +
     geom_segment(aes(y=player,yend=player,x=0,xend=min_start),colour=colour[["sfc"]][["main"]],size=2.5,alpha=0.8) +
-    geom_segment(aes(y=player,yend=player,x=min_start,xend=min),colour=colour[["sfc"]][["light"]],size=2.5,alpha=0.8) +
+    geom_segment(aes(y=player,yend=player,x=min_start,xend=min_start+min_sub),colour=colour[["sfc"]][["light"]],size=2.5,alpha=0.8) +
     theme[["solar"]]() +
     theme(
       plot.title=element_markdown(),
@@ -47,7 +51,7 @@ plot_team <- function(data,squad="Southampton",season="2019-20"){
     filter(squad %in% !!squad) %>%
     select(player,npxg=expected_npxg,xa=expected_xa) %>%
     filter_na(c("npxg","xa")) %>%
-    mutate(focus=ifelse(npxg>=1|xa>=1,TRUE,FALSE)) %>%
+    mutate(focus=ifelse(npxg>=0.1|xa>=0.1,TRUE,FALSE)) %>%
     ggplot(aes(x=npxg,y=xa)) +
     geom_point(aes(fill=focus),shape=23,size=2.5,alpha=0.8,colour=colour[["sfc"]][["black"]]) +
     geom_text_repel(aes(label=ifelse(focus,player,"")),size=rel(2.5)) +
@@ -67,7 +71,9 @@ plot_team <- function(data,squad="Southampton",season="2019-20"){
     filter(squad %in% !!squad) %>%
     select(player,sh=standard_sh,kp) %>%
     make_long_data(levels=c("sh","kp"),labels=c("Shot","Pass leading to shot")) %>%
-    mutate(focus=case_when(percent_rank(n)>0.4 ~ TRUE,
+    # mutate(focus=case_when(percent_rank(n)>0.4 ~ TRUE,
+    #                        TRUE ~ FALSE)) %>%
+    mutate(focus=case_when(n>0 ~ TRUE,
                            TRUE ~ FALSE)) %>%
     ggplot(aes(x=0,y=n)) +
     geom_text_repel(
@@ -97,7 +103,7 @@ plot_team <- function(data,squad="Southampton",season="2019-20"){
     filter(season %in% !!season) %>%
     filter(squad %in% !!squad) %>%
     select(player,min=playing_time_min,team_gls=`team_success_+-`,team_xg=`team_success_xg_xg+-`) %>%
-    make_long_data(levels=c("team_gls","team_xg"),labels=c("Goals +/-","xG +/-")) %>%
+    make_long_data(levels=c("team_gls","team_xg"),labels=c("Goals +/-","Expected Goals +/-")) %>%
     mutate(PM=ifelse(n>=0,TRUE,FALSE)) %>%
     ggplot(aes(x=0,y=n)) +
     geom_text_repel(
@@ -109,7 +115,7 @@ plot_team <- function(data,squad="Southampton",season="2019-20"){
       segment.size=0.4,
       box.padding=0.05
     ) +
-    geom_point(aes(colour=PM,fill=PM),shape=21,size=3,colour="black") +
+    geom_point(aes(colour=PM,fill=PM),shape=23,size=3,colour="black") +
     theme[["solarfacet"]]() +
     facet_wrap("key",scales="free") +
     labs(
@@ -118,8 +124,8 @@ plot_team <- function(data,squad="Southampton",season="2019-20"){
       y=element_blank(),
       caption=glue("Goals/xG for minus against while each player is on the pitch")
     ) +
-    scale_x_continuous(limit=c(0,1)) +
-    scale_y_continuous() +
+    scale_x_continuous(limit=c(0,1),breaks=seq(-50,50,1)) +
+    scale_y_continuous(breaks=seq(-50,50,1)) +
     scale_fill_manual(values=c("TRUE"=colour[["medium"]][[3]],"FALSE"=colour[["medium"]][[8]]))
   
   plots$passescompleted <-
@@ -128,7 +134,9 @@ plot_team <- function(data,squad="Southampton",season="2019-20"){
     filter(squad %in% !!squad) %>%
     select(player,short_cmp,medium_cmp,long_cmp) %>%
     make_long_data(levels=c("short_cmp","medium_cmp","long_cmp"),labels=c("Short (<5 yards)","Medium (5-25 yards)","Long (>25 yards)")) %>%
-    mutate(focus=case_when(percent_rank(n)>0.4 ~ TRUE,
+    # mutate(focus=case_when(percent_rank(n)>0.4 ~ TRUE,
+    #                        TRUE ~ FALSE)) %>%
+    mutate(focus=case_when(n>0 ~ TRUE,
                            TRUE ~ FALSE)) %>%
     ggplot(aes(x=0,y=n)) +
     geom_text_repel(
