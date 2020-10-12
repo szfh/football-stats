@@ -62,8 +62,8 @@ scrape_understat <- function(save_path=here("data","understat.rds"),current_seas
   understat <- bind_rows(understat_keep1, understat_new1, understat_keep2, understat_new2) %>%
     filter(!is.na(data)) %>%
     relocate(data,.after=last_col())
-  
-  saveRDS(understat,file=save_path)
+
+    saveRDS(understat,file=save_path)
   
   return(understat)
 }
@@ -82,6 +82,8 @@ understat_scrape_league <- function(league="EPL", year="2019", str){
     stringr::str_extract("\\[.+\\]") %>%
     jsonlite::fromJSON(simplifyVector=TRUE)
   
+  # understat <- understat_clean_names(data)
+  
   return(data)
 }
 
@@ -94,5 +96,49 @@ understat_scrape_match <- function(datatype,id){
     data <- get_match_shots(id)
   }
   
+  # understat <- understat_clean_names(data)
+  
   return(data)
+}
+
+understat_clean_names <- function(data){
+  browser()
+    names(data) <-
+      names(data) %>%
+      str_squish() %>%
+      str_to_lower() %>%
+      str_replace_all(c(" "="_","$"="_"))
+    
+  # if(page %in% c("squad","player","leagueha")){
+  #   names(data) <-
+  #     glue("{data[1,]} {data[2,]}") %>%
+  #     str_squish() %>%
+  #     str_to_lower() %>%
+  #     str_replace_all(c(" "="_","%"="pc","#"="n")) %>%
+  #     str_remove_all("[/ \\( \\)]") %>%
+  #     make.unique(sep="_") %>%
+  #     print
+  #   
+  #   data %<>% slice(-1,-2)
+  # }
+  # if(page %in% c("schedule","league")){
+  #   names(data) <-
+  #     glue("{data[1,]}") %>%
+  #     str_squish() %>%
+  #     str_to_lower() %>%
+  #     str_replace_all(c(" "="_","%"="pc","#"="n")) %>%
+  #     str_remove_all("[/ \\( \\)]") %>%
+  #     make.unique(sep="_") %>%
+  #     print
+  #   
+  #   data %<>% slice(-1)
+  # }
+  # if("player" %in% names(data)){ # remove duplicated column names from player table
+  #   data %<>% filter(player != "Player")
+  # }
+  # if("wk" %in% names(data)){ # remove duplicated column names + blank rows from schedule
+  #   data %<>% filter(wk != "Wk") %>% filter(wk != "")
+  # }
+  
+  data %<>% type_convert # refactor data types
 }
