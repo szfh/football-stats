@@ -15,7 +15,6 @@
 data/
 plots/
 R/test/
-R/examples/
 
 #html
 .html
