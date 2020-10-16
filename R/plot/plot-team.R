@@ -103,6 +103,7 @@ plot_team <- function(data,squad="Southampton",season="2019-20"){
     filter(season %in% !!season) %>%
     filter(squad %in% !!squad) %>%
     select(player,min=playing_time_min,team_gls=`team_success_+-`,team_xg=`team_success_xg_xg+-`) %>%
+    # mutate(team_gls=90*team_gls/min,team_xg=90*team_xg/min) %>%
     make_long_data(levels=c("team_gls","team_xg"),labels=c("Goals +/-","Expected Goals +/-")) %>%
     mutate(PM=ifelse(n>=0,TRUE,FALSE)) %>%
     ggplot(aes(x=0,y=n)) +
@@ -122,7 +123,7 @@ plot_team <- function(data,squad="Southampton",season="2019-20"){
       title="On-pitch goal difference",
       x=element_blank(),
       y=element_blank(),
-      caption=glue("Goals/xG for minus against while each player is on the pitch")
+      caption=glue("Goals/xG scored - Goals/xG conceded while each player is on the pitch")
     ) +
     scale_x_continuous(limit=c(0,1),breaks=seq(-50,50,1)) +
     scale_y_continuous(breaks=seq(-50,50,1)) +
