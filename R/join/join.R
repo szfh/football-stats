@@ -4,7 +4,7 @@ join <- function(){
   canpl <- readRDS(file=here("data","canpl.rds"))
   
   data <- list()
-  
+
   # tidy  
   fbref <-
     fbref %>%
@@ -94,7 +94,8 @@ fbref_tidy <- function(data,page,stattype){
   if(page %in% c("squad","player","schedule","league","leagueha")){
     data %<>%
       select(-any_of(c("rk","matches","notes","match_report","top_team_scorer","goalkeeper"))) %>%
-      select(-contains(c("pc","90")))
+      select(-contains(c("pc","90"))) %>%
+      mutate(age=as.character(age))
   }
   if(page=="player"){
     data %<>%
