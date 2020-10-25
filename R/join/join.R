@@ -4,7 +4,7 @@ join <- function(){
   canpl <- readRDS(file=here("data","canpl.rds"))
   
   data <- list()
-
+# browser()
   # tidy  
   fbref <-
     fbref %>%
@@ -90,25 +90,29 @@ join <- function(){
 }
 
 fbref_tidy <- function(data,page,stattype){
-  
+  # browser()
   if(page %in% c("squad","player","schedule","league","leagueha")){
-    data %<>%
+    data <-
+      data %>%
       select(-any_of(c("rk","matches","notes","match_report","top_team_scorer","goalkeeper"))) %>%
       select(-contains(c("pc","90"))) %>%
       mutate(age=as.character(age))
   }
   if(page=="player"){
-    data %<>%
+    data <-
+      data %>%
       separate("nation",c(NA,"nation"),sep=" ",fill="right") %>%
       separate("pos",c("pos1",NA,"pos2"),sep=c(2,3),fill="right")
   }
   if(page=="schedule"){
-    data %<>%
+    data <-
+      data %>%
       separate("score",c("homegls","awaygls"),sep="[:punct:]",fill="right") %>%
       rename("homexg"="xg","awayxg"="xg_1")
   }
   if(stattype %in% c("keepers","keepersadv")){
-    data %<>%
+    data <-
+      data %>%
       rename("n_pl_gk"=any_of("n_pl")) %>%
       select(-any_of(c("playing_time_starts","playing_time_mp","playing_time_min")))
   }
