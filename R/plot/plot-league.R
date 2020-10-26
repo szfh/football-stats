@@ -194,10 +194,9 @@ plot_league <- function(data,league="EPL",season="2019-20"){
       x="xG for",
       y="xG against"
     ) +
-    scale_x_continuous(breaks=seq(0,100,5),expand=expansion(add=c(3,1))) +
-    scale_y_reverse(breaks=seq(0,100,5),expand=expansion(add=c(3,1))) +
-    scale_fill_manual(values=palette[["epl"]]()) +
-    coord_fixed()
+    scale_x_continuous(breaks=seq(0,100,5),expand=expansion(add=c(0.5))) +
+    scale_y_reverse(breaks=seq(0,100,5),expand=expansion(add=c(0.5))) +
+    scale_fill_manual(values=palette[["epl"]]())
   
   plots$squadxgd <-
     data$squad %>%
