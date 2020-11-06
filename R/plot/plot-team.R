@@ -2,7 +2,7 @@ source(here("R","plot","plot-utils.R"))
 
 plot_team <- function(data,squad="Southampton",season="2019-20"){
   plots <- list()
-
+  
   plots$minutes <-
     data$players %>%
     filter(season %in% !!season) %>%
@@ -16,7 +16,7 @@ plot_team <- function(data,squad="Southampton",season="2019-20"){
     mutate(
       min_start = ifelse(is.na(min_start),0,min_start),
       min_sub = ifelse(is.na(min_sub),0,min_sub)
-      ) %>%
+    ) %>%
     mutate(
       pos=case_when(
         player %in% c("Kevin Danso","Jannik Vestergaard","Jan Bednarek","Jack Stephens","Maya Yoshida","Mohammed Salisu") ~ "CB",
@@ -43,7 +43,7 @@ plot_team <- function(data,squad="Southampton",season="2019-20"){
       x=element_blank(),
       y=element_blank()
     ) +
-    scale_x_continuous(breaks=seq(0,90*38,180),expand=expansion(add=c(0,20)))
+    scale_x_continuous(breaks=seq(0,90*38,90),expand=expansion(add=c(0,20)))
   
   plots$xgxa <-
     data$players %>%
@@ -51,7 +51,12 @@ plot_team <- function(data,squad="Southampton",season="2019-20"){
     filter(squad %in% !!squad) %>%
     select(player,npxg=expected_npxg,xa=expected_xa) %>%
     filter_na(c("npxg","xa")) %>%
-    mutate(focus=ifelse(npxg>=0.1|xa>=0.1,TRUE,FALSE)) %>%
+    # mutate(focus=ifelse(npxg>=0.1|xa>=0.1,TRUE,FALSE)) %>%
+    mutate(focus=case_when(
+      npxg==0 & xa==0 ~ FALSE,
+      min_rank(desc(npxg))<=8 ~ TRUE,
+      min_rank(desc(xa))<=8 ~ TRUE,
+      TRUE ~ FALSE)) %>%
     ggplot(aes(x=npxg,y=xa)) +
     geom_point(aes(fill=focus),shape=23,size=2.5,alpha=0.8,colour=colour[["sfc"]][["black"]]) +
     geom_text_repel(aes(label=ifelse(focus,player,"")),size=rel(2.5)) +
@@ -73,8 +78,10 @@ plot_team <- function(data,squad="Southampton",season="2019-20"){
     make_long_data(levels=c("sh","kp"),labels=c("Shot","Pass leading to shot")) %>%
     # mutate(focus=case_when(percent_rank(n)>0.4 ~ TRUE,
     #                        TRUE ~ FALSE)) %>%
-    mutate(focus=case_when(n>0 ~ TRUE,
-                           TRUE ~ FALSE)) %>%
+    mutate(focus=case_when(
+      n==0 ~ FALSE,
+      min_rank(desc(n))<=15 ~ TRUE,
+      TRUE ~ FALSE)) %>%
     ggplot(aes(x=0,y=n)) +
     geom_text_repel(
       aes(label=ifelse(focus,player,"")),
@@ -137,8 +144,10 @@ plot_team <- function(data,squad="Southampton",season="2019-20"){
     make_long_data(levels=c("short_cmp","medium_cmp","long_cmp"),labels=c("Short (<5 yards)","Medium (5-25 yards)","Long (>25 yards)")) %>%
     # mutate(focus=case_when(percent_rank(n)>0.4 ~ TRUE,
     #                        TRUE ~ FALSE)) %>%
-    mutate(focus=case_when(n>0 ~ TRUE,
-                           TRUE ~ FALSE)) %>%
+    mutate(focus=case_when(
+      n==0 ~ FALSE,
+      min_rank(desc(n))<=15 ~ TRUE,
+      TRUE ~ FALSE)) %>%
     ggplot(aes(x=0,y=n)) +
     geom_text_repel(
       aes(label=ifelse(focus,player,"")),
@@ -189,20 +198,21 @@ plot_team <- function(data,squad="Southampton",season="2019-20"){
     ) +
     scale_x_continuous(breaks=seq(-2000,2000,200),labels=abs(seq(-2000,2000,200)),expand=expansion(add=c(10))) +
     scale_colour_manual(values=c("Left"=colour[["medium"]][[1]],"Right"=colour[["medium"]][[8]]))
-  
+  # browser()
   plots$sca <-
     data$players %>%
     filter(season %in% !!season) %>%
     filter(squad %in% !!squad) %>%
     select(player,sca=sca_sca,sca_passlive=sca_types_passlive,sca_passdead=sca_types_passdead,
            sca_drib=sca_types_drib,sca_sh=sca_types_sh,sca_fld=sca_types_fld) %>%
-    filter(sca>0) %>%
     mutate(sca_other=sca_drib+sca_sh+sca_fld) %>%
-    make_long_data(levels=c("sca_passlive","sca_passdead","sca_other"),labels=c("Open play pass","Dead ball pass","Dribble/Shot/Fouled")) %>%
+    make_long_data(levels=c("sca_passlive","sca_passdead","sca_other"),labels=c("Open play pass","Dead ball pass","Dribble / Shot / Fouled")) %>%
     mutate(focus=case_when(
-      (key=="Open play pass" & min_rank(desc(n))<=15) ~ TRUE,
-      (key=="Dead ball pass" & min_rank(desc(n))<=2) ~ TRUE,
-      (key=="Dribble/Shot/Fouled" & min_rank(desc(n))<=8) ~ TRUE,
+      n==0 ~ FALSE,
+      # (key=="Open play pass" & min_rank(desc(n))<=15) ~ TRUE,
+      # (key=="Dead ball pass" & min_rank(desc(n))<=2) ~ TRUE,
+      # (key=="Dribble / Shot / Fouled" & min_rank(desc(n))<=8) ~ TRUE,
+      min_rank(desc(n))<=15 ~ TRUE,
       TRUE ~ FALSE
     )) %>%
     ggplot(aes(x=0,y=n)) +
@@ -274,7 +284,6 @@ plot_team <- function(data,squad="Southampton",season="2019-20"){
     make_long_matches() %>%
     filter(season %in% !!season) %>%
     filter(squad %in% !!squad) %>%
-    # mutate(season=ifelse(date<as.Date("2020-03-10"),"2019-20 part 1","2019-20 part 2")) %>%
     mutate(season=case_when(
       date>as.Date("2019-08-01") & date<as.Date("2020-03-31") ~ "2019-20 part 1",
       date>as.Date("2019-04-01") & date<as.Date("2020-07-30") ~ "2019-20 part 2",
