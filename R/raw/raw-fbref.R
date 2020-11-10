@@ -144,6 +144,10 @@ fbref_scrape_href <- function(data_html,data_table,page=NA){
   return(data)
 }
 
+fbref_scrape_events <- function(matchcode){
+  NULL
+}
+
 fbref_clean_names <- function(data,page){
   if(page %in% c("squad","player","leagueha")){
     names(data) <-
