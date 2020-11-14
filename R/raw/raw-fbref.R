@@ -2,7 +2,7 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),current_season="2020
   
   fbref_saved <- readRDS(save_path)
   
-  eplseasons <- tribble(~season, ~seasoncode, #advanced/non-advanced?
+  eplseasons <- tribble(~season, ~seasoncode, #advanced/non-advanced? # rename seasoncode to code/pagecode
                         "2020-21",10728,
                         "2019-20",3232,
                         "2018-19",1889,
@@ -35,6 +35,8 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),current_season="2020
                                "leagueha",
   )
   
+  # browser()
+  
   fbref_all <- tibble() %>% # all squad + player data parameters
     bind_rows(crossing(data_types_squad_player,tables_squad_player)) %>% # (squad + player) * datatypes
     bind_rows(data_types_league) %>% # fixtures
@@ -45,6 +47,7 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),current_season="2020
   
   fbref_new <-
     anti_join(fbref_all, fbref_keep) %>%
+    slice(14) %>%
     mutate(page_url=fbref_get_url(page,seasoncode,stattype,statselector)) %>%
     mutate(content_selector_id=fbref_get_selector(page,seasoncode,stattype,statselector)) %>%
     print
@@ -55,7 +58,8 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),current_season="2020
   fbref <- bind_rows(fbref_keep,fbref_new) %>%
     filter(!is.na(data))
   
-  saveRDS(fbref,file=save_path)
+  browser()
+  # saveRDS(fbref,file=save_path)
   
   return(fbref)
 }
@@ -88,13 +92,17 @@ fbref_scrape <- function(page_url=NA,content_selector_id=NA,page=NA,stattype=NA)
   url <- glue("http://acciotables.herokuapp.com/?page_url={page_url}&content_selector_id={content_selector_id}")
   print(glue("url: {url}"))
   
+  # browser()
+  
   # import table
-  data_html <-
-    url %>%
-    read_html()
+  # data_html <-
+  #   url %>%
+  #   read_html()
   
   session <- polite::bow(url,user_agent="@saintsbynumbers")
   data_html <- polite::scrape(session)
+  
+  # browser()
   
   data_table <- data_html %>%
     html_table(header=FALSE) %>%
@@ -103,14 +111,22 @@ fbref_scrape <- function(page_url=NA,content_selector_id=NA,page=NA,stattype=NA)
   # clean names and remove non-data rows
   data_table <- fbref_clean_names(data_table,page)
   
+  browser()
+  
   # add url codes
   data <- fbref_scrape_href(data_html,data_table,page)
+  
+  # need to also get page code here?
   
   return(data)
 }
 
 fbref_scrape_href <- function(data_html,data_table,page=NA){
+  
+  # browser()
+  
   if(page %in% c("league")){
+
     data_href <-
       data_html %>%
       html_nodes("a") %>%
@@ -120,11 +136,13 @@ fbref_scrape_href <- function(data_html,data_table,page=NA){
       filter(datatype=="squads") %>%
       print
     
-    data <- cbind(data_table,data_href)
-  } else if(page %in% c("schedule")){
+    data <- cbind(data_table,data_href) # update with left_join as below
     
+  } else if(page %in% c("schedule")){
+
     data_href <-
       data_html %>%
+      # html_nodes(".left:nth-child(13)") %>%
       html_nodes("a") %>%
       html_attr("href") %>%
       as_tibble() %>%
@@ -133,14 +151,27 @@ fbref_scrape_href <- function(data_html,data_table,page=NA){
       filter(!is.na(desc)) %>%
       unique()
 
-    if(nrow(data_table) - nrow(data_href) > 0){
-      data_href <- data_href %>%
-        add_row(code=(rep(NA,nrow(data_table) - nrow(data_href)))) #extend df
-    }
-    data <- cbind(data_table,data_href)
+    #filter for Match Report column, anti_join, bind_cols, then bind_rows
+      data_table_mr <- data_table %>%
+        filter(match_report=="Match Report")
+      
+      browser()
+      
+      # t1 <- bind_cols(data_table_mr,data_href)
+      # data <- left_join(data_table,t1)
+      
+      data <- data_table %>%
+        filter(match_report=="Match Report") %>%
+        bind_cols(data_href) %>%
+        left_join(data_table,.)
+
+    #filter for Match Report column, anti_join, bind_cols, then bind_rows
+    
   } else {
     data <- data_table
   }
+  
+  #data <- cbind(data_table,data_href) #move this into each part of the if loop
   return(data)
 }
 
