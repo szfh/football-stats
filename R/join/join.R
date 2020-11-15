@@ -26,7 +26,7 @@ join <- function(){
     filter(page=="league") %>%
     select(-page,-stattype) %>%
     unnest(cols=data)
-  
+
   data$squad <-
     fbref %>%
     filter(page=="squad") %>%
@@ -36,7 +36,8 @@ join <- function(){
     nest() %>%
     mutate(data=map(data,remove_empty,which="cols")) %$%
     data %>%
-    reduce(full_join)
+    reduce(full_join) %>%
+    mutate(vs=str_detect(squad,"vs "))
   
   data$squad <-
     data$table %>%
