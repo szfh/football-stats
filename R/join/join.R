@@ -4,7 +4,7 @@ join <- function(){
   canpl <- readRDS(file=here("data","canpl.rds"))
   
   data <- list()
-
+  
   # tidy  
   fbref <-
     fbref %>%
@@ -40,7 +40,7 @@ join <- function(){
   
   data$squad <-
     data$table %>%
-    left_join(data$squad)
+    full_join(data$squad)
   
   data$players <-
     fbref %>%
@@ -90,7 +90,7 @@ join <- function(){
 }
 
 fbref_tidy <- function(data,page,stattype){
-
+  
   if(page %in% c("squad","player","schedule","league","leagueha")){
     data <-
       data %>%
