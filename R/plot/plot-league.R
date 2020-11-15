@@ -183,6 +183,7 @@ plot_league <- function(data,league="EPL",season="2020-21"){
   
   plots$squadxg2 <-
     data$squad %>%
+    filter(!vs) %>%
     filter(season %in% !!season) %>%
     select(squad,xg=expected_npxg,xga) %>%
     ggplot(aes(x=xg,y=xga)) +
