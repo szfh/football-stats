@@ -47,7 +47,7 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),current_season="2020
   
   fbref_new <-
     anti_join(fbref_all, fbref_keep) %>%
-    slice(14) %>%
+    # slice(14) %>%
     mutate(page_url=fbref_get_url(page,seasoncode,stattype,statselector)) %>%
     mutate(content_selector_id=fbref_get_selector(page,seasoncode,stattype,statselector)) %>%
     print
@@ -111,7 +111,7 @@ fbref_scrape <- function(page_url=NA,content_selector_id=NA,page=NA,stattype=NA)
   # clean names and remove non-data rows
   data_table <- fbref_clean_names(data_table,page)
   
-  browser()
+  # browser()
   
   # add url codes
   data <- fbref_scrape_href(data_html,data_table,page)
@@ -136,7 +136,14 @@ fbref_scrape_href <- function(data_html,data_table,page=NA){
       filter(datatype=="squads") %>%
       print
     
-    data <- cbind(data_table,data_href) # update with left_join as below
+    # browser()
+    
+    # data <- cbind(data_table,data_href) # update with left_join as below
+    
+    data <- data_table %>%
+      # filter(match_report=="Match Report") %>%
+      bind_cols(data_href) %>%
+      left_join(data_table,.)
     
   } else if(page %in% c("schedule")){
 
@@ -152,10 +159,10 @@ fbref_scrape_href <- function(data_html,data_table,page=NA){
       unique()
 
     #filter for Match Report column, anti_join, bind_cols, then bind_rows
-      data_table_mr <- data_table %>%
-        filter(match_report=="Match Report")
+      # data_table_mr <- data_table %>%
+      #   filter(match_report=="Match Report")
       
-      browser()
+      # browser()
       
       # t1 <- bind_cols(data_table_mr,data_href)
       # data <- left_join(data_table,t1)
