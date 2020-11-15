@@ -1,6 +1,6 @@
 source(here("R","plot","plot-utils.R"))
 
-plot_league <- function(data,league="EPL",season="2019-20"){
+plot_league <- function(data,league="EPL",season="2020-21"){
   plots <- list()
   
   # Premier League player plots

@@ -1,6 +1,6 @@
 source(here("R","plot","plot-utils.R"))
 
-plot_team <- function(data,squad="Southampton",season="2019-20"){
+plot_team <- function(data,squad="Southampton",season="2020-21"){
   squadvs <- paste0("vs ",squad)
   
   plots <- list()
