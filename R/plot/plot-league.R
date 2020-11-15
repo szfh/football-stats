@@ -257,6 +257,10 @@ plot_league <- function(data,league="EPL",season="2019-20"){
     scale_fill_manual(values=palette[["epl"]]()) +
     scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.1))
   
-  plots_logo <- add_logo(plots,path=here("images","SB_Regular.png"),x=1,y=1,hjust=1.1,width=0.2)
+  plots_logo <- 
+    plots %>%
+    add_logo(path=here("images","SB_Regular.png"),x=1,y=1,hjust=1.1,width=0.2) %>%
+    add_logo(path=here("images","fbref.png"),x=0.88,y=1,hjust=1.1,width=0.29)
+  
   save_plots(plots_logo,path=here("plots","league"))
 }

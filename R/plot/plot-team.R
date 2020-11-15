@@ -364,7 +364,11 @@ plot_team <- function(data,squad="Southampton",season="2019-20"){
     scale_fill_manual(values=palette[["epl"]]()) +
     scale_x_continuous(breaks=seq(0,1000,100),expand=expansion(add=c(20))) +
     scale_y_reverse(breaks=seq(0,5000,500),expand=expansion(add=c(50)))
-
-  plots_logo <- add_logo(plots,path=here("images","SB_Regular.png"),x=1,y=1,hjust=1.1,width=0.2)
+  
+  plots_logo <- 
+    plots %>%
+    add_logo(path=here("images","SB_Regular.png"),x=1,y=1,hjust=1.1,width=0.2) %>%
+    add_logo(path=here("images","fbref.png"),x=0.88,y=1,hjust=1.1,width=0.29)
+  
   save_plots(plots_logo,path=here("plots","team"))
 }
