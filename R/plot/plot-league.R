@@ -258,6 +258,49 @@ plot_league <- function(data,league="EPL",season="2020-21"){
     scale_fill_manual(values=palette[["epl"]]()) +
     scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.1))
   
+plots$pressures <-
+    data$squad %>%
+    filter(season %in% !!season) %>%select(squad,vs,pass_types_live,pressures_press,pressures_def_3rd:pressures_att_3rd,touches_live,touches_def_3rd:touches_att_3rd) %>%
+    mutate(squad=case_when(
+      vs ~ str_sub(squad,4),
+      TRUE ~ squad
+    )) %>%
+    mutate(vs=case_when(
+      vs ~ "vs",
+      TRUE ~ ""
+    )) %>%
+    pivot_wider(names_from=vs,values_from=pass_types_live:touches_att_3rd) %>%
+    # glimpse %>%
+    mutate(
+      def3rd=pressures_def_3rd_/touches_def_3rd_vs,
+      mid3rd=pressures_mid_3rd_/touches_mid_3rd_vs,
+      att3rd=pressures_att_3rd_/touches_att_3rd_vs
+    ) %>%
+    make_long_data(levels=c("def3rd","mid3rd","att3rd"),labels=c("Defensive Third","Middle Third","Attacking Third")) %>%
+    ggplot(aes(x=0,y=n)) +
+    geom_text_repel(
+      aes(label=squad),
+      size=2.5,
+      nudge_x=0.5,
+      direction="y",
+      hjust=0,
+      segment.size=0.4,
+      segment.alpha=0.8,
+      box.padding=0.05
+    ) +
+    geom_point(aes(fill=squad),size=3,shape=21,colour="black") +
+    theme[["solarfacet"]]() +
+    facet_wrap("key",scales="fixed") +
+    labs(
+      title="Press intensity",
+      x=element_blank(),
+      y=element_blank(),
+      caption="percentage of opposition ball possessions put under pressure | control-dribble-offload = single possession"
+    ) +
+    scale_x_continuous(limit=c(0,1)) +
+    scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+    scale_fill_manual(values=palette[["epl"]]())
+  
   plots_logo <- 
     plots %>%
     add_logo(path=here("images","SB_Regular.png"),x=1,y=1,hjust=1.1,width=0.2) %>%
