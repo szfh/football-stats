@@ -258,7 +258,7 @@ plot_league <- function(data,league="EPL",season="2020-21"){
     scale_fill_manual(values=palette[["epl"]]()) +
     scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.1))
   
-plots$pressures <-
+  plots$pressures <-
     data$squad %>%
     filter(season %in% !!season) %>%select(squad,vs,pass_types_live,pressures_press,pressures_def_3rd:pressures_att_3rd,touches_live,touches_def_3rd:touches_att_3rd) %>%
     mutate(squad=case_when(
@@ -300,6 +300,58 @@ plots$pressures <-
     scale_x_continuous(limit=c(0,1)) +
     scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
     scale_fill_manual(values=palette[["epl"]]())
+  
+  plots$ppda <-
+    data$squad %>%
+    filter(season %in% !!season) %>%
+    select(squad,vs,pass_types_live,pressures_press:pressures_att_3rd,touches_touches,touches_live,touches_def_3rd:touches_att_3rd) %>%
+    mutate(squad=case_when(
+      vs ~ str_sub(squad,4),
+      TRUE ~ squad
+    )) %>%
+    mutate(vs=case_when(
+      vs ~ "vs",
+      TRUE ~ ""
+    )) %>%
+    pivot_wider(names_from=vs,values_from=pass_types_live:touches_att_3rd) %>%
+    ggplot(aes(x=pressures_press_,y=pass_types_live_vs,)) +
+    geom_point(aes(fill=squad),shape=21,size=3.5,alpha=0.8) +
+    geom_text_repel(aes(label=squad),size=2.5) +
+    theme[["solar"]]() +
+    labs(
+      title="Passes per Pressure",
+      x="Pressures",
+      y="Opposition Passes"
+    ) +
+    scale_fill_manual(values=palette[["epl"]]()) +
+    scale_x_continuous(breaks=seq(0,2000,100),expand=expansion(add=c(20))) +
+    scale_y_reverse(breaks=seq(0,5000,500),expand=expansion(add=c(50)))
+  
+  plots$tpda <-
+    data$squad %>%
+    filter(season %in% !!season) %>%
+    select(squad,vs,pressures_def_3rd:pressures_att_3rd,touches_touches,touches_live,touches_def_3rd:touches_att_3rd) %>%
+    mutate(squad=case_when(
+      vs ~ str_sub(squad,4),
+      TRUE ~ squad
+    )) %>%
+    mutate(vs=case_when(
+      vs ~ "vs",
+      TRUE ~ ""
+    )) %>%
+    pivot_wider(names_from=vs,values_from=pressures_def_3rd:touches_att_3rd) %>%
+    ggplot(aes(x=pressures_mid_3rd_+pressures_att_3rd_,y=touches_def_3rd_vs+touches_mid_3rd_vs)) +
+    geom_point(aes(fill=squad),shape=21,size=3.5,alpha=0.8) +
+    geom_text_repel(aes(label=squad),size=2.5) +
+    theme[["solar"]]() +
+    labs(
+      title="Touches per Pressure",
+      x="Pressures (exc defensive third)",
+      y="Opposition Touches (exc attacking third)"
+    ) +
+    scale_fill_manual(values=palette[["epl"]]()) +
+    scale_x_continuous(breaks=seq(0,1000,100),expand=expansion(add=c(20))) +
+    scale_y_reverse(breaks=seq(0,5000,500),expand=expansion(add=c(50)))
   
   plots_logo <- 
     plots %>%
