@@ -352,7 +352,16 @@ plot_league <- function(data,league="EPL",season="2020-21"){
     scale_fill_manual(values=palette[["epl"]]()) +
     scale_x_continuous(breaks=seq(0,1000,100),expand=expansion(add=c(20))) +
     scale_y_reverse(breaks=seq(0,5000,500),expand=expansion(add=c(50)))
-
+  
+  # labels <- tribble(
+  #   ~"squad",~"n",~"key",~"pos",~"label",
+  #   "Leicester City",2.5,"Defensive Third","FW","Leicester's FWs\nrelieve pressure by\nstaying forward",
+  #   "Leeds United",28.5,"Attacking Third","MF","Leeds' midfielders\npress everywhere",
+  #   "Brighton",13.5,"Attacking Third","DF","High full back teams\nwill show up here\n(this is Lamptey + March)",
+  #   "Arsenal",17.5,"Middle Third","MF","Arsenal are\nthe least\nactive in\nmidfield"
+  # ) %>%
+  #   mutate(across(c(squad,key,pos),factor))
+  
   plots$pressposition <-
     data$players %>%
     filter(season %in% !!season) %>%
@@ -374,19 +383,22 @@ plot_league <- function(data,league="EPL",season="2020-21"){
         mutate(position=(as.numeric(position)))
     ) %>%
     mutate(squad=fct_reorder(squad,desc(position))) %>%
-    glimpse %>%
     ggplot() +
     geom_point(aes(x=n,y=squad,fill=squad),shape=21,size=1.5) +
+    # geom_text_repel(data=labels[1,], aes(x=n,y=squad,label=label),fontface="bold",size=1.6,nudge_x=35,segment.size=0.4,box.padding=0.01,min.segment.length = 0) +
+    # geom_text_repel(data=labels[2,], aes(x=n,y=squad,label=label),fontface="bold",size=1.6,nudge_x=-6,nudge_y=4,segment.size=0.4,box.padding=0.01,min.segment.length = 0) +
+    # geom_text_repel(data=labels[3,], aes(x=n,y=squad,label=label),fontface="bold",size=1.6,nudge_x=11,segment.size=0.4,box.padding=0.01,min.segment.length = 0) +
+    # geom_text_repel(data=labels[4,], aes(x=n,y=squad,label=label),fontface="bold",size=1.6,nudge_x=-3,nudge_y=8,segment.size=0.4,box.padding=0.01,min.segment.length = 0) +
     facet_grid(rows=vars(pos),cols=vars(key),scales="free_x") +
     theme[["solar"]]() +
     theme(
       plot.title=element_text(),
       axis.line=element_blank(),
-      axis.text=element_text(size=4),
+      axis.text=element_text(size=3.5),
       strip.text.y=element_text(angle=0)
     ) +
     labs(
-      title="Pressures per match -\nBy pitch location and position",
+      title="Pressures per match -\nPitch location and player position",
       x=element_blank(),
       y=element_blank()
     ) +
