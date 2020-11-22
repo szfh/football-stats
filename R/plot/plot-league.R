@@ -352,6 +352,47 @@ plot_league <- function(data,league="EPL",season="2020-21"){
     scale_fill_manual(values=palette[["epl"]]()) +
     scale_x_continuous(breaks=seq(0,1000,100),expand=expansion(add=c(20))) +
     scale_y_reverse(breaks=seq(0,5000,500),expand=expansion(add=c(50)))
+
+  plots$pressposition <-
+    data$players %>%
+    filter(season %in% !!season) %>%
+    select(player,squad,pos1,pos2,mp=playing_time_mp,min=playing_time_min,press=pressures_press,def3rd=pressures_def_3rd,mid3rd=pressures_mid_3rd,att3rd=pressures_att_3rd) %>%
+    mutate(squad=fct_reorder(squad,press)) %>%
+    mutate(pos=factor(pos1,levels=c("FW","MF","DF","GK"))) %>%
+    filter(pos!="GK") %>%
+    mutate(across(c("def3rd","mid3rd","att3rd"), ~ ./mp)) %>%
+    make_long_data(levels=c("def3rd","mid3rd","att3rd"),labels=c("Defensive Third","Middle Third","Attacking Third")) %>%
+    group_by(squad,pos,key) %>%
+    summarise(n=sum(n,na.rm=TRUE)) %>%
+    ungroup() %>%
+    left_join(
+      data$squad %>%
+        filter(!vs) %>%
+        filter(season=="2020-21") %>%
+        select(squad) %>%
+        rownames_to_column("position") %>%
+        mutate(position=(as.numeric(position)))
+    ) %>%
+    mutate(squad=fct_reorder(squad,desc(position))) %>%
+    glimpse %>%
+    ggplot() +
+    geom_point(aes(x=n,y=squad,fill=squad),shape=21,size=1.5) +
+    facet_grid(rows=vars(pos),cols=vars(key),scales="free_x") +
+    theme[["solar"]]() +
+    theme(
+      plot.title=element_text(),
+      axis.line=element_blank(),
+      axis.text=element_text(size=4),
+      strip.text.y=element_text(angle=0)
+    ) +
+    labs(
+      title="Pressures per match -\nBy pitch location and position",
+      x=element_blank(),
+      y=element_blank()
+    ) +
+    scale_x_continuous(expand=expansion(mult=0.025)) +
+    scale_y_discrete(expand=expansion(add=1)) +
+    scale_fill_manual(values=palette[["epl"]]())
   
   plots_logo <- 
     plots %>%
