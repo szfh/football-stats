@@ -1,5 +1,5 @@
 # libraries
-source(here::here("R","library.R"))
+# source(here::here("R","library.R"))
 
 # raw
 # source(here("R","raw","raw-fbref.R"))
@@ -10,8 +10,8 @@ source(here::here("R","library.R"))
 # import_canpl()
 
 # plot
-source(here("R","join","join.R"))
-source(here("R","themes.R"))
+# source(here("R","join","join.R"))
+# source(here("R","themes.R"))
 # source(here("R","plot","plot-team.R"))
 # plot_team(data=join())
 # source(here("R","plot","plot-league.R"))
