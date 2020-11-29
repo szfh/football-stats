@@ -5,7 +5,7 @@ plot_league <- function(data,league="EPL",season="2020-21"){
   
   # Premier League player plots
   plots$glsxg <-
-    data$players %>%
+    data$fbref$players %>%
     filter(season %in% !!season) %>%
     select(player,squad,gls=standard_gls,pk=performance_pk,npxg=expected_npxg) %>%
     mutate(npgls=gls-pk) %>%
@@ -37,7 +37,7 @@ plot_league <- function(data,league="EPL",season="2020-21"){
     scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.1))
   
   plots$playerxgxa <-
-    data$players %>%
+    data$fbref$players %>%
     filter(season %in% !!season) %>%
     select(player,squad,npxg=expected_npxg,xa=expected_xa) %>%
     make_long_data(levels=c("npxg","xa"),labels=c("xG","xA")) %>%
@@ -67,7 +67,7 @@ plot_league <- function(data,league="EPL",season="2020-21"){
     scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.2))
   
   plots$playercomppasses <-
-    data$players %>%
+    data$fbref$players %>%
     filter(season %in% !!season) %>%
     select(player,squad,short_cmp,medium_cmp,long_cmp) %>%
     make_long_data(levels=c("short_cmp","medium_cmp","long_cmp"),labels=c("Short (<5 yards)","Medium (5-25 yards)","Long (>25 yards)")) %>%
@@ -98,7 +98,7 @@ plot_league <- function(data,league="EPL",season="2020-21"){
     scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.2))
   
   plots$playernogoals <-
-    data$players %>%
+    data$fbref$players %>%
     filter(season %in% !!season) %>%
     select(player,squad,sh=standard_sh,gls=standard_gls,npxg=expected_npxg) %>%
     filter(gls==0) %>%
@@ -122,7 +122,7 @@ plot_league <- function(data,league="EPL",season="2020-21"){
     scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.2))
   
   # plots$playernogoalsallseasons <-
-  #   data$players %>%
+  #   data$fbref$players %>%
   #   select(player,squad,season,sh=standard_sh,gls=standard_gls,npxg=expected_npxg) %>%
   #   filter(gls==0) %>%
   #   mutate(focus=case_when(percent_rank(sh)>0.96 ~ TRUE,
@@ -153,7 +153,7 @@ plot_league <- function(data,league="EPL",season="2020-21"){
   # Premier League team plots
   
   plots$squadxg1 <-
-    data$squad %>%
+    data$fbref$squad %>%
     filter(season %in% !!season) %>%
     select(squad,xg,xga) %>%
     mutate(xga=-xga) %>%
@@ -182,7 +182,7 @@ plot_league <- function(data,league="EPL",season="2020-21"){
     scale_fill_manual(values=palette[["epl"]]())
   
   plots$squadxg2 <-
-    data$squad %>%
+    data$fbref$squad %>%
     filter(!vs) %>%
     filter(season %in% !!season) %>%
     select(squad,xg=expected_npxg,xga) %>%
@@ -200,7 +200,7 @@ plot_league <- function(data,league="EPL",season="2020-21"){
     scale_fill_manual(values=palette[["epl"]]())
   
   plots$squadxgd <-
-    data$squad %>%
+    data$fbref$squad %>%
     filter(season %in% !!season) %>%
     select(squad,gd=gdiff,xgd=xgdiff) %>%
     make_long_data(levels=c("gd","xgd"),labels=c("Goal difference","Expected goal difference")) %>%
@@ -228,7 +228,7 @@ plot_league <- function(data,league="EPL",season="2020-21"){
     scale_fill_manual(values=palette[["epl"]]())
   
   plots$playeratt3rdactions <-
-    data$players %>%
+    data$fbref$players %>%
     select(player,season,squad,touch=touches_att_3rd,pressure=pressures_att_3rd,tackle=tackles_att_3rd) %>%
     filter(season %in% !!season) %>%
     make_long_data(levels=c("touch","pressure","tackle"),labels=c("Touches","Pressures","Tackles")) %>%
@@ -259,7 +259,7 @@ plot_league <- function(data,league="EPL",season="2020-21"){
     scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.1))
   
   plots$pressures <-
-    data$squad %>%
+    data$fbref$squad %>%
     filter(season %in% !!season) %>%select(squad,vs,pass_types_live,pressures_press,pressures_def_3rd:pressures_att_3rd,touches_live,touches_def_3rd:touches_att_3rd) %>%
     mutate(squad=case_when(
       vs ~ str_sub(squad,4),
@@ -302,7 +302,7 @@ plot_league <- function(data,league="EPL",season="2020-21"){
     scale_fill_manual(values=palette[["epl"]]())
   
   plots$ppda <-
-    data$squad %>%
+    data$fbref$squad %>%
     filter(season %in% !!season) %>%
     select(squad,vs,pass_types_live,pressures_press:pressures_att_3rd,touches_touches,touches_live,touches_def_3rd:touches_att_3rd) %>%
     mutate(squad=case_when(
@@ -328,7 +328,7 @@ plot_league <- function(data,league="EPL",season="2020-21"){
     scale_y_reverse(breaks=seq(0,5000,500),expand=expansion(add=c(50)))
   
   plots$tpda <-
-    data$squad %>%
+    data$fbref$squad %>%
     filter(season %in% !!season) %>%
     select(squad,vs,pressures_def_3rd:pressures_att_3rd,touches_touches,touches_live,touches_def_3rd:touches_att_3rd) %>%
     mutate(squad=case_when(
@@ -363,7 +363,7 @@ plot_league <- function(data,league="EPL",season="2020-21"){
   #   mutate(across(c(squad,key,pos),factor))
   
   plots$pressposition <-
-    data$players %>%
+    data$fbref$players %>%
     filter(season %in% !!season) %>%
     select(player,squad,pos1,pos2,mp=playing_time_mp,min=playing_time_min,press=pressures_press,def3rd=pressures_def_3rd,mid3rd=pressures_mid_3rd,att3rd=pressures_att_3rd) %>%
     mutate(squad=fct_reorder(squad,press)) %>%
@@ -375,7 +375,7 @@ plot_league <- function(data,league="EPL",season="2020-21"){
     summarise(n=sum(n,na.rm=TRUE)) %>%
     ungroup() %>%
     left_join(
-      data$squad %>%
+      data$fbref$squad %>%
         filter(!vs) %>%
         filter(season=="2020-21") %>%
         select(squad) %>%

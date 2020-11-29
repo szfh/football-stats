@@ -1,32 +1,31 @@
-join <- function(){
-  fbref <- readRDS(file=here("data","fbref.rds"))
-  understat <- readRDS(file=here("data","understat.rds"))
-  canpl <- readRDS(file=here("data","canpl.rds"))
+join <- function(
+  fbref=readRDS(file=here("data","fbref.rds")),
+  understat=readRDS(file=here("data","understat.rds")),
+  canpl=readRDS(file=here("data","canpl.rds"))
+){
+  fbref_join <- possibly(join_fbref, otherwise=NA)(fbref)
+  understat_join <- possibly(join_understat, otherwise=NA)(understat)
+  canpl_join <- possibly(join_fbref, otherwise=NA)(canpl)
   
+  data <- list(fbref=fbref_join,understat=understat_join,canpl=canpl_join)
+  
+  return(data)
+}
+
+join_fbref <- function(fbref){
   data <- list()
   
-  # tidy  
   fbref <-
     fbref %>%
     mutate(data=pmap(list(data,page,stattype), possibly(fbref_tidy, otherwise=NA))) %>%
     select(-any_of(c("statselector","seasoncode","page_url","content_selector_id")))
   
-  understat <-
-    understat %>%
-    # mutate(data=pmap(function_here)) %>% # make understat_tidy?
-    select(-any_of(c("statselector")))
-  
-  canpl <-
-    canpl %>%
-    select(-any_of(c("path")))
-  
-  # join
   data$table <-
     fbref %>%
     filter(page=="league") %>%
     select(-page,-stattype) %>%
     unnest(cols=data)
-
+  
   data$squad <-
     fbref %>%
     filter(page=="squad") %>%
@@ -60,6 +59,17 @@ join <- function(){
     select(-page,-stattype) %>%
     unnest(cols=data)
   
+  return(data)
+}
+
+join_understat <- function(understat){
+  data <- list()
+  
+  understat <-
+    understat %>%
+    # mutate(data=pmap(function_here)) %>% # make understat_tidy?
+    select(-any_of(c("statselector")))
+  
   data$shots <-
     understat %>%
     filter(datatype=="shots") %>%
@@ -72,20 +82,25 @@ join <- function(){
     select(data) %>%
     unnest(data)
   
-  data$us_schedule <- 
+  data$us_schedule <-
     understat %>%
     filter(stattype=="schedule") %>%
     select(-id,-isResult) %>%
     unnest(cols="data") %>%
     mutate(match_id=id)
   
+  return(data)
+}
+
+join_canpl <- function(canpl){
+  data <- list()
+  
+  canpl <-
+    canpl %>%
+    select(-any_of(c("path")))
+  
   data$canpl <-
     canpl
-  
-  #type convert
-  # data <-
-  #   data %>%
-  #   map(type_convert)
   
   return(data)
 }
