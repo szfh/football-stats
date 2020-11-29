@@ -2,11 +2,11 @@ source(here("R","plot","plot-utils.R"))
 
 plot_team <- function(data,squad="Southampton",season="2020-21"){
   squadvs <- paste0("vs ",squad)
-  
+
   plots <- list()
   
   plots$minutes <-
-    data$players %>%
+    data$fbref$players %>%
     filter(season %in% !!season) %>%
     filter(squad %in% !!squad) %>%
     select(player,pos=pos1,min=playing_time_min,starts=starts_starts,subs=subs_subs,min_start=starts_mnstart,min_sub=subs_mnsub) %>%
@@ -48,7 +48,7 @@ plot_team <- function(data,squad="Southampton",season="2020-21"){
     scale_x_continuous(breaks=seq(0,90*38,90),expand=expansion(add=c(0,20)))
   
   plots$xgxa <-
-    data$players %>%
+    data$fbref$players %>%
     filter(season %in% !!season) %>%
     filter(squad %in% !!squad) %>%
     select(player,npxg=expected_npxg,xa=expected_xa) %>%
@@ -73,7 +73,7 @@ plot_team <- function(data,squad="Southampton",season="2020-21"){
     scale_fill_manual(values=c("TRUE"=colour[["sfc"]][["main"]],"FALSE"=colour[["sfc"]][["grey"]]))
   
   plots$shotskp <-
-    data$players %>%
+    data$fbref$players %>%
     filter(season %in% !!season) %>%
     filter(squad %in% !!squad) %>%
     select(player,sh=standard_sh,kp) %>%
@@ -108,7 +108,7 @@ plot_team <- function(data,squad="Southampton",season="2020-21"){
     scale_fill_manual(values=c("TRUE"=colour[["sfc"]][["light"]],"FALSE"=colour[["sfc"]][["grey"]]))
   
   plots$gd <-
-    data$players %>%
+    data$fbref$players %>%
     filter(season %in% !!season) %>%
     filter(squad %in% !!squad) %>%
     select(player,min=playing_time_min,team_gls=`team_success_+-`,team_xg=`team_success_xg_xg+-`) %>%
@@ -139,7 +139,7 @@ plot_team <- function(data,squad="Southampton",season="2020-21"){
     scale_fill_manual(values=c("TRUE"=colour[["medium"]][[3]],"FALSE"=colour[["medium"]][[8]]))
   
   plots$passescompleted <-
-    data$players %>%
+    data$fbref$players %>%
     filter(season %in% !!season) %>%
     filter(squad %in% !!squad) %>%
     select(player,short_cmp,medium_cmp,long_cmp) %>%
@@ -174,7 +174,7 @@ plot_team <- function(data,squad="Southampton",season="2020-21"){
     scale_fill_manual(values=c("TRUE"=colour[["sfc"]][["light"]],"FALSE"=colour[["sfc"]][["grey"]]))
   
   plots$passfootedness <-
-    data$players %>%
+    data$fbref$players %>%
     filter(season %in% !!season) %>%
     filter(squad %in% !!squad) %>%
     filter(body_parts_left+body_parts_right>0) %>%
@@ -202,7 +202,7 @@ plot_team <- function(data,squad="Southampton",season="2020-21"){
     scale_colour_manual(values=c("Left"=colour[["medium"]][[1]],"Right"=colour[["medium"]][[8]]))
   # browser()
   plots$sca <-
-    data$players %>%
+    data$fbref$players %>%
     filter(season %in% !!season) %>%
     filter(squad %in% !!squad) %>%
     select(player,sca=sca_sca,sca_passlive=sca_types_passlive,sca_passdead=sca_types_passdead,
@@ -245,7 +245,7 @@ plot_team <- function(data,squad="Southampton",season="2020-21"){
     scale_fill_manual(values=c("TRUE"=colour[["sfc"]][["light"]],"FALSE"=colour[["sfc"]][["grey"]]))
   
   plots$xgtrend <-
-    data$matches %>%
+    data$fbref$matches %>%
     make_long_matches() %>%
     filter(season %in% !!season) %>%
     filter(squad %in% !!squad) %>%
@@ -282,7 +282,7 @@ plot_team <- function(data,squad="Southampton",season="2020-21"){
     facet_grid(cols=vars(season), space="free", scales="free_x")
   
   plots$xgsegment <-
-    data$matches %>%
+    data$fbref$matches %>%
     make_long_matches() %>%
     filter(season %in% !!season) %>%
     filter(squad %in% !!squad) %>%
