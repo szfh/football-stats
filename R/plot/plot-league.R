@@ -14,7 +14,7 @@ plot_league <- function(data,league="EPL",season="2020-21"){
     make_long_data(levels=c("npgls","npxg"),labels=c("Goals","Expected Goals")) %>%
     mutate(focus=case_when(min_rank(desc(n))<=10 ~ TRUE,
                            TRUE ~ FALSE)) %>%
-    ggplot(aes(x=0,y=n,alpha=focus)) +
+    ggplot(aes(x=0.05,y=n,alpha=focus)) +
     geom_text_repel(
       aes(label=ifelse(focus,player,"")),
       size=2.5,
@@ -23,8 +23,9 @@ plot_league <- function(data,league="EPL",season="2020-21"){
       hjust=0,
       segment.size=0.4,
       box.padding=0.05
+      # position=position_jitterdodge(jitter.width=0,jitter.height=0.17,dodge.width=0.3,seed=2)
     ) +
-    geom_point(aes(fill=squad),shape=21,size=3,position=position_jitterdodge(jitter.width=0,jitter.height=0.17,dodge.width=0)) +
+    geom_point(aes(fill=squad),shape=21,size=3,position=position_jitterdodge(jitter.width=0,jitter.height=0,dodge.width=0.04,seed=2)) +
     theme[["solarfacet"]]() +
     facet_wrap("key",scales="free") +
     labs(
