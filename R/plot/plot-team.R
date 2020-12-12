@@ -258,7 +258,7 @@ plot_team <- function(data,squad="Southampton",season="2020-21"){
     filter(squad %in% !!squad) %>%
     mutate(season=case_when(
       date>as.Date("2019-08-01") & date<as.Date("2020-03-31") ~ "2019-20 part 1",
-      date>as.Date("2019-04-01") & date<as.Date("2020-07-30") ~ "2019-20 part 2",
+      date>as.Date("2020-04-01") & date<as.Date("2020-07-30") ~ "2019-20 part 2",
       TRUE ~ season)) %>%
     filter(!is.na(homegls)) %>%
     mutate(shortha=ifelse(ha=="home","H","A")) %>%
@@ -292,16 +292,16 @@ plot_team <- function(data,squad="Southampton",season="2020-21"){
     make_long_matches() %>%
     filter(season %in% !!season) %>%
     filter(squad %in% !!squad) %>%
+    mutate(xgf_mva=get_mva(xgf)) %>%
+    mutate(xga_mva=get_mva(xga)) %>%
     mutate(season=case_when(
       date>as.Date("2019-08-01") & date<as.Date("2020-03-31") ~ "2019-20 part 1",
-      date>as.Date("2019-04-01") & date<as.Date("2020-07-30") ~ "2019-20 part 2",
+      date>as.Date("2020-04-01") & date<as.Date("2020-07-30") ~ "2019-20 part 2",
       TRUE ~ season)) %>%
     filter(!is.na(homegls)) %>%
     mutate(shortha=ifelse(ha=="home","H","A")) %>%
     mutate(match=glue::glue("{opposition} {shortha} {glsf}-{glsa}")) %>%
     mutate(match=reorder_within(match, date, season)) %>%
-    mutate(xgf_mva=get_mva(xgf)) %>%
-    mutate(xga_mva=get_mva(xga)) %>%
     ggplot(aes(x=match)) +
     geom_point(aes(y=xgf),size=1,colour="darkred",fill="darkred",alpha=0.5,shape=23) +
     geom_line(aes(y=xgf_mva,group=season),colour="darkred",linetype="longdash",size=0.7) +
@@ -332,7 +332,7 @@ plot_team <- function(data,squad="Southampton",season="2020-21"){
     filter(squad %in% !!squad) %>%
     mutate(season=case_when(
       date>as.Date("2019-08-01") & date<as.Date("2020-03-31") ~ "2019-20 part 1",
-      date>as.Date("2019-04-01") & date<as.Date("2020-07-30") ~ "2019-20 part 2",
+      date>as.Date("2020-04-01") & date<as.Date("2020-07-30") ~ "2019-20 part 2",
       TRUE ~ season)) %>%
     filter(!is.na(homegls)) %>%
     mutate(shortha=ifelse(ha=="home","H","A")) %>%
