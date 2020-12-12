@@ -273,9 +273,9 @@ plot_league <- function(data,league="EPL",season="2020-21"){
     pivot_wider(names_from=vs,values_from=pass_types_live:touches_att_3rd) %>%
     # glimpse %>%
     mutate(
-      def3rd=pressures_def_3rd_/touches_def_3rd_vs,
+      def3rd=pressures_def_3rd_/touches_att_3rd_vs,
       mid3rd=pressures_mid_3rd_/touches_mid_3rd_vs,
-      att3rd=pressures_att_3rd_/touches_att_3rd_vs
+      att3rd=pressures_att_3rd_/touches_def_3rd_vs
     ) %>%
     make_long_data(levels=c("def3rd","mid3rd","att3rd"),labels=c("Defensive Third","Middle Third","Attacking Third")) %>%
     ggplot(aes(x=0,y=n)) +
@@ -289,9 +289,9 @@ plot_league <- function(data,league="EPL",season="2020-21"){
       segment.alpha=0.8,
       box.padding=0.05
     ) +
-    geom_point(aes(fill=squad),size=3,shape=21,colour="black") +
+    geom_point(aes(fill=squad),size=3,shape=23,colour="black") +
     theme[["solarfacet"]]() +
-    facet_wrap("key",scales="fixed") +
+    facet_wrap("key",scales="free") +
     labs(
       title="Press intensity",
       x=element_blank(),
