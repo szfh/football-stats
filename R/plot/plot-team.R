@@ -10,7 +10,13 @@ plot_team <- function(data,squad="Southampton",season="2020-21"){
     filter(season %in% !!season) %>%
     filter(squad %in% !!squad) %>%
     select(player,pos=pos1,min=playing_time_min,starts=starts_starts,subs=subs_subs,min_start=starts_mnstart,min_sub=subs_mnsub) %>%
+    mutate(min_start=replace_na(min_start,0)) %>%
+    mutate(min_sub=replace_na(min_sub,0)) %>%
+    group_by(player,pos) %>%
+    summarise(across(min:subs,sum),across(min_start:min_sub,mean)) %>%
+    # glimpse
     filter_na("min") %>%
+    ungroup() %>%
     mutate(
       min_start=min_start*starts,
       min_sub=min_sub*subs
@@ -28,7 +34,7 @@ plot_team <- function(data,squad="Southampton",season="2020-21"){
         player %in% c("Theo Walcott") ~ "FW",
         TRUE ~ pos)
     ) %>%
-    mutate(pos=factor(pos,levels=c("GK","CB","FB","DM","AM","FW"))) %>%
+    mutate(pos=factor(pos,levels=c("GK","DF","CB","FB","MF","DM","AM","FW"))) %>%
     mutate(player=fct_reorder(player,min)) %>%
     ggplot(aes(x=min,y=player)) +
     geom_segment(aes(y=player,yend=player,x=0,xend=min_start),colour=colour[["sfc"]][["main"]],size=2.5,alpha=0.8) +
@@ -46,7 +52,7 @@ plot_team <- function(data,squad="Southampton",season="2020-21"){
       x=element_blank(),
       y=element_blank()
     ) +
-    scale_x_continuous(breaks=seq(0,90*38,90),expand=expansion(add=c(0,20)))
+    scale_x_continuous(breaks=seq(0,90*38*3,180),expand=expansion(add=c(0,20)))
   
   plots$xgxa <-
     data$fbref$players %>%
