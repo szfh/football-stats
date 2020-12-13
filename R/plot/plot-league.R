@@ -37,6 +37,31 @@ plot_league <- function(data,league="EPL",season="2020-21"){
     scale_fill_manual(values=palette[["epl"]]()) +
     scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.1))
   
+  plots$psxg <-
+    data$fbref$squad %>%
+    filter(season %in% !!season) %>%
+    select(squad,vs,gls=standard_gls,psxg=expected_psxg,psxgsot=expected_psxgsot,psxgpm=`expected_psxg+-`) %>%
+    filter(vs) %>%
+    mutate(psxgpm=-psxgpm) %>%
+    mutate(squad=case_when(
+      vs ~ str_sub(squad,4),
+      TRUE ~ squad
+    )) %>%
+    mutate(PM=ifelse(psxgpm>=0,TRUE,FALSE)) %>%
+    mutate(squad=fct_reorder(squad,psxgpm)) %>%
+    glimpse %>%
+    ggplot(aes(x=psxgpm,y=squad,colour=PM)) +
+    geom_segment(aes(y=squad,yend=squad,x=0,xend=psxgpm),size=3.5,alpha=0.8) +
+    theme[["solar"]]() +
+    labs(
+      title="Post-shot expected goals",
+      x=element_blank(),
+      y=element_blank()) +
+    # annotate("text",label="Goalkeepers underperform\nagainst these teams",fontface="bold",hjust="right",size=3,x=-0.6,y=17) +
+    # annotate("text",label="Goalkeepers overperform\nagainst these teams",fontface="bold",hjust="left",size=3,x=0.6,y=6) +
+    scale_x_continuous(breaks=seq(-200,200,2),expand=expansion(add=c(0.1))) +
+    scale_colour_manual(values=c("TRUE"=colour[["medium"]][[3]],"FALSE"=colour[["medium"]][[8]]))
+  
   plots$playerxgxa <-
     data$fbref$players %>%
     filter(season %in% !!season) %>%
