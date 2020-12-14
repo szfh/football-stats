@@ -290,10 +290,10 @@ plot_team <- function(data,squad="Southampton",season="2020-21"){
   plots$xgtrendmva <-
     data$fbref$matches %>%
     make_long_matches() %>%
-    filter(season %in% !!season) %>%
     filter(squad %in% !!squad) %>%
     mutate(xgf_mva=get_mva(xgf)) %>%
     mutate(xga_mva=get_mva(xga)) %>%
+    filter(season %in% !!season) %>%
     mutate(season=case_when(
       date>as.Date("2019-08-01") & date<as.Date("2020-03-31") ~ "2019-20 part 1",
       date>as.Date("2020-04-01") & date<as.Date("2020-07-30") ~ "2019-20 part 2",
