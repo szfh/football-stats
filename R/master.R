@@ -12,7 +12,6 @@
 # plot
 # source(here("R","join","join.R"))
 # source(here("R","themes.R"))
-# j <- join()
 # source(here("R","plot","plot-team.R"))
 # plot_team(data=join())
 # source(here("R","plot","plot-league.R"))
