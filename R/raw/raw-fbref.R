@@ -66,8 +66,7 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),current_season="2020
     unnest(cols=data) %>%
     select(page:seasoncode,home,away,matchcode=code) %>%
     mutate(page="match",stattype="events") %>% # crossing?
-    filter(!is.na(matchcode)) %>%
-    filter(season=="2020-21") # delete later
+    filter(!is.na(matchcode))
   
   fbref_shots_keep <-
     fbref_saved %>%
