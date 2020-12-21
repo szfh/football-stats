@@ -43,11 +43,11 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),current_season="2020
   
   fbref_squad_player_keep <- #fbref$squad$keep / fbref$player$keep
     fbref_saved %>% # remove data to be scraped from saved
-    filter(page %in% c("player","squad","league","leagueha","schedule"))
-  ###
-  # filter(season!=current_season) %>%
-  # add extra data to be manually removed here
-  ###
+    filter(page %in% c("player","squad","league","leagueha","schedule")) %>%
+    filter(season!=current_season)
+    ###
+    # add extra data to be manually removed here
+    ###
   
   fbref_squad_player_new <- #fbref$squad$new / fbref$player$new
     anti_join(fbref_squad_player_all, fbref_squad_player_keep) %>%
@@ -72,21 +72,15 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),current_season="2020
   fbref_shots_keep <-
     fbref_saved %>%
     filter(stattype=="shots") %>%
-    # filter(season!=current_season) %>%
     filter(!is.na(data)) %>%
-    # filter(is.na(data)) %>%
-    filter(!is.null(data)) #%>%
-  # filter(matchcode=="a") #delete all
+    filter(!is.null(data))
   
-  browser()
-  
-  fbref_shots_new <- # schedule, matchcodes, scrape
-    #   
+  fbref_shots_new <-
     anti_join(fbref_matches_all, fbref_shots_keep, by="matchcode") %>%
     mutate(stattype="shots") %>%
-    mutate(page_url=fbref_get_url(page,matchcode=matchcode)) %>% # update function for this
-    mutate(content_selector_id=fbref_get_selector(page,stattype=stattype,matchcode=matchcode)) %>% # update function for this
-    mutate(data=pmap(list(page_url,content_selector_id,page,stattype), possibly(fbref_scrape, otherwise=NA))) # write this function
+    mutate(page_url=fbref_get_url(page,matchcode=matchcode)) %>%
+    mutate(content_selector_id=fbref_get_selector(page,stattype=stattype,matchcode=matchcode)) %>%
+    mutate(data=pmap(list(page_url,content_selector_id,page,stattype), possibly(fbref_scrape, otherwise=NA)))
   
   fbref_shots <-
     bind_rows(fbref_shots_keep,fbref_shots_new)
