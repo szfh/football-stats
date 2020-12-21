@@ -45,9 +45,9 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),current_season="2020
     fbref_saved %>% # remove data to be scraped from saved
     filter(page %in% c("player","squad","league","leagueha","schedule")) %>%
     filter(season!=current_season)
-    ###
-    # add extra data to be manually removed here
-    ###
+  ###
+  # add extra data to be manually removed here
+  ###
   
   fbref_squad_player_new <- #fbref$squad$new / fbref$player$new
     anti_join(fbref_squad_player_all, fbref_squad_player_keep) %>%
@@ -264,7 +264,8 @@ fbref_clean_names <- function(data,page){
       make.unique(sep="_") %>%
       print
     
-    data <- data %>%
+    data <-
+      data %>%
       slice(-1,-2)
   }
   if(page %in% c("schedule","league")){
@@ -281,6 +282,18 @@ fbref_clean_names <- function(data,page){
       data %>%
       slice(-1)
   }
+  if(page=="match"){ # should be stattype=="shots"
+    names(data) <-
+      glue("{data[1,]} {data[2,]}") %>%
+      str_squish() %>%
+      str_to_lower() %>%
+      str_replace_all(c(" "="_","%"="pc","#"="n")) %>%
+      make.unique(sep="_")
+    
+    data <-
+      data %>%
+      slice(-1,-2)
+  }
   if("player" %in% names(data)){ # remove duplicated column names from player table
     data %<>% filter(player != "Player")
     data <-
@@ -292,6 +305,11 @@ fbref_clean_names <- function(data,page){
       data %>%
       filter(wk != "Wk") %>%
       filter(wk != "")
+  }
+  if(page=="match"){ # should be stattype=="shots"
+    data <-
+      data %>%
+      filter(minute != "")
   }
   
   data <-
