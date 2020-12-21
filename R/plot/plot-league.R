@@ -37,14 +37,39 @@ plot_league <- function(data,league="EPL",season="2020-21"){
     scale_fill_manual(values=palette[["epl"]]()) +
     scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.1))
   
+  plots$psxg <-
+    data$fbref$squad %>%
+    filter(season %in% !!season) %>%
+    select(squad,vs,gls=standard_gls,psxg=expected_psxg,psxgsot=expected_psxgsot,psxgpm=`expected_psxg+-`) %>%
+    filter(vs) %>%
+    mutate(psxgpm=-psxgpm) %>%
+    mutate(squad=case_when(
+      vs ~ str_sub(squad,4),
+      TRUE ~ squad
+    )) %>%
+    mutate(PM=ifelse(psxgpm>=0,TRUE,FALSE)) %>%
+    mutate(squad=fct_reorder(squad,psxgpm)) %>%
+    glimpse %>%
+    ggplot(aes(x=psxgpm,y=squad,colour=PM)) +
+    geom_segment(aes(y=squad,yend=squad,x=0,xend=psxgpm),size=3.5,alpha=0.8) +
+    theme[["solar"]]() +
+    labs(
+      title="Post-shot expected goals",
+      x=element_blank(),
+      y=element_blank()) +
+    # annotate("text",label="Goalkeepers underperform\nagainst these teams",fontface="bold",hjust="right",size=3,x=-0.6,y=17) +
+    # annotate("text",label="Goalkeepers overperform\nagainst these teams",fontface="bold",hjust="left",size=3,x=0.6,y=6) +
+    scale_x_continuous(breaks=seq(-200,200,2),expand=expansion(add=c(0.1))) +
+    scale_colour_manual(values=c("TRUE"=colour[["medium"]][[3]],"FALSE"=colour[["medium"]][[8]]))
+  
   plots$playerxgxa <-
     data$fbref$players %>%
     filter(season %in% !!season) %>%
     select(player,squad,npxg=expected_npxg,xa=expected_xa) %>%
-    make_long_data(levels=c("npxg","xa"),labels=c("xG","xA")) %>%
+    make_long_data(levels=c("npxg","xa"),labels=c("Expected Goals","Expected Assists")) %>%
     mutate(focus=case_when(min_rank(desc(n))<=20 ~ TRUE,
                            TRUE ~ FALSE)) %>%
-    ggplot(aes(x=0,y=n,alpha=focus)) +
+    ggplot(aes(x=0.05,y=n,alpha=focus)) +
     geom_text_repel(
       aes(label=ifelse(focus,player,"")),
       size=2.5,
@@ -54,7 +79,7 @@ plot_league <- function(data,league="EPL",season="2020-21"){
       segment.size=0.4,
       box.padding=0.05
     ) +
-    geom_point(aes(fill=squad),shape=21,size=3) +
+    geom_point(aes(fill=squad),shape=21,size=3,position=position_jitterdodge(jitter.width=0,jitter.height=0,dodge.width=0.04,seed=2)) +
     theme[["solarfacet"]]() +
     facet_wrap("key",scales="free") +
     labs(
@@ -273,9 +298,9 @@ plot_league <- function(data,league="EPL",season="2020-21"){
     pivot_wider(names_from=vs,values_from=pass_types_live:touches_att_3rd) %>%
     # glimpse %>%
     mutate(
-      def3rd=pressures_def_3rd_/touches_def_3rd_vs,
+      def3rd=pressures_def_3rd_/touches_att_3rd_vs,
       mid3rd=pressures_mid_3rd_/touches_mid_3rd_vs,
-      att3rd=pressures_att_3rd_/touches_att_3rd_vs
+      att3rd=pressures_att_3rd_/touches_def_3rd_vs
     ) %>%
     make_long_data(levels=c("def3rd","mid3rd","att3rd"),labels=c("Defensive Third","Middle Third","Attacking Third")) %>%
     ggplot(aes(x=0,y=n)) +
@@ -289,9 +314,9 @@ plot_league <- function(data,league="EPL",season="2020-21"){
       segment.alpha=0.8,
       box.padding=0.05
     ) +
-    geom_point(aes(fill=squad),size=3,shape=21,colour="black") +
+    geom_point(aes(fill=squad),size=3,shape=23,colour="black") +
     theme[["solarfacet"]]() +
-    facet_wrap("key",scales="fixed") +
+    facet_wrap("key",scales="free") +
     labs(
       title="Press intensity",
       x=element_blank(),

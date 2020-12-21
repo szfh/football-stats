@@ -2,7 +2,7 @@ source(here("R","plot","plot-utils.R"))
 
 plot_team <- function(data,squad="Southampton",season="2020-21"){
   squadvs <- paste0("vs ",squad)
-
+  
   plots <- list()
   
   plots$minutes <-
@@ -10,7 +10,13 @@ plot_team <- function(data,squad="Southampton",season="2020-21"){
     filter(season %in% !!season) %>%
     filter(squad %in% !!squad) %>%
     select(player,pos=pos1,min=playing_time_min,starts=starts_starts,subs=subs_subs,min_start=starts_mnstart,min_sub=subs_mnsub) %>%
+    mutate(min_start=replace_na(min_start,0)) %>%
+    mutate(min_sub=replace_na(min_sub,0)) %>%
+    group_by(player,pos) %>%
+    summarise(across(min:subs,sum),across(min_start:min_sub,mean)) %>%
+    # glimpse
     filter_na("min") %>%
+    ungroup() %>%
     mutate(
       min_start=min_start*starts,
       min_sub=min_sub*subs
@@ -28,7 +34,7 @@ plot_team <- function(data,squad="Southampton",season="2020-21"){
         player %in% c("Theo Walcott") ~ "FW",
         TRUE ~ pos)
     ) %>%
-    mutate(pos=factor(pos,levels=c("GK","CB","FB","DM","AM","FW"))) %>%
+    mutate(pos=factor(pos,levels=c("GK","DF","CB","FB","MF","DM","AM","FW"))) %>%
     mutate(player=fct_reorder(player,min)) %>%
     ggplot(aes(x=min,y=player)) +
     geom_segment(aes(y=player,yend=player,x=0,xend=min_start),colour=colour[["sfc"]][["main"]],size=2.5,alpha=0.8) +
@@ -46,7 +52,7 @@ plot_team <- function(data,squad="Southampton",season="2020-21"){
       x=element_blank(),
       y=element_blank()
     ) +
-    scale_x_continuous(breaks=seq(0,90*38,90),expand=expansion(add=c(0,20)))
+    scale_x_continuous(breaks=seq(0,90*38*3,180),expand=expansion(add=c(0,20)))
   
   plots$xgxa <-
     data$fbref$players %>%
@@ -245,15 +251,14 @@ plot_team <- function(data,squad="Southampton",season="2020-21"){
     scale_colour_manual(values=c("TRUE"=colour[["sfc"]][["black"]],"FALSE"=colour[["sfc"]][["grey"]])) +
     scale_fill_manual(values=c("TRUE"=colour[["sfc"]][["light"]],"FALSE"=colour[["sfc"]][["grey"]]))
   
-  plots$xgtrend <-
+  plots$xgtrendsmooth <-
     data$fbref$matches %>%
     make_long_matches() %>%
     filter(season %in% !!season) %>%
     filter(squad %in% !!squad) %>%
-    # mutate(season=ifelse(date<as.Date("2020-03-10"),"2019-20 part 1","2019-20 part 2")) %>%
     mutate(season=case_when(
       date>as.Date("2019-08-01") & date<as.Date("2020-03-31") ~ "2019-20 part 1",
-      date>as.Date("2019-04-01") & date<as.Date("2020-07-30") ~ "2019-20 part 2",
+      date>as.Date("2020-04-01") & date<as.Date("2020-07-30") ~ "2019-20 part 2",
       TRUE ~ season)) %>%
     filter(!is.na(homegls)) %>%
     mutate(shortha=ifelse(ha=="home","H","A")) %>%
@@ -282,6 +287,44 @@ plot_team <- function(data,squad="Southampton",season="2020-21"){
     scale_y_continuous(limits=c(0,NA),expand=expansion(add=c(0,0.1))) +
     facet_grid(cols=vars(season), space="free", scales="free_x")
   
+  plots$xgtrendmva <-
+    data$fbref$matches %>%
+    make_long_matches() %>%
+    filter(squad %in% !!squad) %>%
+    mutate(xgf_mva=get_mva(xgf)) %>%
+    mutate(xga_mva=get_mva(xga)) %>%
+    filter(season %in% !!season) %>%
+    mutate(season=case_when(
+      date>as.Date("2019-08-01") & date<as.Date("2020-03-31") ~ "2019-20 part 1",
+      date>as.Date("2020-04-01") & date<as.Date("2020-07-30") ~ "2019-20 part 2",
+      TRUE ~ season)) %>%
+    filter(!is.na(homegls)) %>%
+    mutate(shortha=ifelse(ha=="home","H","A")) %>%
+    mutate(match=glue::glue("{opposition} {shortha} {glsf}-{glsa}")) %>%
+    mutate(match=reorder_within(match, date, season)) %>%
+    ggplot(aes(x=match)) +
+    geom_point(aes(y=xgf),size=1,colour="darkred",fill="darkred",alpha=0.5,shape=23) +
+    geom_line(aes(y=xgf_mva,group=season),colour="darkred",linetype="longdash",size=0.7) +
+    geom_point(aes(y=xga),size=1,colour="royalblue",fill="royalblue",alpha=0.5,shape=23) +
+    geom_line(aes(y=xga_mva,group=season),colour="royalblue",linetype="longdash",size=0.7) +
+    theme[["solar"]]() +
+    theme(
+      axis.text.x=element_text(size=6,angle=60,hjust=1),
+      axis.title.y=element_markdown(),
+      axis.text.y=element_text(),
+      plot.title=element_markdown(),
+      plot.caption=element_text(),
+      strip.text=element_blank()
+    ) +
+    labs(
+      title=glue("{squad} <b style='color:darkred'>attack</b> / <b style='color:royalblue'>defence</b> xG trend"),
+      x=element_blank(),
+      y=glue("Expected goals <b style='color:darkred'>for</b> / <b style='color:royalblue'>against</b>")
+    ) +
+    scale_x_reordered() +
+    scale_y_continuous(limits=c(0,NA),expand=expansion(add=c(0,0.1))) +
+    facet_grid(cols=vars(season), space="free", scales="free_x")
+  
   plots$xgsegment <-
     data$fbref$matches %>%
     make_long_matches() %>%
@@ -289,7 +332,7 @@ plot_team <- function(data,squad="Southampton",season="2020-21"){
     filter(squad %in% !!squad) %>%
     mutate(season=case_when(
       date>as.Date("2019-08-01") & date<as.Date("2020-03-31") ~ "2019-20 part 1",
-      date>as.Date("2019-04-01") & date<as.Date("2020-07-30") ~ "2019-20 part 2",
+      date>as.Date("2020-04-01") & date<as.Date("2020-07-30") ~ "2019-20 part 2",
       TRUE ~ season)) %>%
     filter(!is.na(homegls)) %>%
     mutate(shortha=ifelse(ha=="home","H","A")) %>%
