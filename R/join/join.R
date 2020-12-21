@@ -63,8 +63,8 @@ join_fbref <- function(fbref){
     fbref %>%
     filter(stattype=="shots") %>%
     select(-page) %>%
-    unnest(cols=data) %>%
-    glimpse
+    unnest(cols=data)
+    
 
   return(data)
 }
