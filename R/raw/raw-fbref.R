@@ -1,5 +1,4 @@
 scrape_fbref <- function(save_path=here("data","fbref.rds"),current_season="2020-21"){
-  
   fbref_saved <- readRDS(save_path)
   
   eplseasons <- tribble(~season, ~seasoncode, #advanced/non-advanced? # rename seasoncode to code/pagecode
@@ -68,6 +67,25 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),current_season="2020
     mutate(page="match",stattype="events") %>% # crossing?
     filter(!is.na(matchcode))
   
+  ###events
+  fbref_events_keep <-
+    fbref_saved %>%
+    filter(stattype=="events") %>%
+    filter(!is.na(data)) %>%
+    filter(!is.null(data))
+  
+  fbref_events_new <-
+    anti_join(fbref_matches_all, fbref_events_keep, by="matchcode") %>%
+    filter(season=="2020-21") %>% # delete later
+    mutate(stattype="events") %>%
+    mutate(page_url=fbref_get_url(page,matchcode=matchcode)) %>%
+    mutate(data=pmap(list(page_url,page,stattype), possibly(fbref_scrape_events, otherwise=NA))) %>%
+    glimpse
+  
+  fbref_events <-
+    bind_rows(fbref_events_keep,fbref_events_new)
+  ###
+  
   fbref_shots_keep <-
     fbref_saved %>%
     filter(stattype=="shots") %>%
@@ -76,6 +94,7 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),current_season="2020
   
   fbref_shots_new <-
     anti_join(fbref_matches_all, fbref_shots_keep, by="matchcode") %>%
+    filter(season=="2020-21") %>% # delete later
     mutate(stattype="shots") %>%
     mutate(page_url=fbref_get_url(page,matchcode=matchcode)) %>%
     mutate(content_selector_id=fbref_get_selector(page,stattype=stattype,matchcode=matchcode)) %>%
@@ -85,7 +104,7 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),current_season="2020
     bind_rows(fbref_shots_keep,fbref_shots_new)
   
   fbref <-
-    bind_rows(fbref_squad_player,fbref_shots)
+    bind_rows(fbref_squad_player,fbref_events,fbref_shots)
   
   saveRDS(fbref,file=save_path)
   
@@ -124,8 +143,6 @@ fbref_scrape <- function(page_url=NA,content_selector_id=NA,page=NA,stattype=NA)
   url <- glue("http://acciotables.herokuapp.com/?page_url={page_url}&content_selector_id={content_selector_id}")
   print(glue("url: {url}"))
   
-  # browser()
-  
   session <- polite::bow(url,user_agent="@saintsbynumbers")
   data_html <- polite::scrape(session)
   
@@ -135,7 +152,7 @@ fbref_scrape <- function(page_url=NA,content_selector_id=NA,page=NA,stattype=NA)
     extract2(1)
   
   # clean names and remove non-data rows
-  data_table <- fbref_clean_names(data_table,page)
+  data_table <- fbref_clean_names(data_table,page,stattype)
   
   # add url codes
   data <- fbref_scrape_href(data_html,data_table,page)
@@ -182,32 +199,32 @@ fbref_scrape_href <- function(data_html,data_table,page=NA){
       left_join(data_table,.)
     
   } else {
-    data <- data_table
+    data <-
+      data_table
   }
   
   return(data)
 }
 
-fbref_scrape_events <- function(code){
+fbref_scrape_events <- function(url,page,stattype){
   selector <- ".event"
-  url <- glue("https://fbref.com/en/matches/{code}/")
   print(url)
-  
-  # browser()
   
   events <-
     url %>%
     read_html() %>%
     html_nodes(selector)
   
-  eventstext <- events %>%
+  events_text <-
+    events %>%
     html_text() %>%
     str_remove_all("\n") %>%
     str_remove_all("\t") %>%
     str_squish() %>%
     as_tibble()
   
-  eventsteams <- events %>%
+  events_teams <-
+    events %>%
     html_attr("class") %>%
     str_squish() %>%
     as_tibble() %>%
@@ -219,21 +236,19 @@ fbref_scrape_events <- function(code){
       TRUE ~ team
     ))
   
-  # browser()
-  
-  eventstable <-
-    cbind(eventstext,eventsteams) %>%
+  events_table <-
+    cbind(events_text,events_teams) %>% # bind rows?
     slice(-1,-2) %>%
     separate(value,c("time","desc"),sep="&rsquor;",extra="merge",fill="right") %>%
     mutate(half=case_when(
       as.numeric(str_sub(time,1,2)) <= 45 ~ 1,
-      TRUE ~ 2 #extra time?
+      TRUE ~ 2 # extra time?
     )) %>%
     mutate(time=case_when(
       str_detect(time,"\\+") ~ as.character(as.numeric(str_sub(time,1,2))+as.numeric(str_sub(time,3))),
       TRUE ~ time
     )) %>%
-    separate(desc,c("home",NA,"away","desc"),sep=c(1,2,3),extra="merge",fill="right") %>%
+    separate(desc,c("homegls",NA,"awaygls","desc"),sep=c(1,2,3),extra="merge",fill="right") %>%
     separate(desc,c("desc","type"),sep=" — ",extra="merge",fill="right") %>%
     mutate(type=case_when(
       str_detect(type,"Goal") ~ "Goal",
@@ -241,18 +256,15 @@ fbref_scrape_events <- function(code){
       str_detect(desc,"Penalty Miss") ~ "Miss (pen)",
       TRUE ~ type
     )) %>%
-    # mutate(state=as.numeric(home)-as.numeric(away)) %>%
+    mutate(state=as.numeric(homegls)-as.numeric(awaygls)) %>%
     mutate(desc=str_remove_all(desc,coll("Penalty Kick — Substitute| —|Penalty Miss"))) %>%
     separate(desc,c("player1","player2"),sep=coll("for |Assist:|Penalty Kick —|Penalty Kick|Penalty saved by |Penalty Miss")) %>%
-    # relocate(half,time,type,team,player1,player2,home,away) %>% #state on the end if used
-    glimpse
+    relocate(half,time,type,team,player1,player2,homegls,awaygls,state)
   
-  # browser()
-  
-  return(eventstable)
+  return(events_table)
 }
 
-fbref_clean_names <- function(data,page){
+fbref_clean_names <- function(data,page,stattype=NA){
   if(page %in% c("squad","player","leagueha")){
     names(data) <-
       glue("{data[1,]} {data[2,]}") %>%
@@ -281,7 +293,7 @@ fbref_clean_names <- function(data,page){
       data %>%
       slice(-1)
   }
-  if(page=="match"){ # should be stattype=="shots"
+  if(page %in% "match" & stattype %in% "shots"){ # should be stattype=="shots"
     names(data) <-
       glue("{data[1,]} {data[2,]}") %>%
       str_squish() %>%
@@ -293,8 +305,7 @@ fbref_clean_names <- function(data,page){
       data %>%
       slice(-1,-2)
   }
-  if("player" %in% names(data)){ # remove duplicated column names from player table
-    data %<>% filter(player != "Player")
+  if("player" %in% names(data)){ # remove duplicated column names from player table # player1 for events?
     data <-
       data %>%
       filter(player != "Player")
@@ -305,7 +316,11 @@ fbref_clean_names <- function(data,page){
       filter(wk != "Wk") %>%
       filter(wk != "")
   }
-  if(page=="match"){ # should be stattype=="shots"
+  if(page %in% "match" & stattype %in% "events"){
+    data <-
+      data
+  }
+  if(page %in% "match" & stattype %in% "shots"){ # should be stattype=="shots"
     data <-
       data %>%
       filter(minute != "")
@@ -315,10 +330,3 @@ fbref_clean_names <- function(data,page){
     data %>%
     type_convert # refactor data types
 }
-
-# fbref_scrape_events <- function(code){
-#   url <- glue("https://fbref.com/matches/{code}/")
-#   # print(url)
-#   
-#   return(url)
-# }
