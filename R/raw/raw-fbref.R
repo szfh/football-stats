@@ -76,11 +76,9 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),current_season="2020
   
   fbref_events_new <-
     anti_join(fbref_matches_all, fbref_events_keep, by="matchcode") %>%
-    filter(season=="2020-21") %>% # delete later
     mutate(stattype="events") %>%
     mutate(page_url=fbref_get_url(page,matchcode=matchcode)) %>%
-    mutate(data=pmap(list(page_url,page,stattype), possibly(fbref_scrape_events, otherwise=NA))) %>%
-    glimpse
+    mutate(data=pmap(list(page_url,page,stattype), possibly(fbref_scrape_events, otherwise=NA)))
   
   fbref_events <-
     bind_rows(fbref_events_keep,fbref_events_new)
@@ -94,7 +92,6 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),current_season="2020
   
   fbref_shots_new <-
     anti_join(fbref_matches_all, fbref_shots_keep, by="matchcode") %>%
-    filter(season=="2020-21") %>% # delete later
     mutate(stattype="shots") %>%
     mutate(page_url=fbref_get_url(page,matchcode=matchcode)) %>%
     mutate(content_selector_id=fbref_get_selector(page,stattype=stattype,matchcode=matchcode)) %>%
