@@ -4,7 +4,7 @@ plot_team <- function(data,squad="Southampton",season="2020-21"){
   squadvs <- paste0("vs ",squad)
   
   plots <- list()
-  
+
   plots$minutes <-
     data$fbref$players %>%
     filter(season %in% !!season) %>%
@@ -294,6 +294,7 @@ plot_team <- function(data,squad="Southampton",season="2020-21"){
     mutate(xgf_mva=get_mva(xgf)) %>%
     mutate(xga_mva=get_mva(xga)) %>%
     filter(season %in% !!season) %>%
+    # filter(date>=as.Date("2020-01-01")) %>%
     mutate(season=case_when(
       date>as.Date("2019-08-01") & date<as.Date("2020-03-31") ~ "2019-20 part 1",
       date>as.Date("2020-04-01") & date<as.Date("2020-07-30") ~ "2019-20 part 2",
@@ -330,6 +331,7 @@ plot_team <- function(data,squad="Southampton",season="2020-21"){
     make_long_matches() %>%
     filter(season %in% !!season) %>%
     filter(squad %in% !!squad) %>%
+    # filter(date>=as.Date("2020-01-01")) %>%
     mutate(season=case_when(
       date>as.Date("2019-08-01") & date<as.Date("2020-03-31") ~ "2019-20 part 1",
       date>as.Date("2020-04-01") & date<as.Date("2020-07-30") ~ "2019-20 part 2",
@@ -343,7 +345,7 @@ plot_team <- function(data,squad="Southampton",season="2020-21"){
     geom_segment(aes(x=0,xend=-xga,y=match,yend=match),colour=colour[["medium"]][[1]],size=2) +
     theme[["solar"]]() +
     theme(
-      plot.title=element_markdown(size=8,hjust=0.5),
+      plot.title=element_markdown(),
       axis.text.x=element_text(),
       axis.text.y=element_text(size=6),
       strip.text=element_blank()
