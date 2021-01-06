@@ -44,9 +44,6 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),current_season="2020
     fbref_saved %>% # remove data to be scraped from saved
     filter(page %in% c("player","squad","league","leagueha","schedule")) %>%
     filter(season!=current_season)
-  ###
-  # add extra data to be manually removed here
-  ###
   
   fbref_squad_player_new <- #fbref$squad$new / fbref$player$new
     anti_join(fbref_squad_player_all, fbref_squad_player_keep) %>%
@@ -67,7 +64,6 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),current_season="2020
     mutate(page="match",stattype="events") %>% # crossing?
     filter(!is.na(matchcode))
   
-  ###events
   fbref_events_keep <-
     fbref_saved %>%
     filter(stattype=="events") %>%
@@ -82,7 +78,6 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),current_season="2020
   
   fbref_events <-
     bind_rows(fbref_events_keep,fbref_events_new)
-  ###
   
   fbref_shots_keep <-
     fbref_saved %>%
@@ -207,58 +202,59 @@ fbref_scrape_events <- function(url,page,stattype){
   selector <- ".event"
   print(url)
   
-  events <-
+  events_raw <-
     url %>%
     read_html() %>%
     html_nodes(selector)
   
   events_text <-
-    events %>%
+    events_raw %>%
     html_text() %>%
-    str_remove_all("\n") %>%
-    str_remove_all("\t") %>%
-    str_squish() %>%
-    as_tibble()
+    # str_remove_all("\n") %>%
+    # str_remove_all("\t") %>%
+    # str_squish() %>%
+    as_tibble() %>%
+    rename("event"="value")
   
   events_teams <-
-    events %>%
+    events_raw %>%
     html_attr("class") %>%
-    str_squish() %>%
+    # str_squish() %>%
     as_tibble() %>%
-    rename("team"="value") %>%
-    mutate(team=case_when(
-      team=="event" ~ "event",
-      team=="event a" ~ "Home",
-      team=="event b" ~ "Away",
-      TRUE ~ team
-    ))
+    rename("type"="value") #%>%
+  # mutate(
+  #   team=case_when(
+  #     team=="event" ~ "event",
+  #     team=="event a" ~ "Home",
+  #     team=="event b" ~ "Away",
+  #     TRUE ~ team))
   
-  events_table <-
-    cbind(events_text,events_teams) %>% # bind rows?
-    slice(-1,-2) %>%
-    separate(value,c("time","desc"),sep="&rsquor;",extra="merge",fill="right") %>%
-    mutate(half=case_when(
-      as.numeric(str_sub(time,1,2)) <= 45 ~ 1,
-      TRUE ~ 2 # extra time?
-    )) %>%
-    mutate(time=case_when(
-      str_detect(time,"\\+") ~ as.character(as.numeric(str_sub(time,1,2))+as.numeric(str_sub(time,3))),
-      TRUE ~ time
-    )) %>%
-    separate(desc,c("homegls",NA,"awaygls","desc"),sep=c(1,2,3),extra="merge",fill="right") %>%
-    separate(desc,c("desc","type"),sep=" — ",extra="merge",fill="right") %>%
-    mutate(type=case_when(
-      str_detect(type,"Goal") ~ "Goal",
-      str_detect(desc,"Penalty Kick") ~ "Goal (pen)",
-      str_detect(desc,"Penalty Miss") ~ "Miss (pen)",
-      TRUE ~ type
-    )) %>%
-    mutate(state=as.numeric(homegls)-as.numeric(awaygls)) %>%
-    mutate(desc=str_remove_all(desc,coll("Penalty Kick — Substitute| —|Penalty Miss"))) %>%
-    separate(desc,c("player1","player2"),sep=coll("for |Assist:|Penalty Kick —|Penalty Kick|Penalty saved by |Penalty Miss")) %>%
-    relocate(half,time,type,team,player1,player2,homegls,awaygls,state)
+  events <-
+    bind_cols(events_text,events_teams) #%>%
+  # slice(-1,-2) %>%
+  # separate(value,c("time","desc"),sep="&rsquor;",extra="merge",fill="right") %>%
+  # mutate(half=case_when(
+  #   as.numeric(str_sub(time,1,2)) <= 45 ~ 1,
+  #   TRUE ~ 2 # extra time?
+  # )) %>%
+  # mutate(time=case_when(
+  #   str_detect(time,"\\+") ~ as.character(as.numeric(str_sub(time,1,2))+as.numeric(str_sub(time,3))),
+  #   TRUE ~ time
+  # )) %>%
+  # separate(desc,c("homegls",NA,"awaygls","desc"),sep=c(1,2,3),extra="merge",fill="right") %>%
+  # separate(desc,c("desc","type"),sep=" — ",extra="merge",fill="right") %>%
+  # mutate(type=case_when(
+  #   str_detect(type,"Goal") ~ "Goal",
+  #   str_detect(desc,"Penalty Kick") ~ "Goal (pen)",
+  #   str_detect(desc,"Penalty Miss") ~ "Miss (pen)",
+  #   TRUE ~ type
+  # )) %>%
+  # mutate(state=as.numeric(homegls)-as.numeric(awaygls)) %>%
+  # mutate(desc=str_remove_all(desc,coll("Penalty Kick — Substitute| —|Penalty Miss"))) %>%
+  # separate(desc,c("player1","player2"),sep=coll("for |Assist:|Penalty Kick —|Penalty Kick|Penalty saved by |Penalty Miss")) %>%
+  # relocate(half,time,type,team,player1,player2,homegls,awaygls,state)
   
-  return(events_table)
+  return(events)
 }
 
 fbref_clean_names <- function(data,page,stattype=NA){
