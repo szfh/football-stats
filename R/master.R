@@ -10,13 +10,13 @@
 # import_canpl()
 
 # plot
-# source(here("R","join","join.R"))
-# source(here("R","themes.R"))
-# source(here("R","plot","plot-team.R"))
+# source(here("R","join","join.R"),encoding="utf-8")
+# source(here("R","themes.R"),encoding="utf-8")
+# source(here("R","plot","plot-team.R"),encoding="utf-8")
 # plot_team(data=join())
-# source(here("R","plot","plot-league.R"))
+# source(here("R","plot","plot-league.R"),encoding="utf-8")
 # plot_league(data=join())
-# source(here("R","plot","plot-cpl.R"))
+# source(here("R","plot","plot-cpl.R"),encoding="utf-8")
 # plot_cpl(data=join()["canpl"])
 
 # knit markdown
