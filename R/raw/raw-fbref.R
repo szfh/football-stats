@@ -210,49 +210,17 @@ fbref_scrape_events <- function(url,page,stattype){
   events_text <-
     events_raw %>%
     html_text() %>%
-    # str_remove_all("\n") %>%
-    # str_remove_all("\t") %>%
-    # str_squish() %>%
     as_tibble() %>%
     rename("event"="value")
   
   events_teams <-
     events_raw %>%
     html_attr("class") %>%
-    # str_squish() %>%
     as_tibble() %>%
-    rename("type"="value") #%>%
-  # mutate(
-  #   team=case_when(
-  #     team=="event" ~ "event",
-  #     team=="event a" ~ "Home",
-  #     team=="event b" ~ "Away",
-  #     TRUE ~ team))
+    rename("type"="value")
   
   events <-
-    bind_cols(events_text,events_teams) #%>%
-  # slice(-1,-2) %>%
-  # separate(value,c("time","desc"),sep="&rsquor;",extra="merge",fill="right") %>%
-  # mutate(half=case_when(
-  #   as.numeric(str_sub(time,1,2)) <= 45 ~ 1,
-  #   TRUE ~ 2 # extra time?
-  # )) %>%
-  # mutate(time=case_when(
-  #   str_detect(time,"\\+") ~ as.character(as.numeric(str_sub(time,1,2))+as.numeric(str_sub(time,3))),
-  #   TRUE ~ time
-  # )) %>%
-  # separate(desc,c("homegls",NA,"awaygls","desc"),sep=c(1,2,3),extra="merge",fill="right") %>%
-  # separate(desc,c("desc","type"),sep=" — ",extra="merge",fill="right") %>%
-  # mutate(type=case_when(
-  #   str_detect(type,"Goal") ~ "Goal",
-  #   str_detect(desc,"Penalty Kick") ~ "Goal (pen)",
-  #   str_detect(desc,"Penalty Miss") ~ "Miss (pen)",
-  #   TRUE ~ type
-  # )) %>%
-  # mutate(state=as.numeric(homegls)-as.numeric(awaygls)) %>%
-  # mutate(desc=str_remove_all(desc,coll("Penalty Kick — Substitute| —|Penalty Miss"))) %>%
-  # separate(desc,c("player1","player2"),sep=coll("for |Assist:|Penalty Kick —|Penalty Kick|Penalty saved by |Penalty Miss")) %>%
-  # relocate(half,time,type,team,player1,player2,homegls,awaygls,state)
+    bind_cols(events_text,events_teams)
   
   return(events)
 }

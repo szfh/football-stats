@@ -14,12 +14,12 @@ join <- function(
 
 join_fbref <- function(fbref){
   data <- list()
-
+  
   fbref <-
     fbref %>%
     mutate(data=pmap(list(data,page,stattype), possibly(fbref_tidy, otherwise=NA))) %>%
     select(-any_of(c("statselector","seasoncode","page_url","content_selector_id")))
-
+  
   data$table <-
     fbref %>%
     filter(page=="league") %>%
@@ -58,14 +58,19 @@ join_fbref <- function(fbref){
     filter(page=="schedule") %>%
     select(-page,-stattype,-home,-away) %>%
     unnest(cols=data)
+
+  data$events <-
+    fbref %>%
+    filter(stattype=="events") %>%
+    select(-page) %>%
+    unnest(cols=data)
   
   data$shots <-
     fbref %>%
     filter(stattype=="shots") %>%
     select(-page) %>%
     unnest(cols=data)
-    
-
+  
   return(data)
 }
 
@@ -137,6 +142,43 @@ fbref_tidy <- function(data,page,stattype){
       data %>%
       rename("n_pl_gk"=any_of("n_pl")) %>%
       select(-any_of(c("playing_time_starts","playing_time_mp","playing_time_min")))
+  }
+  if(stattype %in% "events"){
+    data <-
+      data %>%
+      mutate(event=str_remove_all(event,"\n")) %>%
+      mutate(event=str_remove_all(event,"\t")) %>%
+      mutate(event=str_squish(event)) %>%
+      mutate(
+        team=case_when(
+          type=="event" ~ "event",
+          type=="event a" ~ "Home",
+          type=="event b" ~ "Away",
+          TRUE ~ type)) %>%
+      select(-type) %>%
+      filter(team!="event") %>%
+      separate(event,c("time","desc"),sep="&rsquor;",extra="merge",fill="right") %>%
+      mutate(half=case_when(
+        as.numeric(str_sub(time,1,2)) <= 45 ~ 1,
+        TRUE ~ 2 # extra time?
+      )) %>%
+      mutate(time=case_when(
+        str_detect(time,"\\+") ~ as.character(as.numeric(str_sub(time,1,2))+as.numeric(str_sub(time,3))),
+        TRUE ~ time
+      )) %>%
+      separate(desc,c("homegls",NA,"awaygls","desc"),sep=c(1,2,3),extra="merge",fill="right") %>%
+      separate(desc,c("desc","type"),sep=" — ",extra="merge",fill="right") %>%
+      mutate(type=case_when(
+        str_detect(type,"Goal") ~ "Goal",
+        str_detect(desc,"Penalty Kick") ~ "Goal (pen)",
+        str_detect(desc,"Penalty Miss") ~ "Miss (pen)",
+        TRUE ~ type
+      )) %>%
+      mutate(state=as.numeric(homegls)-as.numeric(awaygls)) %>%
+      mutate(desc=str_remove_all(desc,coll("Penalty Kick — Substitute| —|Penalty Miss"))) %>%
+      separate(desc,c("player1","player2"),sep=coll("for |Assist:|Penalty Kick —|Penalty Kick|Penalty saved by |Penalty Miss")) %>%
+      relocate(half,time,type,team,player1,player2,homegls,awaygls,state) #%>%
+      # type_convert()
   }
   if(stattype %in% "shots"){
     data <-
