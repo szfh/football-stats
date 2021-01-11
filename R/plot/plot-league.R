@@ -288,7 +288,9 @@ plot_league <- function(data,league="EPL",season="2020-21"){
     data$fbref$players %>%
     select(player,season,squad,min=playing_time_min,prog=carries_prog,third=carries_13,cpa=carries_cpa) %>%
     filter(season %in% !!season) %>%
-    filter(min>=360) %>%
+    group_by(player,squad) %>%
+    summarise(across(c("min","prog","third","cpa"),sum)) %>%
+    filter(min>=(4*90)) %>%
     mutate(across(c("prog","third","cpa"), ~ .*90/min)) %>%
     make_long_data(levels=c("prog","third","cpa"),labels=c("70 yards from goal","35 yards from goal","Penalty Area")) %>%
     mutate(focus=ifelse(min_rank(desc(n))<=20,TRUE,FALSE)) %>%
@@ -308,7 +310,7 @@ plot_league <- function(data,league="EPL",season="2020-21"){
     theme[["solarfacet"]]() +
     facet_wrap("key",scales="free") +
     labs(
-      title="2020-21 Progressive Carries",
+      title="2020-21 Progressive Carries (per 90 mins)",
       x=element_blank(),
       y=element_blank()
     ) +
@@ -319,7 +321,8 @@ plot_league <- function(data,league="EPL",season="2020-21"){
   
   plots$pressures <-
     data$fbref$squad %>%
-    filter(season %in% !!season) %>%select(squad,vs,pass_types_live,pressures_press,pressures_def_3rd:pressures_att_3rd,touches_live,touches_def_3rd:touches_att_3rd) %>%
+    filter(season %in% "2020-21") %>%
+    select(squad,vs,pass_types_live,pressures_press,pressures_def_3rd:pressures_att_3rd,touches_live,touches_def_3rd:touches_att_3rd) %>%
     mutate(squad=case_when(
       vs ~ str_sub(squad,4),
       TRUE ~ squad
@@ -362,7 +365,7 @@ plot_league <- function(data,league="EPL",season="2020-21"){
   
   plots$ppda <-
     data$fbref$squad %>%
-    filter(season %in% !!season) %>%
+    filter(season %in% "2020-21") %>%
     select(squad,vs,pass_types_live,pressures_press:pressures_att_3rd,touches_touches,touches_live,touches_def_3rd:touches_att_3rd) %>%
     mutate(squad=case_when(
       vs ~ str_sub(squad,4),
@@ -388,7 +391,7 @@ plot_league <- function(data,league="EPL",season="2020-21"){
   
   plots$tpda <-
     data$fbref$squad %>%
-    filter(season %in% !!season) %>%
+    filter(season %in% "2020-21") %>%
     select(squad,vs,pressures_def_3rd:pressures_att_3rd,touches_touches,touches_live,touches_def_3rd:touches_att_3rd) %>%
     mutate(squad=case_when(
       vs ~ str_sub(squad,4),
@@ -423,7 +426,7 @@ plot_league <- function(data,league="EPL",season="2020-21"){
   
   plots$pressposition <-
     data$fbref$players %>%
-    filter(season %in% !!season) %>%
+    filter(season %in% "2020-21") %>%
     select(player,squad,pos1,pos2,mp=playing_time_mp,min=playing_time_min,press=pressures_press,def3rd=pressures_def_3rd,mid3rd=pressures_mid_3rd,att3rd=pressures_att_3rd) %>%
     mutate(squad=fct_reorder(squad,press)) %>%
     mutate(pos=factor(pos1,levels=c("FW","MF","DF","GK"))) %>%
