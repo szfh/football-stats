@@ -284,6 +284,39 @@ plot_league <- function(data,league="EPL",season="2020-21"){
     scale_fill_manual(values=palette[["epl"]]()) +
     scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.1))
   
+  plots$playercarries <-
+    data$fbref$players %>%
+    select(player,season,squad,min=playing_time_min,prog=carries_prog,third=carries_13,cpa=carries_cpa) %>%
+    filter(season %in% !!season) %>%
+    filter(min>=360) %>%
+    mutate(across(c("prog","third","cpa"), ~ .*90/min)) %>%
+    make_long_data(levels=c("prog","third","cpa"),labels=c("70 yards from goal","35 yards from goal","Penalty Area")) %>%
+    mutate(focus=ifelse(min_rank(desc(n))<=20,TRUE,FALSE)) %>%
+    glimpse %>%
+    ggplot(aes(x=0.05,y=n)) +
+    geom_text_repel(
+      aes(label=ifelse(focus,player,"")),
+      size=2,
+      nudge_x=0.3,
+      direction="y",
+      hjust=0,
+      segment.size=0.4,
+      segment.alpha=0.8,
+      box.padding=0.05
+    ) +
+    geom_point(aes(fill=squad,alpha=focus),shape=21,size=2,position=position_jitter(width=0.02,height=0)) +
+    theme[["solarfacet"]]() +
+    facet_wrap("key",scales="free") +
+    labs(
+      title="2020-21 Progressive Carries",
+      x=element_blank(),
+      y=element_blank()
+    ) +
+    scale_x_continuous(limit=c(0,1)) +
+    scale_y_continuous() +
+    scale_fill_manual(values=palette[["epl"]]()) +
+    scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.1))
+  
   plots$pressures <-
     data$fbref$squad %>%
     filter(season %in% !!season) %>%select(squad,vs,pass_types_live,pressures_press,pressures_def_3rd:pressures_att_3rd,touches_live,touches_def_3rd:touches_att_3rd) %>%
