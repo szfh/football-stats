@@ -4,7 +4,7 @@ plot_team <- function(data,squad="Southampton",season="2020-21"){
   squadvs <- paste0("vs ",squad)
   
   plots <- list()
-
+  
   plots$minutes <-
     data$fbref$players %>%
     filter(season %in% !!season) %>%
@@ -358,6 +358,63 @@ plot_team <- function(data,squad="Southampton",season="2020-21"){
     scale_x_continuous(breaks=seq(-10,10,1),labels=abs(seq(-10,10,1)),expand=expansion(add=c(0.1,1))) +
     scale_y_reordered() +
     facet_grid(rows=vars(season), space="free", scales="free_y")
+  
+  plots$subs <-
+    data$fbref$events %>%
+    filter(type=="Substitute") %>%
+    mutate(h_a=team) %>%
+    left_join(data$fbref$matches %>% 
+                select(matchcode=code, homeglsf=homegls, awayglsf=awaygls, date) %>%
+                unique,
+              by="matchcode") %>%
+    mutate(state=case_when(
+      team=="Away" ~ (state * -1),
+      TRUE ~ state
+    )) %>%
+    mutate(opposition=case_when(
+      team=="Home" ~ away,
+      TRUE ~ home
+    )) %>%
+    mutate(team=case_when(
+      team=="Home" ~ home,
+      TRUE ~ away
+    )) %>%
+    mutate(state2=case_when(
+      state<0 ~ "Losing",
+      state==0 ~ "Drawing",
+      TRUE ~ "Winning"
+    )) %>%
+    type_convert %>%
+    mutate(opposition=fct_reorder(opposition,desc(date))) %>%
+    filter(season %in% !!season) %>%
+    filter(team %in% !!squad) %>%
+    # filter(date>=lubridate::as_date("2018-12-7")) %>%
+    mutate(match=glue::glue("{opposition} {h_a} {homeglsf}-{awayglsf}")) %>%
+    mutate(match=reorder_within(match, desc(date), season)) %>%
+    ggplot(aes(x=time,y=match,fill=state2)) +
+    geom_beeswarm(size=2.5,shape=23,colour="black",groupOnX=FALSE,priority="descending",alpha=0.75) +
+    theme[["solar"]]() +
+    facet_grid(season ~ ., space="free", scales="free_y") +
+    theme(
+      axis.text.y=element_text(size=4.5),
+      # panel.grid.major.y=element_blank(),
+      # panel.grid.minor=element_blank(),
+      # strip.text.y=element_text(colour="black",face="bold",size=7,angle=0,hjust=0),
+      strip.text.y=element_blank(),
+      # legend.position="top",
+      # legend.title=element_blank(),
+      # legend.text=element_text(colour="black"),
+      # legend.key=element_rect(fill=NA)
+    ) +
+    labs(
+      title=glue("{squad} substitutions"),
+      x=element_blank(),
+      y=element_blank()
+      # caption="data: FBref | Project Restart (5 allowed subs) in blue | 5x first half subs not shown"
+    ) +
+    scale_x_continuous(breaks=seq(0,130,5),expand=expansion(add=2)) +
+    scale_y_reordered(expand=expansion(add=c(1.2,1.6)),position = "right") +
+    scale_fill_manual(values=c("Winning"=colour[["medium"]][[3]],"Drawing"=colour[["medium"]][[1]],"Losing"=colour[["medium"]][[8]]))
   
   plots_logo <- 
     plots %>%
