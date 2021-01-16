@@ -1,7 +1,9 @@
 scrape_fbref <- function(save_path=here("data","fbref.rds"),current_season="2020-21"){
   fbref_saved <- readRDS(save_path)
   
-  eplseasons <- tribble(~season, ~seasoncode, #advanced/non-advanced? # rename seasoncode to code/pagecode
+  browser()
+  
+  eplseasons <- tribble(~season, ~key_season, #advanced/non-advanced?
                         "2020-21",10728,
                         "2019-20",3232,
                         "2018-19",1889,
@@ -14,7 +16,7 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),current_season="2020
                                      "squad",
   )
   
-  tables_squad_player <- tribble(~stattype, ~statselector,
+  tables_squad_player <- tribble(~stattype, ~statselector, 
                                  "stats","standard",
                                  "keepers","keeper",
                                  "keepersadv","keeper_adv",
