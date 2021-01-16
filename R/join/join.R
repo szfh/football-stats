@@ -70,7 +70,7 @@ join_fbref <- function(fbref){
     filter(stattype=="shots") %>%
     select(-page) %>%
     unnest(cols=data)
-  
+
   return(data)
 }
 

@@ -1,5 +1,5 @@
 # libraries
-# source(here::here("R","library.R"))
+# source(here::here("R","library.R"),encoding="utf-8")
 
 # raw
 # source(here("R","raw","raw-fbref.R"),encoding="utf-8")
