@@ -195,7 +195,7 @@ plot_league <- function(data,league="EPL",season="2020-21"){
       segment.alpha=0.8,
       box.padding=0.05
     ) +
-    geom_point(aes(fill=squad),size=3,shape=21,colour="black") +
+    geom_point(aes(fill=squad),size=3,shape=23,colour="black") +
     theme[["solarfacet"]]() +
     facet_wrap("key",scales="free") +
     labs(
