@@ -14,16 +14,16 @@ join <- function(
 
 join_fbref <- function(fbref){
   data <- list()
-  
+
   fbref <-
     fbref %>%
-    mutate(data=pmap(list(data,page,stattype), possibly(fbref_tidy, otherwise=NA))) %>%
-    select(-any_of(c("statselector","seasoncode","page_url","content_selector_id")))
-  
+    mutate(data=pmap(list(data,page,stat), possibly(fbref_tidy, otherwise=NA))) %>%
+    select(-any_of(c("stat_key","season_key","page_url","content_selector_id")))
+
   data$table <-
     fbref %>%
     filter(page=="league") %>%
-    select(-page,-stattype) %>%
+    select(-page,-stat) %>%
     unnest(cols=data)
   
   data$squad <-
@@ -31,7 +31,7 @@ join_fbref <- function(fbref){
     filter(page=="squad") %>%
     select(-page) %>%
     unnest(cols=data) %>%
-    group_by(stattype) %>%
+    group_by(stat) %>%
     nest() %>%
     mutate(data=map(data,remove_empty,which="cols")) %$%
     data %>%
@@ -47,7 +47,7 @@ join_fbref <- function(fbref){
     filter(page=="player") %>%
     select(-page) %>%
     unnest(cols=data) %>%
-    group_by(stattype) %>%
+    group_by(stat) %>%
     nest() %>%
     mutate(data=map(data,remove_empty,which="cols")) %$%
     data %>%
@@ -56,18 +56,18 @@ join_fbref <- function(fbref){
   data$matches <-
     fbref %>%
     filter(page=="schedule") %>%
-    select(-page,-stattype,-home,-away) %>%
+    select(-page,-stat,-home,-away) %>%
     unnest(cols=data)
 
   data$events <-
     fbref %>%
-    filter(stattype=="events") %>%
+    filter(stat=="events") %>%
     select(-page) %>%
     unnest(cols=data)
   
   data$shots <-
     fbref %>%
-    filter(stattype=="shots") %>%
+    filter(stat=="shots") %>%
     select(-page) %>%
     unnest(cols=data)
 
@@ -117,7 +117,7 @@ join_canpl <- function(canpl){
   return(data)
 }
 
-fbref_tidy <- function(data,page,stattype){
+fbref_tidy <- function(data,page,stat){
   if(page %in% c("squad","player","schedule","league","leagueha")){
     data <-
       data %>%
@@ -137,13 +137,13 @@ fbref_tidy <- function(data,page,stattype){
       separate("score",c("homegls","awaygls"),sep="[:punct:]",fill="right") %>%
       rename("homexg"="xg","awayxg"="xg_1")
   }
-  if(stattype %in% c("keepers","keepersadv")){
+  if(stat %in% c("keepers","keepersadv")){
     data <-
       data %>%
       rename("n_pl_gk"=any_of("n_pl")) %>%
       select(-any_of(c("playing_time_starts","playing_time_mp","playing_time_min")))
   }
-  if(stattype %in% "events"){
+  if(stat %in% "events"){
     data <-
       data %>%
       mutate(event=str_remove_all(event,"\n")) %>%
@@ -180,7 +180,7 @@ fbref_tidy <- function(data,page,stattype){
       relocate(half,time,type,team,player1,player2,homegls,awaygls,state) #%>%
       # type_convert()
   }
-  if(stattype %in% "shots"){
+  if(stat %in% "shots"){
     data <-
       data %>%
       mutate(half=case_when(
