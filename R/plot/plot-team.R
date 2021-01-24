@@ -364,9 +364,9 @@ plot_team <- function(data,squad="Southampton",season="2020-21"){
     filter(type=="Substitute") %>%
     mutate(h_a=team) %>%
     left_join(data$fbref$matches %>% 
-                select(matchcode=code, homeglsf=homegls, awayglsf=awaygls, date) %>%
+                select(match_key, homeglsf=homegls, awayglsf=awaygls, date) %>%
                 unique,
-              by="matchcode") %>%
+              by="match_key") %>%
     mutate(state=case_when(
       team=="Away" ~ (state * -1),
       TRUE ~ state
