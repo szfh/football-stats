@@ -1,141 +1,144 @@
 scrape_fbref <- function(save_path=here("data","fbref.rds"),current_season="2020-21"){
   fbref_saved <- readRDS(save_path)
   
-  browser()
+  data_types <- list()
   
-  eplseasons <- tribble(~season, ~key_season, #advanced/non-advanced?
-                        "2020-21",10728,
-                        "2019-20",3232,
-                        "2018-19",1889,
-                        "2017-18",1631,
-                        # "2016-17",1526,
+  data_types$seasons <- tribble(~season, ~season_key, #advanced/non-advanced?
+                                "2020-21",10728,
+                                "2019-20",3232,
+                                "2018-19",1889,
+                                "2017-18",1631,
+                                # "2016-17",1526,
   )
   
-  data_types_squad_player <- tribble(~page,
+  data_types$squad_player <- tribble(~page,
                                      "player",
                                      "squad",
   )
   
-  tables_squad_player <- tribble(~stattype, ~statselector, 
-                                 "stats","standard",
-                                 "keepers","keeper",
-                                 "keepersadv","keeper_adv",
-                                 "shooting","shooting",
-                                 "passing","passing",
-                                 "passing_types","passing_types",
-                                 "gca","gca",
-                                 "defense","defense",
-                                 "possession","possession",
-                                 "playingtime","playing_time",
-                                 "misc","misc",
+  data_types$squad_player_tables <- tribble(~stat, ~stat_key, # add %23 to statselector? make factor/ordered?
+                                            "stats","standard",
+                                            "keepers","keeper",
+                                            "keepersadv","keeper_adv",
+                                            "shooting","shooting",
+                                            "passing","passing",
+                                            "passing_types","passing_types",
+                                            "gca","gca",
+                                            "defense","defense",
+                                            "possession","possession",
+                                            "playingtime","playing_time",
+                                            "misc","misc",
   )
   
-  data_types_league <- tribble(~page,
+  data_types$league <- tribble(~page,
                                "schedule",
                                "league",
                                "leagueha",
   )
   
-  fbref_squad_player_all <- #fbref$squad$all / fbref$player$all
-    tibble() %>% # all squad + player data parameters
-    bind_rows(crossing(data_types_squad_player,tables_squad_player)) %>% # (squad + player) * datatypes
-    bind_rows(data_types_league) %>% # fixtures
-    crossing(eplseasons)
+  fbref_data <- list()
+  fbref <- list()
   
-  fbref_squad_player_keep <- #fbref$squad$keep / fbref$player$keep
-    fbref_saved %>% # remove data to be scraped from saved
+  fbref_data$squad_player$all <-
+    tibble() %>% # all squad + player data parameters
+    bind_rows(crossing(data_types$squad_player,data_types$squad_player_tables)) %>%
+    bind_rows(data_types$league) %>%
+    crossing(data_types$seasons)
+  
+  fbref_data$squad_player$keep <-
+    fbref_saved %>%
     filter(page %in% c("player","squad","league","leagueha","schedule")) %>%
     filter(season!=current_season)
   
-  fbref_squad_player_new <- #fbref$squad$new / fbref$player$new
-    anti_join(fbref_squad_player_all, fbref_squad_player_keep) %>%
-    mutate(page_url=fbref_get_url(page,seasoncode,stattype,statselector)) %>%
-    mutate(content_selector_id=fbref_get_selector(page,seasoncode,stattype,statselector)) %>%
-    mutate(data=pmap(list(page_url, content_selector_id, page, stattype), possibly(fbref_scrape, otherwise=NA)))
+  fbref_data$squad_player$new <-
+    anti_join(fbref_data$squad_player$all, fbref_data$squad_player$keep) %>%
+    mutate(page_url=fbref_get_url(page,season_key,stat,stat_key)) %>% # don't need stat?
+    mutate(content_selector_id=fbref_get_selector(page,season_key,stat,stat_key)) %>% #don't need stat?
+    mutate(data=pmap(list(page_url, content_selector_id, page, stat), possibly(fbref_scrape, otherwise=NA)))
   
-  fbref_squad_player <-
-    bind_rows(fbref_squad_player_keep,fbref_squad_player_new) %>%
+  fbref$squad_player <-
+    bind_rows(fbref_data$squad_player$keep,fbref_data$squad_player$new) %>%
     filter(!is.na(data))
   
-  fbref_matches_all <- # derive all matches from fbref data frame
+  fbref_data$matches$all <-
     fbref_saved %>%
     filter(page=="schedule") %>%
-    select(page,stattype,statselector,season,seasoncode,page_url,content_selector_id,data) %>% #matchcode
+    select(page,stat,stat_key,season,season_key,page_url,content_selector_id,data) %>%
     unnest(cols=data) %>%
-    select(page:seasoncode,home,away,matchcode=code) %>%
-    mutate(page="match",stattype="events") %>% # crossing?
-    filter(!is.na(matchcode))
+    select(page:season_key,home,away,match_key=code) %>% # fix match_key=code?
+    mutate(page="match",stat="events") %>% # crossing?
+    filter(!is.na(match_key))
   
-  fbref_events_keep <-
+  fbref_data$events$keep <-
     fbref_saved %>%
-    filter(stattype=="events") %>%
+    filter(stat=="events") %>%
     filter(!is.na(data)) %>%
     filter(!is.null(data))
   
-  fbref_events_new <-
-    anti_join(fbref_matches_all, fbref_events_keep, by="matchcode") %>%
-    mutate(stattype="events") %>%
-    mutate(page_url=fbref_get_url(page,matchcode=matchcode)) %>%
-    mutate(data=pmap(list(page_url,page,stattype), possibly(fbref_scrape_events, otherwise=NA)))
+  fbref_data$events$new <-
+    anti_join(fbref_data$matches$all, fbref_data$events$keep, by="match_key") %>%
+    mutate(stat="events") %>% #delete?
+    mutate(page_url=fbref_get_url(page,match_key=match_key)) %>%
+    mutate(data=pmap(list(page_url,page,stat), possibly(fbref_scrape_events, otherwise=NA)))
   
-  fbref_events <-
-    bind_rows(fbref_events_keep,fbref_events_new)
+  fbref$events <-
+    bind_rows(fbref_data$events$keep,fbref_data$events$new)
   
-  fbref_shots_keep <-
+  fbref_data$shots$keep <-
     fbref_saved %>%
-    filter(stattype=="shots") %>%
+    filter(stat=="shots") %>%
     filter(!is.na(data)) %>%
     filter(!is.null(data))
   
-  fbref_shots_new <-
-    anti_join(fbref_matches_all, fbref_shots_keep, by="matchcode") %>%
-    mutate(stattype="shots") %>%
-    mutate(page_url=fbref_get_url(page,matchcode=matchcode)) %>%
-    mutate(content_selector_id=fbref_get_selector(page,stattype=stattype,matchcode=matchcode)) %>%
-    mutate(data=pmap(list(page_url,content_selector_id,page,stattype), possibly(fbref_scrape, otherwise=NA)))
+  fbref_data$shots$new <-
+    anti_join(fbref_data$matches$all, fbref_data$shots$keep, by="match_key") %>%
+    mutate(stat="shots") %>%
+    mutate(page_url=fbref_get_url(page,match_key=match_key)) %>%
+    mutate(content_selector_id=fbref_get_selector(page,stat=stat,match_key=match_key)) %>%
+    mutate(data=pmap(list(page_url,content_selector_id,page,stat), possibly(fbref_scrape, otherwise=NA)))
   
-  fbref_shots <-
-    bind_rows(fbref_shots_keep,fbref_shots_new)
+  fbref$shots <-
+    bind_rows(fbref_data$shots$keep,fbref_data$shots$new)
   
-  fbref <-
-    bind_rows(fbref_squad_player,fbref_events,fbref_shots)
+  fbref_all <-
+    bind_rows(fbref$squad_player,fbref$events,fbref$shots)
   
-  saveRDS(fbref,file=save_path)
+  saveRDS(fbref_all,file=save_path)
   
-  return(fbref)
+  return(fbref_all)
 }
 
-fbref_get_selector <- function(page,seasoncode=NA,stattype=NA,statselector=NA,matchcode=NA){
+# don't need stat and stat_key?
+fbref_get_selector <- function(page,season_key=NA,stat=NA,stat_key=NA,match_key=NA){
   
   selector <-
     case_when(
-      page=="player" ~ glue("%23stats_{statselector}"),
-      page=="squad" ~ glue("%23stats_{statselector}_squads"),
-      page=="schedule" ~ glue("%23sched_ks_{seasoncode}_1"),
-      page=="league" ~ glue("%23results{seasoncode}1_overall"),
-      page=="leagueha" ~ glue("%23results{seasoncode}1_home_away"),
-      page=="match" & stattype=="shots" ~ glue("%23all_shots_all"),
+      page=="player" ~ glue("%23stats_{stat_key}"),
+      page=="squad" ~ glue("%23stats_{stat_key}_squads"),
+      page=="schedule" ~ glue("%23sched_ks_{season_key}_1"),
+      page=="league" ~ glue("%23results{season_key}1_overall"),
+      page=="leagueha" ~ glue("%23results{season_key}1_home_away"),
+      page=="match" & stat=="shots" ~ glue("%23all_shots_all"),
       TRUE ~ glue()
     )
   return(selector)
 }
 
-fbref_get_url <- function(page,seasoncode=NA,stattype=NA,statselector=NA,matchcode=NA){
-  
+fbref_get_url <- function(page,season_key=NA,stat=NA,stat_key=NA,match_key=NA){
   url <-
     case_when(
-      page %in% c("player","squad") ~ glue("https://fbref.com/en/comps/9/{seasoncode}/{stattype}/"),
-      page=="schedule" ~ glue("https://fbref.com/en/comps/9/{seasoncode}/schedule/"),
-      page %in% c("league","leagueha") ~ glue("https://fbref.com/en/comps/9/{seasoncode}/"),
-      page=="match" ~ glue("https://fbref.com/en/matches/{matchcode}/"),
+      page %in% c("player","squad") ~ glue("https://fbref.com/en/comps/9/{season_key}/{stat}/"),
+      page=="schedule" ~ glue("https://fbref.com/en/comps/9/{season_key}/schedule/"),
+      page %in% c("league","leagueha") ~ glue("https://fbref.com/en/comps/9/{season_key}/"),
+      page=="match" ~ glue("https://fbref.com/en/matches/{match_key}/"),
       TRUE ~ glue()
     )
   return(url)
 }
 
-fbref_scrape <- function(page_url=NA,content_selector_id=NA,page=NA,stattype=NA){
+fbref_scrape <- function(page_url=NA,content_selector_id=NA,page=NA,stat=NA){
   url <- glue("http://acciotables.herokuapp.com/?page_url={page_url}&content_selector_id={content_selector_id}")
-  print(glue("url: {url}"))
+  # print(glue("url: {url}"))
   
   session <- polite::bow(url,user_agent="@saintsbynumbers")
   data_html <- polite::scrape(session)
@@ -146,7 +149,7 @@ fbref_scrape <- function(page_url=NA,content_selector_id=NA,page=NA,stattype=NA)
     extract2(1)
   
   # clean names and remove non-data rows
-  data_table <- fbref_clean_names(data_table,page,stattype)
+  data_table <- fbref_clean_names(data_table,page,stat)
   
   # add url codes
   data <- fbref_scrape_href(data_html,data_table,page)
@@ -166,8 +169,7 @@ fbref_scrape_href <- function(data_html,data_table,page=NA){
       html_attr("href") %>%
       as_tibble() %>%
       separate(value,c(NA,NA,"datatype","code","desc"),sep="/",extra="merge",fill="right") %>%
-      filter(datatype=="squads") %>%
-      print
+      filter(datatype=="squads")
     
     data <-
       data_table %>%
@@ -200,9 +202,9 @@ fbref_scrape_href <- function(data_html,data_table,page=NA){
   return(data)
 }
 
-fbref_scrape_events <- function(url,page,stattype){
+fbref_scrape_events <- function(url,page,stat){
   selector <- ".event"
-  print(url)
+  # print(glue("url: {url}"))
   
   events_raw <-
     url %>%
@@ -227,7 +229,7 @@ fbref_scrape_events <- function(url,page,stattype){
   return(events)
 }
 
-fbref_clean_names <- function(data,page,stattype=NA){
+fbref_clean_names <- function(data,page,stat=NA){
   if(page %in% c("squad","player","leagueha")){
     names(data) <-
       glue("{data[1,]} {data[2,]}") %>%
@@ -235,8 +237,7 @@ fbref_clean_names <- function(data,page,stattype=NA){
       str_to_lower() %>%
       str_replace_all(c(" "="_","%"="pc","#"="n")) %>%
       str_remove_all("[/ \\( \\)]") %>%
-      make.unique(sep="_") %>%
-      print
+      make.unique(sep="_")
     
     data <-
       data %>%
@@ -249,14 +250,13 @@ fbref_clean_names <- function(data,page,stattype=NA){
       str_to_lower() %>%
       str_replace_all(c(" "="_","%"="pc","#"="n")) %>%
       str_remove_all("[/ \\( \\)]") %>%
-      make.unique(sep="_") %>%
-      print
+      make.unique(sep="_")
     
     data <-
       data %>%
       slice(-1)
   }
-  if(page %in% "match" & stattype %in% "shots"){ # should be stattype=="shots"
+  if(page %in% "match" & stat %in% "shots"){ # should be stat=="shots"
     names(data) <-
       glue("{data[1,]} {data[2,]}") %>%
       str_squish() %>%
@@ -279,11 +279,11 @@ fbref_clean_names <- function(data,page,stattype=NA){
       filter(wk != "Wk") %>%
       filter(wk != "")
   }
-  if(page %in% "match" & stattype %in% "events"){
+  if(page %in% "match" & stat %in% "events"){
     data <-
       data
   }
-  if(page %in% "match" & stattype %in% "shots"){ # should be stattype=="shots"
+  if(page %in% "match" & stat %in% "shots"){ # should be stat=="shots"
     data <-
       data %>%
       filter(minute != "")
