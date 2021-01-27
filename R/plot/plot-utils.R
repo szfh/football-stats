@@ -63,6 +63,24 @@ get_mva <- function(xG,n=6){ # windowed average xG
   return(mva)
 }
 
+get_unused_subs <- function(data,subs_available,subs_used){
+  
+  subs_unused <- subs_available-subs_used
+  
+  if(subs_unused<=0){
+    return(data)
+  }
+  else{
+    for(n in 1:subs_unused){
+      # browser()
+      data <-
+        data %>%
+        add_row(time=-3,state2="Unused")
+    }
+    return(data)
+  }
+}
+
 # latest_data <- matches %>%
 #   filter(!is.na(GoalsHome)&!is.na(GoalsAway)) %>%
 #   summarise(last(Date)) %>%
