@@ -416,6 +416,89 @@ plot_team <- function(data,squad="Southampton",season="2020-21"){
     scale_y_reordered(expand=expansion(add=c(1.2,1.6)),position = "right") +
     scale_fill_manual(values=c("Winning"=colour[["medium"]][[3]],"Drawing"=colour[["medium"]][[1]],"Losing"=colour[["medium"]][[8]]))
   
+  plots$subs3 <-
+    data$fbref$matches %>%
+    filter(!is.na(homegls)) %>%
+    select(match_key=code,season,date,home,away,homeglsft=homegls,awayglsft=awaygls) %>%
+    unique() %>%
+    left_join(data$fbref$events %>%
+                filter(type=="Substitute") %>%
+                select(match_key,half,time,team,homegls,awaygls,state) %>%
+                rename(home_away=team),
+              by="match_key") %>%
+    type_convert() %>%
+    mutate(state=case_when(
+      home_away=="Away" ~ (state * -1),
+      TRUE ~ state
+    )) %>%
+    mutate(team=case_when(
+      home_away=="Home" ~ home,
+      TRUE ~ away
+    )) %>%
+    mutate(opposition=case_when(
+      home_away=="Home" ~ away,
+      TRUE ~ home
+    )) %>%
+    mutate(period=case_when(
+      half==1 ~ "First Half",
+      half==2 & time==46 ~ "Half Time",
+      half==2 ~ "Second Half",
+      FALSE ~ "Unused",
+      TRUE ~ "Other"
+    )) %>%
+    mutate(time=case_when(
+      period=="First Half" ~ -2,
+      period=="Half Time" ~ -1,
+      period=="Unused" ~ -3,
+      TRUE ~ time
+    )) %>%
+    mutate(state2=case_when(
+      state>0 ~ "Winning",
+      state<0 ~ "Losing",
+      TRUE ~ "Drawing"
+    )) %>%
+    mutate(home_away=case_when(
+      home_away=="Home" ~ "H",
+      TRUE ~ "A"
+    )) %>%
+    mutate(teamglsft=ifelse(home_away=="Home",homeglsft,awayglsft)) %>%
+    mutate(oppglsft=ifelse(home_away=="Home",awayglsft,homeglsft)) %>%
+    filter(season %in% !!season) %>%
+    filter(team %in% !!squad) %>%
+    nest_by(match_key,date,season,home,away,homeglsft,awayglsft,teamglsft,oppglsft,team,opposition,home_away) %>%
+    mutate(subs_available=case_when(
+      date>=lubridate::as_date("2020-4-1") & date<lubridate::as_date("2020-9-1") ~ 5,
+      TRUE ~ 3
+    )) %>%
+    mutate(subs_used=dim(data)[1]) %>%
+    ungroup() %>%
+    mutate(data=pmap(list(.$data,subs_available,subs_used),possibly(get_unused_subs, otherwise=NA))) %>%
+    unnest(cols=data) %>%
+    mutate(match=glue("{teamglsft}-{oppglsft} {opposition} {home_away}")) %>%
+    mutate(match=reorder_within(match, desc(date), season)) %>%
+    # filter(date>=lubridate::as_date("2018-12-7")) %>%
+    # filter(date>=lubridate::as_date("2020-1-1")) %>%
+    ggplot(aes(x=time,y=match,fill=state2)) +
+    geom_beeswarm(size=2.5,shape=23,colour="black",groupOnX=FALSE,priority="descending",alpha=0.75) +
+    # geom_blank(data=data.frame(time=c(45.5,94.5),match=c(NA,NA),state2=c(NA,NA),period=c("Second Half","Second Half"))) +
+    theme[["solar"]]() +
+    facet_grid(season ~ period, space="free", scales="free") +
+    theme(
+      axis.text.x=element_text(size=5),
+      axis.text.y=element_text(size=5),
+      strip.text=element_blank(),
+      plot.caption=element_markdown()
+    ) +
+    labs(
+      title=glue("{squad} substitutions"),
+      x=element_blank(),
+      y=element_blank(),
+      caption="Gamestate - <b style='color:#60BD68'>winning</b> | <b style='color:#5DA5DA'>drawing</b> | <b style='color:#F15854'>losing</b>"
+    ) +
+    scale_x_continuous(breaks=c(-3,-2,-1,seq(45,130,5)),labels=c("Unused","First\nHalf","Half\nTime",seq(45,130,5)),expand=expansion(add=0.9)) +
+    scale_y_reordered(expand=expansion(add=c(1.2,1.6)),position = "right") +
+    scale_fill_manual(values=c("Winning"=colour[["medium"]][[3]],"Drawing"=colour[["medium"]][[1]],"Losing"=colour[["medium"]][[8]],"Unused"="Grey"))
+  
   plots_logo <- 
     plots %>%
     add_logo(path=here("images","SB_Regular.png"),x=1,y=1,hjust=1.1,width=0.2) %>%
