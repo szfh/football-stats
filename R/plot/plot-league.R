@@ -339,7 +339,7 @@ plot_league <- function(data,league="EPL",season="2020-21"){
       att3rd=pressures_att_3rd_/touches_def_3rd_vs
     ) %>%
     make_long_data(levels=c("def3rd","mid3rd","att3rd"),labels=c("Defensive Third","Middle Third","Attacking Third")) %>%
-    ggplot(aes(x=0,y=n)) +
+    ggplot(aes(x=0.04,y=n)) +
     geom_text_repel(
       aes(label=squad),
       size=2.5,
@@ -350,17 +350,17 @@ plot_league <- function(data,league="EPL",season="2020-21"){
       segment.alpha=0.8,
       box.padding=0.05
     ) +
-    geom_point(aes(fill=squad),size=3,shape=23,colour="black") +
+    geom_point(aes(fill=squad),size=4,shape=23,colour="black") +
     theme[["solarfacet"]]() +
     facet_wrap("key",scales="free") +
     labs(
       title="Press intensity",
       x=element_blank(),
       y=element_blank(),
-      caption="percentage of opposition ball possessions put under pressure | control-dribble-offload = single possession"
+      caption="Percentage of opposition ball possessions put under pressure | control-dribble-offload = single possession"
     ) +
     scale_x_continuous(limit=c(0,1)) +
-    scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+    scale_y_continuous(labels = scales::percent_format(accuracy = 1), breaks=seq(0,1,0.05), expand=expansion(add=0.02)) +
     scale_fill_manual(values=palette[["epl"]]())
   
   plots$ppda <-
