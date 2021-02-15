@@ -10,6 +10,7 @@ pacman::p_load(
   cowplot,
   polite,
   understatr,
+  worldfootballR,
   ggformula,
   gghighlight,
   ggforce,
