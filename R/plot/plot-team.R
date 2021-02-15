@@ -415,7 +415,7 @@ plot_team <- function(data,squad="Southampton",season="2020-21"){
     scale_x_continuous(breaks=seq(0,130,5),expand=expansion(add=2)) +
     scale_y_reordered(expand=expansion(add=c(1.2,1.6)),position = "right") +
     scale_fill_manual(values=c("Winning"=colour[["medium"]][[3]],"Drawing"=colour[["medium"]][[1]],"Losing"=colour[["medium"]][[8]]))
-  
+
   plots$subs3 <-
     data$fbref$matches %>%
     filter(!is.na(homegls)) %>%
@@ -461,9 +461,9 @@ plot_team <- function(data,squad="Southampton",season="2020-21"){
       home_away=="Home" ~ "H",
       TRUE ~ "A"
     )) %>%
-    mutate(teamglsft=ifelse(home_away=="Home",homeglsft,awayglsft)) %>%
-    mutate(oppglsft=ifelse(home_away=="Home",awayglsft,homeglsft)) %>%
-    filter(season %in% !!season) %>%
+    mutate(teamglsft=ifelse(home_away=="H",homeglsft,awayglsft)) %>%
+    mutate(oppglsft=ifelse(home_away=="H",awayglsft,homeglsft)) %>%
+    # filter(season %in% !!season) %>%
     filter(team %in% !!squad) %>%
     nest_by(match_key,date,season,home,away,homeglsft,awayglsft,teamglsft,oppglsft,team,opposition,home_away) %>%
     mutate(subs_available=case_when(
@@ -474,12 +474,16 @@ plot_team <- function(data,squad="Southampton",season="2020-21"){
     ungroup() %>%
     mutate(data=pmap(list(.$data,subs_available,subs_used),possibly(get_unused_subs, otherwise=NA))) %>%
     unnest(cols=data) %>%
+    mutate(season=case_when(
+      date>as.Date("2019-08-01") & date<as.Date("2020-03-31") ~ "2019-20 part 1",
+      date>as.Date("2020-04-01") & date<as.Date("2020-07-30") ~ "2019-20 part 2",
+      TRUE ~ season)) %>%
     mutate(match=glue("{teamglsft}-{oppglsft} {opposition} {home_away}")) %>%
     mutate(match=reorder_within(match, desc(date), season)) %>%
     # filter(date>=lubridate::as_date("2018-12-7")) %>%
-    # filter(date>=lubridate::as_date("2020-1-1")) %>%
+    filter(date>=lubridate::as_date("2020-1-1")) %>%
     ggplot(aes(x=time,y=match,fill=state2)) +
-    geom_beeswarm(size=2.5,shape=23,colour="black",groupOnX=FALSE,priority="descending",alpha=0.75) +
+    geom_beeswarm(size=2.5,shape=23,cex=2,colour="black",groupOnX=FALSE,priority="descending",alpha=0.75) +
     # geom_blank(data=data.frame(time=c(45.5,94.5),match=c(NA,NA),state2=c(NA,NA),period=c("Second Half","Second Half"))) +
     theme[["solar"]]() +
     facet_grid(season ~ period, space="free", scales="free") +
