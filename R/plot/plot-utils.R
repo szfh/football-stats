@@ -48,17 +48,26 @@ filter_na <- function(data,cols){ # filter na
 }
 
 get_mva <- function(xG,n=6){ # windowed average xG
-  
+
   xGlag <- list()
-  xGlag[[1]] <- xG
+  divider <- list()
   
-  for(i in 2:n){
-    xGlag[[i]] <- lag(xG,(i-1))
+  for(i in 1:n){
+    divider[[i]] <- (1-((i-1)/n))
+    # xGlag[[i]] <- lag(xG,(i-1))
+    xGlag[[i]] <- lag(xG,(i-1))*divider[[i]]
   }
+
+  # mva <-
+  #   xGlag %>%
+  #   as.data.frame %>%
+  #   rowMeans(na.rm=TRUE)
   
-  mva <- xGlag %>%
+  mva <-
+    xGlag %>%
     as.data.frame %>%
-    rowMeans(na.rm=TRUE)
+    rowSums(na.rm=TRUE) %>%
+    divide_by(reduce(divider,sum))
   
   return(mva)
 }
