@@ -463,7 +463,7 @@ plot_team <- function(data,squad="Southampton",season="2020-21"){
     )) %>%
     mutate(teamglsft=ifelse(home_away=="H",homeglsft,awayglsft)) %>%
     mutate(oppglsft=ifelse(home_away=="H",awayglsft,homeglsft)) %>%
-    # filter(season %in% !!season) %>%
+    filter(season %in% !!season) %>%
     filter(team %in% !!squad) %>%
     nest_by(match_key,date,season,home,away,homeglsft,awayglsft,teamglsft,oppglsft,team,opposition,home_away) %>%
     mutate(subs_available=case_when(
@@ -481,7 +481,7 @@ plot_team <- function(data,squad="Southampton",season="2020-21"){
     mutate(match=glue("{teamglsft}-{oppglsft} {opposition} {home_away}")) %>%
     mutate(match=reorder_within(match, desc(date), season)) %>%
     # filter(date>=lubridate::as_date("2018-12-7")) %>%
-    filter(date>=lubridate::as_date("2020-1-1")) %>%
+    # filter(date>=lubridate::as_date("2020-1-1")) %>%
     ggplot(aes(x=time,y=match,fill=state2)) +
     geom_beeswarm(size=2.5,shape=23,cex=2,colour="black",groupOnX=FALSE,priority="descending",alpha=0.75) +
     # geom_blank(data=data.frame(time=c(45.5,94.5),match=c(NA,NA),state2=c(NA,NA),period=c("Second Half","Second Half"))) +
