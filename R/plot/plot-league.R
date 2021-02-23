@@ -2,7 +2,7 @@ source(here("R","plot","plot-utils.R"))
 
 plot_league <- function(data,league="EPL",season="2020-21"){
   plots <- list()
-  
+
   # Premier League player plots
   plots$glsxg <-
     data$fbref$players %>%
@@ -227,8 +227,9 @@ plot_league <- function(data,league="EPL",season="2020-21"){
   
   plots$squadxgd <-
     data$fbref$squad %>%
+    filter(!vs) %>%
     filter(season %in% !!season) %>%
-    select(squad,gd=gdiff,xgd=xgdiff) %>%
+    select(squad,gd=gd,xgd=xgd) %>%
     make_long_data(levels=c("gd","xgd"),labels=c("Goal difference","Expected goal difference")) %>%
     ggplot(aes(x=0,y=n)) +
     geom_text_repel(
