@@ -12,7 +12,7 @@ plot_league <- function(data,league="EPL",season="2020-21"){
     group_by(player,squad) %>%
     summarise(npgls=sum(npgls,na.rm=TRUE),npxg=sum(npxg,na.rm=TRUE)) %>%
     make_long_data(levels=c("npgls","npxg"),labels=c("Goals","Expected Goals")) %>%
-    mutate(focus=case_when(min_rank(desc(n))<=10 ~ TRUE,
+    mutate(focus=case_when(min_rank(desc(n))<=15 ~ TRUE,
                            TRUE ~ FALSE)) %>%
     ggplot(aes(x=0.05,y=n,alpha=focus)) +
     geom_text_repel(
