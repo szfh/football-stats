@@ -27,10 +27,10 @@ plot_team <- function(data,squad="Southampton",season="2020-21"){
     ) %>%
     mutate(
       pos=case_when(
-        player %in% c("Kevin Danso","Jannik Vestergaard","Jan Bednarek","Jack Stephens","Maya Yoshida","Mohammed Salisu") ~ "CB",
-        player %in% c("Ryan Bertrand","Cédric Soares","Yan Valery","Kyle Walker-Peters","Jake Vokins") ~ "FB",
-        player %in% c("James Ward-Prowse","Pierre Højbjerg","Oriol Romeu","William Smallbone","Ibrahima Diallo") ~ "DM",
-        player %in% c("Nathan Redmond","Stuart Armstrong","Sofiane Boufal","Moussa Djenepo","Nathan Tella") ~ "AM",
+        player %in% c("Kevin Danso","Jannik Vestergaard","Jan Bednarek","Jack Stephens","Maya Yoshida","Mohammed Salisu","Allan Tchaptchet") ~ "CB",
+        player %in% c("Ryan Bertrand","Cédric Soares","Yan Valery","Kyle Walker-Peters","Jake Vokins","Kayne Ramsey") ~ "FB",
+        player %in% c("James Ward-Prowse","Pierre Højbjerg","Oriol Romeu","William Smallbone","Ibrahima Diallo","Alexandre Jankewitz") ~ "DM",
+        player %in% c("Nathan Redmond","Stuart Armstrong","Sofiane Boufal","Moussa Djenepo","Nathan Tella","Takumi Minamino","Caleb Watts") ~ "AM",
         player %in% c("Theo Walcott") ~ "FW",
         TRUE ~ pos)
     ) %>%
