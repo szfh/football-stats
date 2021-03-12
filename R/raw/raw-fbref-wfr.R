@@ -13,26 +13,16 @@ scrape_fbref_wfr <- function(save_path=here("data","fbref.rds"),current_season=2
   
   fbref_saved <- readRDS(save_path)
   fbref <- list()
-  
-  # browser()
-  
+
   fbref$match_urls$all <-
     tibble() %>%
     bind_rows(
       crossing(data_types$season,data_types$country,data_types$gender)
     ) %>%
-    mutate(data_type="match_url")
-  
-  fbref$match_urls$keep <-
-    fbref_saved %>%
-    filter(data_type=="match_url") %>%
-    filter(season!=current_season)
-  
-  fbref$match_urls$new <-
-    anti_join(fbref$match_urls$all, fbref$match_urls$keep) %>%
+    mutate(data_type="match_url") %>%
     mutate(data=pmap(list(country,gender,season),get_match_urls)) %>%
     mutate(data=map(data,as_tibble))
-  
+
   fbref$match_results$all <-
     tibble() %>%
     bind_rows(
@@ -48,7 +38,7 @@ scrape_fbref_wfr <- function(save_path=here("data","fbref.rds"),current_season=2
   fbref$match_results$new <-
     anti_join(fbref$match_results$all, fbref$match_results$keep) %>%
     mutate(data=pmap(list(country,gender,season),possibly(get_match_results,otherwise=NA)))
-  
+
   fbref$season_stats$all <-
     tibble() %>%
     bind_rows(
@@ -64,9 +54,9 @@ scrape_fbref_wfr <- function(save_path=here("data","fbref.rds"),current_season=2
   fbref$season_stats$new <-
     anti_join(fbref$season_stats$all, fbref$season_stats$keep) %>%
     mutate(data=pmap(list(country,gender,season,stat),possibly(get_season_team_stats,otherwise=NA)))
-  
+
   fbref$match_summary$all <-
-    bind_rows(fbref$match_urls$keep,fbref$match_urls$new) %>%
+    fbref$match_urls$all %>%
     unnest(cols=data) %>%
     remove_empty("cols") %>%
     rename(url=value) %>%
@@ -82,7 +72,7 @@ scrape_fbref_wfr <- function(save_path=here("data","fbref.rds"),current_season=2
     mutate(data=map(url,possibly(get_match_summary,otherwise=NA)))
   
   fbref$advanced_stats$all <-
-    bind_rows(fbref$match_urls$keep,fbref$match_urls$new) %>%
+    fbref$match_urls$all %>%
     unnest(cols=data) %>%
     remove_empty("cols") %>%
     rename(url=value) %>%
@@ -101,7 +91,6 @@ scrape_fbref_wfr <- function(save_path=here("data","fbref.rds"),current_season=2
   
   fbref_all <-
     bind_rows(
-      fbref$match_urls$keep,fbref$match_urls$new,
       fbref$match_results$keep,fbref$match_results$new,
       fbref$season_stats$keep,fbref$season_stats$new,
       fbref$match_summary$keep,fbref$match_summary$new,
