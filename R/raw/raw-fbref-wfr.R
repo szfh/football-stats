@@ -13,7 +13,7 @@ scrape_fbref_wfr <- function(save_path=here("data","fbref.rds"),current_season=2
   
   fbref_saved <- readRDS(save_path)
   fbref <- list()
-
+  
   fbref$match_urls$all <-
     tibble() %>%
     bind_rows(
@@ -22,7 +22,7 @@ scrape_fbref_wfr <- function(save_path=here("data","fbref.rds"),current_season=2
     mutate(data_type="match_url") %>%
     mutate(data=pmap(list(country,gender,season),get_match_urls)) %>%
     mutate(data=map(data,as_tibble))
-
+  
   fbref$match_results$all <-
     tibble() %>%
     bind_rows(
@@ -38,7 +38,7 @@ scrape_fbref_wfr <- function(save_path=here("data","fbref.rds"),current_season=2
   fbref$match_results$new <-
     anti_join(fbref$match_results$all, fbref$match_results$keep) %>%
     mutate(data=pmap(list(country,gender,season),possibly(get_match_results,otherwise=NA)))
-
+  
   fbref$season_stats$all <-
     tibble() %>%
     bind_rows(
@@ -54,7 +54,7 @@ scrape_fbref_wfr <- function(save_path=here("data","fbref.rds"),current_season=2
   fbref$season_stats$new <-
     anti_join(fbref$season_stats$all, fbref$season_stats$keep) %>%
     mutate(data=pmap(list(country,gender,season,stat),possibly(get_season_team_stats,otherwise=NA)))
-
+  
   fbref$match_summary$all <-
     fbref$match_urls$all %>%
     unnest(cols=data) %>%
@@ -64,8 +64,7 @@ scrape_fbref_wfr <- function(save_path=here("data","fbref.rds"),current_season=2
   
   fbref$match_summary$keep <-
     fbref_saved %>%
-    filter(data_type=="match_summary") %>%
-    filter(season!=current_season)
+    filter(data_type=="match_summary")
   
   fbref$match_summary$new <-
     anti_join(fbref$match_summary$all, fbref$match_summary$keep) %>%
@@ -82,8 +81,7 @@ scrape_fbref_wfr <- function(save_path=here("data","fbref.rds"),current_season=2
   
   fbref$advanced_stats$keep <-
     fbref_saved %>%
-    filter(data_type=="advanced_stats") %>%
-    filter(season!=current_season)
+    filter(data_type=="advanced_stats")
   
   fbref$advanced_stats$new <-
     anti_join(fbref$advanced_stats$all, fbref$advanced_stats$keep) %>%
