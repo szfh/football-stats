@@ -5,129 +5,110 @@ scrape_fbref_wfr <- function(save_path=here("data","fbref.rds"),current_season=2
   data_types$season <- tibble(season=2021)
   data_types$country <- tibble(country="ENG")
   data_types$gender <- tibble(gender="M")
-  data_types$advanced_stats_short <- tibble(stat=c("summary"))
   data_types$advanced_stats <- tibble(stat=c("summary","passing","passing_types","defense" ,"possession","misc","keeper"))
   data_types$season_team_stats <- tibble(stat=c("league_table", "league_table_home_away", "standard", "keeper",
                                                 "keeper_adv", "shooting", "passing", "passing_types", "goal_shot_creation",
                                                 "defense", "possession", "playing_time", "misc"))
-  data_types$season_team_stats_short <- tibble(stat=c("standard"))
   data_types$team_or_player <- tibble(team_or_player=c("player","team"))
   
   fbref_saved <- readRDS(save_path)
   fbref <- list()
   
-  browser()
+  # browser()
   
   fbref$match_urls$all <-
     tibble() %>%
     bind_rows(
       crossing(data_types$season,data_types$country,data_types$gender)
     ) %>%
-    mutate(data_type="match_url") %>%
-    glimpse
+    mutate(data_type="match_url")
   
   fbref$match_urls$keep <-
     fbref_saved %>%
     filter(data_type=="match_url") %>%
-    filter(season!=current_season) %>%
-    glimpse
+    filter(season!=current_season)
   
   fbref$match_urls$new <-
     anti_join(fbref$match_urls$all, fbref$match_urls$keep) %>%
     mutate(data=pmap(list(country,gender,season),get_match_urls)) %>%
-    mutate(data=map(data,as_tibble)) %>%
-    glimpse
+    mutate(data=map(data,as_tibble))
   
   fbref$match_results$all <-
     tibble() %>%
     bind_rows(
       crossing(data_types$season,data_types$country,data_types$gender)
     ) %>%
-    mutate(data_type="match_result") %>%
-    glimpse
+    mutate(data_type="match_result")
   
   fbref$match_results$keep <-
     fbref_saved %>%
     filter(data_type=="match_result") %>%
-    filter(season!=current_season) %>%
-    glimpse
+    filter(season!=current_season)
   
   fbref$match_results$new <-
     anti_join(fbref$match_results$all, fbref$match_results$keep) %>%
-    mutate(data=pmap(list(country,gender,season),get_match_results)) %>%
-    glimpse
-  
-  # browser()
+    mutate(data=pmap(list(country,gender,season),possibly(get_match_results,otherwise=NA)))
   
   fbref$season_stats$all <-
     tibble() %>%
     bind_rows(
-      crossing(data_types$season,data_types$country,data_types$gender,data_types$season_team_stats_short)
+      crossing(data_types$season,data_types$country,data_types$gender,data_types$season_team_stats)
     ) %>%
-    mutate(data_type="season_stat") %>%
-    glimpse
+    mutate(data_type="season_stat")
   
   fbref$season_stats$keep <-
     fbref_saved %>%
     filter(data_type=="season_stat") %>%
-    filter(season!=current_season) %>%
-    glimpse
+    filter(season!=current_season)
   
   fbref$season_stats$new <-
     anti_join(fbref$season_stats$all, fbref$season_stats$keep) %>%
-    mutate(data=pmap(list(country,gender,season,stat="standard"),get_season_team_stats)) %>%
-    glimpse
+    mutate(data=pmap(list(country,gender,season,stat),possibly(get_season_team_stats,otherwise=NA)))
   
-  browser()
+  fbref$match_summary$all <-
+    bind_rows(fbref$match_urls$keep,fbref$match_urls$new) %>%
+    unnest(cols=data) %>%
+    remove_empty("cols") %>%
+    rename(url=value) %>%
+    mutate(data_type="match_summary")
   
-  # fbref_match_list <- list()
+  fbref$match_summary$keep <-
+    fbref_saved %>%
+    filter(data_type=="match_summary") %>%
+    filter(season!=current_season)
   
-  # fbref$match_summary <-
-  #   fbref$match_urls %>%
-  #   unnest(cols=data) %>%
-  #   rename(url=value) %>%
-  #   slice(1:4) %>% # delete
-  #   mutate(data=map(url,get_match_summary)) %>%
-  #   glimpse
+  fbref$match_summary$new <-
+    anti_join(fbref$match_summary$all, fbref$match_summary$keep) %>%
+    mutate(data=map(url,possibly(get_match_summary,otherwise=NA)))
   
-  # fbref$advanced_match_stats <-
-  #   fbref$match_urls %>%
-  #   unnest(cols=data) %>%
-  #   rename(url=value) %>%
-  #   slice(1:4) %>% # delete
-  #   crossing(data_types$advanced_stats_short) %>%
-  #   # crossing(data_types$advanced_stats) %>%
-  #   # crossing(data_types$team_or_player) %>%
-  #   crossing(tibble(team_or_player="player")) %>%
-  #   mutate(data=pmap(list(url,stat,team_or_player),get_advanced_match_stats)) %>%
-  #   glimpse
+  fbref$advanced_stats$all <-
+    bind_rows(fbref$match_urls$keep,fbref$match_urls$new) %>%
+    unnest(cols=data) %>%
+    remove_empty("cols") %>%
+    rename(url=value) %>%
+    crossing(data_types$advanced_stats) %>%
+    crossing(data_types$team_or_player) %>%
+    mutate(data_type="advanced_stats")
   
-  # fbref1 <-
-  #   bind_rows(fbref$match_urls,fbref$match_results) %>%
-  #   relocate(data,.after=last_col())
+  fbref$advanced_stats$keep <-
+    fbref_saved %>%
+    filter(data_type=="advanced_stats") %>%
+    filter(season!=current_season)
   
-  # fbref2 <-
-  #   bind_rows(fbref$match_summary,fbref$advanced_match_stats) %>%
-  # relocate(data,.after=last_col())
-  
-  # fbref_all <-
-  #   bind_rows(fbref1,fbref2) %>%
-  #   relocate(data_type,.before=first_col()) %>%
-  #   relocate(data,.after=last_col())
-  
-  browser()
-  
-  glimpse(fbref)
+  fbref$advanced_stats$new <-
+    anti_join(fbref$advanced_stats$all, fbref$advanced_stats$keep) %>%
+    mutate(data=pmap(list(url,stat,team_or_player),possibly(get_advanced_match_stats,otherwise=NA)))
   
   fbref_all <-
     bind_rows(
       fbref$match_urls$keep,fbref$match_urls$new,
       fbref$match_results$keep,fbref$match_results$new,
-      fbref$season_stats$keep,fbref$season_stats$new
+      fbref$season_stats$keep,fbref$season_stats$new,
+      fbref$match_summary$keep,fbref$match_summary$new,
+      fbref$advanced_stats$keep,fbref$advanced_stats$new
     ) %>%
     relocate(data_type) %>%
-    relocate(data,.after=last_col()) %>%
-    glimpse
+    relocate(data,.after=last_col())
   
   saveRDS(fbref_all,file=save_path)
   
