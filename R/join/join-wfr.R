@@ -19,57 +19,54 @@ join_fbref <- function(fbref){
   data$table <-
     fbref_tidy %>%
     filter(stat=="league_table") %>%
-    select(season,data) %>%
-    unnest(cols=data) %>%
-    glimpse
+    select(data) %>%
+    unnest(data)
   
   data$table_home_away <-
     fbref_tidy %>%
     filter(stat=="league_table_home_away") %>%
-    select(season,data) %>%
-    unnest(cols=data) %>%
-    glimpse
+    select(data) %>%
+    unnest(data)
   
   data$season_stat <-
     fbref_tidy %>%
     filter(data_type=="season_stat") %>%
     filter(stat!="league_table") %>%
     filter(stat!="league_table_home_away") %>%
-    select(-data_type,-stat) %$%
-    data %>%
-    reduce(full_join) %>%
-    glimpse
+    pull(data) %>%
+    reduce(full_join)
   
   data$matches <-
     fbref_tidy %>%
     filter(data_type=="match_result") %>%
-    select(-stat) %>%
-    unnest(cols=data) %>%
-    glimpse
-
+    select(data) %>%
+    unnest(data)
+  
   data$team_advanced_stats_match <-
     fbref_tidy %>%
     filter(data_type=="advanced_stats") %>%
     filter(team_or_player=="team") %>%
+    select(stat,data) %>%
     unnest(data) %>%
     group_by(stat) %>%
     nest() %>%
     mutate(data=map(data,remove_empty,which="cols")) %>%
     pull(data) %>%
-    reduce(full_join) %>%
-    glimpse
+    reduce(full_join)
   
   data$player_advanced_stats_match <-
     fbref_tidy %>%
     filter(data_type=="advanced_stats") %>%
     filter(team_or_player=="player") %>%
+    select(stat,data) %>%
     unnest(data) %>%
     group_by(stat) %>%
     nest() %>%
     mutate(data=map(data,remove_empty,which="cols")) %>%
     pull(data) %>%
-    reduce(full_join) %>%
-    glimpse
+    reduce(full_join)
+  
+  # to do: match summaries
   
   return(data)
 }
@@ -81,44 +78,42 @@ tidy_fbref <- function(data,data_type=NA,stat=NA){
       as_tibble() %>%
       rename("url"="value")
   }
+  
   if(data_type=="match_result"){
     data <-
       data %>%
       as_tibble() %>%
       select(-contains(c("Attendance","Venue","Referee","Notes")))
   }
+  
   if(data_type=="season_stat" && stat %in% c("league_table","league_table_home_away")){
     data <-
       data %>%
       as_tibble() %>%
       select(-contains(c("90","Last.5","Top.Team.Scorer","Goalkeeper","Notes")))
   }
-  if(data_type=="season_stat" && stat %in% c("keeper","keeper_adv")){
+  else if(data_type=="season_stat" && stat %in% c("keeper","keeper_adv")){
     data <-
       data %>%
       as_tibble() %>%
-      # select(-any_of(c("Num_Players":"Min_Playing"))) %>%
       select(-contains(c("Players","Playing","90","Last.5","Top.Team.Scorer","Goalkeeper","Notes")))
   }
-  if(data_type=="season_stat"){
+  else if(data_type=="season_stat"){
     data <-
       data %>%
       as_tibble()
   }
   
   if(data_type=="advanced_stats" && stat=="keeper"){
-    # browser()
     data <-
       data %>%
       as_tibble() %>%
       select(-contains(c("Player","Nation","Age","Min","Att_Passes")))
   }
-  if(data_type=="advanced_stats"){
-    # browser()
+  else if(data_type=="advanced_stats"){
     data <-
       data %>%
-      as_tibble() #%>%
-    # select(-contains(c("Min")))
+      as_tibble()
   }
   
   return(data)
