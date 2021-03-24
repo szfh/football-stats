@@ -16,7 +16,7 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),current_season="2020
                                      "squad",
   )
   
-  data_types$squad_player_tables <- tribble(~stat, ~stat_key, # add %23 to statselector? make factor/ordered?
+  data_types$squad_player_tables <- tribble(~stat, ~stat_key, # make factor/ordered?
                                             "stats","standard",
                                             "keepers","keeper",
                                             "keepersadv","keeper_adv",
@@ -39,6 +39,8 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),current_season="2020
   fbref_data <- list()
   fbref <- list()
   
+  browser()
+  
   fbref_data$squad_player$all <-
     tibble() %>% # all squad + player data parameters
     bind_rows(crossing(data_types$squad_player,data_types$squad_player_tables)) %>%
@@ -56,9 +58,7 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),current_season="2020
     mutate(content_selector_id=fbref_get_selector(page,season_key,stat,stat_key)) %>% #don't need stat?
     mutate(data=pmap(list(page_url, content_selector_id, page, stat), possibly(fbref_scrape, otherwise=NA)))
   
-  fbref$squad_player <-
-    bind_rows(fbref_data$squad_player$keep,fbref_data$squad_player$new) %>%
-    filter(!is.na(data))
+  # browser()
   
   fbref_data$matches$all <-
     fbref_saved %>%
@@ -81,9 +81,6 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),current_season="2020
     mutate(page_url=fbref_get_url(page,match_key=match_key)) %>%
     mutate(data=pmap(list(page_url,page,stat), possibly(fbref_scrape_events, otherwise=NA)))
   
-  fbref$events <-
-    bind_rows(fbref_data$events$keep,fbref_data$events$new)
-  
   fbref_data$shots$keep <-
     fbref_saved %>%
     filter(stat=="shots") %>%
@@ -97,11 +94,17 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),current_season="2020
     mutate(content_selector_id=fbref_get_selector(page,stat=stat,match_key=match_key)) %>%
     mutate(data=pmap(list(page_url,content_selector_id,page,stat), possibly(fbref_scrape, otherwise=NA)))
   
-  fbref$shots <-
-    bind_rows(fbref_data$shots$keep,fbref_data$shots$new)
+  browser()
   
   fbref_all <-
-    bind_rows(fbref$squad_player,fbref$events,fbref$shots)
+    bind_rows(
+      fbref$squad_player$keep,fbref$squad_player$new,
+      fbref$events$keep,fbref$events$new,
+      fbref$shots$keep,fbref$shots$new
+    ) %>%
+    relocate(data,.after=last_col())
+  
+  browser()
   
   saveRDS(fbref_all,file=save_path)
   
@@ -114,8 +117,9 @@ fbref_get_selector <- function(page,season_key=NA,stat=NA,stat_key=NA,match_key=
   selector <-
     case_when(
       page=="player" ~ glue("%23stats_{stat_key}"),
-      page=="squad" ~ glue("%23stats_{stat_key}_squads"),
-      page=="schedule" ~ glue("%23sched_ks_{season_key}_1"),
+      # page=="squad" ~ glue("%23stats_{stat_key}_squads"),
+      page=="squad" ~ glue("%23stats_squads_{stat_key}_for"),
+      page=="schedule" ~ glue("%23sched_{season_key}_1"),
       page=="league" ~ glue("%23results{season_key}1_overall"),
       page=="leagueha" ~ glue("%23results{season_key}1_home_away"),
       page=="match" & stat=="shots" ~ glue("%23all_shots_all"),
@@ -138,11 +142,11 @@ fbref_get_url <- function(page,season_key=NA,stat=NA,stat_key=NA,match_key=NA){
 
 fbref_scrape <- function(page_url=NA,content_selector_id=NA,page=NA,stat=NA){
   url <- glue("http://acciotables.herokuapp.com/?page_url={page_url}&content_selector_id={content_selector_id}")
-  # print(glue("url: {url}"))
-  
+  print(glue("url: {url}"))
+  # browser()
   session <- polite::bow(url,user_agent="@saintsbynumbers")
   data_html <- polite::scrape(session)
-  
+  # browser()
   data_table <-
     data_html %>%
     html_table(header=FALSE) %>%
