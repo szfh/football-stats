@@ -1,4 +1,5 @@
 source(here("R","raw","raw-fbref-utils.R"),encoding="utf-8")
+source(here("R","themes.R"),encoding="utf-8")
 
 scrape_fbref_wfr <- function(save_path=here("data","fbref.rds"),current_season=2021){
   data_types <- list()
