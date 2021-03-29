@@ -89,9 +89,12 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),current_season="2020
     filter(!is.na(data)) %>%
     filter(!is.null(data))
   
+  browser()
+  
   fbref_data$shots$new <-
     anti_join(fbref_data$matches$all, fbref_data$shots$keep, by="match_key") %>%
     mutate(stat="shots") %>%
+    filter(stat=="A") %>%
     mutate(page_url=fbref_get_url(page,match_key=match_key)) %>%
     mutate(content_selector_id=fbref_get_selector(page,stat=stat,match_key=match_key)) %>%
     mutate(data=pmap(list(page_url,content_selector_id,page,stat), possibly(fbref_scrape, otherwise=NA)))
@@ -100,9 +103,9 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),current_season="2020
   
   fbref_all <-
     bind_rows(
-      fbref$squad_player$keep,fbref$squad_player$new,
-      fbref$events$keep,fbref$events$new,
-      fbref$shots$keep,fbref$shots$new
+      fbref_data$squad_player$keep,fbref_data$squad_player$new,
+      fbref_data$events$keep,fbref_data$events$new,
+      fbref_data$shots$keep,fbref_data$shots$new
     ) %>%
     relocate(data,.after=last_col())
   
