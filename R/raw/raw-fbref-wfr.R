@@ -3,8 +3,9 @@ source(here("R","raw","raw-fbref-utils.R"),encoding="utf-8")
 scrape_fbref_wfr <- function(save_path=here("data","fbref.rds"),current_season=2021){
   data_types <- list()
   data_types$season <- tibble(season=2021)
+  # data_types$season <- tibble(season=2018:2021)
   data_types$country <- tibble(country="ENG")
-  data_types$gender <- tibble(gender="M")
+  # data_types$gender <- tibble(gender="M")
   data_types$advanced_stats <- tibble(stat=c("summary","passing","passing_types","defense" ,"possession","misc","keeper"))
   data_types$season_team_stats <- tibble(stat=c("league_table", "league_table_home_away", "standard", "keeper",
                                                 "keeper_adv", "shooting", "passing", "passing_types", "goal_shot_creation",
@@ -13,20 +14,20 @@ scrape_fbref_wfr <- function(save_path=here("data","fbref.rds"),current_season=2
   
   fbref_saved <- readRDS(save_path)
   fbref <- list()
-  
+
   fbref$match_urls$all <-
     tibble() %>%
     bind_rows(
-      crossing(data_types$season,data_types$country,data_types$gender)
+      crossing(data_types$season,data_types$country)
     ) %>%
     mutate(data_type="match_url") %>%
-    mutate(data=pmap(list(country,gender,season),get_match_urls)) %>%
+    mutate(data=pmap(list(country,gender="M",season),get_match_urls)) %>%
     mutate(data=map(data,as_tibble))
   
   fbref$match_results$all <-
     tibble() %>%
     bind_rows(
-      crossing(data_types$season,data_types$country,data_types$gender)
+      crossing(data_types$season,data_types$country)
     ) %>%
     mutate(data_type="match_result")
   
@@ -38,12 +39,12 @@ scrape_fbref_wfr <- function(save_path=here("data","fbref.rds"),current_season=2
   
   fbref$match_results$new <-
     anti_join(fbref$match_results$all, fbref$match_results$keep) %>%
-    mutate(data=pmap(list(country,gender,season),possibly(get_match_results,otherwise=NA)))
+    mutate(data=pmap(list(country,gender="M",season,tier="1st"),possibly(get_match_results,otherwise=NA)))
   
   fbref$season_stats$all <-
     tibble() %>%
     bind_rows(
-      crossing(data_types$season,data_types$country,data_types$gender,data_types$season_team_stats)
+      crossing(data_types$season,data_types$country,data_types$season_team_stats)
     ) %>%
     mutate(data_type="season_stat")
   
@@ -55,12 +56,11 @@ scrape_fbref_wfr <- function(save_path=here("data","fbref.rds"),current_season=2
   
   fbref$season_stats$new <-
     anti_join(fbref$season_stats$all, fbref$season_stats$keep) %>%
-    mutate(data=pmap(list(country,gender,season,stat),possibly(get_season_team_stats,otherwise=NA)))
+    mutate(data=pmap(list(country,gender="M",season,tier="1st",stat),possibly(get_season_team_stats,otherwise=NA)))
   
   fbref$match_summary$all <-
     fbref$match_urls$all %>%
     unnest(cols=data) %>%
-    remove_empty("cols") %>%
     rename(url=value) %>%
     mutate(data_type="match_summary")
   
@@ -76,7 +76,6 @@ scrape_fbref_wfr <- function(save_path=here("data","fbref.rds"),current_season=2
   fbref$advanced_stats$all <-
     fbref$match_urls$all %>%
     unnest(cols=data) %>%
-    remove_empty("cols") %>%
     rename(url=value) %>%
     crossing(data_types$advanced_stats) %>%
     crossing(data_types$team_or_player) %>%
@@ -90,6 +89,8 @@ scrape_fbref_wfr <- function(save_path=here("data","fbref.rds"),current_season=2
   fbref$advanced_stats$new <-
     anti_join(fbref$advanced_stats$all, fbref$advanced_stats$keep) %>%
     mutate(data=pmap(list(url,stat,team_or_player),possibly(get_advanced_match_stats,otherwise=NA)))
+  
+  # browser()
   
   fbref_all <-
     bind_rows(
