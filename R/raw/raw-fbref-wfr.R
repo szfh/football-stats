@@ -15,7 +15,7 @@ scrape_fbref_wfr <- function(save_path=here("data","fbref.rds"),current_season=2
   
   fbref_saved <- readRDS(save_path)
   fbref <- list()
-
+  
   fbref$match_urls$all <-
     tibble() %>%
     bind_rows(
@@ -40,7 +40,8 @@ scrape_fbref_wfr <- function(save_path=here("data","fbref.rds"),current_season=2
   
   fbref$match_results$new <-
     anti_join(fbref$match_results$all, fbref$match_results$keep) %>%
-    mutate(data=pmap(list(country,gender="M",season,tier="1st"),possibly(get_match_results,otherwise=NA)))
+    mutate(data=pmap(list(country,gender="M",season,tier="1st"),possibly(get_match_results,otherwise=NA))) %>%
+    print(n=Inf)
   
   fbref$season_stats$all <-
     tibble() %>%
@@ -57,7 +58,8 @@ scrape_fbref_wfr <- function(save_path=here("data","fbref.rds"),current_season=2
   
   fbref$season_stats$new <-
     anti_join(fbref$season_stats$all, fbref$season_stats$keep) %>%
-    mutate(data=pmap(list(country,gender="M",season,tier="1st",stat),possibly(get_season_team_stats,otherwise=NA)))
+    mutate(data=pmap(list(country,gender="M",season,tier="1st",stat),possibly(get_season_team_stats,otherwise=NA))) %>%
+    print(n=Inf)
   
   fbref$match_summary$all <-
     fbref$match_urls$all %>%
@@ -72,7 +74,8 @@ scrape_fbref_wfr <- function(save_path=here("data","fbref.rds"),current_season=2
   
   fbref$match_summary$new <-
     anti_join(fbref$match_summary$all, fbref$match_summary$keep) %>%
-    mutate(data=map(url,possibly(get_match_summary,otherwise=NA)))
+    mutate(data=map(url,possibly(get_match_summary,otherwise=NA))) %>%
+    print(n=Inf)
   
   fbref$advanced_stats$all <-
     fbref$match_urls$all %>%
@@ -89,7 +92,8 @@ scrape_fbref_wfr <- function(save_path=here("data","fbref.rds"),current_season=2
   
   fbref$advanced_stats$new <-
     anti_join(fbref$advanced_stats$all, fbref$advanced_stats$keep) %>%
-    mutate(data=pmap(list(url,stat,team_or_player),possibly(get_advanced_match_stats,otherwise=NA)))
+    mutate(data=pmap(list(url,stat,team_or_player),possibly(get_advanced_match_stats,otherwise=NA))) %>%
+    print(n=Inf)
   
   # browser()
   
