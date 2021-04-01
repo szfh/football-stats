@@ -3,7 +3,7 @@ source(here("R","themes.R"),encoding="utf-8")
 
 scrape_fbref_wfr <- function(save_path=here("data","fbref.rds"),current_season=2021){
   data_types <- get_data_types()
-
+  
   fbref_saved <- readRDS(save_path)
   fbref <- list()
   
@@ -14,7 +14,8 @@ scrape_fbref_wfr <- function(save_path=here("data","fbref.rds"),current_season=2
     ) %>%
     mutate(data_type="match_url") %>%
     mutate(data=pmap(list(country,gender="M",season),get_match_urls)) %>%
-    mutate(data=map(data,as_tibble))
+    mutate(data=map(data,as_tibble)) %>%
+    mutate(data=map(data,unique))
   
   fbref$match_results$all <-
     tibble() %>%
