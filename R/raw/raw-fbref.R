@@ -114,8 +114,9 @@ fbref_get_selector <- function(page,season_key=NA,stat=NA,stat_key=NA,match_key=
   selector <-
     case_when(
       page=="player" ~ glue("%23stats_{stat_key}"),
-      page=="squad" ~ glue("%23stats_{stat_key}_squads"),
-      page=="schedule" ~ glue("%23sched_ks_{season_key}_1"),
+      # page=="squad" ~ glue("%23stats_{stat_key}_squads"),
+      page=="squad" ~ glue("%23stats_squads_{stat_key}_for"),
+      page=="schedule" ~ glue("%23sched_{season_key}_1"),
       page=="league" ~ glue("%23results{season_key}1_overall"),
       page=="leagueha" ~ glue("%23results{season_key}1_home_away"),
       page=="match" & stat=="shots" ~ glue("%23all_shots_all"),
