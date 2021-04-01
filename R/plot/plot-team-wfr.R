@@ -6,52 +6,48 @@ plot_team_wfr <- function(data,team="Southampton",season="2020-2021"){
   force(data)
   plots <- list()
   
-  browser()
-  
-  # plots$xgtrendmva <-
-  # d1 <-
-  data$fbref$team_advanced_stats_match %>% # need team xg not home/away xg
+  plots$xgtrendmva <-
+    data$fbref$team_advanced_stats_match %>%
     filter(Team %in% !!team) %>%
-    select(Season,Match_Date,Home_Team,Home_Score,Home_xG,Away_Team,Away_Score,Away_xG,Home_Away) %>%
-    # make_long_matches_wfr() %>%
+    select(Season,Match_Date,Team,Home_Team,Home_Score,Home_xG,Away_Team,Away_Score,Away_xG,Home_Away) %>%
+    make_for_against_matches() %>%
+    select(-Home_Team,-Home_Score,-Home_xG,-Away_Team,-Away_Score,-Away_xG) %>%
     mutate(Match_Date=lubridate::parse_date_time(Match_Date,"mdy")) %>%
     arrange(Match_Date) %>%
-    mutate(Home_xG_mva=get_mva(Home_xG)) %>%
-    mutate(Away_xG_mva=get_mva(Away_xG)) %>%
+    mutate(Team_xG_mva=get_mva(Team_xG)) %>%
+    mutate(Opposition_xG_mva=get_mva(Opposition_xG)) %>%
     filter(season %in% !!season) %>%
-    #   # filter(date>=as.Date("2020-01-01")) %>%
+    # #   # filter(date>=as.Date("2020-01-01")) %>%
     mutate(Season=case_when(
       Match_Date>=as.Date("2019-08-01") & Match_Date<as.Date("2020-04-01") ~ "2019-20 part 1",
       Match_Date>=as.Date("2020-04-01") & Match_Date<as.Date("2020-08-01") ~ "2019-20 part 2",
       TRUE ~ season)) %>%
     mutate(Home_Away_Short=ifelse(Home_Away=="Home","H","A")) %>%
-    mutate(Opposition=ifelse(Home_Away=="Home",Away_Team,Home_Team)) %>%
-    mutate(Match=glue::glue("{Opposition} {Home_Away_Short} {Home_Score}-{Away_Score}")) %>%
+    mutate(Match=glue::glue("{Opposition} {Home_Away_Short} {Team_Score}-{Opposition_Score}")) %>%
     mutate(Match=reorder_within(Match, Match_Date, Season)) %>%
     glimpse %>%
     ggplot(aes(x=Match)) +
-    # geom_point(aes(y=xgf),size=1,colour="darkred",fill="darkred",alpha=0.5,shape=23) +
-    #   geom_line(aes(y=xgf_mva,group=season),colour="darkred",linetype="longdash",size=0.7) +
-    #   geom_point(aes(y=xga),size=1,colour="royalblue",fill="royalblue",alpha=0.5,shape=23) +
-    #   geom_line(aes(y=xga_mva,group=season),colour="royalblue",linetype="longdash",size=0.7) +
-    #   theme[["solar"]]() +
-    #   theme(
-    #     axis.text.x=element_text(size=6,angle=60,hjust=1),
-    #     axis.title.y=element_markdown(),
-    #     axis.text.y=element_text(),
-    #     plot.title=element_markdown(),
-    #     plot.caption=element_text(),
-  #     strip.text=element_blank()
-  #   ) +
-  #   labs(
-  #     title=glue("{squad} <b style='color:darkred'>attack</b> / <b style='color:royalblue'>defence</b> xG trend"),
-  #     x=element_blank(),
-  #     y=glue("Expected goals <b style='color:darkred'>for</b> / <b style='color:royalblue'>against</b>")
-  #   ) +
-  #   scale_x_reordered() +
-  #   scale_y_continuous(limits=c(0,NA),expand=expansion(add=c(0,0.1))) +
-  #   facet_grid(cols=vars(season), space="free", scales="free_x") +
-  NULL
+    geom_point(aes(y=Team_xG),size=1,colour="darkred",fill="darkred",alpha=0.5,shape=23) +
+    geom_line(aes(y=Team_xG_mva,group=season),colour="darkred",linetype="longdash",size=0.7) +
+    geom_point(aes(y=Opposition_xG),size=1,colour="royalblue",fill="royalblue",alpha=0.5,shape=23) +
+    geom_line(aes(y=Opposition_xG_mva,group=season),colour="royalblue",linetype="longdash",size=0.7) +
+    theme[["solar"]]() +
+    theme(
+      axis.text.x=element_text(size=6,angle=60,hjust=1),
+      axis.title.y=element_markdown(),
+      axis.text.y=element_text(),
+      plot.title=element_markdown(),
+      plot.caption=element_text(),
+      strip.text=element_blank()
+    ) +
+    labs(
+      title=glue("{team} <b style='color:darkred'>attack</b> / <b style='color:royalblue'>defence</b> xG trend"),
+      x=element_blank(),
+      y=glue("Expected goals <b style='color:darkred'>for</b> / <b style='color:royalblue'>against</b>")
+    ) +
+    scale_x_reordered() +
+    scale_y_continuous(limits=c(0,NA),expand=expansion(add=c(0,0.1))) +
+    facet_grid(cols=vars(Season), space="free", scales="free_x")
   
   # plots$minutes <-
   # d1 <-
