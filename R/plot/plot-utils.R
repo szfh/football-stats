@@ -10,7 +10,8 @@ make_long_data <- function(data,levels,labels){ # transform data to long format
 
 make_long_matches <- function(matches){ # transform matches to long format
   
-  matches %<>%
+  matches_long <-
+    matches %>%
     pivot_longer(cols=c(home,away),
                  names_to="ha",
                  values_to="squad") %>%
@@ -37,7 +38,26 @@ make_long_matches <- function(matches){ # transform matches to long format
       #   adj_scoreA=ifelse(ha=="Home",adj_score2,adj_score1)
     )
   
-  return(matches)
+  return(matches_long)
+}
+
+make_long_matches_wfr <- function(matches){ # transform matches to long format
+  
+  matches_long <-
+    matches %>%
+    pivot_longer(cols=c(Home_Team,Away_Team),
+                 names_to="H_A",
+                 values_to="Squad") %>%
+    left_join(matches) %>%
+    mutate(
+      opposition=ifelse(H_A=="Home",Away_Team,Home_Team),
+      glsf=ifelse(H_A=="Home",Home_Score,Away_Score),
+      glsa=ifelse(H_A=="Home",Away_Score,Home_Score),
+      xgf=ifelse(H_A=="Home",Home_xG,Away_xG),
+      xga=ifelse(H_A=="Home",Away_xG,Home_xG)
+    )
+  
+  return(matches_long)
 }
 
 filter_na <- function(data,cols){ # filter na
@@ -48,7 +68,7 @@ filter_na <- function(data,cols){ # filter na
 }
 
 get_mva <- function(xG,n=6){ # windowed average xG
-
+  
   xGlag <- list()
   divider <- list()
   
@@ -57,7 +77,7 @@ get_mva <- function(xG,n=6){ # windowed average xG
     # xGlag[[i]] <- lag(xG,(i-1))
     xGlag[[i]] <- lag(xG,(i-1))*divider[[i]]
   }
-
+  
   # mva <-
   #   xGlag %>%
   #   as.data.frame %>%

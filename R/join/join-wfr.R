@@ -2,7 +2,6 @@ join_wfr <- function(
   save_path_fbref=here("data","fbref.rds")
 ){
   fbref_join <- possibly(join_fbref, otherwise=NA)(readRDS(save_path_fbref))
-  # data <- list(fbref=fbref_join,understat=understat_join,canpl=canpl_join)
   data <- list(fbref=fbref_join)
   
   return(data)
@@ -50,7 +49,9 @@ join_fbref <- function(fbref){
     unnest(data) %>%
     group_by(stat) %>%
     nest() %>%
+    ungroup() %>%
     mutate(data=map(data,remove_empty,which="cols")) %>%
+    filter(stat!="misc") %>%
     pull(data) %>%
     reduce(full_join)
   
@@ -62,7 +63,9 @@ join_fbref <- function(fbref){
     unnest(data) %>%
     group_by(stat) %>%
     nest() %>%
+    ungroup() %>%
     mutate(data=map(data,remove_empty,which="cols")) %>%
+    filter(stat!="misc") %>%
     pull(data) %>%
     reduce(full_join)
   
@@ -118,3 +121,4 @@ tidy_fbref <- function(data,data_type=NA,stat=NA){
   
   return(data)
 }
+
