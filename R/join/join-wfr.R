@@ -32,6 +32,13 @@ join_fbref <- function(fbref){
     filter(data_type=="season_stat") %>%
     filter(stat!="league_table") %>%
     filter(stat!="league_table_home_away") %>%
+    select(stat,data) %>%
+    unnest(data) %>%
+    group_by(stat) %>%
+    nest() %>%
+    ungroup() %>%
+    mutate(data=map(data,remove_empty,which="cols")) %>%
+    # filter(stat!="misc") %>%
     pull(data) %>%
     reduce(full_join)
   
