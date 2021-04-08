@@ -57,80 +57,57 @@ plot_team_wfr <- function(data,team="Southampton",season="2020-2021"){
     scale_x_reordered() +
     scale_y_continuous(limits=c(0,NA),expand=expansion(add=c(0,0.1))) +
     facet_grid(cols=vars(Season), space="free", scales="free_x")
+
+  starting <-
+    data$fbref$match_lineups %>%
+    separate(Matchday,c("Match","Match_Date")," – ") %>%
+    select(Match_Date,"Player"=Player_Name,Starting)
   
-  # plots$minutes <-
-  # d1 <-
-  # data$fbref$player_advanced_stats_match %>%
-  #   filter(Season %in% !!season) %>%
-  #   filter(Team %in% !!team) %>%
-  #   select(Player,Pos,Min) %>%
-  #   group_by(Player,Pos) %>%
-  #   summarise(across(where(is.numeric),sum)) %>%
-  #   glimpse
-  
-  
-  # data$fbref$players %>%
-  # filter(season %in% !!season) %>%
-  # filter(squad %in% !!squad) %>%
-  # select(player,pos=pos1,min=playing_time_min,starts=starts_starts,subs=subs_subs,min_start=starts_mnstart,min_sub=subs_mnsub) %>%
-  # mutate(min_start=replace_na(min_start,0)) %>%
-  # mutate(min_sub=replace_na(min_sub,0)) %>%
-  # group_by(player,pos) %>%
-  # summarise(across(min:subs,sum),across(min_start:min_sub,mean)) %>%
-  # # glimpse
-  # filter_na("min") %>%
-  # ungroup() %>%
-  # mutate(
-  #   min_start=min_start*starts,
-  #   min_sub=min_sub*subs
-  # ) %>%
-  # mutate(
-  #   min_start = ifelse(is.na(min_start),0,min_start),
-  #   min_sub = ifelse(is.na(min_sub),0,min_sub)
-  # ) %>%
-  # mutate(
-  #   pos=case_when(
-  #     player %in% c("Kevin Danso","Jannik Vestergaard","Jan Bednarek","Jack Stephens","Maya Yoshida","Mohammed Salisu","Allan Tchaptchet") ~ "CB",
-  #     player %in% c("Ryan Bertrand","Cédric Soares","Yan Valery","Kyle Walker-Peters","Jake Vokins","Kayne Ramsey") ~ "FB",
-  #     player %in% c("James Ward-Prowse","Pierre Højbjerg","Oriol Romeu","William Smallbone","Ibrahima Diallo","Alexandre Jankewitz") ~ "DM",
-  #     player %in% c("Nathan Redmond","Stuart Armstrong","Sofiane Boufal","Moussa Djenepo","Nathan Tella","Takumi Minamino","Caleb Watts") ~ "AM",
-  #     player %in% c("Theo Walcott") ~ "FW",
-  #     TRUE ~ pos)
-  # ) %>%
-  # mutate(pos=factor(pos,levels=c("GK","DF","CB","FB","MF","DM","AM","FW"))) %>%
-  # mutate(player=fct_reorder(player,min)) %>%
-  # ggplot(aes(x=min,y=player)) +
-  # geom_segment(aes(y=player,yend=player,x=0,xend=min_start),colour=colour[["sfc"]][["main"]],size=2.5,alpha=0.8) +
-  # geom_segment(aes(y=player,yend=player,x=min_start,xend=min_start+min_sub),colour=colour[["sfc"]][["light"]],size=2.5,alpha=0.8) +
-  # theme[["solar"]]() +
-  # theme(
-  #   plot.title=element_markdown(),
-  #   axis.line=element_blank(),
-  #   axis.text=element_text(size=7),
-  #   strip.text.y=element_text(angle=0)
-  # ) +
-  # facet_grid(pos ~ ., space="free", scales="free_y") +
-  # labs(
-  #   title=glue("League minutes<br />(<b style='color:#D71920'>from start</b> | <b style='color:#ED5C5C'>from bench</b>)"),
-  #   x=element_blank(),
-  #   y=element_blank()
-  # ) +
-  # scale_x_continuous(breaks=seq(0,90*38*3,180),expand=expansion(add=c(0,20)))
+  plots$minutes <-
+    data$fbref$player_advanced_stats_match %>%
+    filter(Season %in% !!season) %>%
+    filter(Team %in% !!team) %>%
+    select(Match_Date,Player,Min) %>%
+    left_join(starting) %>%
+    select(-Match_Date) %>%
+    group_by(Player,Starting) %>%
+    summarise(across(where(is.numeric),sum)) %>%
+    ungroup() %>%
+    pivot_wider(names_from=Starting, values_from=Min, names_glue="Min_{Starting}") %>%
+    mutate(Min_Pitch=replace_na(Min_Pitch,0)) %>%
+    mutate(Min_Bench=replace_na(Min_Bench,0)) %>%
+    mutate(Min_Total=Min_Pitch+Min_Bench) %>%
+    mutate(Player=fct_reorder(Player,Min_Total)) %>%
+    ggplot(aes(y=Player)) +
+    geom_segment(aes(y=Player,yend=Player,x=0,xend=Min_Pitch),colour=colour[["sfc"]][["main"]],size=2.5,alpha=0.8) +
+    geom_segment(aes(y=Player,yend=Player,x=Min_Pitch,xend=Min_Total),colour=colour[["sfc"]][["light"]],size=2.5,alpha=0.8) +
+    theme[["solar"]]() +
+    theme(
+      plot.title=element_markdown(),
+      axis.line=element_blank(),
+      axis.text=element_text(size=7),
+      strip.text.y=element_text(angle=0)
+    ) +
+    labs(
+      title=glue("League minutes<br />(<b style='color:#D71920'>from start</b> | <b style='color:#ED5C5C'>from bench</b>)"),
+      x=element_blank(),
+      y=element_blank()
+    ) +
+    scale_x_continuous(breaks=seq(0,90*38*3,180),expand=expansion(add=c(0,20)))
   
   plots$xgxa <-
     data$fbref$player_advanced_stats_match %>%
     filter(Season %in% !!season) %>%
     filter(Team %in% !!team) %>%
-    # glimpse %>%
     select(Player,Min,npxG=npxG_Expected,xA=xA_Expected) %>%
     group_by(Player) %>%
     summarise(across(where(is.numeric),sum)) %>%
+    ungroup() %>%
     mutate(Focus=case_when(
       npxG==0 & xA==0 ~ FALSE,
       min_rank(desc(npxG))<=8 ~ TRUE,
       min_rank(desc(xA))<=8 ~ TRUE,
       TRUE ~ FALSE)) %>%
-    glimpse %>%
     ggplot(aes(x=npxG,y=xA)) +
     geom_point(aes(fill=Focus),shape=23,size=2.5,alpha=0.8,colour=colour[["sfc"]][["black"]]) +
     geom_text_repel(aes(label=ifelse(Focus,Player,"")),size=rel(2.5)) +
@@ -144,14 +121,9 @@ plot_team_wfr <- function(data,team="Southampton",season="2020-2021"){
     scale_y_continuous(limits=c(0,NA),breaks=seq(0,30,1),expand=expansion(add=c(0,0.2))) +
     scale_fill_manual(values=c("TRUE"=colour[["sfc"]][["main"]],"FALSE"=colour[["sfc"]][["grey"]]))
   
-  # m1 <- data$fbref$matches %>%
-  #   slice(1:20) %>%
-  #   glimpse
-  
   plots$psxg_against <-
     data$fbref$team_advanced_stats_match %>%
     filter(Season %in% !!season) %>%
-    # filter(Team %in% !!team) %>%
     select(Team,Match_Date,GA=GA_Shot,psxG=PSxG_Shot) %>%
     mutate(Match_Date=lubridate::parse_date_time(Match_Date,"mdy")) %>%
     mutate(psxGD=psxG-GA) %>%
@@ -160,7 +132,6 @@ plot_team_wfr <- function(data,team="Southampton",season="2020-2021"){
     mutate(cumulative_psxGD=cumsum(psxGD)) %>%
     ungroup() %>%
     mutate(focus=ifelse(Team=="Southampton",TRUE,FALSE)) %>%
-    glimpse %>%
     ggplot(aes(x=Match_Date,y=cumulative_psxGD)) +
     geom_path(aes(group=Team,alpha=focus,colour=focus),size=0.75) +
     theme[["solar"]]() +
