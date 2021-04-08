@@ -71,6 +71,22 @@ scrape_fbref_wfr <- function(save_path=here("data","fbref.rds"),current_season=2
     mutate(data=map(url,possibly(get_match_summary,otherwise=NA))) %>%
     print(n=Inf)
   
+  fbref$match_lineups$all <-
+    fbref$match_urls$all %>%
+    unnest(cols=data) %>%
+    rename(url=value) %>%
+    mutate(data_type="match_lineups")
+  
+  fbref$match_lineups$keep <-
+    fbref_saved %>%
+    filter(data_type=="match_lineups") %>%
+    filter(!is.na(data))
+  
+  fbref$match_summary$new <-
+    anti_join(fbref$match_lineups$all, fbref$match_lineups$keep) %>%
+    mutate(data=map(url,possibly(get_match_lineups,otherwise=NA))) %>%
+    print(n=Inf)
+  
   fbref$advanced_stats$all <-
     fbref$match_urls$all %>%
     unnest(cols=data) %>%
