@@ -8,6 +8,21 @@ make_long_data <- function(data,levels,labels){ # transform data to long format
   return(data)
 }
 
+make_for_against_matches <- function(matches){
+  
+  matches_for_against <-
+    matches %>%
+    mutate(Opposition=ifelse(Home_Away=="Home",Away_Team,Home_Team)) %>%
+    mutate(Team_Score=ifelse(Home_Away=="Home",Home_Score,Away_Score)) %>%
+    mutate(Team_xG=ifelse(Home_Away=="Home",Home_xG,Away_xG)) %>%
+    mutate(Team_npxG=ifelse(Home_Away=="Home",Home_npxG,Away_npxG)) %>%
+    mutate(Opposition_Score=ifelse(Home_Away=="Home",Away_Score,Home_Score)) %>%
+    mutate(Opposition_xG=ifelse(Home_Away=="Home",Away_xG,Home_xG)) %>%
+    mutate(Opposition_npxG=ifelse(Home_Away=="Home",Away_npxG,Home_npxG))
+  
+  return(matches_for_against)
+}
+
 make_long_matches <- function(matches){ # transform matches to long format
   
   matches_long <-

@@ -6,18 +6,28 @@ plot_team_wfr <- function(data,team="Southampton",season="2020-2021"){
   force(data)
   plots <- list()
   
+  penalties <-
+    data$fbref$team_advanced_stats_match %>%
+    filter((Home_Team %in% !!team)|(Away_Team %in% !!team)) %>%
+    select(Match_Date,Home_Away,PKatt) %>%
+    unique() %>%
+    pivot_wider(names_from=Home_Away, values_from=PKatt, names_glue="PK_{Home_Away}")
+  
   plots$xgtrendmva <-
     data$fbref$team_advanced_stats_match %>%
     filter(Team %in% !!team) %>%
-    select(Season,Match_Date,Team,Home_Team,Home_Score,Home_xG,Away_Team,Away_Score,Away_xG,Home_Away) %>%
+    select(Season,Match_Date,Team,Home_Team,Home_Score,Home_xG,Away_Team,Away_Score,Away_xG,Home_Away,PKatt) %>%
+    left_join(penalties) %>%
+    mutate(Home_npxG=Home_xG-(PK_Home*0.7)) %>%
+    mutate(Away_npxG=Away_xG-(PK_Away*0.7)) %>%
     make_for_against_matches() %>%
     select(-Home_Team,-Home_Score,-Home_xG,-Away_Team,-Away_Score,-Away_xG) %>%
     mutate(Match_Date=lubridate::parse_date_time(Match_Date,"mdy")) %>%
     arrange(Match_Date) %>%
-    mutate(Team_xG_mva=get_mva(Team_xG)) %>%
-    mutate(Opposition_xG_mva=get_mva(Opposition_xG)) %>%
-    filter(season %in% !!season) %>%
-    # #   # filter(date>=as.Date("2020-01-01")) %>%
+    mutate(Team_npxG_mva=get_mva(Team_npxG)) %>%
+    mutate(Opposition_npxG_mva=get_mva(Opposition_npxG)) %>%
+    filter(Season %in% !!season) %>%
+    # filter(date>=as.Date("2020-01-01")) %>%
     mutate(Season=case_when(
       Match_Date>=as.Date("2019-08-01") & Match_Date<as.Date("2020-04-01") ~ "2019-20 part 1",
       Match_Date>=as.Date("2020-04-01") & Match_Date<as.Date("2020-08-01") ~ "2019-20 part 2",
@@ -25,12 +35,11 @@ plot_team_wfr <- function(data,team="Southampton",season="2020-2021"){
     mutate(Home_Away_Short=ifelse(Home_Away=="Home","H","A")) %>%
     mutate(Match=glue::glue("{Opposition} {Home_Away_Short} {Team_Score}-{Opposition_Score}")) %>%
     mutate(Match=reorder_within(Match, Match_Date, Season)) %>%
-    glimpse %>%
     ggplot(aes(x=Match)) +
-    geom_point(aes(y=Team_xG),size=1,colour="darkred",fill="darkred",alpha=0.5,shape=23) +
-    geom_line(aes(y=Team_xG_mva,group=season),colour="darkred",linetype="longdash",size=0.7) +
-    geom_point(aes(y=Opposition_xG),size=1,colour="royalblue",fill="royalblue",alpha=0.5,shape=23) +
-    geom_line(aes(y=Opposition_xG_mva,group=season),colour="royalblue",linetype="longdash",size=0.7) +
+    geom_point(aes(y=Team_npxG),size=1,colour="darkred",fill="darkred",alpha=0.5,shape=23) +
+    geom_line(aes(y=Team_npxG_mva,group=season),colour="darkred",linetype="longdash",size=0.7) +
+    geom_point(aes(y=Opposition_npxG),size=1,colour="royalblue",fill="royalblue",alpha=0.5,shape=23) +
+    geom_line(aes(y=Opposition_npxG_mva,group=season),colour="royalblue",linetype="longdash",size=0.7) +
     theme[["solar"]]() +
     theme(
       axis.text.x=element_text(size=6,angle=60,hjust=1),
