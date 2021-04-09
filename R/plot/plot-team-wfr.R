@@ -31,15 +31,15 @@ plot_team_wfr <- function(data,team="Southampton",season="2020-2021"){
     mutate(Season=case_when(
       Match_Date>=as.Date("2019-08-01") & Match_Date<as.Date("2020-04-01") ~ "2019-20 part 1",
       Match_Date>=as.Date("2020-04-01") & Match_Date<as.Date("2020-08-01") ~ "2019-20 part 2",
-      TRUE ~ season)) %>%
+      TRUE ~ Season)) %>%
     mutate(Home_Away_Short=ifelse(Home_Away=="Home","H","A")) %>%
     mutate(Match=glue::glue("{Opposition} {Home_Away_Short} {Team_Score}-{Opposition_Score}")) %>%
     mutate(Match=reorder_within(Match, Match_Date, Season)) %>%
     ggplot(aes(x=Match)) +
     geom_point(aes(y=Team_npxG),size=1,colour="darkred",fill="darkred",alpha=0.5,shape=23) +
-    geom_line(aes(y=Team_npxG_mva,group=season),colour="darkred",linetype="longdash",size=0.7) +
+    geom_line(aes(y=Team_npxG_mva,group=Season),colour="darkred",linetype="longdash",size=0.7) +
     geom_point(aes(y=Opposition_npxG),size=1,colour="royalblue",fill="royalblue",alpha=0.5,shape=23) +
-    geom_line(aes(y=Opposition_npxG_mva,group=season),colour="royalblue",linetype="longdash",size=0.7) +
+    geom_line(aes(y=Opposition_npxG_mva,group=Season),colour="royalblue",linetype="longdash",size=0.7) +
     theme[["solar"]]() +
     theme(
       axis.text.x=element_text(size=6,angle=60,hjust=1),
@@ -57,7 +57,7 @@ plot_team_wfr <- function(data,team="Southampton",season="2020-2021"){
     scale_x_reordered() +
     scale_y_continuous(limits=c(0,NA),expand=expansion(add=c(0,0.1))) +
     facet_grid(cols=vars(Season), space="free", scales="free_x")
-
+  
   starting <-
     data$fbref$match_lineups %>%
     separate(Matchday,c("Match","Match_Date")," – ") %>%
