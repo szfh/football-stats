@@ -11,11 +11,13 @@ plot_team_wfr <- function(data,team="Southampton",season="2020-2021"){
     filter((Home_Team %in% !!team)|(Away_Team %in% !!team)) %>%
     select(Match_Date,Home_Away,PKatt) %>%
     unique() %>%
+    filter(!is.na(PKatt)) %>%
     pivot_wider(names_from=Home_Away, values_from=PKatt, names_glue="PK_{Home_Away}")
   
   plots$xgtrendmva <-
     data$fbref$team_advanced_stats_match %>%
     filter(Team %in% !!team) %>%
+    filter((!is.na(Home_xG))|!is.na(Away_xG)) %>%
     select(Season,Match_Date,Team,Home_Team,Home_Score,Home_xG,Away_Team,Away_Score,Away_xG,Home_Away,PKatt) %>%
     left_join(penalties) %>%
     mutate(Home_npxG=Home_xG-(PK_Home*0.7)) %>%
@@ -61,12 +63,14 @@ plot_team_wfr <- function(data,team="Southampton",season="2020-2021"){
   starting <-
     data$fbref$match_lineups %>%
     separate(Matchday,c("Match","Match_Date")," – ") %>%
-    select(Match_Date,"Player"=Player_Name,Starting)
+    select(Match_Date,"Player"=Player_Name,Starting) %>%
+    filter(Starting %in% c("Pitch","Bench"))
   
   plots$minutes <-
     data$fbref$player_advanced_stats_match %>%
     filter(Season %in% !!season) %>%
     filter(Team %in% !!team) %>%
+    filter(!is.na(Player)) %>%
     select(Match_Date,Player,Min) %>%
     left_join(starting) %>%
     select(-Match_Date) %>%
