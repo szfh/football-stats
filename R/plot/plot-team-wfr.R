@@ -135,7 +135,7 @@ plot_team_wfr <- function(data,team="Southampton",season="2020-2021"){
     group_by(Team) %>%
     mutate(cumulative_psxGD=cumsum(psxGD)) %>%
     ungroup() %>%
-    mutate(focus=ifelse(Team=="Southampton",TRUE,FALSE)) %>%
+    mutate(focus=ifelse(Team %in% !!team,TRUE,FALSE)) %>%
     ggplot(aes(x=Match_Date,y=cumulative_psxGD)) +
     geom_path(aes(group=Team,alpha=focus,colour=focus),size=0.75) +
     theme[["solar"]]() +
@@ -148,7 +148,7 @@ plot_team_wfr <- function(data,team="Southampton",season="2020-2021"){
       strip.text=element_blank()
     ) +
     labs(
-      title="GK expected saves - <b style='color:darkred'>Southampton</b>",
+      title=glue("GK expected saves - <b style='color:darkred'>{team}</b>"),
       x=element_blank(),
       y="Post-shot xG performance"
     ) +
