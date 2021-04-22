@@ -1,3 +1,8 @@
+expand_seasons <- function(season){
+  season <- c(season,str_sub(season,-4))
+  return(season)
+}
+
 make_long_data <- function(data,levels,labels){ # transform data to long format
   data %<>%
     filter_at(levels,any_vars(!is.na(.))) %>%
