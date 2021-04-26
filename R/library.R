@@ -4,6 +4,7 @@ pacman::p_load(
   tidyverse,
   magrittr,
   rvest,
+  lubridate,
   tidytext,
   glue,
   janitor,
