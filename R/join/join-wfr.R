@@ -38,7 +38,6 @@ join_fbref <- function(fbref){
     nest() %>%
     ungroup() %>%
     mutate(data=map(data,remove_empty,which="cols")) %>%
-    # filter(stat!="misc") %>%
     pull(data) %>%
     reduce(full_join)
   
@@ -58,13 +57,13 @@ join_fbref <- function(fbref){
     fbref_tidy %>%
     filter(data_type=="advanced_stats") %>%
     filter(team_or_player=="team") %>%
+    filter(stat!="keeper") %>% # keeper tables have 1 line per player
     select(stat,data) %>%
     unnest(data) %>%
     group_by(stat) %>%
     nest() %>%
     ungroup() %>%
     mutate(data=map(data,remove_empty,which="cols")) %>%
-    filter(stat!="misc") %>%
     pull(data) %>%
     reduce(full_join)
   
@@ -78,7 +77,6 @@ join_fbref <- function(fbref){
     nest() %>%
     ungroup() %>%
     mutate(data=map(data,remove_empty,which="cols")) %>%
-    filter(stat!="misc") %>%
     pull(data) %>%
     reduce(full_join)
   
