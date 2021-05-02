@@ -71,6 +71,7 @@ join_fbref <- function(fbref){
     fbref_tidy %>%
     filter(data_type=="advanced_stats") %>%
     filter(team_or_player=="player") %>%
+    filter(stat!="misc") %>%
     select(stat,data) %>%
     unnest(data) %>%
     group_by(stat) %>%
