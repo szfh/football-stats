@@ -71,6 +71,7 @@ scrape_fbref_wfr <- function(save_path=here("data","fbref.rds"),current_season=2
   fbref$match_summary$new <-
     anti_join(fbref$match_summary$all, fbref$match_summary$keep) %>%
     mutate(data=map(url,possibly(get_match_summary,otherwise=NA))) %>%
+    mutate(date_scraped=Sys.Date()) %>%
     print(n=Inf)
   
   fbref$match_lineups$all <-
