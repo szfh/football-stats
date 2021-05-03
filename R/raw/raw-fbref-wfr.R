@@ -119,6 +119,7 @@ scrape_fbref_wfr <- function(save_path=here("data","fbref.rds"),current_season=2
       fbref$match_summary$keep,fbref$match_summary$new,
       fbref$advanced_stats$keep,fbref$advanced_stats$new
     ) %>%
+    filter(!is.na(data)) %>%
     relocate(data_type) %>%
     relocate(date_scraped,.after=last_col()) %>%
     relocate(data,.after=last_col())
