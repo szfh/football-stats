@@ -5,7 +5,8 @@ plot_team_wfr <- function(data,team="Southampton",season="2020-2021"){
   
   force(data)
   plots <- list()
-  
+  # browser()
+  # team <- expand_team(team)
   season <- expand_seasons(season)
   
   penalties <-
@@ -105,8 +106,7 @@ plot_team_wfr <- function(data,team="Southampton",season="2020-2021"){
   
   starting <-
     data$fbref$match_lineups %>%
-    separate(Matchday,c("Match","Match_Date")," – ") %>%
-    select(Match_Date,"Player"=Player_Name,Starting) %>%
+    select(Match_Date=Matchday,Player=Player_Name,Team,Starting) %>%
     filter(Starting %in% c("Pitch","Bench"))
   
   plots$minutes <-
@@ -114,6 +114,7 @@ plot_team_wfr <- function(data,team="Southampton",season="2020-2021"){
     filter(Season %in% !!season) %>%
     filter(Team %in% !!team) %>%
     filter(!is.na(Player)) %>%
+    mutate(Match_Date=parse_date_time(Match_Date,"mdy")) %>%
     select(Match_Date,Player,Min) %>%
     left_join(starting) %>%
     select(-Match_Date) %>%
@@ -167,14 +168,44 @@ plot_team_wfr <- function(data,team="Southampton",season="2020-2021"){
     scale_x_continuous(limits=c(0,NA),breaks=seq(0,30,1),expand=expansion(add=c(0,0.2))) +
     scale_y_continuous(limits=c(0,NA),breaks=seq(0,30,1),expand=expansion(add=c(0,0.2))) +
     scale_fill_manual(values=c("TRUE"=colour[["sfc"]][["main"]],"FALSE"=colour[["sfc"]][["grey"]]))
-  browser()
+  
+  plots$xgxa90 <-
+    data$fbref$player_advanced_stats_match %>%
+    filter(Season %in% !!season) %>%
+    filter(Team %in% !!team) %>%
+    select(Player,Min,npxG=npxG_Expected,xA=xA_Expected) %>%
+    group_by(Player) %>%
+    summarise(across(where(is.numeric),sum)) %>%
+    ungroup() %>%
+    filter(Min>900) %>%
+    mutate(npxG=90*npxG/Min) %>%
+    mutate(xA=90*xA/Min) %>%
+    mutate(Focus=case_when(
+      npxG==0 & xA==0 ~ FALSE,
+      min_rank(desc(npxG))<=8 ~ TRUE,
+      min_rank(desc(xA))<=8 ~ TRUE,
+      TRUE ~ FALSE)) %>%
+    ggplot(aes(x=npxG,y=xA)) +
+    geom_point(aes(fill=Focus),shape=23,size=2.5,alpha=0.8,colour=colour[["sfc"]][["black"]]) +
+    geom_text_repel(aes(label=ifelse(Focus,Player,"")),size=rel(2.5)) +
+    theme[["solar"]]() +
+    labs(
+      title=glue("{team} xG/xA per 90"),
+      x="Expected goals per 90 mins (penalties excluded)",
+      y="Expected assists per 90 mins"
+    ) +
+    scale_x_continuous(limits=c(0,NA),breaks=seq(0,5,0.1),expand=expansion(add=c(0,0.02))) +
+    scale_y_continuous(limits=c(0,NA),breaks=seq(0,5,0.1),expand=expansion(add=c(0,0.02))) +
+    scale_fill_manual(values=c("TRUE"=colour[["sfc"]][["main"]],"FALSE"=colour[["sfc"]][["grey"]]))
+  
+  # browser()
   # plots$shotskp <-
-  d1 <-
-  data$fbref$season_stat %>%
-    # filter(Squad %in% !!team) %>%
-    # filter(Season %in% !!season) %>%
-    filter(Season_End_Year %in% !!season) %>%
-    glimpse
+  # d1 <-
+  #   data$fbref$season_stat %>%
+  #   # filter(Squad %in% !!team) %>%
+  #   # filter(Season %in% !!season) %>%
+  #   filter(Season_End_Year %in% !!season) %>%
+  #   glimpse
   #   data$fbref$players %>%
   #   filter(season %in% !!season) %>%
   #   filter(squad %in% !!squad) %>%
@@ -209,37 +240,37 @@ plot_team_wfr <- function(data,team="Southampton",season="2020-2021"){
   #   scale_colour_manual(values=c("TRUE"=colour[["sfc"]][["black"]],"FALSE"=colour[["sfc"]][["grey"]])) +
   #   scale_fill_manual(values=c("TRUE"=colour[["sfc"]][["light"]],"FALSE"=colour[["sfc"]][["grey"]]))
   
-  plots$psxg_against <-
-    data$fbref$team_advanced_stats_match %>%
-    filter(Season %in% !!season) %>%
-    select(Team,Match_Date,GA=GA_Shot,psxG=PSxG_Shot) %>%
-    mutate(Match_Date=lubridate::parse_date_time(Match_Date,"mdy")) %>%
-    mutate(psxGD=psxG-GA) %>%
-    arrange(Match_Date) %>%
-    group_by(Team) %>%
-    mutate(cumulative_psxGD=cumsum(psxGD)) %>%
-    ungroup() %>%
-    mutate(focus=ifelse(Team %in% !!team,TRUE,FALSE)) %>%
-    ggplot(aes(x=Match_Date,y=cumulative_psxGD)) +
-    geom_path(aes(group=Team,alpha=focus,colour=focus),size=0.75) +
-    theme[["solar"]]() +
-    theme(
-      axis.text.x=element_markdown(),
-      axis.title.y=element_markdown(),
-      axis.text.y=element_text(),
-      plot.title=element_markdown(),
-      plot.caption=element_text(),
-      strip.text=element_blank()
-    ) +
-    labs(
-      title=glue("GK expected saves - <b style='color:darkred'>{team}</b>"),
-      x=element_blank(),
-      y="Post-shot xG performance"
-    ) +
-    scale_x_datetime(expand=expansion(add=100)) +
-    scale_y_continuous(expand=expansion(add=0.2)) +
-    scale_colour_manual(values=c("TRUE"="darkred","FALSE"="darkgray")) +
-    scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.5))
+  # plots$psxg_against <-
+  #   data$fbref$team_advanced_stats_match %>%
+  #   filter(Season %in% !!season) %>%
+  #   select(Team,Match_Date,GA=GA_Shot,psxG=PSxG_Shot) %>%
+  #   mutate(Match_Date=lubridate::parse_date_time(Match_Date,"mdy")) %>%
+  #   mutate(psxGD=psxG-GA) %>%
+  #   arrange(Match_Date) %>%
+  #   group_by(Team) %>%
+  #   mutate(cumulative_psxGD=cumsum(psxGD)) %>%
+  #   ungroup() %>%
+  #   mutate(focus=ifelse(Team %in% !!team,TRUE,FALSE)) %>%
+  #   ggplot(aes(x=Match_Date,y=cumulative_psxGD)) +
+  #   geom_path(aes(group=Team,alpha=focus,colour=focus),size=0.75) +
+  #   theme[["solar"]]() +
+  #   theme(
+  #     axis.text.x=element_markdown(),
+  #     axis.title.y=element_markdown(),
+  #     axis.text.y=element_text(),
+  #     plot.title=element_markdown(),
+  #     plot.caption=element_text(),
+  #     strip.text=element_blank()
+  #   ) +
+  #   labs(
+  #     title=glue("GK expected saves - <b style='color:darkred'>{team}</b>"),
+  #     x=element_blank(),
+  #     y="Post-shot xG performance"
+  #   ) +
+  #   scale_x_datetime(expand=expansion(add=100)) +
+  #   scale_y_continuous(expand=expansion(add=0.2)) +
+  #   scale_colour_manual(values=c("TRUE"="darkred","FALSE"="darkgray")) +
+  #   scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.5))
   
   plots_logo <-
     plots %>%
