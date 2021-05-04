@@ -8,7 +8,39 @@ plot_league_wfr <- function(data,season="2020-2021"){
   # browser()
   season <- expand_seasons(season)
   
-  
+  plots$goals_xg <-
+    data$fbref$player_advanced_stats_match %>%
+    filter(Season %in% !!season) %>%
+    mutate(npG=Gls-PK) %>%
+    select(Player,Team,npG,npxG=npxG_Expected) %>%
+    
+    group_by(Player,Team) %>%
+    summarise(across(where(is.numeric),sum,na.rm=TRUE)) %>%
+    ungroup() %>%
+    make_long_data(levels=c("npG","npxG"),labels=c("Goals","Expected Goals")) %>%
+    mutate(focus=case_when(min_rank(desc(n))<=20 ~ TRUE,
+                           TRUE ~ FALSE)) %>%
+    ggplot(aes(x=0.05,y=n,alpha=focus)) +
+    geom_text_repel(
+      aes(label=ifelse(focus,Player,"")),
+      size=2.5,
+      nudge_x=0.3,
+      direction="y",
+      hjust=0,
+      segment.size=0.4,
+      box.padding=0.05
+    ) +
+    geom_point(aes(fill=Team),shape=23,size=3,position=position_jitterdodge(jitter.width=0,jitter.height=0,dodge.width=0.04,seed=2)) +
+    theme[["solarfacet"]]() +
+    facet_wrap("key",scales="free") +
+    labs(
+      title="Expected Goals (penalties excluded)",
+      x=element_blank(),
+      y=element_blank()) +
+    scale_x_continuous(limit=c(0,1)) +
+    scale_y_continuous() +
+    scale_fill_manual(values=palette[["epl"]]()) +
+    scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.1))
   
   plots_logo <-
     plots %>%
