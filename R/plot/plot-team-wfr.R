@@ -198,79 +198,72 @@ plot_team_wfr <- function(data,team="Southampton",season="2020-2021"){
     scale_y_continuous(limits=c(0,NA),breaks=seq(0,5,0.1),expand=expansion(add=c(0,0.02))) +
     scale_fill_manual(values=c("TRUE"=colour[["sfc"]][["main"]],"FALSE"=colour[["sfc"]][["grey"]]))
   
-  # browser()
-  # plots$shotskp <-
-  # d1 <-
-  #   data$fbref$season_stat %>%
-  #   # filter(Squad %in% !!team) %>%
-  #   # filter(Season %in% !!season) %>%
-  #   filter(Season_End_Year %in% !!season) %>%
-  #   glimpse
-  #   data$fbref$players %>%
-  #   filter(season %in% !!season) %>%
-  #   filter(squad %in% !!squad) %>%
-  #   select(player,sh=standard_sh,kp) %>%
-  #   make_long_data(levels=c("sh","kp"),labels=c("Shot","Pass leading to shot")) %>%
-  #   # mutate(focus=case_when(percent_rank(n)>0.4 ~ TRUE,
-  #   #                        TRUE ~ FALSE)) %>%
-  #   mutate(focus=case_when(
-  #     n==0 ~ FALSE,
-  #     min_rank(desc(n))<=15 ~ TRUE,
-  #     TRUE ~ FALSE)) %>%
-  #   ggplot(aes(x=0,y=n)) +
-  #   geom_text_repel(
-  #     aes(label=ifelse(focus,player,"")),
-  #     size=rel(3),
-  #     nudge_x=0.3,
-  #     direction="y",
-  #     hjust=0,
-  #     segment.size=0.4,
-  #     box.padding=0.05
-  #   ) +
-  #   geom_point(aes(colour=focus,fill=focus),shape=21,size=2) +
-  #   theme[["solarfacet"]]() +
-  #   facet_wrap("key",scales="free") +
-  #   labs(
-  #     title="Shots / Passes",
-  #     x=element_blank(),
-  #     y=element_blank()
-  #   ) +
-  #   scale_x_continuous(limit=c(0,1)) +
-  #   scale_y_continuous() +
-  #   scale_colour_manual(values=c("TRUE"=colour[["sfc"]][["black"]],"FALSE"=colour[["sfc"]][["grey"]])) +
-  #   scale_fill_manual(values=c("TRUE"=colour[["sfc"]][["light"]],"FALSE"=colour[["sfc"]][["grey"]]))
+  plots$shots_keypasses <-
+    data$fbref$player_advanced_stats_match %>%
+    filter(Team %in% !!team) %>%
+    filter(Season %in% !!season) %>%
+    select(Player,Sh,KP) %>%
+    group_by(Player) %>%
+    summarise(across(where(is.numeric),sum)) %>%
+    make_long_data(levels=c("Sh","KP"),labels=c("Shot","Pass leading to shot")) %>%
+    mutate(focus=case_when(
+      n==0 ~ FALSE,
+      min_rank(desc(n))<=8 ~ TRUE,
+      TRUE ~ FALSE)) %>%
+    ggplot(aes(x=0,y=n)) +
+    geom_text_repel(
+      aes(label=ifelse(focus,Player,"")),
+      size=rel(3),
+      nudge_x=0.3,
+      direction="y",
+      hjust=0,
+      segment.size=0.4,
+      box.padding=0.05
+    ) +
+    geom_point(aes(colour=focus,fill=focus),shape=23,size=2) +
+    theme[["solarfacet"]]() +
+    facet_wrap("key",scales="free") +
+    labs(
+      title="Shots and Shot Creating Passes",
+      x=element_blank(),
+      y=element_blank()
+    ) +
+    scale_x_continuous(limit=c(0,1)) +
+    scale_y_continuous() +
+    scale_colour_manual(values=c("TRUE"=colour[["sfc"]][["black"]],"FALSE"=colour[["sfc"]][["grey"]])) +
+    scale_fill_manual(values=c("TRUE"=colour[["sfc"]][["light"]],"FALSE"=colour[["sfc"]][["grey"]]))
   
-  # plots$psxg_against <-
-  #   data$fbref$team_advanced_stats_match %>%
-  #   filter(Season %in% !!season) %>%
-  #   select(Team,Match_Date,GA=GA_Shot,psxG=PSxG_Shot) %>%
-  #   mutate(Match_Date=lubridate::parse_date_time(Match_Date,"mdy")) %>%
-  #   mutate(psxGD=psxG-GA) %>%
-  #   arrange(Match_Date) %>%
-  #   group_by(Team) %>%
-  #   mutate(cumulative_psxGD=cumsum(psxGD)) %>%
-  #   ungroup() %>%
-  #   mutate(focus=ifelse(Team %in% !!team,TRUE,FALSE)) %>%
-  #   ggplot(aes(x=Match_Date,y=cumulative_psxGD)) +
-  #   geom_path(aes(group=Team,alpha=focus,colour=focus),size=0.75) +
-  #   theme[["solar"]]() +
-  #   theme(
-  #     axis.text.x=element_markdown(),
-  #     axis.title.y=element_markdown(),
-  #     axis.text.y=element_text(),
-  #     plot.title=element_markdown(),
-  #     plot.caption=element_text(),
-  #     strip.text=element_blank()
-  #   ) +
-  #   labs(
-  #     title=glue("GK expected saves - <b style='color:darkred'>{team}</b>"),
-  #     x=element_blank(),
-  #     y="Post-shot xG performance"
-  #   ) +
-  #   scale_x_datetime(expand=expansion(add=100)) +
-  #   scale_y_continuous(expand=expansion(add=0.2)) +
-  #   scale_colour_manual(values=c("TRUE"="darkred","FALSE"="darkgray")) +
-  #   scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.5))
+  plots$psxg_against <-
+    data$fbref$team_advanced_stats_match %>%
+    filter(Season %in% !!season) %>%
+    select(Team,Match_Date,GA=GA_Shot,psxG=PSxG_Shot) %>%
+    mutate(Match_Date=lubridate::parse_date_time(Match_Date,"mdy")) %>%
+    mutate(psxGD=psxG-GA) %>%
+    arrange(Match_Date) %>%
+    group_by(Team) %>%
+    mutate(cumulative_psxGD=cumsum(psxGD)) %>%
+    ungroup() %>%
+    mutate(focus=ifelse(Team %in% !!team,TRUE,FALSE)) %>%
+    ggplot(aes(x=Match_Date,y=cumulative_psxGD)) +
+    geom_path(aes(group=Team,alpha=focus,colour=focus),size=0.75) +
+    theme[["solar"]]() +
+    theme(
+      axis.text.x=element_markdown(),
+      axis.title.y=element_markdown(),
+      axis.text.y=element_text(),
+      plot.title=element_markdown(),
+      plot.caption=element_text(),
+      strip.text=element_blank()
+    ) +
+    labs(
+      title=glue("GK expected saves - <b style='color:darkred'>{team}</b>"),
+      x=element_blank(),
+      y="Post-shot xG performance"
+    ) +
+    scale_x_datetime(expand=expansion(add=100)) +
+    scale_y_continuous(expand=expansion(add=0.2)) +
+    scale_colour_manual(values=c("TRUE"="darkred","FALSE"="darkgray")) +
+    scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.5))
   
   plots_logo <-
     plots %>%
