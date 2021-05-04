@@ -57,7 +57,7 @@ join_fbref <- function(fbref){
     fbref_tidy %>%
     filter(data_type=="advanced_stats") %>%
     filter(team_or_player=="team") %>%
-    filter(stat!="keeper") %>% # keeper tables have 1 line per player
+    # filter(stat!="keeper") %>% # keeper tables have 1 line per player
     select(stat,data) %>%
     unnest(data) %>%
     group_by(stat) %>%
