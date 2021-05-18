@@ -53,6 +53,12 @@ join_fbref <- function(fbref){
     select(data) %>%
     unnest(data)
   
+  data$match_summaries <-
+    fbref_tidy %>%
+    filter(data_type=="match_summary") %>%
+    select(data) %>%
+    unnest(data)
+  
   data$team_advanced_stats_match <-
     fbref_tidy %>%
     filter(data_type=="advanced_stats") %>%
@@ -80,8 +86,6 @@ join_fbref <- function(fbref){
     mutate(data=map(data,remove_empty,which="cols")) %>%
     pull(data) %>%
     reduce(full_join)
-  
-  # to do: match summaries
   
   return(data)
 }
