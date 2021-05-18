@@ -4,6 +4,8 @@ pacman::p_load(
   tidyverse,
   magrittr,
   rvest,
+  gt,
+  webshot,
   lubridate,
   tidytext,
   glue,
