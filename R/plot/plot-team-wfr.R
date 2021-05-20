@@ -5,7 +5,7 @@ plot_team_wfr <- function(data,team="Southampton",season="2020-2021"){
   
   force(data)
   plots <- list()
-  # browser()
+  
   # team <- expand_team(team)
   season <- expand_seasons(season)
   
@@ -119,7 +119,7 @@ plot_team_wfr <- function(data,team="Southampton",season="2020-2021"){
     left_join(starting) %>%
     select(-Match_Date) %>%
     group_by(Player,Starting) %>%
-    summarise(across(where(is.numeric),sum)) %>%
+    summarise(across(where(is.numeric),sum,na.rm=TRUE)) %>%
     ungroup() %>%
     pivot_wider(names_from=Starting, values_from=Min, names_glue="Min_{Starting}") %>%
     mutate(Min_Pitch=replace_na(Min_Pitch,0)) %>%
@@ -149,7 +149,7 @@ plot_team_wfr <- function(data,team="Southampton",season="2020-2021"){
     filter(Team %in% !!team) %>%
     select(Player,Min,npxG=npxG_Expected,xA=xA_Expected) %>%
     group_by(Player) %>%
-    summarise(across(where(is.numeric),sum)) %>%
+    summarise(across(where(is.numeric),sum,na.rm=TRUE)) %>%
     ungroup() %>%
     mutate(Focus=case_when(
       npxG==0 & xA==0 ~ FALSE,
@@ -175,7 +175,7 @@ plot_team_wfr <- function(data,team="Southampton",season="2020-2021"){
     filter(Team %in% !!team) %>%
     select(Player,Min,npxG=npxG_Expected,xA=xA_Expected) %>%
     group_by(Player) %>%
-    summarise(across(where(is.numeric),sum)) %>%
+    summarise(across(where(is.numeric),sum,na.rm=TRUE)) %>%
     ungroup() %>%
     filter(Min>900) %>%
     mutate(npxG=90*npxG/Min) %>%
@@ -204,7 +204,7 @@ plot_team_wfr <- function(data,team="Southampton",season="2020-2021"){
     filter(Season %in% !!season) %>%
     select(Player,Sh,KP) %>%
     group_by(Player) %>%
-    summarise(across(where(is.numeric),sum)) %>%
+    summarise(across(where(is.numeric),sum,na.rm=TRUE)) %>%
     make_long_data(levels=c("Sh","KP"),labels=c("Shot","Pass leading to shot")) %>%
     mutate(focus=case_when(
       n==0 ~ FALSE,
@@ -265,11 +265,44 @@ plot_team_wfr <- function(data,team="Southampton",season="2020-2021"){
     scale_colour_manual(values=c("TRUE"="darkred","FALSE"="darkgray")) +
     scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.5))
   
+  plots$passfootedness <-
+    data$fbref$player_advanced_stats_match %>%
+    filter(Team %in% !!team) %>%
+    filter(Season %in% !!season) %>%
+    select(Player,Left=Left_Body,Right=Right_Body) %>%
+    group_by(Player) %>%
+    summarise(across(where(is.numeric),sum,na.rm=TRUE)) %>%
+    ungroup() %>%
+    mutate(All=Left+Right) %>%
+    filter(All>100) %>%
+    group_by(Player) %>%
+    mutate(Most=max(Left,Right)) %>%
+    mutate(Least=min(Left,Right)) %>%
+    mutate(Foot1=ifelse(Left>Right,"Left","Right")) %>%
+    mutate(Foot2=ifelse(Left>=Right,"Right","Left")) %>%
+    ungroup() %>%
+    mutate(Ratio=Most/All) %>%
+    mutate(Player=fct_reorder(Player,desc(Ratio))) %>%
+    ggplot(aes(x=0,y=Player,yend=Player)) +
+    geom_segment(aes(xend=Most,colour=Foot1),size=2.5,alpha=0.8) +
+    geom_segment(aes(xend=-Least,colour=Foot2),size=2.5,alpha=0.8) +
+    geom_label(aes(label=sprintf("%2.0f%%",100*Ratio)),size=1.6,label.padding=unit(0.16, "lines"),label.r = unit(0.08, "lines")) +
+    theme[["solar"]]() +
+    theme(
+      plot.title=element_markdown()
+    ) +
+    labs(
+      title=glue("<b style='color:#265DAB'>Left foot</b> / <b style='color:#CB2027'>Right foot</b> passes"),
+      x=element_blank(),
+      y=element_blank()
+    ) +
+    scale_x_continuous(breaks=seq(-2000,2000,200),labels=abs(seq(-2000,2000,200)),expand=expansion(add=c(10))) +
+    scale_colour_manual(values=c("Left"=colour[["medium"]][[1]],"Right"=colour[["medium"]][[8]]))
+  
   plots_logo <-
     plots %>%
     add_logo(path=here("images","SB_Regular.png"),x=1,y=1,hjust=1.1,width=0.2) %>%
     add_logo(path=here("images","fbref.png"),x=0.88,y=1,hjust=1.1,width=0.29)
   
   save_plots(plots_logo,path=here("plots","team_wfr"))
-  
 }
