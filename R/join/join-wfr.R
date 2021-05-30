@@ -19,7 +19,8 @@ join_fbref <- function(fbref){
     fbref_tidy %>%
     filter(stat=="league_table") %>%
     select(data) %>%
-    unnest(data)
+    unnest(data) %>%
+    select(-Team_or_Opponent)
   
   data$table_home_away <-
     fbref_tidy %>%
@@ -63,7 +64,7 @@ join_fbref <- function(fbref){
     fbref_tidy %>%
     filter(data_type=="advanced_stats") %>%
     filter(team_or_player=="team") %>%
-    # filter(stat!="keeper") %>% # keeper tables have 1 line per player
+    filter(stat!="keeper") %>% # keeper tables have 1 line per player
     select(stat,data) %>%
     unnest(data) %>%
     group_by(stat) %>%
@@ -71,13 +72,13 @@ join_fbref <- function(fbref){
     ungroup() %>%
     mutate(data=map(data,remove_empty,which="cols")) %>%
     pull(data) %>%
-    reduce(full_join)
+    reduce(full_join) # should be 146 columns
   
   data$player_advanced_stats_match <-
     fbref_tidy %>%
     filter(data_type=="advanced_stats") %>%
     filter(team_or_player=="player") %>%
-    filter(stat!="misc") %>%
+    # filter(stat!="misc") %>%
     select(stat,data) %>%
     unnest(data) %>%
     group_by(stat) %>%
