@@ -11,7 +11,8 @@ join_fbref <- function(fbref){
   
   fbref_tidy <-
     fbref %>%
-    mutate(data=pmap(list(data,data_type,stat),tidy_fbref))
+    mutate(data=map(data,as_tibble)) %>%
+    mutate(data=pmap(list(data,data_type,stat,team_or_player),tidy_fbref))
   
   data <- list()
   
@@ -64,7 +65,7 @@ join_fbref <- function(fbref){
     fbref_tidy %>%
     filter(data_type=="advanced_stats") %>%
     filter(team_or_player=="team") %>%
-    filter(stat!="keeper") %>% # keeper tables have 1 line per player
+    # filter(stat!="keeper") %>% # keeper tables have 1 line per player
     select(stat,data) %>%
     unnest(data) %>%
     group_by(stat) %>%
@@ -91,49 +92,39 @@ join_fbref <- function(fbref){
   return(data)
 }
 
-tidy_fbref <- function(data,data_type=NA,stat=NA){
+tidy_fbref <- function(data,data_type=NA,stat=NA,team_or_player=NA){
   if(data_type=="match_url"){
     data <-
       data %>%
-      as_tibble() %>%
       rename("url"="value")
   }
-  
   if(data_type=="match_result"){
     data <-
       data %>%
-      as_tibble() %>%
       select(-contains(c("Attendance","Venue","Referee","Notes")))
   }
-  
   if(data_type=="season_stat" && stat %in% c("league_table","league_table_home_away")){
     data <-
       data %>%
-      as_tibble() %>%
       select(-contains(c("90","Last.5","Top.Team.Scorer","Goalkeeper","Notes")))
   }
-  else if(data_type=="season_stat" && stat %in% c("keeper","keeper_adv")){
+  if(data_type=="season_stat" && stat %in% c("keeper","keeper_adv")){
     data <-
       data %>%
-      as_tibble() %>%
       select(-contains(c("Players","Playing","90","Last.5","Top.Team.Scorer","Goalkeeper","Notes")))
   }
-  else if(data_type=="season_stat"){
+  if(data_type=="advanced_stats" && stat=="keeper" && team_or_player=="team" && dim(data)[1]>2){
     data <-
       data %>%
-      as_tibble()
+      select(-contains("percent")) %>%
+      select(-c(Home_Score:Home_xG,Away_Score:Away_xG)) %>%
+      group_by(League,Gender,Country,Season,Home_Team,Away_Team,Team,Home_Away) %>%
+      summarise(across(where(is.numeric),sum,na.rm=TRUE),.groups="drop")
   }
-  
   if(data_type=="advanced_stats" && stat=="keeper"){
     data <-
       data %>%
-      as_tibble() %>%
       select(-contains(c("Player","Nation","Age","Min","Att_Passes")))
-  }
-  else if(data_type=="advanced_stats"){
-    data <-
-      data %>%
-      as_tibble()
   }
   
   return(data)
