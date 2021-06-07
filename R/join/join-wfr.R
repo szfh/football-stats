@@ -113,18 +113,18 @@ tidy_fbref <- function(data,data_type=NA,stat=NA,team_or_player=NA){
       data %>%
       select(-contains(c("Players","Playing","90","Last.5","Top.Team.Scorer","Goalkeeper","Notes")))
   }
-  if(data_type=="advanced_stats" && stat=="keeper" && team_or_player=="team" && dim(data)[1]>2){
+  if(data_type=="advanced_stats" && stat=="keeper"){
     data <-
       data %>%
       select(-contains("percent")) %>%
       select(-c(Home_Score:Home_xG,Away_Score:Away_xG)) %>%
-      group_by(League,Gender,Country,Season,Home_Team,Away_Team,Team,Home_Away) %>%
-      summarise(across(where(is.numeric),sum,na.rm=TRUE),.groups="drop")
+      select(-contains(c("Player","Nation","Age","Min","Att_Passes")))
   }
-  if(data_type=="advanced_stats" && stat=="keeper"){
+  if(data_type=="advanced_stats" && stat=="keeper" && team_or_player=="team" && dim(data)[1]>2){
     data <-
       data %>%
-      select(-contains(c("Player","Nation","Age","Min","Att_Passes")))
+      group_by(across(where(is.character))) %>%
+      summarise(across(where(is.numeric),sum,na.rm=TRUE),.groups="drop")
   }
   
   return(data)
