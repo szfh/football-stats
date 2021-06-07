@@ -102,7 +102,6 @@ scrape_fbref_wfr <- function(save_path=here("data","fbref.rds"),current_season=2
   fbref$advanced_stats$keep <-
     fbref_saved %>%
     filter(data_type=="advanced_stats") %>%
-    # filter(!(stat=="summary" & team_or_player=="team" & map(data, function(x) any(is.na(x)))==TRUE)) %>%
     filter(!is.na(data))
   
   fbref$advanced_stats$new <-
@@ -120,11 +119,43 @@ scrape_fbref_wfr <- function(save_path=here("data","fbref.rds"),current_season=2
       fbref$advanced_stats$keep,fbref$advanced_stats$new
     ) %>%
     filter(!is.na(data)) %>%
+    mutate(event_date=pmap(list(data,data_type,event_date),possibly(get_event_date,otherwise=NA))) %>%
     relocate(data_type) %>%
+    relocate(event_date,.after=last_col()) %>%
     relocate(date_scraped,.after=last_col()) %>%
     relocate(data,.after=last_col())
   
   saveRDS(fbref_all,file=save_path)
   
   return(fbref_all)
+}
+
+get_event_date <- function(data,data_type=NA,event_date=NA){
+  
+  if(is.null(event_date)){
+    event_date <- lubridate::NA_Date_
+  }
+  if(data_type=="match_lineups"){
+    event_date <-
+      data %>%
+      select(Matchday) %>%
+      distinct() %>%
+      pull()
+  } else if(data_type=="match_summary"){
+    event_date <- 
+      data %>%
+      select(Match_Date) %>%
+      distinct() %>%
+      lubridate::parse_date_time("mdy")
+  } else if(data_type=="advanced_stats"){
+    event_date <-
+      data %>%
+      select(Match_Date) %>%
+      distinct() %>%
+      lubridate::parse_date_time("mdy")
+  } else {
+    event_date <- lubridate::NA_Date_
+  }
+  event_date <- as_date(event_date)
+  return(event_date)
 }
