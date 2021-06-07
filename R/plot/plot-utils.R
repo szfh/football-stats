@@ -3,6 +3,22 @@ expand_seasons <- function(season){
   return(season)
 }
 
+expand_teams <- function(team){
+  team <- team %>%
+    str_replace("United","Utd")
+  team <- case_when(
+    team %in% "Brighton & Hove Albion" ~ "Brighton",
+    # team %in% "Manchester United" ~ "Manchester Utd",
+    team %in% 
+    # team %in% "Sheffield United" ~ "Sheffield Utd",
+    team %in% "West Bromwich Albion" ~ "West Brom",
+    # team %in% "West Ham United" ~ "West Ham Utd",
+    team %in% "Wolverhampton Wanders" ~ "Wolves",
+    TRUE ~ team
+  )
+  return(team)
+}
+
 make_long_data <- function(data,levels,labels){ # transform data to long format
   data %<>%
     filter_at(levels,any_vars(!is.na(.))) %>%
