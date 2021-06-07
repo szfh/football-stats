@@ -18,14 +18,14 @@ join_fbref <- function(fbref){
   
   data$table <-
     fbref_tidy %>%
-    filter(stat=="league_table") %>%
+    filter(data_type=="season_stat" & stat=="league_table") %>%
     select(data) %>%
     unnest(data) %>%
     select(-Team_or_Opponent)
   
   data$table_home_away <-
     fbref_tidy %>%
-    filter(stat=="league_table_home_away") %>%
+    filter(data_type=="season_stat" & stat=="league_table_home_away") %>%
     select(data) %>%
     unnest(data)
   
@@ -88,6 +88,180 @@ join_fbref <- function(fbref){
     mutate(data=map(data,remove_empty,which="cols")) %>%
     pull(data) %>%
     reduce(full_join)
+  
+  data$match_results <-
+    fbref_tidy %>%
+    filter(data_type=="match_result") %>%
+    select(data) %>%
+    unnest(data)
+  
+  data$match_summary <-
+    fbref_tidy %>%
+    filter(data_type=="match_summary") %>%
+    select(data) %>%
+    unnest(data)
+  
+  data$match_lineups <-
+    fbref_tidy %>%
+    filter(data_type=="match_lineups") %>%
+    select(data) %>%
+    unnest(data)
+  
+  data$match_summary <-
+    fbref_tidy %>%
+    filter(data_type=="match_summary") %>%
+    select(data) %>%
+    unnest(data)
+  
+  data$season_stat_defense <-
+    fbref_tidy %>%
+    filter(data_type=="season_stat" & stat=="defense") %>%
+    select(data) %>%
+    unnest(data)
+  
+  data$season_stat_gca <-
+    fbref_tidy %>%
+    filter(data_type=="season_stat" & stat=="goal_shot_creation") %>%
+    select(data) %>%
+    unnest(data)
+  
+  data$season_stat_keeper <-
+    fbref_tidy %>%
+    filter(data_type=="season_stat" & stat=="keeper") %>%
+    select(data) %>%
+    unnest(data)
+  
+  data$season_stat_keeper_adv <-
+    fbref_tidy %>%
+    filter(data_type=="season_stat" & stat=="keeper_adv") %>%
+    select(data) %>%
+    unnest(data)
+  
+  data$season_stat_misc <-
+    fbref_tidy %>%
+    filter(data_type=="season_stat" & stat=="misc") %>%
+    select(data) %>%
+    unnest(data)
+  
+  data$season_stat_passing <-
+    fbref_tidy %>%
+    filter(data_type=="season_stat" & stat=="passing") %>%
+    select(data) %>%
+    unnest(data)
+  
+  data$season_stat_passing_types <-
+    fbref_tidy %>%
+    filter(data_type=="season_stat" & stat=="passing_types") %>%
+    select(data) %>%
+    unnest(data)
+  
+  data$season_stat_possession <-
+    fbref_tidy %>%
+    filter(data_type=="season_stat" & stat=="possession") %>%
+    select(data) %>%
+    unnest(data)
+  
+  data$season_stat_playing_time <-
+    fbref_tidy %>%
+    filter(data_type=="season_stat" & stat=="playing_time") %>%
+    select(data) %>%
+    unnest(data)
+  
+  data$season_stat_shooting <-
+    fbref_tidy %>%
+    filter(data_type=="season_stat" & stat=="shooting") %>%
+    select(data) %>%
+    unnest(data)
+  
+  data$season_stat_standard <-
+    fbref_tidy %>%
+    filter(data_type=="season_stat" & stat=="standard") %>%
+    select(data) %>%
+    unnest(data)
+  
+  data$advanced_stats_player_possession <-
+    fbref_tidy %>%
+    filter(data_type=="advanced_stats" & stat=="possession" & team_or_player=="player") %>%
+    select(data) %>%
+    unnest(data)
+  
+  data$advanced_stats_player_passing <-
+    fbref_tidy %>%
+    filter(data_type=="advanced_stats" & stat=="passing" & team_or_player=="player") %>%
+    select(data) %>%
+    unnest(data)
+  
+  data$advanced_stats_player_summary <-
+    fbref_tidy %>%
+    filter(data_type=="advanced_stats" & stat=="summary" & team_or_player=="player") %>%
+    select(data) %>%
+    unnest(data)
+  
+  data$advanced_stats_player_defense <-
+    fbref_tidy %>%
+    filter(data_type=="advanced_stats" & stat=="defense" & team_or_player=="player") %>%
+    select(data) %>%
+    unnest(data)
+  
+  data$advanced_stats_player_misc <-
+    fbref_tidy %>%
+    filter(data_type=="advanced_stats" & stat=="misc" & team_or_player=="player") %>%
+    select(data) %>%
+    unnest(data)
+  
+  data$advanced_stats_player_passing_types <-
+    fbref_tidy %>%
+    filter(data_type=="advanced_stats" & stat=="passing_types" & team_or_player=="player") %>%
+    select(data) %>%
+    unnest(data)
+  
+  data$advanced_stats_player_keeper <-
+    fbref_tidy %>%
+    filter(data_type=="advanced_stats" & stat=="keeper" & team_or_player=="player") %>%
+    select(data) %>%
+    unnest(data)
+  
+  data$advanced_stats_team_possession <-
+    fbref_tidy %>%
+    filter(data_type=="advanced_stats" & stat=="possession" & team_or_player=="team") %>%
+    select(data) %>%
+    unnest(data)
+  
+  data$advanced_stats_team_passing <-
+    fbref_tidy %>%
+    filter(data_type=="advanced_stats" & stat=="passing" & team_or_player=="team") %>%
+    select(data) %>%
+    unnest(data)
+  
+  data$advanced_stats_team_summary <-
+    fbref_tidy %>%
+    filter(data_type=="advanced_stats" & stat=="summary" & team_or_player=="team") %>%
+    select(data) %>%
+    unnest(data)
+  
+  data$advanced_stats_team_defense <-
+    fbref_tidy %>%
+    filter(data_type=="advanced_stats" & stat=="defense" & team_or_player=="team") %>%
+    select(data) %>%
+    unnest(data)
+  
+  data$advanced_stats_team_misc <-
+    fbref_tidy %>%
+    filter(data_type=="advanced_stats" & stat=="misc" & team_or_player=="team") %>%
+    select(data) %>%
+    unnest(data)
+  
+  data$advanced_stats_team_passing_types <-
+    fbref_tidy %>%
+    filter(data_type=="advanced_stats" & stat=="passing_types" & team_or_player=="team") %>%
+    select(data) %>%
+    unnest(data)
+  
+  data$advanced_stats_team_keeper <-
+    fbref_tidy %>%
+    filter(data_type=="advanced_stats" & stat=="keeper" & team_or_player=="team") %>%
+    select(data) %>%
+    unnest(data)
   
   return(data)
 }
