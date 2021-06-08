@@ -16,79 +16,6 @@ join_fbref <- function(fbref){
   
   data <- list()
   
-  data$table <-
-    fbref_tidy %>%
-    filter(data_type=="season_stat" & stat=="league_table") %>%
-    select(data) %>%
-    unnest(data) %>%
-    select(-Team_or_Opponent)
-  
-  data$table_home_away <-
-    fbref_tidy %>%
-    filter(data_type=="season_stat" & stat=="league_table_home_away") %>%
-    select(data) %>%
-    unnest(data)
-  
-  data$season_stat <-
-    fbref_tidy %>%
-    filter(data_type=="season_stat") %>%
-    filter(stat!="league_table") %>%
-    filter(stat!="league_table_home_away") %>%
-    select(stat,data) %>%
-    unnest(data) %>%
-    group_by(stat) %>%
-    nest() %>%
-    ungroup() %>%
-    mutate(data=map(data,remove_empty,which="cols")) %>%
-    pull(data) %>%
-    reduce(full_join)
-  
-  data$matches <-
-    fbref_tidy %>%
-    filter(data_type=="match_result") %>%
-    select(data) %>%
-    unnest(data)
-  
-  data$match_lineups <-
-    fbref_tidy %>%
-    filter(data_type=="match_lineups") %>%
-    select(data) %>%
-    unnest(data)
-  
-  data$match_summaries <-
-    fbref_tidy %>%
-    filter(data_type=="match_summary") %>%
-    select(data) %>%
-    unnest(data)
-  
-  data$team_advanced_stats_match <-
-    fbref_tidy %>%
-    filter(data_type=="advanced_stats") %>%
-    filter(team_or_player=="team") %>%
-    # filter(stat!="keeper") %>% # keeper tables have 1 line per player
-    select(stat,data) %>%
-    unnest(data) %>%
-    group_by(stat) %>%
-    nest() %>%
-    ungroup() %>%
-    mutate(data=map(data,remove_empty,which="cols")) %>%
-    pull(data) %>%
-    reduce(full_join) # should be 146 columns
-  
-  data$player_advanced_stats_match <-
-    fbref_tidy %>%
-    filter(data_type=="advanced_stats") %>%
-    filter(team_or_player=="player") %>%
-    # filter(stat!="misc") %>%
-    select(stat,data) %>%
-    unnest(data) %>%
-    group_by(stat) %>%
-    nest() %>%
-    ungroup() %>%
-    mutate(data=map(data,remove_empty,which="cols")) %>%
-    pull(data) %>%
-    reduce(full_join)
-  
   data$match_results <-
     fbref_tidy %>%
     filter(data_type=="match_result") %>%
@@ -107,9 +34,16 @@ join_fbref <- function(fbref){
     select(data) %>%
     unnest(data)
   
-  data$match_summary <-
+  data$table <-
     fbref_tidy %>%
-    filter(data_type=="match_summary") %>%
+    filter(data_type=="season_stat" & stat=="league_table") %>%
+    select(data) %>%
+    unnest(data) %>%
+    select(-Team_or_Opponent)
+  
+  data$table_home_away <-
+    fbref_tidy %>%
+    filter(data_type=="season_stat" & stat=="league_table_home_away") %>%
     select(data) %>%
     unnest(data)
   
