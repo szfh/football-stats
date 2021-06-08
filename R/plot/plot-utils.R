@@ -10,8 +10,8 @@ expand_teams <- function(team){
     team %in% "Brighton & Hove Albion" ~ "Brighton",
     # team %in% "Manchester United" ~ "Manchester Utd",
     team %in% 
-    # team %in% "Sheffield United" ~ "Sheffield Utd",
-    team %in% "West Bromwich Albion" ~ "West Brom",
+      # team %in% "Sheffield United" ~ "Sheffield Utd",
+      team %in% "West Bromwich Albion" ~ "West Brom",
     # team %in% "West Ham United" ~ "West Ham Utd",
     team %in% "Wolverhampton Wanders" ~ "Wolves",
     TRUE ~ team
@@ -128,19 +128,15 @@ get_mva <- function(xG,n=6){ # windowed average xG
   return(mva)
 }
 
-get_unused_subs <- function(data,subs_available,subs_used){
-  
-  subs_unused <- subs_available-subs_used
-  
-  if(subs_unused<=0){
+get_unused_subs <- function(data,Subs_Available,Subs_Used){
+  Subs_Unused <- Subs_Available-Subs_Used
+  if(Subs_Unused<=0){
     return(data)
-  }
-  else{
-    for(n in 1:subs_unused){
-      # browser()
+  } else {
+    for(n in 1:Subs_Unused){
       data <-
         data %>%
-        add_row(time=-3,state2="Unused")
+        add_row(Event_Time=-3,Game_State="Unused")
     }
     return(data)
   }
