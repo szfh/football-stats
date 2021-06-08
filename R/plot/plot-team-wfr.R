@@ -10,29 +10,36 @@ plot_team_wfr <- function(data,team="Southampton",season="2020-2021"){
   season <- expand_seasons(season)
   
   penalties <-
-    data$fbref$team_advanced_stats_match %>%
+    data$fbref$advanced_stats_team_summary %>%
+    mutate(Match_Date=parse_date_time(Match_Date,"mdy")) %>%
+    filter(!is.na(PKatt)) %>%
     filter((Home_Team %in% !!team)|(Away_Team %in% !!team)) %>%
     select(Match_Date,Home_Away,PKatt) %>%
-    unique() %>%
-    filter(!is.na(PKatt)) %>%
     pivot_wider(names_from=Home_Away, values_from=PKatt, names_glue="PK_{Home_Away}")
   
   plots$xgtrendmva <-
-    data$fbref$team_advanced_stats_match %>%
+    data$fbref$advanced_stats_team_summary %>%
     filter(Team %in% !!team) %>%
     filter((!is.na(Home_xG))|!is.na(Away_xG)) %>%
-    select(Season,Match_Date,Team,Home_Team,Home_Score,Home_xG,Away_Team,Away_Score,Away_xG,Home_Away,PKatt) %>%
+    mutate(Match_Date=parse_date_time(Match_Date,"mdy")) %>%
+    select(Season,Match_Date,Team,Home_Team,Home_Score,Home_xG,Away_Team,Away_Score,Away_xG,Home_Away) %>%
     left_join(penalties) %>%
-    mutate(Home_npxG=Home_xG-(PK_Home*0.7)) %>%
-    mutate(Away_npxG=Away_xG-(PK_Away*0.7)) %>%
-    make_for_against_matches() %>%
-    select(-Home_Team,-Home_Score,-Home_xG,-Away_Team,-Away_Score,-Away_xG) %>%
-    mutate(Match_Date=lubridate::parse_date_time(Match_Date,"mdy")) %>%
     arrange(Match_Date) %>%
-    mutate(Team_npxG_mva=get_mva(Team_npxG)) %>%
-    mutate(Opposition_npxG_mva=get_mva(Opposition_npxG)) %>%
+    mutate(
+      Home_npxG=Home_xG-(PK_Home*0.7),
+      Away_npxG=Away_xG-(PK_Away*0.7)
+    ) %>%
+    mutate(Opposition=ifelse(Home_Away=="Home",Away_Team,Home_Team),.after="Team") %>%
+    mutate(
+      Team_Score=ifelse(Home_Away=="Home",Home_Score,Away_Score),
+      Team_npxG=ifelse(Home_Away=="Home",Home_npxG,Away_npxG),
+      Opposition_Score=ifelse(Home_Away=="Home",Away_Score,Home_Score),
+      Opposition_npxG=ifelse(Home_Away=="Home",Away_npxG,Home_npxG)
+    ) %>%
+    mutate(
+      Team_npxG_mva=get_mva(Team_npxG),
+      Opposition_npxG_mva=get_mva(Opposition_npxG)) %>%
     filter(Season %in% !!season) %>%
-    # filter(date>=as.Date("2020-01-01")) %>%
     mutate(Season=case_when(
       Match_Date>=as.Date("2019-08-01") & Match_Date<as.Date("2020-04-01") ~ "2019-20 part 1",
       Match_Date>=as.Date("2020-04-01") & Match_Date<as.Date("2020-08-01") ~ "2019-20 part 2",
@@ -64,19 +71,25 @@ plot_team_wfr <- function(data,team="Southampton",season="2020-2021"){
     facet_grid(cols=vars(Season), space="free", scales="free_x")
   
   plots$xgsegment <-
-    data$fbref$team_advanced_stats_match %>%
+    data$fbref$advanced_stats_team_summary %>%
     filter(Team %in% !!team) %>%
     filter((!is.na(Home_xG))|!is.na(Away_xG)) %>%
-    select(Season,Match_Date,Team,Home_Team,Home_Score,Home_xG,Away_Team,Away_Score,Away_xG,Home_Away,PKatt) %>%
+    mutate(Match_Date=parse_date_time(Match_Date,"mdy")) %>%
+    select(Season,Match_Date,Team,Home_Team,Home_Score,Home_xG,Away_Team,Away_Score,Away_xG,Home_Away) %>%
     left_join(penalties) %>%
-    mutate(Home_npxG=Home_xG-(PK_Home*0.7)) %>%
-    mutate(Away_npxG=Away_xG-(PK_Away*0.7)) %>%
-    make_for_against_matches() %>%
-    select(-Home_Team,-Home_Score,-Home_xG,-Away_Team,-Away_Score,-Away_xG) %>%
-    mutate(Match_Date=lubridate::parse_date_time(Match_Date,"mdy")) %>%
     arrange(Match_Date) %>%
+    mutate(
+      Home_npxG=Home_xG-(PK_Home*0.7),
+      Away_npxG=Away_xG-(PK_Away*0.7)
+    ) %>%
+    mutate(Opposition=ifelse(Home_Away=="Home",Away_Team,Home_Team),.after="Team") %>%
+    mutate(
+      Team_Score=ifelse(Home_Away=="Home",Home_Score,Away_Score),
+      Team_npxG=ifelse(Home_Away=="Home",Home_npxG,Away_npxG),
+      Opposition_Score=ifelse(Home_Away=="Home",Away_Score,Home_Score),
+      Opposition_npxG=ifelse(Home_Away=="Home",Away_npxG,Home_npxG)
+    ) %>%
     filter(Season %in% !!season) %>%
-    # filter(date>=as.Date("2020-01-01")) %>%
     mutate(Season=case_when(
       Match_Date>=as.Date("2019-08-01") & Match_Date<as.Date("2020-04-01") ~ "2019-20 part 1",
       Match_Date>=as.Date("2020-04-01") & Match_Date<as.Date("2020-08-01") ~ "2019-20 part 2",
@@ -84,7 +97,6 @@ plot_team_wfr <- function(data,team="Southampton",season="2020-2021"){
     mutate(Home_Away_Short=ifelse(Home_Away=="Home","H","A")) %>%
     mutate(Match=glue::glue("{Opposition} {Home_Away_Short} {Team_Score}-{Opposition_Score}")) %>%
     mutate(Match=reorder_within(Match, desc(Match_Date), Season)) %>%
-    glimpse %>%
     ggplot(aes(y=Match,yend=Match)) +
     geom_segment(aes(x=0,xend=Team_npxG),colour=colour[["sfc"]][["light"]],size=2) +
     geom_segment(aes(x=0,xend=-Opposition_npxG),colour=colour[["medium"]][[1]],size=2) +
@@ -106,25 +118,24 @@ plot_team_wfr <- function(data,team="Southampton",season="2020-2021"){
   
   starting <-
     data$fbref$match_lineups %>%
-    select(Match_Date=Matchday,Player=Player_Name,Team,Starting) %>%
+    select(Match_Date=Matchday,Team,Home_Away,Player=Player_Name,Team,Starting) %>%
     filter(Starting %in% c("Pitch","Bench"))
   
   plots$minutes <-
-    data$fbref$player_advanced_stats_match %>%
+    data$fbref$advanced_stats_player_summary %>%
     filter(Season %in% !!season) %>%
     filter(Team %in% !!team) %>%
-    filter(!is.na(Player)) %>%
     mutate(Match_Date=parse_date_time(Match_Date,"mdy")) %>%
     select(Match_Date,Player,Min) %>%
     left_join(starting) %>%
     select(-Match_Date) %>%
     group_by(Player,Starting) %>%
-    summarise(across(where(is.numeric),sum,na.rm=TRUE)) %>%
-    ungroup() %>%
+    summarise(across(where(is.numeric),sum,na.rm=TRUE),.groups="drop") %>%
     pivot_wider(names_from=Starting, values_from=Min, names_glue="Min_{Starting}") %>%
-    mutate(Min_Pitch=replace_na(Min_Pitch,0)) %>%
-    mutate(Min_Bench=replace_na(Min_Bench,0)) %>%
-    mutate(Min_Total=Min_Pitch+Min_Bench) %>%
+    mutate(
+      Min_Pitch=replace_na(Min_Pitch,0),
+      Min_Bench=replace_na(Min_Bench,0),
+      Min_Total=Min_Pitch+Min_Bench) %>%
     mutate(Player=fct_reorder(Player,Min_Total)) %>%
     ggplot(aes(y=Player)) +
     geom_segment(aes(y=Player,yend=Player,x=0,xend=Min_Pitch),colour=colour[["sfc"]][["main"]],size=2.5,alpha=0.8) +
@@ -144,13 +155,12 @@ plot_team_wfr <- function(data,team="Southampton",season="2020-2021"){
     scale_x_continuous(breaks=seq(0,90*38*3,180),expand=expansion(add=c(0,20)))
   
   plots$xgxa <-
-    data$fbref$player_advanced_stats_match %>%
+    data$fbref$advanced_stats_player_summary %>%
     filter(Season %in% !!season) %>%
     filter(Team %in% !!team) %>%
     select(Player,Min,npxG=npxG_Expected,xA=xA_Expected) %>%
     group_by(Player) %>%
-    summarise(across(where(is.numeric),sum,na.rm=TRUE)) %>%
-    ungroup() %>%
+    summarise(across(where(is.numeric),sum,na.rm=TRUE),.groups="drop") %>%
     mutate(Focus=case_when(
       npxG==0 & xA==0 ~ FALSE,
       min_rank(desc(npxG))<=8 ~ TRUE,
@@ -170,16 +180,15 @@ plot_team_wfr <- function(data,team="Southampton",season="2020-2021"){
     scale_fill_manual(values=c("TRUE"=colour[["sfc"]][["main"]],"FALSE"=colour[["sfc"]][["grey"]]))
   
   plots$xgxa90 <-
-    data$fbref$player_advanced_stats_match %>%
+    data$fbref$advanced_stats_player_summary %>%
     filter(Season %in% !!season) %>%
     filter(Team %in% !!team) %>%
     select(Player,Min,npxG=npxG_Expected,xA=xA_Expected) %>%
     group_by(Player) %>%
-    summarise(across(where(is.numeric),sum,na.rm=TRUE)) %>%
-    ungroup() %>%
-    filter(Min>900) %>%
-    mutate(npxG=90*npxG/Min) %>%
-    mutate(xA=90*xA/Min) %>%
+    summarise(across(where(is.numeric),sum,na.rm=TRUE),.groups="drop") %>%
+    filter(Min>=900) %>%
+    mutate(npxG=90*npxG/Min,
+           xA=90*xA/Min) %>%
     mutate(Focus=case_when(
       npxG==0 & xA==0 ~ FALSE,
       min_rank(desc(npxG))<=8 ~ TRUE,
@@ -199,13 +208,14 @@ plot_team_wfr <- function(data,team="Southampton",season="2020-2021"){
     scale_fill_manual(values=c("TRUE"=colour[["sfc"]][["main"]],"FALSE"=colour[["sfc"]][["grey"]]))
   
   plots$shots_keypasses <-
-    data$fbref$player_advanced_stats_match %>%
+    data$fbref$advanced_stats_player_summary %>%
+    left_join(data$fbref$advanced_stats_player_passing) %>%
     filter(Team %in% !!team) %>%
     filter(Season %in% !!season) %>%
     select(Player,Sh,KP) %>%
     group_by(Player) %>%
-    summarise(across(where(is.numeric),sum,na.rm=TRUE)) %>%
-    make_long_data(levels=c("Sh","KP"),labels=c("Shot","Pass leading to shot")) %>%
+    summarise(across(where(is.numeric),sum,na.rm=TRUE),.groups="drop") %>%
+    make_long_data(levels=c("Sh","KP"),labels=c("Shots","Passes leading to shots")) %>%
     mutate(focus=case_when(
       n==0 ~ FALSE,
       min_rank(desc(n))<=8 ~ TRUE,
@@ -234,11 +244,12 @@ plot_team_wfr <- function(data,team="Southampton",season="2020-2021"){
     scale_fill_manual(values=c("TRUE"=colour[["sfc"]][["light"]],"FALSE"=colour[["sfc"]][["grey"]]))
   
   plots$psxg_against <-
-    data$fbref$team_advanced_stats_match %>%
+    data$fbref$advanced_stats_team_keeper %>%
+    left_join(data$fbref$advanced_stats_team_misc) %>%
+    mutate(Match_Date=parse_date_time(Match_Date,"mdy")) %>%
     filter(Season %in% !!season) %>%
-    select(Team,Match_Date,GA=GA_Shot,psxG=PSxG_Shot) %>%
-    mutate(Match_Date=lubridate::parse_date_time(Match_Date,"mdy")) %>%
-    mutate(psxGD=psxG-GA) %>%
+    select(Team,Match_Date,GA=GA_Shot_Stopping,psxG=PSxG_Shot_Stopping,OG) %>%
+    mutate(psxGD=psxG-(GA-OG)) %>%
     arrange(Match_Date) %>%
     group_by(Team) %>%
     mutate(cumulative_psxGD=cumsum(psxGD)) %>%
@@ -266,20 +277,20 @@ plot_team_wfr <- function(data,team="Southampton",season="2020-2021"){
     scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.5))
   
   plots$passfootedness <-
-    data$fbref$player_advanced_stats_match %>%
+    data$fbref$advanced_stats_player_passing_types %>%
     filter(Team %in% !!team) %>%
     filter(Season %in% !!season) %>%
-    select(Player,Left=Left_Body,Right=Right_Body) %>%
+    select(Player,Left=Left_Body_Parts,Right=Right_Body_Parts) %>%
     group_by(Player) %>%
-    summarise(across(where(is.numeric),sum,na.rm=TRUE)) %>%
-    ungroup() %>%
+    summarise(across(where(is.numeric),sum,na.rm=TRUE),.groups="drop") %>%
     mutate(All=Left+Right) %>%
     filter(All>100) %>%
     group_by(Player) %>%
-    mutate(Most=max(Left,Right)) %>%
-    mutate(Least=min(Left,Right)) %>%
-    mutate(Foot1=ifelse(Left>Right,"Left","Right")) %>%
-    mutate(Foot2=ifelse(Left>=Right,"Right","Left")) %>%
+    mutate(
+      Most=max(Left,Right),
+      Least=min(Left,Right),
+      Foot1=ifelse(Left>Right,"Left","Right"),
+      Foot2=ifelse(Left>=Right,"Right","Left")) %>%
     ungroup() %>%
     mutate(Ratio=Most/All) %>%
     mutate(Player=fct_reorder(Player,desc(Ratio))) %>%
