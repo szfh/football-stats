@@ -5,18 +5,15 @@ plot_league_wfr <- function(data,season="2020-2021"){
   
   force(data)
   plots <- list()
-  # browser()
   season <- expand_seasons(season)
   
   plots$goals_xg <-
-    data$fbref$player_advanced_stats_match %>%
+    data$fbref$advanced_stats_player_summary %>%
     filter(Season %in% !!season) %>%
-    mutate(npG=Gls-PK) %>%
-    select(Player,Team,npG,npxG=npxG_Expected) %>%
-    
+    select(Player,Team,Gls,PK,npxG=npxG_Expected) %>%
+    mutate(npG=Gls-PK,.keep="unused",.after="PK") %>%
     group_by(Player,Team) %>%
-    summarise(across(where(is.numeric),sum,na.rm=TRUE)) %>%
-    ungroup() %>%
+    summarise(across(where(is.numeric),sum,na.rm=TRUE),.groups="drop") %>%
     make_long_data(levels=c("npG","npxG"),labels=c("Goals","Expected Goals")) %>%
     mutate(focus=case_when(
       key=="Goals" & min_rank(desc(n))<=10 ~ TRUE,
@@ -45,27 +42,31 @@ plot_league_wfr <- function(data,season="2020-2021"){
     scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.1))
   
   penalties <-
-    data$fbref$team_advanced_stats_match %>%
-    select(Match_Date,Home_Team,Away_Team,Home_Away,PKatt) %>%
-    unique() %>%
+    data$fbref$advanced_stats_team_summary %>%
+    mutate(Match_Date=parse_date_time(Match_Date,"mdy")) %>%
     filter(!is.na(PKatt)) %>%
+    select(Match_Date,Home_Team,Away_Team,Home_Away,PKatt) %>%
     pivot_wider(names_from=Home_Away, values_from=PKatt, names_glue="PK_{Home_Away}")
   
   plots$xg_for_against <-
-    data$fbref$team_advanced_stats_match %>%
+    data$fbref$advanced_stats_team_summary %>%
     filter(Season %in% !!season) %>%
+    filter((!is.na(Home_xG))|!is.na(Away_xG)) %>%
+    mutate(Match_Date=parse_date_time(Match_Date,"mdy")) %>%
     select(Match_Date,Home_Team,Away_Team,Home_xG,Away_xG,Team,Home_Away) %>%
     left_join(penalties) %>%
-    mutate(Match_Date=lubridate::parse_date_time(Match_Date,"mdy")) %>%
-    # filter(Match_Date>="2021-01-01") %>%
-    mutate(Home_npxG=Home_xG-(0.7*PK_Home)) %>%
-    mutate(Away_npxG=Away_xG-(0.7*PK_Away)) %>%
-    mutate(Team_npxG=ifelse(Home_Away=="Home",Home_npxG,Away_npxG)) %>%
-    mutate(Opposition_npxG=ifelse(Home_Away=="Home",-Away_npxG,-Home_npxG)) %>%
+    arrange(Match_Date) %>%
+    mutate(
+      Home_npxG=Home_xG-(PK_Home*0.7),
+      Away_npxG=Away_xG-(PK_Away*0.7)
+    ) %>%
+    mutate(
+      Team_npxG=ifelse(Home_Away=="Home",Home_npxG,Away_npxG),
+      Opposition_npxG=ifelse(Home_Away=="Home",-Away_npxG,-Home_npxG)
+    ) %>%
     select(Team,Team_npxG,Opposition_npxG) %>%
     group_by(Team) %>%
-    summarise(across(where(is.numeric),sum,na.rm=TRUE)) %>%
-    ungroup() %>%
+    summarise(across(where(is.numeric),sum,na.rm=TRUE),.groups="drop") %>%
     make_long_data(levels=c("Team_npxG","Opposition_npxG"),labels=c("Expected Goals For","Expected Goals Against")) %>%
     ggplot(aes(x=0.05,y=n)) +
     geom_text_repel(
@@ -85,24 +86,26 @@ plot_league_wfr <- function(data,season="2020-2021"){
       x=element_blank(),
       y=element_blank()) +
     scale_x_continuous(limit=c(0,1)) +
-    scale_y_continuous(breaks=seq(-100,100,5),labels=abs(seq(-100,100,5)),expand=expansion(add=1)) +
+    scale_y_continuous(breaks=seq(-100,100,5),labels=abs(seq(-100,100,5)),expand=expansion(add=2)) +
     scale_fill_manual(values=palette[["epl"]]())
   
   plots$xg_for_against_sc <-
-    data$fbref$team_advanced_stats_match %>%
+    data$fbref$advanced_stats_team_summary %>%
     filter(Season %in% !!season) %>%
+    mutate(Match_Date=parse_date_time(Match_Date,"mdy")) %>%
     select(Match_Date,Home_Team,Away_Team,Home_xG,Away_xG,Team,Home_Away) %>%
     left_join(penalties) %>%
-    mutate(Match_Date=lubridate::parse_date_time(Match_Date,"mdy")) %>%
-    # filter(Match_Date>="2021-01-01") %>%
-    mutate(Home_npxG=Home_xG-(0.7*PK_Home)) %>%
-    mutate(Away_npxG=Away_xG-(0.7*PK_Away)) %>%
-    mutate(Team_npxG=ifelse(Home_Away=="Home",Home_npxG,Away_npxG)) %>%
-    mutate(Opposition_npxG=ifelse(Home_Away=="Home",Away_npxG,Home_npxG)) %>%
+    mutate(
+      Home_npxG=Home_xG-(PK_Home*0.7),
+      Away_npxG=Away_xG-(PK_Away*0.7)
+    ) %>%
+    mutate(
+      Team_npxG=ifelse(Home_Away=="Home",Home_npxG,Away_npxG),
+      Opposition_npxG=ifelse(Home_Away=="Home",Away_npxG,Home_npxG)
+    ) %>%
     select(Team,Team_npxG,Opposition_npxG) %>%
     group_by(Team) %>%
-    summarise(across(where(is.numeric),sum,na.rm=TRUE)) %>%
-    ungroup() %>%
+    summarise(across(where(is.numeric),sum,na.rm=TRUE),.groups="drop") %>%
     ggplot(aes(x=Team_npxG,y=Opposition_npxG)) +
     geom_text_repel(aes(label=Team),size=2) +
     geom_point(aes(fill=Team),shape=23,size=2.5) +
@@ -112,8 +115,8 @@ plot_league_wfr <- function(data,season="2020-2021"){
       x="xG for",
       y="xG against"
     ) +
-    scale_x_continuous(breaks=seq(0,100,5),expand=expansion(add=c(0.5))) +
-    scale_y_reverse(breaks=seq(0,100,5),expand=expansion(add=c(0.5))) +
+    scale_x_continuous(breaks=seq(0,100,5),expand=expansion(add=c(2))) +
+    scale_y_reverse(breaks=seq(0,100,5),expand=expansion(add=c(2))) +
     scale_fill_manual(values=palette[["epl"]]())
   
   plots_logo <-
