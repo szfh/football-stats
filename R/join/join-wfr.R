@@ -34,6 +34,12 @@ join_fbref <- function(fbref){
     select(data) %>%
     unnest(data)
   
+  data$match_shots <-
+    fbref_tidy %>%
+    filter(data_type=="match_shots") %>%
+    select(data) %>%
+    unnest(data)
+  
   data$table <-
     fbref_tidy %>%
     filter(data_type=="season_stat" & stat=="league_table") %>%
