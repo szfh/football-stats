@@ -91,6 +91,23 @@ scrape_fbref_wfr <- function(save_path=here("data","fbref.rds"),current_season=2
     mutate(date_scraped=Sys.Date()) %>%
     print(n=Inf)
   
+  fbref$match_shots$all <-
+    fbref$match_urls$all %>%
+    unnest(cols=data) %>%
+    rename(url=value) %>%
+    mutate(data_type="match_shots")
+  
+  fbref$match_shots$keep <-
+    fbref_saved %>%
+    filter(data_type=="match_shots") %>%
+    filter(!is.na(data))
+  
+  fbref$match_shots$new <-
+    anti_join(fbref$match_shots$all, fbref$match_shots$keep) %>%
+    mutate(data=map(url,possibly(get_match_shooting,otherwise=NA))) %>%
+    mutate(date_scraped=Sys.Date()) %>%
+    print(n=Inf)
+  
   fbref$advanced_stats$all <-
     fbref$match_urls$all %>%
     unnest(cols=data) %>%
@@ -116,7 +133,8 @@ scrape_fbref_wfr <- function(save_path=here("data","fbref.rds"),current_season=2
       fbref$season_stats$keep,fbref$season_stats$new,
       fbref$match_lineups$keep,fbref$match_lineups$new,
       fbref$match_summary$keep,fbref$match_summary$new,
-      fbref$advanced_stats$keep,fbref$advanced_stats$new
+      fbref$match_shots$keep,fbref$match_shots$new,
+      fbref$advanced_stats$keep,fbref$advanced_stats$new,
     ) %>%
     filter(!is.na(data)) %>%
     mutate(event_date=pmap(list(data,data_type,event_date),possibly(get_event_date,otherwise=NA))) %>%
@@ -147,6 +165,12 @@ get_event_date <- function(data,data_type=NA,event_date=NA){
       select(Match_Date) %>%
       distinct() %>%
       lubridate::parse_date_time("mdy")
+  } else if(data_type=="match_shots"){
+    event_date <- 
+      data %>%
+      select(Date) %>%
+      distinct() %>%
+      pull()
   } else if(data_type=="advanced_stats"){
     event_date <-
       data %>%
