@@ -153,6 +153,9 @@ get_event_date <- function(data,data_type=NA,event_date=NA){
   if(is.null(event_date)){
     event_date <- lubridate::NA_Date_
   }
+  if(!is.na(event_date)){
+    event_date <- event_date
+  }
   if(data_type=="match_lineups"){
     event_date <-
       data %>%
