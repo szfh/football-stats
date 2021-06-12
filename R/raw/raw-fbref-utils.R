@@ -198,3 +198,43 @@ get_data_types <- function(){
   
   return(data_types)
 }
+
+
+get_event_date <- function(data,data_type=NA,event_date=NA){
+  
+  if(is.null(event_date)){
+    event_date <- lubridate::NA_Date_
+  }
+  if(!is.na(event_date)){
+    event_date <- event_date
+  }
+  if(data_type=="match_lineups"){
+    event_date <-
+      data %>%
+      select(Matchday) %>%
+      distinct() %>%
+      pull()
+  } else if(data_type=="match_summary"){
+    event_date <- 
+      data %>%
+      select(Match_Date) %>%
+      distinct() %>%
+      lubridate::parse_date_time("mdy")
+  } else if(data_type=="match_shots"){
+    event_date <- 
+      data %>%
+      select(Date) %>%
+      distinct() %>%
+      pull()
+  } else if(data_type=="advanced_stats"){
+    event_date <-
+      data %>%
+      select(Match_Date) %>%
+      distinct() %>%
+      lubridate::parse_date_time("mdy")
+  } else {
+    event_date <- lubridate::NA_Date_
+  }
+  event_date <- as_date(event_date)
+  return(event_date)
+}
