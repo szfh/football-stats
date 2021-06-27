@@ -119,6 +119,46 @@ plot_league_wfr <- function(data,season="2020-2021"){
     scale_y_reverse(breaks=seq(0,100,5),expand=expansion(add=c(2))) +
     scale_fill_manual(values=palette[["epl"]]())
   
+  plots$psxg_team <-
+    data$fbref$season_stat_keeper_adv %>%
+    filter(Team_or_Opponent=="team") %>%
+    filter(Season_End_Year %in% !!season) %>%
+    select(Squad,GA=GA_Goals,OG=OG_Goals,PSxG=PSxG_Expected,PSxGSOT=PSxG_per_SoT_Expected,PSxGD=PSxGPlus_Minus_Expected) %>%
+    mutate(Plus_Minus=ifelse(PSxGD>=0,TRUE,FALSE)) %>%
+    mutate(Squad=fct_reorder(Squad,PSxGD)) %>%
+    ggplot(aes(x=0,xend=PSxGD,y=Squad,yend=Squad,colour=Plus_Minus)) +
+    geom_segment(size=3.5,alpha=0.8) +
+    theme[["solar"]]() +
+    labs(
+      title="Post-shot expected goals",
+      x=element_blank(),
+      y=element_blank()) +
+    annotate("text",label="Goalkeepers\noverperforming\nshot-stopping",fontface="bold",hjust="right",size=3,x=-0.6,y=17) +
+    annotate("text",label="Goalkeepers\nunderperform\nshot-stopping",fontface="bold",hjust="left",size=3,x=0.6,y=4) +
+    scale_x_continuous(breaks=seq(-200,200,2),expand=expansion(add=c(0.1))) +
+    scale_colour_manual(values=c("TRUE"=colour[["medium"]][[3]],"FALSE"=colour[["medium"]][[8]]))
+  
+  plots$psxg_opponent <-
+    data$fbref$season_stat_keeper_adv %>%
+    filter(Team_or_Opponent=="opponent") %>%
+    filter(Season_End_Year %in% !!season) %>%
+    select(Squad,GA=GA_Goals,OG=OG_Goals,PSxG=PSxG_Expected,PSxGSOT=PSxG_per_SoT_Expected,PSxGD=PSxGPlus_Minus_Expected) %>%
+    mutate(PSxGD=-PSxGD) %>%
+    mutate(Squad=str_sub(Squad,4)) %>%
+    mutate(Plus_Minus=ifelse(PSxGD>=0,TRUE,FALSE)) %>%
+    mutate(Squad=fct_reorder(Squad,PSxGD)) %>%
+    ggplot(aes(x=0,xend=PSxGD,y=Squad,yend=Squad,colour=Plus_Minus)) +
+    geom_segment(size=3.5,alpha=0.8) +
+    theme[["solar"]]() +
+    labs(
+      title="Post-shot expected goals",
+      x=element_blank(),
+      y=element_blank()) +
+    annotate("text",label="Opposition goalkeepers\nunderperform\nagainst these teams",fontface="bold",hjust="right",size=3,x=-0.6,y=17) +
+    annotate("text",label="Opposition goalkeepers\noverperform\nagainst these teams",fontface="bold",hjust="left",size=3,x=0.6,y=4) +
+    scale_x_continuous(breaks=seq(-200,200,2),expand=expansion(add=c(0.1))) +
+    scale_colour_manual(values=c("TRUE"=colour[["medium"]][[8]],"FALSE"=colour[["medium"]][[3]]))
+  
   plots_logo <-
     plots %>%
     add_logo(path=here("images","SB_Regular.png"),x=1,y=1,hjust=1.1,width=0.2) %>%
