@@ -1,8 +1,12 @@
 join <- function(
-  save_path_fbref=here("data","fbref.rds")
+  save_path_fbref=here("data","fbref.rds"),
+  save_path_canpl=here("data","canpl.rds")
 ){
   fbref_join <- possibly(join_fbref, otherwise=NA)(readRDS(save_path_fbref))
-  data <- list(fbref=fbref_join)
+  canpl_join <- possibly(join_canpl, otherwise=NA)(readRDS(save_path_canpl))
+  data <- list(
+    fbref=fbref_join,
+    canpl=canpl_join)
   
   return(data)
 }
@@ -204,6 +208,59 @@ join_fbref <- function(fbref){
     unnest(data)
   
   return(data)
+}
+
+join_canpl <- function(canpl){
+  
+  data <- list()
+  
+  # TODO get season from name
+  
+  # {
+  #   j20 <-
+  #     canpl %>%
+  #     filter(str_detect(name,"TeamTotals")) %>%
+  #     filter(str_detect(name,"2020")) %>%
+  #     select(data) %>%
+  #     unnest(data)
+  #   
+  #   j21 <-
+  #     canpl %>%
+  #     filter(str_detect(name,"TeamTotals")) %>%
+  #     filter(str_detect(name,"2021")) %>%
+  #     select(data) %>%
+  #     unnest(data)
+  #   
+  #   j21 %>%
+  #     select(-any_of(colnames(j20)))
+  # }
+  
+  data$team_total <-
+    canpl %>%
+    filter(str_detect(name,"TeamTotals")) %>%
+    select(data) %>%
+    unnest(data)
+  
+  data$player_total <-
+    canpl %>%
+    filter(str_detect(name,"PlayerTotals")) %>%
+    select(data) %>%
+    unnest(data)
+  
+  data$team_match <-
+    canpl %>%
+    filter(str_detect(name,"TeamByGame")) %>%
+    select(data) %>%
+    unnest(data)
+  
+  data$player_match <-
+    canpl %>%
+    filter(str_detect(name,"PlayerByGame")) %>%
+    select(data) %>%
+    unnest(data)
+  
+  return(data)
+  
 }
 
 tidy_fbref <- function(data,data_type=NA,stat=NA,team_or_player=NA){
