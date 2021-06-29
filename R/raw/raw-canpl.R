@@ -1,5 +1,5 @@
 import_canpl <- function(save_folder=here("data","CPL"),save_path=here("data","canpl.rds")){
-
+  
   find_cc <- drive_find(pattern="Centre Circle Data & Info") #auto select account?
   get_cc <- drive_get(as_id(find_cc[1,]))
   
@@ -20,8 +20,3 @@ import_canpl <- function(save_folder=here("data","CPL"),save_path=here("data","c
   
   return(canpl)
 }
-
-# csv_files %>%
-#   pwalk(list(.$id),~drive_download(as_id(.x)))
-
-# walk(csv_files$id, ~ drive_download(as_id(.x),path=glue("{path}/{csv_files$id}"),overwrite=TRUE))
