@@ -214,53 +214,37 @@ join_canpl <- function(canpl){
   
   data <- list()
   
-  # TODO get season from name
-  
-  # {
-  #   j20 <-
-  #     canpl %>%
-  #     filter(str_detect(name,"TeamTotals")) %>%
-  #     filter(str_detect(name,"2020")) %>%
-  #     select(data) %>%
-  #     unnest(data)
-  #   
-  #   j21 <-
-  #     canpl %>%
-  #     filter(str_detect(name,"TeamTotals")) %>%
-  #     filter(str_detect(name,"2021")) %>%
-  #     select(data) %>%
-  #     unnest(data)
-  #   
-  #   j21 %>%
-  #     select(-any_of(colnames(j20)))
-  # }
+  canpl_tidy <-
+    canpl %>%
+    mutate(Season=as.numeric(str_sub(name,start=-8,end=-5)),.before="name") %>%
+    mutate(data=map(data,as_tibble)) %>%
+    mutate(data=map(data,tidy_canpl))
   
   data$team_total <-
-    canpl %>%
+    canpl_tidy %>%
     filter(str_detect(name,"TeamTotals")) %>%
-    select(data) %>%
+    select(Season,data) %>%
     unnest(data)
   
   data$player_total <-
-    canpl %>%
+    canpl_tidy %>%
     filter(str_detect(name,"PlayerTotals")) %>%
-    select(data) %>%
+    select(Season,data) %>%
     unnest(data)
   
   data$team_match <-
-    canpl %>%
+    canpl_tidy %>%
     filter(str_detect(name,"TeamByGame")) %>%
-    select(data) %>%
+    select(Season,data) %>%
     unnest(data)
   
   data$player_match <-
-    canpl %>%
+    canpl_tidy %>%
     filter(str_detect(name,"PlayerByGame")) %>%
-    select(data) %>%
+    select(Season,data) %>%
     unnest(data)
   
   return(data)
-  
 }
 
 tidy_fbref <- function(data,data_type=NA,stat=NA,team_or_player=NA){
@@ -297,6 +281,14 @@ tidy_fbref <- function(data,data_type=NA,stat=NA,team_or_player=NA){
       group_by(across(where(is.character))) %>%
       summarise(across(where(is.numeric),sum,na.rm=TRUE),.groups="drop")
   }
+  
+  return(data)
+}
+
+tidy_canpl <- function(data){
+  data <-
+    data %>%
+    select(-contains(c("Season")))
   
   return(data)
 }
