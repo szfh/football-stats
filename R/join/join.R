@@ -1,4 +1,4 @@
-join_wfr <- function(
+join <- function(
   save_path_fbref=here("data","fbref.rds")
 ){
   fbref_join <- possibly(join_fbref, otherwise=NA)(readRDS(save_path_fbref))
