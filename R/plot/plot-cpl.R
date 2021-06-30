@@ -1,70 +1,81 @@
 source(here("R","plot","plot-utils.R"))
 
-plot_cpl <- function(data,team="all"){
-  
+plot_cpl <- function(data,season=2021,team="all"){
   plots <- list()
   
-  player20 <- data$canpl %>%
-    slice(4) %>%
-    select(data) %>%
-    unnest(cols=data)
-  
-  team20 <- data$canpl %>%
-    slice(8) %>%
-    select(data) %>%
-    unnest(cols=data)
-  
-  matches1920 <- data$canpl %>%
-    slice(5,6) %>%
-    select(name,data) %>%
-    unnest(cols=data)
-  
-  plots$goalsxg <-
-    team20 %>%
-    select(team,team_id=optaTeamId,goal=Goal,pg=PenGoal,npxg=NonPenxG) %>%
-    mutate(team_id=as.character(team_id)) %>%
-    mutate(npg=goal-pg) %>%
-    ggplot(aes(x=npxg,y=npg)) +
-    geom_point(aes(fill=team_id),colour="black",shape=23,size=3,position=position_jitter(width=0.2,height=0.05,seed=999)) +
-    geom_text_repel(aes(label=team),size=4,position=position_jitter(width=0.2,height=0.05,seed=999)) +
+  plots$goals_xg <-
+    data$canpl$team_total %>%
+    filter(Season==!!season) %>%
+    select(Team,Team_ID=optaTeamId,Goal,PenGoal,NPxG=NonPenxG) %>%
+    mutate(Team_ID=as.character(Team_ID)) %>%
+    mutate(NPG=Goal-PenGoal) %>%
+    ggplot(aes(x=NPxG,y=NPG)) +
+    geom_point(aes(fill=Team_ID),colour="black",shape=23,size=3,position=position_jitter(width=0.2,height=0.05,seed=999)) +
+    geom_text_repel(aes(label=Team),size=4,position=position_jitter(width=0.2,height=0.05,seed=999)) +
     theme[["solar"]]() +
     labs(
-      title="Canadian Premier League Goals/xG 2020",
+      title=glue("Canadian Premier League Goals/xG {season}"),
       x="Expected Goals",
       y="Goals scored (non-penalties)") +
     scale_fill_manual(values=palette[["cpl2"]]())
   
   plots$xg <-
-    team20 %>%
-    select(team,team_id=optaTeamId,goal=Goal,pg=PenGoal,xg=ExpG,npxg=NonPenxG,xga=ExpGAg) %>%
-    mutate(team_id=as.character(team_id)) %>%
-    mutate(npg=goal-pg) %>%
-    ggplot(aes(x=xg,y=xga)) +
-    geom_point(aes(fill=team_id),colour="black",shape=23,size=4,alpha=0.8,position=position_jitter(width=0.1,height=0.1,seed=999)) +
-    geom_text_repel(aes(label=team),size=4,position=position_jitter(width=0.1,height=0.1,seed=999)) +
+    data$canpl$team_total %>%
+    filter(Season==!!season) %>%
+    select(Team,Team_ID=optaTeamId,Goal,PenGoal,xG=ExpG,NPxG=NonPenxG,xGA=ExpGAg) %>%
+    mutate(Team_ID=as.character(Team_ID)) %>%
+    mutate(NPG=Goal-PenGoal) %>%
+    ggplot(aes(x=xG,y=xGA)) +
+    geom_point(aes(fill=Team_ID),colour="black",shape=23,size=4,alpha=0.8,position=position_jitter(width=0.1,height=0.1,seed=999)) +
+    geom_text_repel(aes(label=Team),size=4,position=position_jitter(width=0.1,height=0.1,seed=999)) +
     theme[["solar"]]() +
     labs(
-      title="Canadian Premier League xG 2020",
+      title=glue("Canadian Premier League xG {season}"),
       x="Expected Goals",
       y="xG A") +
-    scale_x_continuous(breaks=seq(0,100,2),expand=expansion(add=c(0.5))) +
-    scale_y_reverse(breaks=seq(0,100,2),expand=expansion(add=c(0.5))) +
+    scale_x_continuous(breaks=seq(0,100,0.5),expand=expansion(add=c(0.5))) +
+    scale_y_reverse(breaks=seq(0,100,0.5),expand=expansion(add=c(0.5))) +
+    scale_fill_manual(values=palette[["cpl2"]]())
+  
+  plots$xg90 <-
+    data$canpl$team_total %>%
+    filter(Season==!!season) %>%
+    select(Team,Team_ID=optaTeamId,MP=GM,Goal,PenGoal,xG=ExpG,NPxG=NonPenxG,xGA=ExpGAg) %>%
+    mutate(Team_ID=as.character(Team_ID)) %>%
+    mutate(NPG=Goal-PenGoal) %>%
+    mutate(
+      xG90=xG/MP,
+      npxG90=NPxG/MP,
+      xGA90=xGA/MP
+    ) %>%
+    ggplot(aes(x=xG90,y=xGA90)) +
+    geom_point(aes(fill=Team_ID),colour="black",shape=23,size=4,alpha=0.8,position=position_jitter(width=0.1,height=0.1,seed=999)) +
+    geom_text_repel(aes(label=Team),size=4,position=position_jitter(width=0.1,height=0.1,seed=999)) +
+    theme[["solar"]]() +
+    labs(
+      title=glue("Canadian Premier League xG {season}"),
+      x="xG per match",
+      y="xG against per match") +
+    scale_x_continuous(breaks=seq(0,100,0.5),expand=expansion(add=c(0.5))) +
+    scale_y_reverse(breaks=seq(0,100,0.5),expand=expansion(add=c(0.5))) +
     scale_fill_manual(values=palette[["cpl2"]]())
   
   plots$xgtrend <-
-    matches1920 %>%
-    filter(team==!!team) %>%
-    mutate(season=case_when(
-      date<lubridate::as_date("2019-7-2") ~ "2019\nSpring Season",
-      date<lubridate::as_date("2019-10-20") ~ "2019\nFall Season",
+    data$canpl$team_match %>%
+    # filter(Season==!!season) %>%
+    filter(Team==!!team) %>%
+    select(Season,Team,Date,xG=ExpG,xGA=ExpGAg,scatterExtra) %>%
+    mutate(Date=as.Date(Date)) %>%
+    mutate(Season=case_when(
+      Date<lubridate::as_date("2019-7-2") ~ "2019\nSpring Season",
+      Date<lubridate::as_date("2019-10-20") ~ "2019\nFall Season",
       TRUE ~ "2020\nIsland Games")) %>%
-    mutate(season=factor(season,levels=c("2019\nSpring Season","2019\nFall Season","2020\nIsland Games"))) %>%
-    mutate(game=reorder_within(scatterExtra, date, season)) %>%
-    ggplot(aes(x=game)) +
-    geom_point(aes(y=ExpG),size=1,colour="darkred",fill="darkred",alpha=0.5,shape=23) +
-    geom_spline(aes(y=ExpG,group=season),spar=0.5,colour="darkred",linetype="longdash",size=0.7) +
-    geom_point(aes(y=ExpGAg),size=1,colour="royalblue",fill="royalblue",alpha=0.5,shape=23) +
-    geom_spline(aes(y=ExpGAg,group=season),spar=0.5,colour="royalblue",linetype="longdash",size=0.7) +
+    mutate(Game=reorder_within(scatterExtra, Date, Season)) %>%
+    ggplot(aes(x=Game)) +
+    geom_point(aes(y=xG),size=1,colour="darkred",fill="darkred",alpha=0.5,shape=23) +
+    geom_spline(aes(y=xG,group=Season),spar=0.5,colour="darkred",linetype="longdash",size=0.7) +
+    geom_point(aes(y=xGA),size=1,colour="royalblue",fill="royalblue",alpha=0.5,shape=23) +
+    geom_spline(aes(y=xGA,group=Season),spar=0.5,colour="royalblue",linetype="longdash",size=0.7) +
     theme[["solar"]]() +
     theme(
       axis.text.x=element_text(size=6,angle=60,hjust=1),
@@ -82,24 +93,22 @@ plot_cpl <- function(data,team="all"){
     ) +
     scale_x_reordered() +
     scale_y_continuous(limits=c(0,NA),expand=expansion(add=c(0,0.1))) +
-    facet_grid(cols=vars(season), space="free", scales="free_x")
+    facet_grid(cols=vars(Season), space="free", scales="free_x")
   
   plots$xgsegment <-
-    matches1920 %>%
-    filter(team==!!team) %>%
-    mutate(season=case_when(
-      date<lubridate::as_date("2019-7-2") ~ "2019\nSpring Season",
-      date<lubridate::as_date("2019-10-20") ~ "2019\nFall Season",
+    data$canpl$team_match %>%
+    # filter(Season==!!season) %>%
+    filter(Team==!!team) %>%
+    select(Season,Team,Date,xG=ExpG,xGA=ExpGAg,scatterExtra) %>%
+    mutate(Date=as.Date(Date)) %>%
+    mutate(Season=case_when(
+      Date<lubridate::as_date("2019-7-2") ~ "2019\nSpring Season",
+      Date<lubridate::as_date("2019-10-20") ~ "2019\nFall Season",
       TRUE ~ "2020\nIsland Games")) %>%
-    mutate(season=factor(season,levels=c("2019\nSpring Season","2019\nFall Season","2020\nIsland Games"))) %>%
-    mutate(game=reorder_within(scatterExtra, date, season)) %>%
-    # filter(!is.na(homegls)) %>%
-    # mutate(shortha=ifelse(ha=="home","H","A")) %>%
-    # mutate(match=glue::glue("{opposition} {shortha} {glsf}-{glsa}")) %>%
-    # mutate(match=reorder_within(match, desc(date), season)) %>%
-    ggplot(aes(y=game)) +
-    geom_segment(aes(x=0,xend=ExpG,y=game,yend=game),colour=colour[["sfc"]][["light"]],size=2.5) +
-    geom_segment(aes(x=0,xend=-ExpGAg,y=game,yend=game),colour=colour[["medium"]][[1]],size=2.5) +
+    mutate(Game=reorder_within(scatterExtra, Date, Season)) %>%
+    ggplot(aes(y=Game)) +
+    geom_segment(aes(x=0,xend=xG,y=Game,yend=Game),colour=colour[["sfc"]][["light"]],size=2.5) +
+    geom_segment(aes(x=0,xend=-xGA,y=Game,yend=Game),colour=colour[["medium"]][[1]],size=2.5) +
     theme[["solar"]]() +
     theme(
       plot.title=element_markdown(size=12),
@@ -114,25 +123,18 @@ plot_cpl <- function(data,team="all"){
     ) +
     scale_x_continuous(breaks=seq(-10,10,1),labels=abs(seq(-10,10,1)),expand=expansion(add=c(0.1,1))) +
     scale_y_reordered() +
-    facet_grid(rows=vars(season), space="free", scales="free_y")
+    facet_grid(rows=vars(Season), space="free", scales="free_y")
   
   plots$squadxg <-
-    team20 %>%
-    select(team,team_id=optaTeamId,goal=Goal,pg=PenGoal,xg=ExpG,npxg=NonPenxG,xga=ExpGAg) %>%
-    mutate(team_id=as.character(team_id)) %>%
-    mutate(xga=-xga) %>%
-    # mutate(team=ifelse(team %in% c("Cavalry","HFX Wanderers","Forge","Pacific"),
-    #                    glue("<b style='color:#265DAB'>{team}</b>"),
-    #                    glue("<b style='color:#D71920'>{team}</b>"))) %>%
-    mutate(through=ifelse(team %in% c("Cavalry","HFX Wanderers","Forge","Pacific"),TRUE,FALSE)) %>%
-    # mutate(season=case_when(
-    # date<lubridate::as_date("2019-7-2") ~ "2019\nSpring Season",
-    # date<lubridate::as_date("2019-10-20") ~ "2019\nFall Season",
-    # TRUE ~ "2020\nIsland Games")) %>%
-    make_long_data(levels=c("xg","xga"),labels=c("<b style='color:#1B365D'>Expected Goals For</b>","<b style='color:#1B365D'>Expected Goals Against</b>")) %>%
+    data$canpl$team_total %>%
+    filter(Season==!!season) %>%
+    select(Team,Team_ID=optaTeamId,Goal,PenGoal,xG=ExpG,NPxG=NonPenxG,xGA=ExpGAg) %>%
+    mutate(Team_ID=as.character(Team_ID)) %>%
+    mutate(xGA=-xGA) %>%
+    make_long_data(levels=c("xG","xGA"),labels=c("Expected Goals For","Expected Goals Against")) %>%
     ggplot(aes(x=0,y=n)) +
     geom_text_repel(
-      aes(label=team,colour=through),
+      aes(label=Team),
       size=3.5,
       nudge_x=0.5,
       direction="y",
@@ -142,7 +144,7 @@ plot_cpl <- function(data,team="all"){
       box.padding=0.05,
       fontface="bold"
     ) +
-    geom_point(aes(fill=team_id),size=3.5,shape=23,colour="black") +
+    geom_point(aes(fill=Team_ID),size=3.5,shape=23,colour="black") +
     theme[["solarfacet"]]() +
     facet_wrap("key",scales="free") +
     theme(
@@ -150,14 +152,13 @@ plot_cpl <- function(data,team="all"){
       strip.text.x=element_markdown()
     ) +
     labs(
-      title="<b style='color:#1B365D'>2020 Canadian Premier League - first round</b>",
+      title=glue("{season} Canadian Premier League xG"),
       x=element_blank(),
       y=element_blank()
     ) +
     scale_x_continuous(limit=c(0,1)) +
     scale_y_continuous(breaks=seq(-100,100,1),labels=abs(seq(-100,100,1)),expand=expansion(add=c(0.5))) +
-    scale_fill_manual(values=palette[["cpl2"]]()) +
-    scale_colour_manual(values=c("TRUE"="#1B365D","FALSE"="#DA291C"))
+    scale_fill_manual(values=palette[["cpl2"]]())
   
   plots_logo <- add_logo(plots,here("images","StatsPerformLogo.png"),x=0.9,y=1)
   plots_logo <- add_logo(plots_logo,here("images","CPL.png"),x=1,y=1)
