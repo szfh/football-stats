@@ -11,6 +11,7 @@ pacman::p_load(
   glue,
   janitor,
   cowplot,
+  slider,
   polite,
   understatr,
   worldfootballR,
