@@ -59,23 +59,30 @@ plot_cpl <- function(data,season=2021,team="all"){
     scale_x_continuous(breaks=seq(0,100,0.5),expand=expansion(add=c(0.5))) +
     scale_y_reverse(breaks=seq(0,100,0.5),expand=expansion(add=c(0.5))) +
     scale_fill_manual(values=palette[["cpl2"]]())
-  
+# browser()
   plots$xgtrend <-
     data$canpl$team_match %>%
-    # filter(Season==!!season) %>%
     filter(Team==!!team) %>%
     select(Season,Team,Date,xG=ExpG,xGA=ExpGAg,scatterExtra) %>%
     mutate(Date=as.Date(Date)) %>%
+    mutate(
+      xG_mva=get_mva(xG),
+      xGA_mva=get_mva(xGA)) %>%
+    # filter(Season %in% !!season) %>%
     mutate(Season=case_when(
-      Date<lubridate::as_date("2019-7-2") ~ "2019\nSpring Season",
-      Date<lubridate::as_date("2019-10-20") ~ "2019\nFall Season",
-      TRUE ~ "2020\nIsland Games")) %>%
+      (Date>=lubridate::as_date("2019-01-01") & Date<lubridate::as_date("2019-07-02")) ~ "2019\nSpring Season",
+      (Date>=lubridate::as_date("2019-07-02") & Date<lubridate::as_date("2019-12-31")) ~ "2019\nFall Season",
+      (Date>=lubridate::as_date("2020-01-01") & Date<lubridate::as_date("2020-12-31")) ~ "2020\nIsland Games",
+      (Date>=lubridate::as_date("2021-01-01") & Date<lubridate::as_date("2021-12-31")) ~ "2021",
+      TRUE ~ as.character(Season))) %>%
+    mutate(Season=factor(Season,levels=c("2019\nSpring Season","2019\nFall Season","2020\nIsland Games","2021"))) %>%
+    
     mutate(Game=reorder_within(scatterExtra, Date, Season)) %>%
     ggplot(aes(x=Game)) +
     geom_point(aes(y=xG),size=1,colour="darkred",fill="darkred",alpha=0.5,shape=23) +
-    geom_spline(aes(y=xG,group=Season),spar=0.5,colour="darkred",linetype="longdash",size=0.7) +
+    geom_line(aes(y=xG_mva,group=Season),colour="darkred",linetype="longdash",size=0.7) +
     geom_point(aes(y=xGA),size=1,colour="royalblue",fill="royalblue",alpha=0.5,shape=23) +
-    geom_spline(aes(y=xGA,group=Season),spar=0.5,colour="royalblue",linetype="longdash",size=0.7) +
+    geom_line(aes(y=xGA_mva,group=Season),colour="royalblue",linetype="longdash",size=0.7) +
     theme[["solar"]]() +
     theme(
       axis.text.x=element_text(size=6,angle=60,hjust=1),
@@ -83,7 +90,7 @@ plot_cpl <- function(data,season=2021,team="all"){
       axis.text.y=element_text(),
       plot.title=element_markdown(),
       plot.caption=element_text(),
-      # strip.text=element_blank()
+      # strip.text=element_blank(),
       panel.grid.major.x=element_blank()
     ) +
     labs(
@@ -102,10 +109,13 @@ plot_cpl <- function(data,season=2021,team="all"){
     select(Season,Team,Date,xG=ExpG,xGA=ExpGAg,scatterExtra) %>%
     mutate(Date=as.Date(Date)) %>%
     mutate(Season=case_when(
-      Date<lubridate::as_date("2019-7-2") ~ "2019\nSpring Season",
-      Date<lubridate::as_date("2019-10-20") ~ "2019\nFall Season",
-      TRUE ~ "2020\nIsland Games")) %>%
-    mutate(Game=reorder_within(scatterExtra, Date, Season)) %>%
+      (Date>=lubridate::as_date("2019-01-01") & Date<lubridate::as_date("2019-07-02")) ~ "2019\nSpring Season",
+      (Date>=lubridate::as_date("2019-07-02") & Date<lubridate::as_date("2019-12-31")) ~ "2019\nFall Season",
+      (Date>=lubridate::as_date("2020-01-01") & Date<lubridate::as_date("2020-12-31")) ~ "2020\nIsland Games",
+      (Date>=lubridate::as_date("2021-01-01") & Date<lubridate::as_date("2021-12-31")) ~ "2021",
+      TRUE ~ as.character(Season))) %>%
+    mutate(Season=factor(Season,levels=c("2019\nSpring Season","2019\nFall Season","2020\nIsland Games","2021"))) %>%
+    mutate(Game=reorder_within(scatterExtra, desc(Date), Season)) %>%
     ggplot(aes(y=Game)) +
     geom_segment(aes(x=0,xend=xG,y=Game,yend=Game),colour=colour[["sfc"]][["light"]],size=2.5) +
     geom_segment(aes(x=0,xend=-xGA,y=Game,yend=Game),colour=colour[["medium"]][[1]],size=2.5) +
