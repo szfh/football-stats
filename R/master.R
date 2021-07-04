@@ -1,13 +1,13 @@
 # libraries
-source(here::here("R","library.R"),encoding="utf-8")
+# source(here::here("R","library.R"),encoding="utf-8")
 
 # raw
 # source(here("R","raw","raw-fbref.R"),encoding="utf-8")
 # scrape_fbref()
 # source(here("R","raw","raw-understat.R"),encoding="utf-8")
 # scrape_understat()
-source(here("R","raw","raw-canpl.R"),encoding="utf-8")
-import_canpl()
+# source(here("R","raw","raw-canpl.R"),encoding="utf-8")
+# import_canpl()
 
 # join
 # source(here("R","join","join.R"),encoding="utf-8")
