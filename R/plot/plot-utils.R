@@ -104,28 +104,31 @@ filter_na <- function(data,cols){ # filter na
 }
 
 get_mva <- function(xG,n=6){ # windowed average xG
-  
-  xGlag <- list()
-  divider <- list()
-  
-  for(i in 1:n){
-    divider[[i]] <- (1-((i-1)/n))
-    # xGlag[[i]] <- lag(xG,(i-1))
-    xGlag[[i]] <- lag(xG,(i-1))*divider[[i]]
+  get_weighted_mean <- function(xG,n){
+    k <- length(xG)
+    weights <- (1:n)/n
+    weights <- weights[(n-k+1):n]
+    
+    xG_weighted <- list()
+    divider <- list()
+    
+    for(i in 1:k){
+      xG_weighted[[i]] <- xG[[i]]*weights[[i]]
+      divider[[i]] <- weights[[i]]
+    }
+    
+    weighted_mean <- reduce(xG_weighted,sum)/reduce(divider,sum)
+    
+    return(weighted_mean)
   }
   
-  # mva <-
-  #   xGlag %>%
-  #   as.data.frame %>%
-  #   rowMeans(na.rm=TRUE)
+  weighted_mean <-
+    xG %>%
+    as_tibble %>%
+    mutate(xg_mva=slide_dbl(value,possibly(get_weighted_mean,otherwise=NA),.before=(n-1),n=n)) %>%
+    pull(xg_mva)
   
-  mva <-
-    xGlag %>%
-    as.data.frame %>%
-    rowSums(na.rm=TRUE) %>%
-    divide_by(reduce(divider,sum))
-  
-  return(mva)
+  return(weighted_mean)
 }
 
 get_unused_subs <- function(data,Subs_Available,Subs_Used){
