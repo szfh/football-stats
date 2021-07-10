@@ -59,7 +59,7 @@ plot_cpl <- function(data,season=2021,team="all"){
     scale_x_continuous(breaks=seq(0,100,0.5),expand=expansion(add=c(0.5))) +
     scale_y_reverse(breaks=seq(0,100,0.5),expand=expansion(add=c(0.5))) +
     scale_fill_manual(values=palette[["cpl2"]]())
-# browser()
+  
   plots$xgtrend <-
     data$canpl$team_match %>%
     filter(Team==!!team) %>%
@@ -169,6 +169,105 @@ plot_cpl <- function(data,season=2021,team="all"){
     scale_x_continuous(limit=c(0,1)) +
     scale_y_continuous(breaks=seq(-100,100,1),labels=abs(seq(-100,100,1)),expand=expansion(add=c(0.5))) +
     scale_fill_manual(values=palette[["cpl2"]]())
+  
+  plots$playerxg <-
+    data$canpl$player_total %>%
+    filter(Season %in% !!season) %>%
+    select(Player,Team,Team_ID=optaTeamId,GM,Min,G=Goal,xG=ExpG) %>%
+    mutate(Team_ID=as.character(Team_ID)) %>%
+    group_by(Player,Team,Team_ID) %>%
+    summarise(across(where(is.numeric),sum,na.rm=TRUE)) %>%
+    make_long_data(levels=c("G","xG"),labels=c("Goals","Expected Goals")) %>%
+    group_by(key) %>%
+    mutate(focus=case_when(
+      key=="Goals" & min_rank(desc(n))<=15 ~ TRUE,
+      key=="Expected Goals" & min_rank(desc(n))<=15 ~ TRUE,
+      TRUE ~ FALSE
+    )) %>%
+    ungroup() %>%
+    ggplot(aes(x=0.05,y=n,alpha=focus)) +
+    geom_text_repel(
+      aes(label=ifelse(focus,Player,"")),
+      size=2.5,
+      nudge_x=0.3,
+      direction="y",
+      hjust=0,
+      segment.size=0.4,
+      box.padding=0.05,
+      fontface="bold"
+    ) +
+    geom_point(aes(fill=Team_ID),size=3.5,shape=23,position=position_jitterdodge(jitter.width=0,jitter.height=0,dodge.width=0.04,seed=2)) +
+    theme[["solarfacet"]]() +
+    facet_wrap("key",scales="free") +
+    theme(
+      plot.title=element_markdown(),
+      strip.text.x=element_markdown()
+    ) +
+    labs(
+      title=glue("All-time Canadian Premier League Goals/xG"),
+      x=element_blank(),
+      y=element_blank()
+    ) +
+    scale_x_continuous(limit=c(0,1)) +
+    scale_y_continuous(breaks=seq(-100,100,1),labels=abs(seq(-100,100,1)),expand=expansion(add=c(0.5))) +
+    scale_fill_manual(values=palette[["cpl2"]]()) +
+    scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.05))
+  
+  plots$player_event_share <-
+    data$canpl$player_total %>%
+    filter(Season %in% !!season) %>%
+    select(Player,Team,Team_ID=optaTeamId,Min,OPxG=OpenPlayxG,xA=ExpA,Touch=Touches,Pass=PsAtt,Shot=SOG,Recovery) %>%
+    left_join(data$canpl$team_total %>%
+                filter(Season %in% !!season) %>%
+                select(Team_ID=optaTeamId,Team_GM=GM,
+                       Team_OPxG=OpenPlayxG,Team_xA=ExpA,Team_Touch=Touches,Team_Pass=PsAtt,Team_Shot=SOG,Team_Recovery=Recovery)) %>%
+    mutate(Team_ID=as.character(Team_ID)) %>%
+    mutate(
+      Share_Min=Min/(90*Team_GM),
+      Share_OPxG=OPxG/Team_OPxG,
+      Share_xA=xA/Team_xA,
+      Share_Touch=Touch/Team_Touch,
+      Share_Pass=Pass/Team_Pass,
+      Share_Shot=Shot/Team_Shot,
+      Share_Recovery=Recovery/Team_Recovery,
+      .keep="unused") %>%
+    make_long_data(levels=c("Share_OPxG","Share_xA","Share_Touch","Share_Pass","Share_Shot","Share_Recovery"),
+                   labels=c("Open-play xG","xA","Touches","Passes","Shots","Recoveries")) %>%
+    group_by(Team,Team_ID,key) %>%
+    mutate(focus=case_when(
+      min_rank(desc(n))==1 ~ TRUE,
+      TRUE ~ FALSE
+    )) %>%
+    ungroup() %>%
+    ggplot(aes(x=0.05,y=n,alpha=focus)) +
+    geom_text_repel(
+      aes(label=ifelse(focus,Player,"")),
+      size=2.5,
+      nudge_x=0.3,
+      direction="y",
+      hjust=0,
+      segment.size=0.4,
+      box.padding=0.05
+    ) +
+    geom_point(aes(fill=Team_ID),size=2.5,shape=23,position=position_jitterdodge(jitter.width=0,jitter.height=0,dodge.width=0.04,seed=2)) +
+    theme[["solarfacet"]]() +
+    facet_wrap("key",scales="free") +
+    theme(
+      plot.title=element_markdown(),
+      strip.text.x=element_markdown()
+    ) +
+    labs(
+      title=glue("CanPL {season} share of team events"),
+      x=element_blank(),
+      y=element_blank(),
+      caption="percent of each team's actions performed by individual players"
+    ) +
+    scale_x_continuous(limit=c(0,1)) +
+    scale_y_continuous(labels = scales::percent_format(accuracy=1),expand=expansion(mult=c(0.2))) +
+    scale_fill_manual(values=palette[["cpl2"]]()) +
+    scale_alpha_manual(values=c("TRUE"=0.95,"FALSE"=0.05))
+  
+  
   
   plots_logo <- add_logo(plots,here("images","StatsPerformLogo.png"),x=0.9,y=1)
   plots_logo <- add_logo(plots_logo,here("images","CPL.png"),x=1,y=1)
