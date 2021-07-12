@@ -62,8 +62,12 @@ plot_cpl <- function(data,season=2021,team="all"){
   
   plots$xgtrend <-
     data$canpl$team_match %>%
-    filter(Team==!!team) %>%
-    select(Season,Team,Date,xG=ExpG,xGA=ExpGAg,scatterExtra) %>%
+    filter(Team==!!team) %>% 
+    mutate(Month_short=str_sub(as.character(Date),6,7)) %>%
+    mutate(Day_short=str_sub(as.character(Date),9,10)) %>%
+    mutate(Date_short=glue("{Month_short}-{Day_short}")) %>%
+    mutate(Game=glue("{opponentFullName} ({Date_short}) {Result}")) %>%
+    select(Season,Team,Date,xG=ExpG,xGA=ExpGAg,Game) %>%
     mutate(Date=as.Date(Date)) %>%
     mutate(
       xG_mva=get_mva(xG),
@@ -76,8 +80,7 @@ plot_cpl <- function(data,season=2021,team="all"){
       (Date>=lubridate::as_date("2021-01-01") & Date<lubridate::as_date("2021-12-31")) ~ "2021",
       TRUE ~ as.character(Season))) %>%
     mutate(Season=factor(Season,levels=c("2019\nSpring Season","2019\nFall Season","2020\nIsland Games","2021"))) %>%
-    
-    mutate(Game=reorder_within(scatterExtra, Date, Season)) %>%
+    mutate(Game=reorder_within(Game, Date, Season)) %>% 
     ggplot(aes(x=Game)) +
     geom_point(aes(y=xG),size=1,colour="darkred",fill="darkred",alpha=0.5,shape=23) +
     geom_line(aes(y=xG_mva,group=Season),colour="darkred",linetype="longdash",size=0.7) +
