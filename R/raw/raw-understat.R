@@ -1,144 +1,51 @@
-scrape_understat <- function(save_path=here("data","understat.rds"),current_season="2020"){
+source(here("R","raw","raw-fbref-utils.R"),encoding="utf-8")
+source(here("R","themes.R"),encoding="utf-8")
+
+scrape_understat <- function(save_path=here("data","understat.rds"),current_season="2021"){
+  
+  data_types <- get_data_types()
   
   understat_saved <- readRDS(save_path)
+  understat <- list()
   
-  eplseasons <- tibble(season=as.character(2014:2020))
+  eplseasons <- tibble(season=as.character(2014:2021))
   
-  data_types_league <- tribble(~datatype,
-                               "league",
-  )
+  understat$results$all <-
+    tibble() %>%
+    bind_rows(eplseasons)
   
-  tables_league <- tribble(~stattype, ~statselector,
-                           "schedule","datesData",
-                           "players","playersData",
-                           # "teams","teamsData",
-  )
+  understat$results$keep <-
+    understat_saved %>%
+    filter(data_type=="results")
   
-  understat_all1 <- data.frame() %>% # schedule and player data
-    bind_rows(crossing(data_types_league,tables_league)) %>%
-    crossing(eplseasons)
+  understat$results$new <-
+    anti_join(understat$results$all,understat$results$keep) %>%
+    mutate(data=pmap(list("EPL",season),understat_league_match_results)) %>%
+    mutate(data_type="results") %>%
+    glimpse
   
-  understat_keep1 <- understat_saved %>%
-    filter(datatype=="league") %>%
-    filter(season!=current_season)
+  understat$shots$all <-
+    tibble() %>%
+    bind_rows(eplseasons)
   
-  understat_new1 <-
-    anti_join(understat_all1, understat_keep1)
+  understat$shots$keep <-
+    understat_saved %>%
+    filter(data_type=="shots")
   
-  understat_new1 %<>%
-    mutate(data=pmap(list("EPL",season,statselector),possibly(understat_scrape_league, otherwise=NA)))
+  understat$shots$new <-
+    anti_join(understat$shots$all,understat$shots$keep) %>%
+    mutate(data=pmap(list("EPL",season),understat_league_season_shots)) %>%
+    mutate(data_type="shots") %>%
+    glimpse
   
-  ###
+  understat_all <-
+    bind_rows(
+      understat$results$keep,understat$results$new,
+      understat$shots$keep,understat$shots$new
+    ) %>%
+    glimpse
   
-  match_id <- bind_rows(understat_keep1, understat_new1) %>%
-    filter(stattype=="schedule") %>%
-    select(season,data) %>%
-    unnest(cols=data) %>%
-    select(season,id,isResult) #%>%
-    # select(-c(datatype,stattype,statselector)) %>%
-    # glimpse
-  
-  data_types_match <- tribble(~datatype,
-                              "stats",
-                              "shots"
-  )
-  
-  understat_all2 <- data.frame() %>% # match stat + shot data
-    bind_rows(crossing(match_id,data_types_match) %>%
-                filter(isResult==TRUE))
-  
-  understat_keep2 <- understat_saved %>%
-    filter(datatype %in% c("stats","shots")) %>%
-    filter(season!=current_season)
-  
-  understat_new2 <-
-    anti_join(understat_all2, understat_keep2)
-  
-  understat_new2 %<>%
-    mutate(data=pmap(list(datatype,id),possibly(understat_scrape_match, otherwise=NA)))
-  
-  ###
-  
-  understat <- bind_rows(understat_keep1, understat_new1, understat_keep2, understat_new2) %>%
-    filter(!is.na(data)) %>%
-    relocate(data,.after=last_col())
-
-    saveRDS(understat,file=save_path)
+  saveRDS(understat_all,file=save_path)
   
   return(understat)
-}
-
-understat_scrape_league <- function(league="EPL", year="2019", str){
-  url <- glue("https://understat.com/league/{league}/{year}")
-  print(glue("url: {url}"))
-  
-  data <-
-    url %>%
-    read_html() %>%
-    html_nodes("script") %>%
-    as.character() %>%
-    stringr::str_subset(str) %>%
-    stringi::stri_unescape_unicode() %>%
-    stringr::str_extract("\\[.+\\]") %>%
-    jsonlite::fromJSON(simplifyVector=TRUE)
-  
-  # understat <- understat_clean_names(data)
-  
-  return(data)
-}
-
-understat_scrape_match <- function(datatype,id){
-  
-  if(datatype=="stats"){
-    data <- get_match_stats(id)
-  }
-  if(datatype=="shots"){
-    data <- get_match_shots(id)
-  }
-  
-  # understat <- understat_clean_names(data)
-  
-  return(data)
-}
-
-understat_clean_names <- function(data){
-  browser()
-    names(data) <-
-      names(data) %>%
-      str_squish() %>%
-      str_to_lower() %>%
-      str_replace_all(c(" "="_","$"="_"))
-    
-  # if(page %in% c("squad","player","leagueha")){
-  #   names(data) <-
-  #     glue("{data[1,]} {data[2,]}") %>%
-  #     str_squish() %>%
-  #     str_to_lower() %>%
-  #     str_replace_all(c(" "="_","%"="pc","#"="n")) %>%
-  #     str_remove_all("[/ \\( \\)]") %>%
-  #     make.unique(sep="_") %>%
-  #     print
-  #   
-  #   data %<>% slice(-1,-2)
-  # }
-  # if(page %in% c("schedule","league")){
-  #   names(data) <-
-  #     glue("{data[1,]}") %>%
-  #     str_squish() %>%
-  #     str_to_lower() %>%
-  #     str_replace_all(c(" "="_","%"="pc","#"="n")) %>%
-  #     str_remove_all("[/ \\( \\)]") %>%
-  #     make.unique(sep="_") %>%
-  #     print
-  #   
-  #   data %<>% slice(-1)
-  # }
-  # if("player" %in% names(data)){ # remove duplicated column names from player table
-  #   data %<>% filter(player != "Player")
-  # }
-  # if("wk" %in% names(data)){ # remove duplicated column names + blank rows from schedule
-  #   data %<>% filter(wk != "Wk") %>% filter(wk != "")
-  # }
-  
-  data %<>% type_convert # refactor data types
 }
