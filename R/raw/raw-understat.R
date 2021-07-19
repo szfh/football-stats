@@ -8,11 +8,14 @@ scrape_understat <- function(save_path=here("data","understat.rds"),current_seas
   understat_saved <- readRDS(save_path)
   understat <- list()
   
-  eplseasons <- tibble(season=as.character(2014:2021))
-  
+  seasons <- tibble(season=as.character(2021))
+  leagues <- tibble(league=c("EPL"))
+  browser()
   understat$results$all <-
     tibble() %>%
-    bind_rows(eplseasons)
+    bind_rows(
+      crossing(seasons,leagues)
+    )
   
   understat$results$keep <-
     understat_saved %>%
@@ -20,13 +23,15 @@ scrape_understat <- function(save_path=here("data","understat.rds"),current_seas
   
   understat$results$new <-
     anti_join(understat$results$all,understat$results$keep) %>%
-    mutate(data=pmap(list("EPL",season),understat_league_match_results)) %>%
+    mutate(data=pmap(list(league,season),understat_league_match_results)) %>%
     mutate(data_type="results") %>%
     glimpse
   
   understat$shots$all <-
     tibble() %>%
-    bind_rows(eplseasons)
+    bind_rows(
+      crossing(seasons,leagues)
+    )
   
   understat$shots$keep <-
     understat_saved %>%
@@ -34,7 +39,7 @@ scrape_understat <- function(save_path=here("data","understat.rds"),current_seas
   
   understat$shots$new <-
     anti_join(understat$shots$all,understat$shots$keep) %>%
-    mutate(data=pmap(list("EPL",season),understat_league_season_shots)) %>%
+    mutate(data=pmap(list(league,season),understat_league_season_shots)) %>%
     mutate(data_type="shots") %>%
     glimpse
   
@@ -42,8 +47,7 @@ scrape_understat <- function(save_path=here("data","understat.rds"),current_seas
     bind_rows(
       understat$results$keep,understat$results$new,
       understat$shots$keep,understat$shots$new
-    ) %>%
-    glimpse
+    )
   
   saveRDS(understat_all,file=save_path)
   
