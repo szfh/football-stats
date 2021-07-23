@@ -8,7 +8,7 @@ scrape_understat <- function(save_path=here("data","understat.rds"),current_seas
   understat_saved <- readRDS(save_path)
   understat <- list()
   
-  seasons <- tibble(season=as.character(2020:2021))
+  seasons <- tibble(season=as.character(2014:2021))
   leagues <- tibble(league=c("EPL","La liga","Ligue 1","Bundesliga","Serie A"))
   
   understat$results$all <-
