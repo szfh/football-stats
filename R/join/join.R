@@ -1,11 +1,14 @@
 join <- function(
   save_path_fbref=here("data","fbref.rds"),
+  save_path_understat=here("data","understat.rds"),
   save_path_canpl=here("data","canpl.rds")
 ){
   fbref_join <- possibly(join_fbref, otherwise=NA)(readRDS(save_path_fbref))
+  understat_join <- possibly(join_understat, otherwise=NA)(readRDS(save_path_understat))
   canpl_join <- possibly(join_canpl, otherwise=NA)(readRDS(save_path_canpl))
   data <- list(
     fbref=fbref_join,
+    understat=understat_join,
     canpl=canpl_join)
   
   return(data)
@@ -210,6 +213,29 @@ join_fbref <- function(fbref){
   return(data)
 }
 
+join_understat <- function(understat){
+  
+  understat_tidy <-
+    understat #%>%
+  # mutate(data=map(data,tidy_understat))
+  
+  data <- list()
+  
+  data$results <-
+    understat_tidy %>%
+    filter(data_type=="results") %>%
+    select(data) %>%
+    unnest(data)
+  
+  data$shots <-
+    understat_tidy %>%
+    filter(data_type=="shots") %>%
+    select(data) %>%
+    unnest(data)
+  
+  return(data)
+}
+
 join_canpl <- function(canpl){
   
   data <- list()
@@ -285,7 +311,16 @@ tidy_fbref <- function(data,data_type=NA,stat=NA,team_or_player=NA){
   return(data)
 }
 
+tidy_understat <- function(data){
+  
+  data <-
+    data
+  
+  return(data)
+}
+
 tidy_canpl <- function(data){
+  
   data <-
     data %>%
     select(-contains(c("Season")))
