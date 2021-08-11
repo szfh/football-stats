@@ -74,6 +74,80 @@ plot_league <- function(data,season="2020-2021"){
     scale_fill_manual(values=palette[["epl"]]()) +
     scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.1))
   
+  plots$progressive_carries <-
+    data$fbref$advanced_stats_player_possession %>%
+    filter(Season %in% !!season) %>% 
+    select(Player,Team,Min,Carries1=Prog_Carries,Carries2=Final_Third_Carries,Carries3=CPA_Carries) %>%
+    group_by(Player,Team) %>%
+    summarise(across(where(is.numeric),sum,na.rm=TRUE),.groups="drop") %>%
+    # filter(Min>900) %>%
+    make_long_data(levels=c("Carries1","Carries2","Carries3"),labels=c("70 yards from goal","35 yards from goal","20 yards from goal")) %>%
+    mutate(focus=ifelse(min_rank(desc(n))<=20,TRUE,FALSE)) %>%
+    ggplot(aes(x=0.05,y=n,alpha=focus)) +
+    geom_text_repel(
+      aes(label=ifelse(focus,Player,"")),
+      size=2.5,
+      nudge_x=0.3,
+      direction="y",
+      hjust=0,
+      segment.size=0.4,
+      box.padding=0.05
+    ) +
+    geom_point(aes(fill=Team),shape=23,size=3,position=position_jitterdodge(jitter.width=0,jitter.height=0,dodge.width=0.04,seed=2)) +
+    theme[["solarfacet"]]() +
+    facet_wrap("key",scales="free") +
+    labs(
+      title="Progressive Carries",
+      x=element_blank(),
+      y=element_blank()) +
+    scale_x_continuous(limit=c(0,1)) +
+    scale_y_continuous() +
+    scale_fill_manual(values=palette[["epl"]]()) +
+    scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.1))
+  
+  plots$progressive_carries_90 <-
+    data$fbref$advanced_stats_player_possession %>%
+    filter(Season %in% !!season) %>% 
+    select(Player,Team,Min,Carries1=Prog_Carries,Carries2=Final_Third_Carries,Carries3=CPA_Carries) %>%
+    group_by(Player,Team) %>%
+    summarise(across(where(is.numeric),sum,na.rm=TRUE),.groups="drop") %>%
+    filter(Min>900) %>%
+    mutate(
+      Carries1=90*Carries1/Min,
+      Carries2=90*Carries2/Min,
+      Carries3=90*Carries3/Min
+    ) %>%
+    make_long_data(levels=c("Carries1","Carries2","Carries3"),labels=c("70 yards from goal","35 yards from goal","20 yards from goal")) %>%
+    mutate(focus=case_when(
+      Player=="Jack Grealish" ~ "focus1",
+      min_rank(desc(n))<=20 ~ "focus2",
+      TRUE ~ "focus3"
+    )) %>%
+    ggplot(aes(x=0.05,y=n,alpha=focus)) +
+    geom_text_repel(
+      aes(label=ifelse(focus!="focus3",Player,""),
+          fontface=ifelse(focus=="focus1","bold","plain"),
+          colour=focus),
+      size=2.5,
+      nudge_x=0.3,
+      direction="y",
+      hjust=0,
+      segment.size=0.4,
+      box.padding=0.05
+    ) +
+    geom_point(aes(fill=Team),shape=23,size=3,position=position_jitterdodge(jitter.width=0,jitter.height=0,dodge.width=0.04,seed=2)) +
+    theme[["solarfacet"]]() +
+    facet_wrap("key",scales="free") +
+    labs(
+      title="Progressive Carries per 90 minutes",
+      x=element_blank(),
+      y=element_blank()) +
+    scale_x_continuous(limit=c(0,1)) +
+    scale_y_continuous() +
+    scale_fill_manual(values=palette[["epl"]]()) +
+    scale_colour_manual(values=c("focus1"="#670E36","focus2"="black","focus3"="black")) + 
+    scale_alpha_manual(values=c("focus1"=1,"focus2"=1,"focus3"=0.1))
+  
   penalties <-
     data$fbref$advanced_stats_team_summary %>%
     mutate(Match_Date=parse_date_time(Match_Date,"mdy")) %>%
