@@ -15,7 +15,7 @@ join <- function(
 }
 
 join_fbref <- function(fbref){
-  
+  # browser()
   fbref_tidy <-
     fbref %>%
     mutate(data=map(data,as_tibble)) %>%
@@ -41,11 +41,11 @@ join_fbref <- function(fbref){
     select(data) %>%
     unnest(data)
   
-  data$match_shots <-
-    fbref_tidy %>%
-    filter(data_type=="match_shots") %>%
-    select(data) %>%
-    unnest(data)
+  # data$match_shots <-
+  #   fbref_tidy %>%
+  #   filter(data_type=="match_shots") %>%
+  #   select(data) %>%
+  #   unnest(data)
   
   data$table <-
     fbref_tidy %>%
