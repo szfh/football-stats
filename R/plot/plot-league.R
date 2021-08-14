@@ -1,7 +1,7 @@
 source(here("R","plot","plot-utils.R"),encoding="utf-8")
 source(here("R","themes.R"),encoding="utf-8")
 
-plot_league <- function(data,season="2020-2021"){
+plot_league <- function(data,season="2021-2022"){
   
   force(data)
   plots <- list()
