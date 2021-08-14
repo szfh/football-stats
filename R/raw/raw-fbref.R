@@ -1,7 +1,7 @@
 source(here("R","raw","raw-fbref-utils.R"),encoding="utf-8")
 source(here("R","themes.R"),encoding="utf-8")
 
-scrape_fbref <- function(save_path=here("data","fbref.rds"),current_season=2021){
+scrape_fbref <- function(save_path=here("data","fbref.rds"),current_season=2022){
   data_types <- get_data_types()
   
   fbref_saved <- readRDS(save_path)
