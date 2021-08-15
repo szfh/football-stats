@@ -376,7 +376,7 @@ plot_team <- function(data,team="Southampton",season="2021-2022"){
       title=glue("{team} substitutions"),
       x=element_blank(),
       y=element_blank(),
-      caption="Gamestate - <b style='color:#60BD68'>winning</b> | <b style='color:#5DA5DA'>drawing</b> | <b style='color:#F15854'>losing</b>"
+      caption="<b style='color:#60BD68'>winning</b> | <b style='color:#5DA5DA'>drawing</b> | <b style='color:#F15854'>losing</b>"
     ) +
     scale_x_continuous(breaks=c(-3,-2,-1,seq(45,130,5)),labels=c("Unused","First\nHalf","Half\nTime",seq(45,130,5)),expand=expansion(add=0.9)) +
     scale_y_reordered(expand=expansion(add=c(1.2,1.6)),position = "right") +
