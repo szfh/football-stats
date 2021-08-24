@@ -137,9 +137,7 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),current_season=2022)
       fbref$advanced_stats$keep,fbref$advanced_stats$new,
     ) %>%
     filter(!is.na(data)) %>%
-    mutate(event_date=pmap(list(data,data_type,event_date),possibly(get_event_date,otherwise=NA))) %>%
     relocate(data_type) %>%
-    relocate(event_date,.after=last_col()) %>%
     relocate(date_scraped,.after=last_col()) %>%
     relocate(data,.after=last_col())
   
