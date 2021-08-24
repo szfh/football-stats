@@ -3,11 +3,9 @@ source(here("R","themes.R"),encoding="utf-8")
 
 delete_recent <- function(save_path=here("data","fbref.rds"),days=7,current_season=2022){
   fbref_saved <- readRDS(save_path)
-  browser()
   
   fbref <-
     fbref_saved %>%
-    select(-event_date) %>%
     mutate(event_date=pmap(list(data,data_type),possibly(get_event_date,otherwise=lubridate::NA_Date_))) %>%
     filter(is.na(event_date) | event_date<lubridate::today()-days) %>%
     select(-event_date)
@@ -16,19 +14,12 @@ delete_recent <- function(save_path=here("data","fbref.rds"),days=7,current_seas
     anti_join(fbref_saved,fbref) %>%
     print(n=Inf)
   
-  browser()
-  saveRDS(fbref_all,file=save_path)
+  saveRDS(fbref,file=save_path)
   return(fbref)
 }
 
 get_event_date <- function(data,data_type=NA){
   
-  # if(is.null(event_date)){
-  #   event_date <- lubridate::NA_Date_
-  # }
-  # if(!is.na(event_date)){
-  #   event_date <- event_date
-  # }
   if(data_type=="match_lineups"){
     event_date <-
       data %>%
