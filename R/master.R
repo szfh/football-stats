@@ -1,11 +1,13 @@
 # libraries
-source(here::here("R","library.R"),encoding="utf-8")
+# source(here::here("R","library.R"),encoding="utf-8")
 
 # raw
 # source(here("R","raw","raw-fbref.R"),encoding="utf-8")
 # scrape_fbref()
-source(here("R","raw","raw-understat.R"),encoding="utf-8")
-scrape_understat()
+# source(here("R","raw","delete-recent.R"),encoding="utf-8")
+# delete_recent(days=7)
+# source(here("R","raw","raw-understat.R"),encoding="utf-8")
+# scrape_understat()
 # source(here("R","raw","raw-canpl.R"),encoding="utf-8")
 # import_canpl()
 
@@ -16,7 +18,8 @@ scrape_understat()
 # plot
 # source(here("R","themes.R"),encoding="utf-8")
 # source(here("R","plot","plot-team.R"),encoding="utf-8")
-# plot_team(data=join())
+# plot_team(data=join(),season=c("2020-2021","2021-2022"))
+# plot_team(data=join(),season=c("2018-2019","2019-2020","2020-2021","2021-2022"))
 # source(here("R","plot","plot-league.R"),encoding="utf-8")
 # plot_league(data=join())
 # source(here("R","plot","plot-cpl.R"),encoding="utf-8")

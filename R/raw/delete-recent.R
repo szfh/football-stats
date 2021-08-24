@@ -1,0 +1,61 @@
+source(here("R","raw","raw-fbref-utils.R"),encoding="utf-8")
+source(here("R","themes.R"),encoding="utf-8")
+
+delete_recent <- function(save_path=here("data","fbref.rds"),days=7,current_season=2022){
+  fbref_saved <- readRDS(save_path)
+  browser()
+  
+  fbref <-
+    fbref_saved %>%
+    select(-event_date) %>%
+    mutate(event_date=pmap(list(data,data_type),possibly(get_event_date,otherwise=lubridate::NA_Date_))) %>%
+    filter(is.na(event_date) | event_date<lubridate::today()-days) %>%
+    select(-event_date)
+  
+  removed <-
+    anti_join(fbref_saved,fbref) %>%
+    print(n=Inf)
+  
+  browser()
+  saveRDS(fbref_all,file=save_path)
+  return(fbref)
+}
+
+get_event_date <- function(data,data_type=NA){
+  
+  # if(is.null(event_date)){
+  #   event_date <- lubridate::NA_Date_
+  # }
+  # if(!is.na(event_date)){
+  #   event_date <- event_date
+  # }
+  if(data_type=="match_lineups"){
+    event_date <-
+      data %>%
+      select(Matchday) %>%
+      distinct() %>%
+      pull()
+  } else if(data_type=="match_summary"){
+    event_date <- 
+      data %>%
+      select(Match_Date) %>%
+      distinct() %>%
+      lubridate::parse_date_time("mdy")
+  } else if(data_type=="match_shots"){
+    event_date <- 
+      data %>%
+      select(Date) %>%
+      distinct() %>%
+      pull()
+  } else if(data_type=="advanced_stats"){
+    event_date <-
+      data %>%
+      select(Match_Date) %>%
+      distinct() %>%
+      lubridate::parse_date_time("mdy")
+  } else {
+    event_date <- lubridate::NA_Date_
+  }
+  event_date <- as_date(event_date)
+  return(event_date)
+}
