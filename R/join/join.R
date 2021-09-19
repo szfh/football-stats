@@ -17,7 +17,6 @@ join <- function(
 }
 
 join_fbref <- function(fbref){
-  # browser()
   fbref_tidy <-
     fbref %>%
     mutate(data=map(data,as_tibble)) %>%
@@ -216,7 +215,6 @@ join_fbref <- function(fbref){
 }
 
 join_understat <- function(understat){
-  
   understat_tidy <-
     understat #%>%
   # mutate(data=map(data,tidy_understat))
@@ -239,14 +237,13 @@ join_understat <- function(understat){
 }
 
 join_canpl <- function(canpl){
-  
-  data <- list()
-  
   canpl_tidy <-
     canpl %>%
     mutate(Season=as.numeric(str_sub(name,start=-8,end=-5)),.before="name") %>%
     mutate(data=map(data,as_tibble)) %>%
     mutate(data=map(data,tidy_canpl))
+  
+  data <- list()
   
   data$team_total <-
     canpl_tidy %>%
