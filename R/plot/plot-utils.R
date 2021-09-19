@@ -13,9 +13,25 @@ expand_teams <- function(team){
       # team %in% "Sheffield United" ~ "Sheffield Utd",
       team %in% "West Bromwich Albion" ~ "West Brom",
     # team %in% "West Ham United" ~ "West Ham Utd",
-    team %in% "Wolverhampton Wanders" ~ "Wolves",
+    team %in% "Wolverhampton Wanderers" ~ "Wolves",
     TRUE ~ team
   )
+  
+  return(team)
+}
+
+shorten_team_names <- function(team){
+  team <- team %>%
+    str_replace("United","Utd")
+  
+  team <- case_when(
+    team %in% "Brighton & Hove Albion" ~ "Brighton",
+    team %in% "Tottenham Hotspur" ~ "Tottenham",
+    team %in% "West Bromwich Albion" ~ "West Brom",
+    team %in% "Wolverhampton Wanderers" ~ "Wolves",
+    TRUE ~ team
+  )
+  
   return(team)
 }
 
