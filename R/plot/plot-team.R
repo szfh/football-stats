@@ -29,6 +29,10 @@ plot_team <- function(data,team="Southampton",season="2021-2022"){
       Home_npxG=Home_xG-(PK_Home*0.7),
       Away_npxG=Away_xG-(PK_Away*0.7)
     ) %>%
+    mutate(
+      Home_Team=shorten_team_names(Home_Team),
+      Away_Team=shorten_team_names(Away_Team)
+    ) %>%
     mutate(Opposition=ifelse(Home_Away=="Home",Away_Team,Home_Team),.after="Team") %>%
     mutate(
       Team_Score=ifelse(Home_Away=="Home",Home_Score,Away_Score),
@@ -81,6 +85,10 @@ plot_team <- function(data,team="Southampton",season="2021-2022"){
     mutate(
       Home_npxG=Home_xG-(PK_Home*0.7),
       Away_npxG=Away_xG-(PK_Away*0.7)
+    ) %>%
+    mutate(
+      Home_Team=shorten_team_names(Home_Team),
+      Away_Team=shorten_team_names(Away_Team)
     ) %>%
     mutate(Opposition=ifelse(Home_Away=="Home",Away_Team,Home_Team),.after="Team") %>%
     mutate(
