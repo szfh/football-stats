@@ -10,6 +10,8 @@
 # scrape_understat()
 # source(here("R","raw","raw-canpl.R"),encoding="utf-8")
 # import_canpl()
+# source(here("R","raw","raw-fivethirtyeight.R"),encoding="utf-8")
+# import_fivethirtyeight()
 
 # join
 # source(here("R","join","join.R"),encoding="utf-8")
