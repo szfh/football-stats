@@ -11,6 +11,9 @@
 #python
 .spyproject
 
+#master
+R/master.R
+
 #folders
 data/
 plots/
