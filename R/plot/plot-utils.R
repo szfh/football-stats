@@ -187,9 +187,9 @@ add_logo <- function(plots,path,x,y,hjust=1,vjust=1,width=0.1,height=0.1,scale=1
   return(plots_logo)
 }
 
-save_plots <- function(plots,path){
+save_plots <- function(plots,path,dpi=1500){
   for(i in 1:length(plots)){
     name <- names(plots[i])
-    save_plot(glue("{path}/{name}.jpg"),plots[[i]],dpi=1000)
+    save_plot(glue("{path}/{name}.jpg"),plots[[i]],dpi=dpi)
   }
 }
