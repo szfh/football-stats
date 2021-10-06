@@ -5,6 +5,7 @@ pacman::p_load(
   magrittr,
   rvest,
   gt,
+  gtExtras,
   webshot,
   lubridate,
   tidytext,
