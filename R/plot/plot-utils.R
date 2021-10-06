@@ -26,6 +26,7 @@ shorten_team_names <- function(team){
   
   team <- case_when(
     team %in% "Brighton & Hove Albion" ~ "Brighton",
+    team %in% "Huddersfield Town" ~ "Huddersfield",
     team %in% "Tottenham Hotspur" ~ "Tottenham",
     team %in% "West Bromwich Albion" ~ "West Brom",
     team %in% "Wolverhampton Wanderers" ~ "Wolves",
@@ -167,7 +168,6 @@ get_unused_subs <- function(data,Subs_Available,Subs_Used){
 #   extract2(1)
 
 add_logo <- function(plots,path,x,y,hjust=1,vjust=1,width=0.1,height=0.1,scale=1){
-  
   plots_logo <- list()
   
   for(i in 1:length(plots)){
