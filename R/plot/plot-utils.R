@@ -167,8 +167,9 @@ get_unused_subs <- function(data,Subs_Available,Subs_Used){
 #   summarise(last(Date)) %>%
 #   extract2(1)
 
-get_opposition <- function(team,home_team,away_team){
-  opposition <- ifelse(team==home_team,away_team,home_team)
+get_opposition <- function(team=NA,home_away=NA,home_team,away_team){
+  opposition <- ifelse(home_away=="Home",away_team,home_team)
+  # opposition <- ifelse(team==home_team,away_team,home_team)
   return(opposition)
 }
 
