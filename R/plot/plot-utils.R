@@ -167,6 +167,11 @@ get_unused_subs <- function(data,Subs_Available,Subs_Used){
 #   summarise(last(Date)) %>%
 #   extract2(1)
 
+get_opposition <- function(team,home_team,away_team){
+  opposition <- ifelse(team==home_team,away_team,home_team)
+  return(opposition)
+}
+
 add_logo <- function(plots,path,x,y,hjust=1,vjust=1,width=0.1,height=0.1,scale=1){
   plots_logo <- list()
   
