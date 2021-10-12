@@ -36,6 +36,12 @@ shorten_team_names <- function(team){
   return(team)
 }
 
+make_std_date <- function(date){
+  new_date <- lubridate::parse_date_time(date,"mdy")
+  
+  return(new_date)
+}
+
 make_long_data <- function(data,levels,labels){ # transform data to long format
   data %<>%
     filter_at(levels,any_vars(!is.na(.))) %>%
