@@ -1,7 +1,7 @@
 source(here("R","plot","plot-utils.R"),encoding="utf-8")
 source(here("R","themes.R"),encoding="utf-8")
 
-plot_team <- function(data,team="Southampton",season="2021-2022"){
+plot_team <- function(data,team="Southampton",season="2021-2022",scaling_factor=1){
   
   force(data)
   plots <- list()
@@ -160,7 +160,8 @@ plot_team <- function(data,team="Southampton",season="2021-2022"){
       x=element_blank(),
       y=element_blank()
     ) +
-    scale_x_continuous(breaks=seq(0,90*38*3,180),expand=expansion(add=c(0,20)))
+    scale_x_continuous(breaks=seq(0,90*38*5,90*scaling_factor),expand=expansion(add=c(0,20)))
+  # scale_x_continuous(breaks=function(x) seq(0, 90*38*5, by = <x>)) # axis labels as function https://stackoverflow.com/questions/15622001/how-to-display-only-integer-values-on-an-axis-using-ggplot2
   
   plots$xgxa <-
     data$fbref$advanced_stats_player_summary %>%
@@ -183,8 +184,8 @@ plot_team <- function(data,team="Southampton",season="2021-2022"){
       x="Expected goals (penalties excluded)",
       y="Expected assists"
     ) +
-    scale_x_continuous(limits=c(0,NA),breaks=seq(0,30,1),expand=expansion(add=c(0,0.2))) +
-    scale_y_continuous(limits=c(0,NA),breaks=seq(0,30,1),expand=expansion(add=c(0,0.2))) +
+    scale_x_continuous(limits=c(0,NA),breaks=breaks_extended(6),expand=expansion(add=c(0,0.2))) +
+    scale_y_continuous(limits=c(0,NA),breaks=breaks_extended(6),expand=expansion(add=c(0,0.2))) +
     scale_fill_manual(values=c("TRUE"=colour[["sfc"]][["main"]],"FALSE"=colour[["sfc"]][["grey"]]))
   
   plots$xgxa90 <-
@@ -194,7 +195,7 @@ plot_team <- function(data,team="Southampton",season="2021-2022"){
     select(Player,Min,npxG=npxG_Expected,xA=xA_Expected) %>%
     group_by(Player) %>%
     summarise(across(where(is.numeric),sum,na.rm=TRUE),.groups="drop") %>%
-    filter(Min>=900) %>%
+    filter(Min>=90*scaling_factor) %>%
     mutate(npxG=90*npxG/Min,
            xA=90*xA/Min) %>%
     mutate(Focus=case_when(
@@ -211,8 +212,8 @@ plot_team <- function(data,team="Southampton",season="2021-2022"){
       x="Expected goals per 90 mins (penalties excluded)",
       y="Expected assists per 90 mins"
     ) +
-    scale_x_continuous(limits=c(0,NA),breaks=seq(0,5,0.1),expand=expansion(add=c(0,0.02))) +
-    scale_y_continuous(limits=c(0,NA),breaks=seq(0,5,0.1),expand=expansion(add=c(0,0.02))) +
+    scale_x_continuous(limits=c(0,NA),breaks=breaks_extended(5),expand=expansion(add=c(0,0.02))) +
+    scale_y_continuous(limits=c(0,NA),breaks=breaks_extended(5),expand=expansion(add=c(0,0.02))) +
     scale_fill_manual(values=c("TRUE"=colour[["sfc"]][["main"]],"FALSE"=colour[["sfc"]][["grey"]]))
   
   plots$shots_keypasses <-
@@ -247,7 +248,7 @@ plot_team <- function(data,team="Southampton",season="2021-2022"){
       y=element_blank()
     ) +
     scale_x_continuous(limit=c(0,1)) +
-    scale_y_continuous() +
+    scale_y_continuous(breaks=breaks_extended(5)) +
     scale_colour_manual(values=c("TRUE"=colour[["sfc"]][["black"]],"FALSE"=colour[["sfc"]][["grey"]])) +
     scale_fill_manual(values=c("TRUE"=colour[["sfc"]][["light"]],"FALSE"=colour[["sfc"]][["grey"]]))
   
@@ -287,7 +288,7 @@ plot_team <- function(data,team="Southampton",season="2021-2022"){
   
   # plots$psxg_against_player <-
   
-  plots$passfootedness <-
+  plots$pass_footedness <-
     data$fbref$advanced_stats_player_passing_types %>%
     filter(Team %in% !!team) %>%
     filter(Season %in% !!season) %>%
@@ -295,7 +296,7 @@ plot_team <- function(data,team="Southampton",season="2021-2022"){
     group_by(Player) %>%
     summarise(across(where(is.numeric),sum,na.rm=TRUE),.groups="drop") %>%
     mutate(All=Left+Right) %>%
-    filter(All>100) %>%
+    filter(All>=100*scaling_factor) %>%
     group_by(Player) %>%
     mutate(
       Most=max(Left,Right),
@@ -318,7 +319,7 @@ plot_team <- function(data,team="Southampton",season="2021-2022"){
       x=element_blank(),
       y=element_blank()
     ) +
-    scale_x_continuous(breaks=seq(-2000,2000,200),labels=abs(seq(-2000,2000,200)),expand=expansion(add=c(10))) +
+    scale_x_continuous(breaks=seq(-2000,2000,100*scaling_factor),labels=abs(seq(-2000,2000,100*scaling_factor)),expand=expansion(add=c(10))) +
     scale_colour_manual(values=c("Left"=colour[["medium"]][[1]],"Right"=colour[["medium"]][[8]]))
   
   plots$subs <-

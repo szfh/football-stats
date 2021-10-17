@@ -10,6 +10,7 @@ pacman::p_load(
   lubridate,
   tidytext,
   glue,
+  scales,
   janitor,
   cowplot,
   slider,

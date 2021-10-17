@@ -1,7 +1,7 @@
 source(here("R","plot","plot-utils.R"),encoding="utf-8")
 source(here("R","themes.R"),encoding="utf-8")
 
-plot_league <- function(data,season="2021-2022"){
+plot_league <- function(data,season="2021-2022",scaling_factor=1){
   
   force(data)
   plots <- list()
@@ -37,7 +37,7 @@ plot_league <- function(data,season="2021-2022"){
       x=element_blank(),
       y=element_blank()) +
     scale_x_continuous(limit=c(0,1)) +
-    scale_y_continuous() +
+    scale_y_continuous(breaks=breaks_extended(6)) +
     scale_fill_manual(values=palette[["epl"]]()) +
     scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.1))
   
@@ -70,7 +70,7 @@ plot_league <- function(data,season="2021-2022"){
       x=element_blank(),
       y=element_blank()) +
     scale_x_continuous(limit=c(0,1)) +
-    scale_y_continuous() +
+    scale_y_continuous(breaks=breaks_extended(6)) +
     scale_fill_manual(values=palette[["epl"]]()) +
     scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.1))
   
@@ -80,7 +80,7 @@ plot_league <- function(data,season="2021-2022"){
     select(Player,Team,Min,Carries1=Prog_Carries,Carries2=Final_Third_Carries,Carries3=CPA_Carries) %>%
     group_by(Player,Team) %>%
     summarise(across(where(is.numeric),sum,na.rm=TRUE),.groups="drop") %>%
-    # filter(Min>900) %>%
+    # filter(Min>=900*scaling_factor) %>%
     make_long_data(levels=c("Carries1","Carries2","Carries3"),labels=c("70 yards from goal","35 yards from goal","20 yards from goal")) %>%
     mutate(focus=ifelse(min_rank(desc(n))<=20,TRUE,FALSE)) %>%
     ggplot(aes(x=0.05,y=n,alpha=focus)) +
@@ -101,7 +101,7 @@ plot_league <- function(data,season="2021-2022"){
       x=element_blank(),
       y=element_blank()) +
     scale_x_continuous(limit=c(0,1)) +
-    scale_y_continuous() +
+    scale_y_continuous(breaks=breaks_extended(6)) +
     scale_fill_manual(values=palette[["epl"]]()) +
     scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.1))
   
@@ -111,7 +111,7 @@ plot_league <- function(data,season="2021-2022"){
     select(Player,Team,Min,Carries1=Prog_Carries,Carries2=Final_Third_Carries,Carries3=CPA_Carries) %>%
     group_by(Player,Team) %>%
     summarise(across(where(is.numeric),sum,na.rm=TRUE),.groups="drop") %>%
-    filter(Min>900) %>%
+    # filter(Min>=900*scaling_factor) %>%
     mutate(
       Carries1=90*Carries1/Min,
       Carries2=90*Carries2/Min,
@@ -143,7 +143,7 @@ plot_league <- function(data,season="2021-2022"){
       x=element_blank(),
       y=element_blank()) +
     scale_x_continuous(limit=c(0,1)) +
-    scale_y_continuous() +
+    scale_y_continuous(breaks=breaks_extended(6)) +
     scale_fill_manual(values=palette[["epl"]]()) +
     scale_colour_manual(values=c("focus1"="#670E36","focus2"="black","focus3"="black")) + 
     scale_alpha_manual(values=c("focus1"=1,"focus2"=1,"focus3"=0.1))
@@ -193,7 +193,7 @@ plot_league <- function(data,season="2021-2022"){
       x=element_blank(),
       y=element_blank()) +
     scale_x_continuous(limit=c(0,1)) +
-    scale_y_continuous(breaks=seq(-100,100,5),labels=abs(seq(-100,100,5)),expand=expansion(add=2)) +
+    scale_y_continuous(breaks=seq(-100,100,5*scaling_factor),labels=abs(seq(-100,100,5*scaling_factor)),expand=expansion(add=2*scaling_factor)) +
     scale_fill_manual(values=palette[["epl"]]())
   
   plots$xg_for_against_sc <-
@@ -222,8 +222,8 @@ plot_league <- function(data,season="2021-2022"){
       x="xG for",
       y="xG against"
     ) +
-    scale_x_continuous(breaks=seq(0,100,5),expand=expansion(add=c(2))) +
-    scale_y_reverse(breaks=seq(0,100,5),expand=expansion(add=c(2))) +
+    scale_x_continuous(breaks=breaks_extended(6),expand=expansion(add=c(2))) +
+    scale_y_reverse(breaks=breaks_extended(6),expand=expansion(add=c(2))) +
     scale_fill_manual(values=palette[["epl"]]())
   
   plots$psxg_team <-
@@ -242,7 +242,7 @@ plot_league <- function(data,season="2021-2022"){
       y=element_blank()) +
     annotate("text",label="Goalkeepers\noverperforming\nshot-stopping",fontface="bold",hjust="right",size=3,x=-0.6,y=17) +
     annotate("text",label="Goalkeepers\nunderperform\nshot-stopping",fontface="bold",hjust="left",size=3,x=0.6,y=4) +
-    scale_x_continuous(breaks=seq(-200,200,2),expand=expansion(add=c(0.1))) +
+    scale_x_continuous(breaks=breaks_extended(6),expand=expansion(mult=c(0.05,0.05))) +
     scale_colour_manual(values=c("TRUE"=colour[["medium"]][[3]],"FALSE"=colour[["medium"]][[8]]))
   
   plots$psxg_opponent <-
@@ -263,7 +263,7 @@ plot_league <- function(data,season="2021-2022"){
       y=element_blank()) +
     annotate("text",label="Opposition goalkeepers\nunderperform\nagainst these teams",fontface="bold",hjust="right",size=3,x=-0.6,y=17) +
     annotate("text",label="Opposition goalkeepers\noverperform\nagainst these teams",fontface="bold",hjust="left",size=3,x=0.6,y=4) +
-    scale_x_continuous(breaks=seq(-200,200,2),expand=expansion(add=c(0.1))) +
+    scale_x_continuous(breaks=breaks_extended(6),expand=expansion(mult=c(0.05,0.05))) +
     scale_colour_manual(values=c("TRUE"=colour[["medium"]][[8]],"FALSE"=colour[["medium"]][[3]]))
   
   plots_logo <-
