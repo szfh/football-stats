@@ -19,12 +19,31 @@ scrape_understat <- function(save_path=here("data","understat.rds"),current_seas
   
   understat$results$keep <-
     understat_saved %>%
-    filter(data_type=="results")
+    filter(data_type=="results") %>%
+    filter(season!=current_season)
   
   understat$results$new <-
     anti_join(understat$results$all,understat$results$keep) %>%
     mutate(data=pmap(list(league,season),understat_league_match_results)) %>%
     mutate(data_type="results") %>%
+    mutate(date_scraped=Sys.Date()) %>%
+    glimpse
+  
+  understat$team_stats$all <-
+    tibble() %>%
+    bind_rows(
+      crossing(seasons,league="EPL")
+    )
+  
+  understat$team_stats$keep <-
+    understat_saved %>%
+    filter(data_type=="team_stats") %>%
+    filter(season!=current_season)
+  
+  understat$team_stats$new <-
+    anti_join(understat$team_stats$all,understat$team_stats$keep) %>%
+    mutate(data=pmap(list(league,season),understatr::get_league_teams_stats)) %>%
+    mutate(data_type="team_stats") %>%
     mutate(date_scraped=Sys.Date()) %>%
     glimpse
   
@@ -36,7 +55,8 @@ scrape_understat <- function(save_path=here("data","understat.rds"),current_seas
   
   understat$shots$keep <-
     understat_saved %>%
-    filter(data_type=="shots")
+    filter(data_type=="shots") #%>%
+  # filter(season!=current_season)
   
   understat$shots$new <-
     anti_join(understat$shots$all,understat$shots$keep) %>%
@@ -48,6 +68,7 @@ scrape_understat <- function(save_path=here("data","understat.rds"),current_seas
   understat_all <-
     bind_rows(
       understat$results$keep,understat$results$new,
+      understat$match_stats$keep,understat$match_stats$new,
       understat$shots$keep,understat$shots$new
     ) %>%
     filter(!is.na(data)) %>%
