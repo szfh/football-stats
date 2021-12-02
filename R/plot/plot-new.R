@@ -19,6 +19,7 @@
   plots$xg_trend <- xg_trend(team,season)
   plots$xg_segment <- xg_segment(team,season)
   plots$xg_xa <- xg_xa(team,season)
+  plots$shots_key_passes <- shots_key_passes(team,season)
 }
 
 {
