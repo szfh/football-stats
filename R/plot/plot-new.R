@@ -20,6 +20,7 @@
   plots$xg_segment <- xg_segment(team,season)
   plots$xg_xa <- xg_xa(team,season)
   plots$shots_key_passes <- shots_key_passes(team,season)
+  plots$psxg_against <- psxg_against(team,season)
 }
 
 {
