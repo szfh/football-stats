@@ -21,6 +21,8 @@
   plots$xg_xa <- xg_xa(team,season)
   plots$shots_key_passes <- shots_key_passes(team,season)
   plots$psxg_against <- psxg_against(team,season)
+  plots$pass_footedness <- pass_footedness(team,season)
+  plots$subs <- subs(team,season)
 }
 
 {
