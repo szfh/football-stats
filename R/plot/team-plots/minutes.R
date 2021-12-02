@@ -1,4 +1,4 @@
-team_minutes <- function(season,team){
+team_minutes <- function(team,season){
   starting <-
     data$fbref$match_lineups %>%
     select(Match_Date=Matchday,Team,Home_Away,Player=Player_Name,Team,Starting) %>%

@@ -15,7 +15,7 @@
 }
 {
   lapply(list.files(here("R","plot","team-plots"), full.names=TRUE), source, encoding="utf-8")
-  plots$minutes <- team_minutes(season,team)
+  plots$minutes <- team_minutes(team,season)
 }
 {
   plots_logo <-
