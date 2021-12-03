@@ -15,7 +15,7 @@ psxg_for <- function(season){
       x=element_blank(),
       y=element_blank()) +
     annotate("text",label="Goalkeepers\noverperforming\nshot-stopping",fontface="bold",hjust="right",size=3,x=-0.6,y=17) +
-    annotate("text",label="Goalkeepers\nunderperform\nshot-stopping",fontface="bold",hjust="left",size=3,x=0.6,y=4) +
+    annotate("text",label="Goalkeepers\nunderperforming\nshot-stopping",fontface="bold",hjust="left",size=3,x=0.6,y=4) +
     scale_x_continuous(breaks=breaks_extended(6),expand=expansion(mult=c(0.05,0.05))) +
     scale_colour_manual(values=c("TRUE"=colour[["medium"]][[3]],"FALSE"=colour[["medium"]][[8]]))
   
