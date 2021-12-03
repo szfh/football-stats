@@ -14,6 +14,9 @@
 #master
 R/master.R
 
+#template
+R/plot/template.R
+
 #folders
 data/
 plots/
