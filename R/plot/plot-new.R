@@ -10,7 +10,7 @@
 {
   plots <- list()
   team <- "Southampton"
-  season <- "2020-2021"
+  season <- expand_seasons("2020-2021")
   player <- ""
 }
 {
@@ -31,6 +31,8 @@
   plots$progressive_carries_player <- progressive_carries_player(season)
   plots$xg_team <- xg_team(season)
   plots$xg_team_scatter <- xg_team_scatter(season)
+  plots$psxg_for <- psxg_for(season)
+  plots$psxg_against <- psxg_against(season)
 }
 {
   plots_logo <-
