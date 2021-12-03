@@ -24,7 +24,10 @@
   plots$pass_footedness <- pass_footedness(team,season)
   plots$subs <- subs(team,season)
 }
-
+{
+  lapply(list.files(here("R","plot","league-plots"), full.names=TRUE), source, encoding="utf-8")
+  plots$goals_xg_player <- goals_xg_player(season)
+}
 {
   plots_logo <-
     plots %>%
