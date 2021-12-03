@@ -28,6 +28,9 @@
   lapply(list.files(here("R","plot","league-plots"), full.names=TRUE), source, encoding="utf-8")
   plots$goals_xg_player <- goals_xg_player(season)
   plots$xg_xa_player <- xg_xa_player(season)
+  plots$progressive_carries_player <- progressive_carries_player(season)
+  plots$xg_team <- xg_team(season)
+  plots$xg_team_scatter <- xg_team_scatter(season)
 }
 {
   plots_logo <-
