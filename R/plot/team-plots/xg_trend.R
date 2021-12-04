@@ -38,6 +38,7 @@ xg_trend <- function(team,season){
       Match_Date>=as.Date("2019-08-01") & Match_Date<as.Date("2020-04-01") ~ "2019-20 part 1",
       Match_Date>=as.Date("2020-04-01") & Match_Date<as.Date("2020-08-01") ~ "2019-20 part 2",
       TRUE ~ Season)) %>%
+    filter(Match_Date>=as.Date("2021-01-01")) %>%
     mutate(Home_Away_Short=ifelse(Home_Away=="Home","H","A"),.after="Home_Away") %>%
     mutate(Match=glue::glue("{Opposition} {Home_Away_Short} {Team_Score}-{Opposition_Score}")) %>%
     mutate(Match=reorder_within(Match, Match_Date, Season)) %>%
@@ -56,7 +57,7 @@ xg_trend <- function(team,season){
       strip.text=element_blank()
     ) +
     labs(
-      title=glue("{team} <b style='color:darkred'>attack</b> / <b style='color:royalblue'>defence</b> xG trend"),
+      title=glue("{shorten_team_names(team)} <b style='color:darkred'>attack</b> / <b style='color:royalblue'>defence</b> xG trend"),
       x=element_blank(),
       y=glue("Expected goals <b style='color:darkred'>for</b> / <b style='color:royalblue'>against</b>")
     ) +
