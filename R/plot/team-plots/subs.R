@@ -9,6 +9,12 @@ subs <- function(team,season){
     select(Season,Match_Date,Home_Team,Home_Score,Away_Team,Away_Score,Team,Home_Away,Event_Half,Event_Time,Score_Progression) %>%
     mutate(Opposition=ifelse(Home_Away=="Home",Away_Team,Home_Team),.after="Team") %>%
     mutate(
+      Home_Team=shorten_team_names(Home_Team),
+      Away_Team=shorten_team_names(Away_Team),
+      Team=shorten_team_names(Team),
+      Opposition=shorten_team_names(Opposition)
+    ) %>%
+    mutate(
       Team_Score=ifelse(Home_Away=="Home",Home_Score,Away_Score),
       Opposition_Score=ifelse(Home_Away=="Home",Away_Score,Home_Score)
     ) %>%
@@ -60,7 +66,7 @@ subs <- function(team,season){
       plot.caption=element_markdown()
     ) +
     labs(
-      title=glue("{team} substitutions"),
+      title=glue("{shorten_team_names(team)} substitutions"),
       x=element_blank(),
       y=element_blank(),
       caption="<b style='color:#60BD68'>winning</b> | <b style='color:#5DA5DA'>drawing</b> | <b style='color:#F15854'>losing</b>"
