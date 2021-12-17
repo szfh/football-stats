@@ -1,4 +1,4 @@
-xg_team_scatter <- function(season,date=NA){
+xg_team_scatter <- function(season,per90=TRUE,date=NA){
   
   penalties <-
     data$fbref$advanced_stats_team_summary %>%
@@ -24,8 +24,10 @@ xg_team_scatter <- function(season,date=NA){
     ) %>%
     select(Team,Team_npxG,Opposition_npxG) %>%
     group_by(Team) %>%
-    # summarise(across(where(is.numeric),sum,na.rm=TRUE),.groups="drop") %>%
-    summarise(across(where(is.numeric),mean,na.rm=TRUE),.groups="drop") %>%
+    {
+      if (per90) summarise(., across(where(is.numeric),mean,na.rm=TRUE),.groups="drop")
+      else summarise(., across(where(is.numeric),sum,na.rm=TRUE),.groups="drop")
+    } %>%
     ggplot(aes(x=Team_npxG,y=Opposition_npxG)) +
     geom_text_repel(aes(label=Team),size=2) +
     geom_point(aes(fill=Team),shape=23,size=2.5) +
