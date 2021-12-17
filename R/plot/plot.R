@@ -11,6 +11,7 @@
   plots <- list()
   team <- "Southampton"
   season <- expand_seasons("2021-2022")
+  # season <- expand_seasons(c("2020-2021","2021-2022"))
   player <- ""
 }
 {
@@ -38,8 +39,10 @@
   plots$goals_xg_player <- goals_xg_player(season)
   plots$xg_xa_player <- xg_xa_player(season)
   plots$progressive_carries_player <- progressive_carries_player(season)
-  plots$xg_team <- xg_team(season)
-  plots$xg_team_scatter <- xg_team_scatter(season)
+  plots$xg_team <- xg_team(season,per90=FALSE)
+  plots$xg_team_p90 <- xg_team(season,per90=TRUE)
+  plots$xg_team_scatter <- xg_team_scatter(season,per90=FALSE)
+  plots$xg_team_scatter_p90 <- xg_team_scatter(season,per90=TRUE)
   plots$psxg_for <- psxg_for(season)
   plots$psxg_against <- psxg_against(season)
   
