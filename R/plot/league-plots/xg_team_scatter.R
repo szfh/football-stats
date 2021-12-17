@@ -18,6 +18,7 @@ xg_team_scatter <- function(season,per90=TRUE,date=NA){
       Home_npxG=Home_xG-(PK_Home*0.7),
       Away_npxG=Away_xG-(PK_Away*0.7)
     ) %>%
+    mutate(across(c(Home_Team,Away_Team,Team),shorten_team_names)) %>%
     mutate(
       Team_npxG=ifelse(Home_Away=="Home",Home_npxG,Away_npxG),
       Opposition_npxG=ifelse(Home_Away=="Home",Away_npxG,Home_npxG)
