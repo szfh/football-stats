@@ -1,4 +1,4 @@
-xg_xa <- function(team,season){
+xg_xa <- function(team,season,per90=TRUE){
   
   plot <-
     data$fbref$advanced_stats_player_summary %>%
@@ -6,7 +6,9 @@ xg_xa <- function(team,season){
     filter(Team %in% !!team) %>%
     select(Player,Min,npxG=npxG_Expected,xA=xA_Expected) %>%
     group_by(Player) %>%
-    summarise(across(where(is.numeric),sum,na.rm=TRUE),.groups="drop") %>%
+    summarise(., across(where(is.numeric),sum,na.rm=TRUE),.groups="drop") %>%
+    filter(Min>=0.1*max(Min)) %>%
+    {if(per90) mutate(., npxG=90*npxG/Min, xA=90*xA/Min) else mutate(., npxG=npxG, xA=xA)} %>%
     mutate(Focus=case_when(
       npxG==0 & xA==0 ~ FALSE,
       min_rank(desc(npxG))<=8 ~ TRUE,
@@ -21,8 +23,8 @@ xg_xa <- function(team,season){
       x="Expected goals (penalties excluded)",
       y="Expected assists"
     ) +
-    scale_x_continuous(limits=c(0,NA),breaks=breaks_extended(6),expand=expansion(add=c(0,0.2))) +
-    scale_y_continuous(limits=c(0,NA),breaks=breaks_extended(6),expand=expansion(add=c(0,0.2))) +
+    scale_x_continuous(limits=c(0,NA),breaks=breaks_extended(8),expand=expansion(mult=c(0,0.05))) +
+    scale_y_continuous(limits=c(0,NA),breaks=breaks_extended(8),expand=expansion(mult=c(0,0.05))) +
     scale_fill_manual(values=c("TRUE"=colour[["sfc"]][["main"]],"FALSE"=colour[["sfc"]][["grey"]]))
   
   return(plot)

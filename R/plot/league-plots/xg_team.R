@@ -1,4 +1,4 @@
-xg_team <- function(season){
+xg_team <- function(season,per90=TRUE,date=NA){
   
   penalties <-
     data$fbref$advanced_stats_team_summary %>%
@@ -12,6 +12,7 @@ xg_team <- function(season){
     filter(Season %in% !!season) %>%
     filter((!is.na(Home_xG))|!is.na(Away_xG)) %>%
     mutate(Match_Date=parse_date_time(Match_Date,"mdy")) %>%
+    {if (is.na(date)) filter(., TRUE) else filter(., Match_Date>=as.Date(date))} %>%
     select(Match_Date,Home_Team,Away_Team,Home_xG,Away_xG,Team,Home_Away) %>%
     left_join(penalties) %>%
     arrange(Match_Date) %>%
@@ -25,7 +26,10 @@ xg_team <- function(season){
     ) %>%
     select(Team,Team_npxG,Opposition_npxG) %>%
     group_by(Team) %>%
-    summarise(across(where(is.numeric),sum,na.rm=TRUE),.groups="drop") %>%
+    {
+      if (per90) summarise(., across(where(is.numeric),mean,na.rm=TRUE),.groups="drop")
+      else summarise(., across(where(is.numeric),sum,na.rm=TRUE),.groups="drop")
+    } %>%
     make_long_data(levels=c("Team_npxG","Opposition_npxG"),labels=c("Expected Goals For","Expected Goals Against")) %>%
     ggplot(aes(x=0.05,y=n)) +
     geom_text_repel(
@@ -45,7 +49,9 @@ xg_team <- function(season){
       x=element_blank(),
       y=element_blank()) +
     scale_x_continuous(limit=c(0,1)) +
-    scale_y_continuous(breaks=seq(-100,100,10),labels=abs(seq(-100,100,10)),expand=expansion(add=5)) +
+    # scale_y_continuous(breaks=seq(-100,100,10),labels=abs(seq(-100,100,10)),expand=expansion(mult=0.0.5)) +
+    scale_y_continuous(breaks=breaks_extended(8),expand=expansion(mult=c(0.05))) +
+    # scale_y_continuous(breaks=breaks_extended(8),labels=abs(breaks_extended(8)),expand=expansion(mult=c(0.05))) +
     scale_fill_manual(values=palette[["epl"]]())
   
   return(plot)

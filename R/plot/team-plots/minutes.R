@@ -1,4 +1,30 @@
 team_minutes <- function(team,season){
+  positions <-
+    data$fbref$match_lineups %>%
+    select(Player=Player_Name,Pos,Min) %>%
+    mutate(Pos=str_sub(Pos,1,2)) %>%
+    filter(!is.na(Pos)) %>%
+    group_by(Player,Pos) %>%
+    summarise(Min=sum(Min,na.rm=TRUE),.groups="drop") %>%
+    group_by(Player) %>%
+    slice_max(Min) %>%
+    ungroup() %>%
+    select(Player,Pos) %>%
+    mutate(Pos=case_when(
+      Pos=="LB" ~ "FB",
+      Pos=="RB" ~ "FB",
+      Pos=="WB" ~ "FB",
+      Pos=="DM" ~ "CM",
+      Pos=="LM" ~ "AM",
+      Pos=="RM" ~ "AM",
+      Pos=="LW" ~ "AM",
+      Pos=="RW" ~ "AM",
+      Pos=="FW" ~ "ST",
+      TRUE ~ Pos
+    )) %>%
+    mutate(Pos=factor(Pos,levels=c("GK","CB","FB","CM","AM","ST")))
+  # mutate(Pos=factor(Pos,levels=c("GK","CB","LB","RB","DM","CM","LM","RM","FW")))
+  
   starting <-
     data$fbref$match_lineups %>%
     select(Match_Date=Matchday,Team,Home_Away,Player=Player_Name,Team,Starting) %>%
@@ -19,10 +45,12 @@ team_minutes <- function(team,season){
       Min_Pitch=replace_na(Min_Pitch,0),
       Min_Bench=replace_na(Min_Bench,0),
       Min_Total=Min_Pitch+Min_Bench) %>%
+    left_join(positions) %>%
     mutate(Player=fct_reorder(Player,Min_Total)) %>%
     ggplot(aes(y=Player)) +
     geom_segment(aes(y=Player,yend=Player,x=0,xend=Min_Pitch),colour=colour[["sfc"]][["main"]],size=2.5,alpha=0.8) +
     geom_segment(aes(y=Player,yend=Player,x=Min_Pitch,xend=Min_Total),colour=colour[["sfc"]][["light"]],size=2.5,alpha=0.8) +
+    facet_grid(Pos ~ ., scales="free", space="free") +
     theme[["solar"]]() +
     theme(
       plot.title=element_markdown(),
