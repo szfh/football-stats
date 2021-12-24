@@ -7,9 +7,14 @@ output: github_document
 
 ## Football analytics repository
 
-### Written by
+### Structure
 
-[@saintsbynumbers](https://twitter.com/saintsbynumbers)
+* [R/raw/](https://github.com/szfh/football-stats/tree/main/R/raw) for scripts to get data from public sources and save to a .RDS file. **[See note below](https://github.com/szfh/football-stats#note-about-scraping)**.
+* [R/join/](https://github.com/szfh/football-stats/tree/main/R/join) for data preparation and import to the R workspace.
+* [R/plot/](https://github.com/szfh/football-stats/tree/main/R/plot) for scripts to create and save images. Called from  [/plot.R](https://github.com/szfh/football-stats/blob/main/R/plot/plot.R).
+* [R/library.R](https://github.com/szfh/football-stats/blob/main/R/library.R) for packages.
+* [R/themes.R](https://github.com/szfh/football-stats/blob/main/R/themes.R) for themes.
+* [@saintsbynumbers](https://twitter.com/saintsbynumbers) for the author.
 
 ### Note about scraping
 
