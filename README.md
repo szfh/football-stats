@@ -14,7 +14,7 @@ output: github_document
 * [R/plot/](https://github.com/szfh/football-stats/tree/main/R/plot) for scripts to create and save images. Called from  [/plot.R](https://github.com/szfh/football-stats/blob/main/R/plot/plot.R).
 * [R/library.R](https://github.com/szfh/football-stats/blob/main/R/library.R) for packages.
 * [R/themes.R](https://github.com/szfh/football-stats/blob/main/R/themes.R) for themes.
-* [@saintsbynumbers](https://twitter.com/saintsbynumbers) for the author.
+* [@saintsbynumbers](https://twitter.com/saintsbynumbers) for the author. I [blog](https://szfh.github.io/) about twice a year.
 
 ### Note about scraping
 
@@ -25,6 +25,7 @@ If you use scraping tools including any in this repository, **you must use them 
 ### Useful resources
 
 1. [Friends of Tracking](https://www.youtube.com/channel/UCUBFJYcag8j2rm_9HkrrA7w)
+1. [Free Statsbomb Data](https://statsbomb.com/2021/11/statsbomb-announce-the-release-of-free-statsbomb-360-data-euro-2020-available-now/)
 1. [Devin Pleuler Analytics Handbook](https://github.com/devinpleuler/analytics-handbook)
 1. [John Burn-Murdoch clubelo script](https://gist.github.com/johnburnmurdoch/1b3f32aaf7757733bd68a6513ab86226) with
     [link to Tweet](https://mobile.twitter.com/jburnmurdoch/status/1075088086370013184)
