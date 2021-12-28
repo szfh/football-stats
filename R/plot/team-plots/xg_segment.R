@@ -1,4 +1,4 @@
-xg_segment <- function(team,season){
+xg_segment <- function(team,season,lastn=NA,since=NA){
   penalties <-
     data$fbref$advanced_stats_team_summary %>%
     mutate(Match_Date=parse_date_time(Match_Date,"mdy")) %>%
@@ -35,6 +35,8 @@ xg_segment <- function(team,season){
       Match_Date>=as.Date("2019-08-01") & Match_Date<as.Date("2020-04-01") ~ "2019-20 part 1",
       Match_Date>=as.Date("2020-04-01") & Match_Date<as.Date("2020-08-01") ~ "2019-20 part 2",
       TRUE ~ Season)) %>%
+    {if (!is.na(since)) filter(., Match_Date>=as.Date(since)) else .} %>%
+    {if (!is.na(lastn)) slice_tail(., n=lastn) else .} %>%
     mutate(Home_Away_Short=ifelse(Home_Away=="Home","H","A")) %>%
     mutate(Match=glue::glue("{Opposition} {Home_Away_Short} {Team_Score}-{Opposition_Score}")) %>%
     mutate(Match=reorder_within(Match, desc(Match_Date), Season)) %>%
