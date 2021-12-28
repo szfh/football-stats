@@ -1,4 +1,4 @@
-xg_trend <- function(team,season){
+xg_trend <- function(team,season,lastn=NA){
   penalties <-
     data$fbref$advanced_stats_team_summary %>%
     mutate(Match_Date=parse_date_time(Match_Date,"mdy")) %>%
@@ -38,7 +38,8 @@ xg_trend <- function(team,season){
       Match_Date>=as.Date("2019-08-01") & Match_Date<as.Date("2020-04-01") ~ "2019-20 part 1",
       Match_Date>=as.Date("2020-04-01") & Match_Date<as.Date("2020-08-01") ~ "2019-20 part 2",
       TRUE ~ Season)) %>%
-    filter(Match_Date>=as.Date("2021-01-01")) %>%
+    # filter(Match_Date>=as.Date("2021-01-01")) %>%
+    {if (!is.na(lastn)) slice_tail(., n=lastn) else .} %>%
     mutate(Home_Away_Short=ifelse(Home_Away=="Home","H","A"),.after="Home_Away") %>%
     mutate(Match=glue::glue("{Opposition} {Home_Away_Short} {Team_Score}-{Opposition_Score}")) %>%
     mutate(Match=reorder_within(Match, Match_Date, Season)) %>%
