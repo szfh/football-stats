@@ -5,12 +5,6 @@ team_minutes <- function(team,season,since=NA){
     select(Player=Player_Name,Pos,Min) %>%
     mutate(Pos=str_sub(Pos,1,2)) %>%
     filter(!is.na(Pos)) %>%
-    group_by(Player,Pos) %>%
-    summarise(Min=sum(Min,na.rm=TRUE),.groups="drop") %>%
-    group_by(Player) %>%
-    slice_max(Min,with_ties=FALSE) %>%
-    ungroup() %>%
-    select(Player,Pos) %>%
     mutate(Pos=case_when(
       Pos=="LB" ~ "FB",
       Pos=="RB" ~ "FB",
@@ -23,8 +17,14 @@ team_minutes <- function(team,season,since=NA){
       Pos=="FW" ~ "ST",
       TRUE ~ Pos
     )) %>%
-    mutate(Pos=factor(Pos,levels=c("GK","CB","FB","CM","AM","ST")))
-  # mutate(Pos=factor(Pos,levels=c("GK","CB","LB","RB","DM","CM","LM","RM","FW")))
+    mutate(Pos=factor(Pos,levels=c("GK","CB","FB","CM","AM","ST"))) %>%
+    # mutate(Pos=factor(Pos,levels=c("GK","CB","LB","RB","DM","CM","LM","RM","FW")))
+    group_by(Player,Pos) %>%
+    summarise(Min=sum(Min,na.rm=TRUE),.groups="drop") %>%
+    group_by(Player) %>%
+    slice_max(Min) %>%
+    ungroup() %>%
+    select(Player,Pos)
   
   starting <-
     data$fbref$match_lineups %>%
