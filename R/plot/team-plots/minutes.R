@@ -1,4 +1,4 @@
-team_minutes <- function(team,season,since=NA){
+team_minutes <- function(team,season,since=NA,scale_factor=1){
   positions <-
     data$fbref$match_lineups %>%
     {if (!is.na(since)) filter(., Matchday>=as.Date(since)) else filter(., Matchday>=as.Date(today()-365))} %>%
@@ -65,7 +65,7 @@ team_minutes <- function(team,season,since=NA){
       x=element_blank(),
       y=element_blank()
     ) +
-    scale_x_continuous(breaks=seq(0,90*38*5,90*2),expand=expansion(add=c(0,20)))
+    scale_x_continuous(breaks=seq(0,90*38*5,90*scale_factor),expand=expansion(add=c(0,10*scale_factor)))
   # scale_x_continuous(breaks=function(x) seq(0, 90*38*5, by = <x>)) # axis labels as function https://stackoverflow.com/questions/15622001/how-to-display-only-integer-values-on-an-axis-using-ggplot2
   
   return(plot)
