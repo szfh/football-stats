@@ -1,13 +1,14 @@
-team_minutes <- function(team,season){
+team_minutes <- function(team,season,since=NA){
   positions <-
     data$fbref$match_lineups %>%
+    {if (!is.na(since)) filter(., Matchday>=as.Date(since)) else filter(., Matchday>=as.Date(today()-365))} %>%
     select(Player=Player_Name,Pos,Min) %>%
     mutate(Pos=str_sub(Pos,1,2)) %>%
     filter(!is.na(Pos)) %>%
     group_by(Player,Pos) %>%
     summarise(Min=sum(Min,na.rm=TRUE),.groups="drop") %>%
     group_by(Player) %>%
-    slice_max(Min) %>%
+    slice_max(Min,with_ties=FALSE) %>%
     ungroup() %>%
     select(Player,Pos) %>%
     mutate(Pos=case_when(
@@ -35,6 +36,7 @@ team_minutes <- function(team,season){
     filter(Season %in% !!season) %>%
     filter(Team %in% !!team) %>%
     mutate(Match_Date=parse_date_time(Match_Date,"mdy")) %>%
+    {if (!is.na(since)) filter(., Match_Date>=as.Date(since)) else .} %>%
     select(Match_Date,Player,Min) %>%
     left_join(starting) %>%
     select(-Match_Date) %>%
