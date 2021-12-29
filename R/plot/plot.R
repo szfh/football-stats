@@ -18,14 +18,14 @@
   lapply(list.files(here("R","plot","team-plots"), full.names=TRUE), source, encoding="utf-8")
   plots <- list()
   plots$minutes <- team_minutes(team,season)
-  plots$xg_trend <- xg_trend(team,season)
-  plots$xg_segment <- xg_segment(team,season)
+  plots$xg_trend <- xg_trend(team,season=c("2020-2021","2021-2022"),lastn=38)
+  plots$xg_segment <- xg_segment(team,season=c("2020-2021","2021-2022"),lastn=38)
   plots$xg_xa <- xg_xa(team,season,per90=FALSE)
   plots$xg_xa_p90 <- xg_xa(team,season,per90=TRUE)
   plots$shots_key_passes <- shots_key_passes(team,season)
   plots$psxg_against <- psxg_against(team,season)
   plots$pass_footedness <- pass_footedness(team,season)
-  plots$subs <- subs(team,season)
+  plots$subs <- subs(team,season=c("2020-2021","2021-2022"),lastn=38)
   
   plots_logo <-
     plots %>%
