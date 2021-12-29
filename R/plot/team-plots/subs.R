@@ -1,15 +1,12 @@
 subs <- function(team,season,since=NA,lastn=NA){
   
-  # plot <-
-  t1 <-
+  plot <-
     data$fbref$match_summary %>%
     mutate(Match_Date=parse_date_time(Match_Date,"mdy")) %>%
     filter(Team %in% !!team) %>%
     filter(Season %in% !!season) %>%
     {if (!is.na(since)) filter(., Match_Date>=as.Date(since)) else .} %>%
-    #group_by(Match_Date) #%>% # doesn't work as selects n from each group rather than n groups
-    # {if (!is.na(lastn)) slice_tail(., n=lastn) else .} %>%
-    # ungroup() %>%
+    {if (!is.na(lastn)) filter(., Match_Date>=(group_by(., Match_Date) %>% group_keys(.) %>% slice(n()-lastn+1) %>% pull())) else .} %>%
     filter(Event_Type=="Substitute") %>%
     select(Season,Match_Date,Home_Team,Home_Score,Away_Team,Away_Score,Team,Home_Away,Event_Half,Event_Time,Score_Progression) %>%
     mutate(Opposition=ifelse(Home_Away=="Home",Away_Team,Home_Team),.after="Team") %>%
