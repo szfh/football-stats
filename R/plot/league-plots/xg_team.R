@@ -1,4 +1,4 @@
-xg_team <- function(season,per90=TRUE,date=NA){
+xg_team <- function(season,per90=TRUE,since=NA){
   
   penalties <-
     data$fbref$advanced_stats_team_summary %>%
@@ -12,7 +12,7 @@ xg_team <- function(season,per90=TRUE,date=NA){
     filter(Season %in% !!season) %>%
     filter((!is.na(Home_xG))|!is.na(Away_xG)) %>%
     mutate(Match_Date=parse_date_time(Match_Date,"mdy")) %>%
-    {if (is.na(date)) filter(., TRUE) else filter(., Match_Date>=as.Date(date))} %>%
+    {if (is.na(since)) filter(., TRUE) else filter(., Match_Date>=as.Date(since))} %>%
     select(Match_Date,Home_Team,Away_Team,Home_xG,Away_xG,Team,Home_Away) %>%
     left_join(penalties) %>%
     arrange(Match_Date) %>%

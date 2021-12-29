@@ -1,4 +1,4 @@
-xg_team_scatter <- function(season,per90=TRUE,date=NA){
+xg_team_scatter <- function(season,per90=TRUE,since=NA){
   
   penalties <-
     data$fbref$advanced_stats_team_summary %>%
@@ -11,7 +11,7 @@ xg_team_scatter <- function(season,per90=TRUE,date=NA){
     data$fbref$advanced_stats_team_summary %>%
     filter(Season %in% !!season) %>%
     mutate(Match_Date=parse_date_time(Match_Date,"mdy")) %>%
-    {if (is.na(date)) filter(., TRUE) else filter(., Match_Date>=as.Date(date))} %>%
+    {if (is.na(since)) filter(., TRUE) else filter(., Match_Date>=as.Date(since))} %>%
     select(Match_Date,Home_Team,Away_Team,Home_xG,Away_xG,Team,Home_Away) %>%
     left_join(penalties) %>%
     mutate(
