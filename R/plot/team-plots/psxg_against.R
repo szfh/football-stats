@@ -1,9 +1,10 @@
-psxg_against <- function(team,season){
+psxg_against <- function(team,season,since=NA){
   
   plot <-
     data$fbref$advanced_stats_team_keeper %>%
     left_join(data$fbref$advanced_stats_team_misc) %>%
     mutate(Match_Date=parse_date_time(Match_Date,"mdy")) %>%
+    {if (!is.na(since)) filter(., Match_Date>=as.Date(since)) else .} %>%
     filter(Season %in% !!season) %>%
     select(Team,Match_Date,GA=GA_Shot_Stopping,psxG=PSxG_Shot_Stopping,SoTA=SoTA_Shot_Stopping,OG) %>%
     bind_rows(
@@ -16,12 +17,13 @@ psxg_against <- function(team,season){
         OG=0
       )
     ) %>%
-    print(n=Inf) %>%
     mutate(psxGD=psxG-(GA-OG)) %>%
     arrange(Match_Date) %>%
     group_by(Team) %>%
-    mutate(cumulative_psxGD=cumsum(psxGD)) %>%
-    mutate(cumulative_SoTA=cumsum(SoTA)) %>%
+    mutate(
+      cumulative_psxGD=cumsum(psxGD),
+      cumulative_SoTA=cumsum(SoTA)
+    ) %>%
     ungroup() %>%
     mutate(focus=ifelse(Team %in% !!team,TRUE,FALSE)) %>%
     ggplot(aes(x=cumulative_SoTA,y=cumulative_psxGD)) +
