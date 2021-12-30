@@ -22,7 +22,7 @@ team_minutes <- function(team,season,since=NA,scale_factor=1){
     group_by(Player,Pos) %>%
     summarise(Min=sum(Min,na.rm=TRUE),.groups="drop") %>%
     group_by(Player) %>%
-    slice_max(Min) %>%
+    slice_max(Min, with_ties=FALSE) %>%
     ungroup() %>%
     select(Player,Pos)
   
