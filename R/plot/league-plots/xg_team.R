@@ -31,7 +31,7 @@ xg_team <- function(season,per90=TRUE,since=NA){
       if (per90) summarise(., across(where(is.numeric),mean,na.rm=TRUE),.groups="drop")
       else summarise(., across(where(is.numeric),sum,na.rm=TRUE),.groups="drop")
     } %>%
-    make_long_data(levels=c("Team_npxG","Opposition_npxG"),labels=c("Expected Goals For","Expected Goals Against")) %>%
+    make_long_data(levels=c("Team_npxG","Opposition_npxG"),labels=c("Expected goals for","Expected goals against")) %>%
     ggplot(aes(x=0.05,y=n)) +
     geom_text_repel(
       aes(label=Team),
@@ -46,7 +46,7 @@ xg_team <- function(season,per90=TRUE,since=NA){
     theme[["solarfacet"]]() +
     facet_wrap("key",scales="free") +
     labs(
-      title="Expected Goals",
+      title="Expected goals",
       x=element_blank(),
       y=element_blank()) +
     scale_x_continuous(limit=c(0,1)) +
