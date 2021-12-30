@@ -1,4 +1,4 @@
-xg_team <- function(season,per90=TRUE,since=NA){
+xg_team <- function(season,per90=TRUE,since=NA,highlight=NA,highlight_colour="darkred"){
   
   penalties <-
     data$fbref$advanced_stats_team_summary %>%
@@ -32,9 +32,15 @@ xg_team <- function(season,per90=TRUE,since=NA){
       else summarise(., across(where(is.numeric),sum,na.rm=TRUE),.groups="drop")
     } %>%
     make_long_data(levels=c("Team_npxG","Opposition_npxG"),labels=c("Expected goals for","Expected goals against")) %>%
+    mutate(focus=case_when(
+      Team %in% highlight ~ TRUE,
+      TRUE ~ FALSE
+    )) %>%
     ggplot(aes(x=0.05,y=n)) +
     geom_text_repel(
-      aes(label=Team),
+      aes(label=Team,
+          fontface=ifelse(focus,"bold","plain"),
+          colour=focus),
       size=2.5,
       nudge_x=0.3,
       direction="y",
@@ -53,6 +59,7 @@ xg_team <- function(season,per90=TRUE,since=NA){
     # scale_y_continuous(breaks=seq(-100,100,10),labels=abs(seq(-100,100,10)),expand=expansion(mult=0.0.5)) +
     scale_y_continuous(breaks=breaks_extended(8),expand=expansion(mult=c(0.05))) +
     # scale_y_continuous(breaks=breaks_extended(8),labels=abs(breaks_extended(8)),expand=expansion(mult=c(0.05))) +
+    scale_colour_manual(values=c("TRUE"=highlight_colour,"FALSE"="black")) + 
     scale_fill_manual(values=palette[["epl"]]())
   
   return(plot)
