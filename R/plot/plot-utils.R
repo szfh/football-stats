@@ -205,3 +205,16 @@ save_plots <- function(plots,path,dpi=1500){
     save_plot(glue("{path}/{name}.jpg"),plots[[i]],dpi=dpi)
   }
 }
+
+save_tables <- function(tables,path,extention="png"){
+  # browser()
+  for(i in 1:length(tables)){
+    # browser()
+    name <- names(tables[i])
+    # gtsave(data=tables[[i]], filename=glue("{path}/{name}.jpg"))
+    # save_plot(glue("{path}/{name}.jpg"),plots[[i]],dpi=dpi)
+    # browser()
+    tables[[i]] %>%
+      gtsave(filename=glue("{name}.{extention}"),path=glue("{path}"))
+  }
+}
