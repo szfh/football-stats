@@ -56,3 +56,6 @@
   
   save_plots(plots_logo,path=here("plots","league"))
 }
+{
+  lapply(list.files(here("R","plot","table"), full.names=TRUE), source, encoding="utf-8")
+}
