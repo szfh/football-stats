@@ -138,7 +138,7 @@ days_since_last_match <- function(team){
       palette = c("grey","lightgreen"),
       domain=range(results_by_days$PPG),
       use_paletteer=FALSE
-    ) %>%
+    ) #%>%
     # data_color(
     #   columns=c(GD,xGD),
     #   colors=scales::col_numeric(
@@ -151,7 +151,7 @@ days_since_last_match <- function(team){
     #   )
     # ) %>%
   # gtsave("days_since_last_match.png",here("plots","table")) %>%
-  print
+  # print
   
   return(table)
 }
