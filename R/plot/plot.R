@@ -58,4 +58,6 @@
 }
 {
   lapply(list.files(here("R","plot","table"), full.names=TRUE), source, encoding="utf-8")
+  tables <- list()
+  tables$days_since_last_match <- days_since_last_match(team)
 }
