@@ -60,6 +60,12 @@
   lapply(list.files(here("R","plot","table"), full.names=TRUE), source, encoding="utf-8")
   tables <- list()
   tables$days_since_last_match <- days_since_last_match(team)
+  tables$fivethirtyeight_result_odds_epl <- fivethirtyeight_result_odds(season=2021,league="EPL")
+  tables$fivethirtyeight_result_odds_efl <- fivethirtyeight_result_odds(season=2021,league=c("EFLC","EFL1","EFL2"))
+  tables$fivethirtyeight_result_odds_wsl <- fivethirtyeight_result_odds(season=2021,league="WSL")
+  tables$fivethirtyeight_result_odds_epl_all <- fivethirtyeight_result_odds(season=2016:2021,league="EPL")
+  tables$fivethirtyeight_result_odds_efl_all <- fivethirtyeight_result_odds(season=2016:2021,league=c("EFLC","EFL1","EFL2"))
+  tables$fivethirtyeight_result_odds_wsl_all <- fivethirtyeight_result_odds(season=2016:2021,league="WSL")
   
   save_tables(tables,path=here("plots","tables"))
 }
