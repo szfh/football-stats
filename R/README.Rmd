@@ -14,6 +14,7 @@ output: github_document
 * [R/plot/](https://github.com/szfh/football-stats/tree/main/R/plot) for scripts to create and save images. Called from  [/plot.R](https://github.com/szfh/football-stats/blob/main/R/plot/plot.R).
 * [R/library.R](https://github.com/szfh/football-stats/blob/main/R/library.R) for packages.
 * [R/themes.R](https://github.com/szfh/football-stats/blob/main/R/themes.R) for themes.
+* [positions.csv](https://github.com/szfh/football-stats/blob/main/positions.csv) for a .csv file of positions based on FBRef match data. For EPL players between 2017-08-01 and 2021-12-31.
 * [@saintsbynumbers](https://twitter.com/saintsbynumbers) for the author. I [blog](https://szfh.github.io/) about twice a year.
 
 ### Note about scraping
