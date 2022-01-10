@@ -1,6 +1,6 @@
 fivethirtyeight_result_odds <- function(season="2022",league="EPL"){
   data <-
-    read.csv("https://projects.fivethirtyeight.com/soccer-api/club/spi_matches.csv") %>%
+    read_csv("https://projects.fivethirtyeight.com/soccer-api/club/spi_matches.csv") %>%
     as_tibble(.name_repair = "unique")
   
   league <- league %>%
@@ -41,10 +41,13 @@ fivethirtyeight_result_odds <- function(season="2022",league="EPL"){
       heading.subtitle.font.size = 12,
       heading.align = "center",
       table.border.top.color = "black",
+      heading.border.bottom.color = "black",
+      column_labels.border.top.color = "black",
       column_labels.border.bottom.color = "black",
       column_labels.border.bottom.width= px(3)
     ) %>%
     cols_label(
+      season=md("**Season**"),
       match=md("**Match**"),
       result_odds=md("**Pre-match odds**"),
     ) %>%
@@ -66,5 +69,5 @@ fivethirtyeight_result_odds <- function(season="2022",league="EPL"){
       align = "center",
       columns = everything()) %>%
     tab_source_note(
-      md("[fivethirtyeight pre-match odds | W-D-L result]"))
+      md("[ Women's Super League since 2017 | fivethirtyeight pre-match odds | W-D-L result ]"))
 }
