@@ -17,7 +17,7 @@
 {
   lapply(list.files(here("R","plot","team-plots"), full.names=TRUE), source, encoding="utf-8")
   plots <- list()
-  plots$minutes <- team_minutes(team,season)
+  plots$team_minutes <- team_minutes(team,season)
   plots$team_appearances <- team_appearances(team,season)
   plots$xg_trend <- xg_trend(team,season=c("2020-2021","2021-2022"),lastn=38)
   plots$xg_segment <- xg_segment(team,season=c("2020-2021","2021-2022"),lastn=38)
