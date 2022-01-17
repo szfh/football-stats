@@ -34,7 +34,7 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),current_season=2022)
     anti_join(fbref$match_results$all, fbref$match_results$keep) %>%
     mutate(data=pmap(list(country,gender="M",season,tier="1st"),possibly(get_match_results,otherwise=NA))) %>%
     mutate(data=map(data,unique)) %>%
-    mutate(date_scraped=Sys.Date()) %>%
+    mutate(date_scraped=today()) %>%
     print(n=Inf)
   
   fbref$season_stats$all <-
@@ -54,7 +54,7 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),current_season=2022)
     anti_join(fbref$season_stats$all, fbref$season_stats$keep) %>%
     mutate(data=pmap(list(country,gender="M",season,tier="1st",stat),possibly(get_season_team_stats,otherwise=NA))) %>%
     mutate(data=map(data,unique)) %>%
-    mutate(date_scraped=Sys.Date()) %>%
+    mutate(date_scraped=today()) %>%
     print(n=Inf)
   
   fbref$match_summary$all <-
@@ -71,7 +71,7 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),current_season=2022)
   fbref$match_summary$new <-
     anti_join(fbref$match_summary$all, fbref$match_summary$keep) %>%
     mutate(data=map(url,possibly(get_match_summary,otherwise=NA))) %>%
-    mutate(date_scraped=Sys.Date()) %>%
+    mutate(date_scraped=today()) %>%
     print(n=Inf)
   
   fbref$match_lineups$all <-
@@ -88,7 +88,7 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),current_season=2022)
   fbref$match_lineups$new <-
     anti_join(fbref$match_lineups$all, fbref$match_lineups$keep) %>%
     mutate(data=map(url,possibly(get_match_lineups,otherwise=NA))) %>%
-    mutate(date_scraped=Sys.Date()) %>%
+    mutate(date_scraped=today()) %>%
     print(n=Inf)
   
   fbref$match_shots$all <-
@@ -105,7 +105,7 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),current_season=2022)
   fbref$match_shots$new <-
     anti_join(fbref$match_shots$all, fbref$match_shots$keep) %>%
     mutate(data=map(url,possibly(get_match_shooting,otherwise=NA))) %>%
-    mutate(date_scraped=Sys.Date()) %>%
+    mutate(date_scraped=today()) %>%
     print(n=Inf)
   
   fbref$advanced_stats$all <-
@@ -124,7 +124,7 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),current_season=2022)
   fbref$advanced_stats$new <-
     anti_join(fbref$advanced_stats$all, fbref$advanced_stats$keep) %>%
     mutate(data=pmap(list(url,stat,team_or_player),possibly(get_advanced_match_stats,otherwise=NA))) %>%
-    mutate(date_scraped=Sys.Date()) %>%
+    mutate(date_scraped=today()) %>%
     print(n=Inf)
   
   fbref_all <-
