@@ -47,7 +47,7 @@ fivethirtyeight_result_odds <- function(season="2022",league="EPL"){
       column_labels.border.bottom.width= px(3)
     ) %>%
     cols_label(
-      season=md("**Season**"),
+      # season=md("**Season**"),
       match=md("**Match**"),
       result_odds=md("**Pre-match odds**"),
     ) %>%
