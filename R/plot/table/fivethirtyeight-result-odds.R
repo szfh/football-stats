@@ -36,7 +36,7 @@ fivethirtyeight_result_odds <- function(season="2022",league="EPL"){
     fmt_markdown(columns = match, rows=everything()) %>%
     fmt_percent(columns = result_odds, rows=everything(),decimals=1) %>%
     tab_header(
-      title = md("**Results by pre-match odds**")) %>%
+      title = md("**Least likely results by pre-match prediction**")) %>%
     tab_options(
       heading.subtitle.font.size = 12,
       heading.align = "center",
@@ -46,6 +46,15 @@ fivethirtyeight_result_odds <- function(season="2022",league="EPL"){
       column_labels.border.bottom.color = "black",
       column_labels.border.bottom.width= px(3)
     ) %>%
+    # tab_style(
+    #   style = list(
+    #     cell_fill(color="darkgrey", alpha=0.6)#,
+    #     # cell_text(style="italic")
+    #   ),
+    #   locations = cells_body(
+    #     columns=1,rows=3
+    #   )
+    # ) %>%
     cols_label(
       # season=md("**Season**"),
       match=md("**Match**"),
@@ -69,5 +78,5 @@ fivethirtyeight_result_odds <- function(season="2022",league="EPL"){
       align = "center",
       columns = everything()) %>%
     tab_source_note(
-      md("[ Women's Super League since 2017 | fivethirtyeight pre-match odds | W-D-L result ]"))
+      md("[FiveThirtyEight pre-match prediction | W-D-L result ]"))
 }
