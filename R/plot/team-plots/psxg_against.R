@@ -28,6 +28,7 @@ psxg_against <- function(team,season,since=NA){
     mutate(focus=ifelse(Team %in% !!team,TRUE,FALSE)) %>%
     ggplot(aes(x=cumulative_SoTA,y=cumulative_psxGD)) +
     geom_path(aes(group=Team,alpha=focus,colour=focus),size=0.75) +
+    
     theme[["solar"]]() +
     theme(
       axis.text.x=element_markdown(),
@@ -41,7 +42,7 @@ psxg_against <- function(team,season,since=NA){
       # title=glue("GK expected saves - <b style='color:darkred'>{team}</b>"),
       title=glue("Post-shot expected goals"),
       x="Shots on target faced",
-      y="Post-shot xG on target performance"
+      y="GK over/under performance"
     ) +
     scale_x_continuous(breaks=breaks_extended(8),expand=expansion(add=c(0,1))) +
     scale_y_continuous(breaks=breaks_extended(8),expand=expansion(add=c(02,0.2))) +
