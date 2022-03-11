@@ -63,7 +63,7 @@ xg_trend <- function(team,season,lastn=NA,since=NA){
       y=glue("Expected goals <b style='color:darkred'>for</b> / <b style='color:royalblue'>against</b>")
     ) +
     scale_x_reordered() +
-    scale_y_continuous(limits=c(0,NA),expand=expansion(add=c(0,0.1))) +
+    scale_y_continuous(limits=c(0,NA),breaks=seq(0,10,1),expand=expansion(add=c(0,0.1))) +
     facet_grid(cols=vars(Season), space="free", scales="free_x")
   
   return(plot)
