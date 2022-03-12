@@ -7,6 +7,7 @@ psxg_against <- function(team,season,since=NA){
     {if (!is.na(since)) filter(., Match_Date>=as.Date(since)) else .} %>%
     filter(Season %in% !!season) %>%
     select(Team,Match_Date,GA=GA_Shot_Stopping,psxG=PSxG_Shot_Stopping,SoTA=SoTA_Shot_Stopping,OG) %>%
+    filter(!is.na(psxG)) %>%
     bind_rows(
       tibble(
         Team=data$fbref$advanced_stats_team_keeper %>% filter(Season %in% !!season) %>% pull(Team) %>% unique(),
