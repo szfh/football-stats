@@ -19,7 +19,7 @@ psxg_against <- function(season){
     annotate("text",label="Opposition\ngoalkeepers\nunderperform\nagainst these teams",fontface="bold",hjust="right",size=3,x=-0.4,y=17.5) +
     annotate("text",label="Opposition\ngoalkeepers\noverperform\nagainst these teams",fontface="bold",hjust="left",size=3,x=0.4,y=4.5) +
     scale_x_continuous(breaks=breaks_extended(6),expand=expansion(mult=c(0.05,0.05))) +
-    scale_colour_manual(values=c("TRUE"=colour[["medium"]][[8]],"FALSE"=colour[["medium"]][[3]]))
+    scale_colour_manual(values=c("TRUE"=colour[["medium"]][[3]],"FALSE"=colour[["medium"]][[8]]))
   
   return(plot)
 }
