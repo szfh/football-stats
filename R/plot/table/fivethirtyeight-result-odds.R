@@ -1,8 +1,4 @@
-fivethirtyeight_result_odds <- function(season="2022",league="EPL"){
-  data <-
-    read_csv("https://projects.fivethirtyeight.com/soccer-api/club/spi_matches.csv") %>%
-    as_tibble(.name_repair = "unique")
-  
+fivethirtyeight_result_odds <- function(season="2022",league="EPL",hide_season=TRUE){
   league <- league %>%
     str_replace("EPL","Barclays Premier League") %>%
     str_replace("WSL","FA Women's Super League") %>%
@@ -14,7 +10,7 @@ fivethirtyeight_result_odds <- function(season="2022",league="EPL"){
     str_replace("EFL2", "English League Two")
   
   match_odds <-
-    data %>%
+    data$fivethirtyeight$matches %>%
     filter(season %in% !!(as.numeric(season))) %>%
     filter(league %in% !!league) %>%
     rowwise %>%
@@ -29,7 +25,7 @@ fivethirtyeight_result_odds <- function(season="2022",league="EPL"){
   
   match_odds %>%
     mutate(match=glue("{team1} **{score1}-{score2}** {team2}")) %>%
-    select(match,result_odds) %>%
+    select(season,match,result_odds) %>%
     arrange(result_odds) %>%
     slice_min(result_odds,n=12) %>%
     gt() %>%
@@ -56,10 +52,11 @@ fivethirtyeight_result_odds <- function(season="2022",league="EPL"){
     #   )
     # ) %>%
     cols_label(
-      # season=md("**Season**"),
+      season=md("**Season**"),
       match=md("**Match**"),
       result_odds=md("**Pre-match odds**"),
     ) %>%
+    {if(hide_season) cols_hide(., season) else .} %>%
     tab_style(
       style = list(
         cell_text(weight="bold")
@@ -78,5 +75,5 @@ fivethirtyeight_result_odds <- function(season="2022",league="EPL"){
       align = "center",
       columns = everything()) %>%
     tab_source_note(
-      md("[FiveThirtyEight pre-match prediction | W-D-L result ]"))
+      md("[ FiveThirtyEight pre-match prediction | W-D-L result ]"))
 }
