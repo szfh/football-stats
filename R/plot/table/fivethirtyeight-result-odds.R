@@ -1,8 +1,4 @@
 fivethirtyeight_result_odds <- function(season="2022",league="EPL"){
-  data <-
-    read_csv("https://projects.fivethirtyeight.com/soccer-api/club/spi_matches.csv") %>%
-    as_tibble(.name_repair = "unique")
-  
   league <- league %>%
     str_replace("EPL","Barclays Premier League") %>%
     str_replace("WSL","FA Women's Super League") %>%
@@ -14,7 +10,7 @@ fivethirtyeight_result_odds <- function(season="2022",league="EPL"){
     str_replace("EFL2", "English League Two")
   
   match_odds <-
-    data %>%
+    data$fivethirtyeight$matches %>%
     filter(season %in% !!(as.numeric(season))) %>%
     filter(league %in% !!league) %>%
     rowwise %>%
