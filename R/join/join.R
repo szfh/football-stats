@@ -3,14 +3,17 @@ source(here("R","join","tidy.R"),encoding="utf-8")
 join <- function(
   save_path_fbref=here("data","fbref.rds"),
   save_path_understat=here("data","understat.rds"),
+  save_path_fivethirtyeight=here("data","fivethirtyeight.rds"),
   save_path_canpl=here("data","canpl.rds")
 ){
   fbref_join <- possibly(join_fbref, otherwise=NA)(readRDS(save_path_fbref))
   understat_join <- possibly(join_understat, otherwise=NA)(readRDS(save_path_understat))
+  fivethirtyeight_join <- possibly(join_fivethirtyeight, otherwise=NA)(readRDS(save_path_fivethirtyeight))
   canpl_join <- possibly(join_canpl, otherwise=NA)(readRDS(save_path_canpl))
   data <- list(
     fbref=fbref_join,
     understat=understat_join,
+    fivethirtyeight=fivethirtyeight_join,
     canpl=canpl_join)
   
   return(data)
@@ -232,6 +235,15 @@ join_understat <- function(understat){
     filter(data_type=="shots") %>%
     select(data) %>%
     unnest(data)
+  
+  return(data)
+}
+
+join_fivethirtyeight <- function(fivethirtyeight){
+  fivethirtyeight_tidy <-
+    fivethirtyeight
+
+  data <- fivethirtyeight_tidy
   
   return(data)
 }
