@@ -74,5 +74,5 @@ fivethirtyeight_result_odds <- function(season="2022",league="EPL"){
       align = "center",
       columns = everything()) %>%
     tab_source_note(
-      md("[FiveThirtyEight pre-match prediction | W-D-L result ]"))
+      md("[ FiveThirtyEight pre-match prediction | W-D-L result ]"))
 }
