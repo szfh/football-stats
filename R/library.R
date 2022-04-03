@@ -2,6 +2,7 @@ pacman::p_load(
   pacman,
   here,
   tidyverse,
+  ggplot2,
   magrittr,
   rvest,
   extrafont,
