@@ -1,7 +1,7 @@
 source(here("R","raw","raw-utils.R"),encoding="utf-8")
 source(here("R","themes.R"),encoding="utf-8")
 
-scrape_understat <- function(save_path=here("data","understat.rds"),current_season="2022"){
+scrape_understat <- function(save_path=here("data","understat.rds"),current_season="2022",include_shots=FALSE){
   
   data_types <- get_data_types()
   
@@ -55,8 +55,8 @@ scrape_understat <- function(save_path=here("data","understat.rds"),current_seas
   
   understat$shots$keep <-
     understat_saved %>%
-    filter(data_type=="shots") #%>%
-  # filter(season!=current_season)
+    filter(data_type=="shots") %>%
+    {if(include_shots) . else filter(., season!=current_season)}
   
   understat$shots$new <-
     anti_join(understat$shots$all,understat$shots$keep) %>%
