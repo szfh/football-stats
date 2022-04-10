@@ -56,7 +56,7 @@ scrape_understat <- function(save_path=here("data","understat.rds"),current_seas
   understat$shots$keep <-
     understat_saved %>%
     filter(data_type=="shots") %>%
-    {if(include_shots) . else filter(., season!=current_season)}
+    {if(include_shots) filter(., season!=current_season) else .}
   
   understat$shots$new <-
     anti_join(understat$shots$all,understat$shots$keep) %>%
