@@ -1,7 +1,7 @@
 team_appearances <- function(team,season,since=NA){
   positions <-
     data$fbref$match_lineups %>%
-    {if (!is.na(since)) filter(., Matchday>=as.Date(since)) else filter(., Matchday>=as.Date(today()-365))} %>%
+    {if (!is.na(since)) filter(., Matchday>=as.Date(since)) else .} %>%
     select(Player=Player_Name,Pos,Min) %>%
     mutate(Pos=str_sub(Pos,1,2)) %>%
     filter(!is.na(Pos)) %>%
@@ -31,7 +31,7 @@ team_appearances <- function(team,season,since=NA){
     filter(Season %in% !!season) %>%
     filter(Team %in% !!team) %>%
     mutate(Match_Date=parse_date_time(Match_Date,"mdy")) %>%
-    filter(Match_Date>=today()-365) %>%
+    {if (!is.na(since)) filter(., Matchday>=as.Date(since)) else .} %>%
     mutate(
       Home_Team=shorten_team_names(Home_Team),
       Away_Team=shorten_team_names(Away_Team)
