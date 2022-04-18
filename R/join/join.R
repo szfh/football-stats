@@ -2,16 +2,19 @@ source(here("R","join","tidy.R"),encoding="utf-8")
 
 join <- function(
   save_path_fbref=here("data","fbref.rds"),
+  save_path_fbref_urls=here("data","fbref_urls.rds"),
   save_path_understat=here("data","understat.rds"),
   save_path_fivethirtyeight=here("data","fivethirtyeight.rds"),
   save_path_canpl=here("data","canpl.rds")
 ){
   fbref_join <- possibly(join_fbref, otherwise=NA)(readRDS(save_path_fbref))
+  fbref_urls_join <- possibly(join_fbref_urls, otherwise=NA)(readRDS(save_path_fbref_urls))
   understat_join <- possibly(join_understat, otherwise=NA)(readRDS(save_path_understat))
   fivethirtyeight_join <- possibly(join_fivethirtyeight, otherwise=NA)(readRDS(save_path_fivethirtyeight))
   canpl_join <- possibly(join_canpl, otherwise=NA)(readRDS(save_path_canpl))
   data <- list(
     fbref=fbref_join,
+    fbref_urls=fbref_urls_join,
     understat=understat_join,
     fivethirtyeight=fivethirtyeight_join,
     canpl=canpl_join)
@@ -217,6 +220,13 @@ join_fbref <- function(fbref){
   return(data)
 }
 
+join_fbref_urls <- function(fbref_urls){
+  data <-
+    fbref_urls
+  
+  return(data)
+}
+
 join_understat <- function(understat){
   understat_tidy <-
     understat #%>%
@@ -242,7 +252,7 @@ join_understat <- function(understat){
 join_fivethirtyeight <- function(fivethirtyeight){
   fivethirtyeight_tidy <-
     fivethirtyeight
-
+  
   data <- fivethirtyeight_tidy
   
   return(data)
