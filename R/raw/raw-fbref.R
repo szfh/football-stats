@@ -1,21 +1,58 @@
 source(here("R","raw","raw-utils.R"),encoding="utf-8")
 source(here("R","themes.R"),encoding="utf-8")
 
-scrape_fbref <- function(save_path=here("data","fbref.rds"),current_season=2022){
+scrape_fbref <- function(save_path=here("data","fbref.rds"),save_path_urls=here("data","fbref_urls.rds"),current_season=2022){
   data_types <- get_data_types()
   
   fbref_saved <- readRDS(save_path)
+  fbref_urls_saved <- readRDS(save_path_urls)
   fbref <- list()
+  fbref_urls <- list()
   
-  fbref$match_urls$all <-
+  fbref_urls$league$all <-
     tibble() %>%
     bind_rows(
       crossing(data_types$season,data_types$country)
     ) %>%
-    mutate(data_type="match_url") %>%
+    mutate(data_type="league")
+  
+  fbref_urls$league$keep <-
+    fbref_urls_saved %>%
+    filter(data_type=="league")
+  
+  fbref_urls$league$new <-
+    anti_join(fbref_urls$league$all, fbref_urls$league$keep) %>%
+    mutate(data=pmap(list(country,gender="M",season),fb_league_urls)) %>%
+    mutate(date_scraped=today()) %>%
+    print(n=Inf)
+  
+  fbref_urls$team$all <-
+    bind_rows(fbref_urls$league$keep,fbref_urls$league$new) %>%
+    mutate(data_type="team")
+  
+  fbref_urls$team$keep <-
+    fbref_urls_saved %>%
+    filter(data_type=="team")
+  
+  fbref_urls$team$new <-
+    anti_join(fbref_urls$team$all, fbref_urls$team$keep) %>%
+    mutate(data=map(data,fb_teams_urls)) %>%
+    mutate(date_scraped=today()) %>%
+    print(n=Inf)
+  
+  fbref_urls$match$all <-
+    bind_rows(fbref_urls$league$keep,fbref_urls$league$new) %>%
+    mutate(data_type="match")
+  
+  fbref_urls$match$keep <-
+    fbref_urls_saved %>%
+    filter(data_type=="match")
+  
+  fbref_urls$match$new <-
+    anti_join(fbref_urls$match$all, fbref_urls$match$keep) %>%
     mutate(data=pmap(list(country,gender="M",season),get_match_urls)) %>%
-    mutate(data=map(data,as_tibble)) %>%
-    mutate(data=map(data,unique))
+    mutate(date_scraped=today()) %>%
+    print(n=Inf)
   
   fbref$match_results$all <-
     tibble() %>%
@@ -58,9 +95,10 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),current_season=2022)
     print(n=Inf)
   
   fbref$match_summary$all <-
-    fbref$match_urls$all %>%
+    bind_rows(fbref_urls$match$keep,fbref_urls$match$new) %>%
+    select(-date_scraped) %>%
     unnest(cols=data) %>%
-    rename(url=value) %>%
+    rename(url=data) %>%
     mutate(data_type="match_summary")
   
   fbref$match_summary$keep <-
@@ -75,9 +113,10 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),current_season=2022)
     print(n=Inf)
   
   fbref$match_lineups$all <-
-    fbref$match_urls$all %>%
+    bind_rows(fbref_urls$match$keep,fbref_urls$match$new) %>%
+    select(-date_scraped) %>%
     unnest(cols=data) %>%
-    rename(url=value) %>%
+    rename(url=data) %>%
     mutate(data_type="match_lineups")
   
   fbref$match_lineups$keep <-
@@ -92,9 +131,10 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),current_season=2022)
     print(n=Inf)
   
   fbref$match_shots$all <-
-    fbref$match_urls$all %>%
+    bind_rows(fbref_urls$match$keep,fbref_urls$match$new) %>%
+    select(-date_scraped) %>%
     unnest(cols=data) %>%
-    rename(url=value) %>%
+    rename(url=data) %>%
     mutate(data_type="match_shots")
   
   fbref$match_shots$keep <-
@@ -109,9 +149,10 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),current_season=2022)
     print(n=Inf)
   
   fbref$advanced_stats$all <-
-    fbref$match_urls$all %>%
+    bind_rows(fbref_urls$match$keep,fbref_urls$match$new) %>%
+    select(-date_scraped) %>%
     unnest(cols=data) %>%
-    rename(url=value) %>%
+    rename(url=data) %>%
     crossing(data_types$advanced_stats) %>%
     crossing(data_types$team_or_player) %>%
     mutate(data_type="advanced_stats")
@@ -141,7 +182,19 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),current_season=2022)
     relocate(date_scraped,.after=last_col()) %>%
     relocate(data,.after=last_col())
   
+  fbref_urls_all <-
+    bind_rows(
+      fbref_urls$league$keep,fbref_urls$league$new,
+      fbref_urls$team$keep,fbref_urls$team$new,
+      fbref_urls$match$keep,fbref_urls$match$new,
+    ) %>%
+    filter(!is.na(data)) %>%
+    relocate(data_type) %>%
+    relocate(date_scraped,.after=last_col()) %>%
+    relocate(data,.after=last_col())
+  
   saveRDS(fbref_all,file=save_path)
+  saveRDS(fbref_urls_all,file=save_path_urls)
   
   return(fbref_all)
 }
