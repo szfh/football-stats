@@ -35,6 +35,12 @@ join_fbref <- function(fbref){
     filter(data_type=="match_result") %>%
     select(data) %>%
     unnest(data)
+
+  data$match_results_allcomp <-
+    fbref_tidy %>%
+    filter(data_type=="match_result_allcomp") %>%
+    select(data) %>%
+    unnest(data)
   
   data$match_summary <-
     fbref_tidy %>%
