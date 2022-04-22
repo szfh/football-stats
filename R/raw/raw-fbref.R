@@ -28,7 +28,8 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),save_path_urls=here(
   
   fbref_urls$team$all <-
     bind_rows(fbref_urls$league$keep,fbref_urls$league$new) %>%
-    mutate(data_type="team")
+    mutate(data_type="team") %>%
+    rename(data_league=data)
   
   fbref_urls$team$keep <-
     fbref_urls_saved %>%
@@ -36,13 +37,15 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),save_path_urls=here(
   
   fbref_urls$team$new <-
     anti_join(fbref_urls$team$all, fbref_urls$team$keep) %>%
-    mutate(data=map(data,fb_teams_urls)) %>%
+    mutate(data=map(data_league,fb_teams_urls)) %>%
+    select(-data_league) %>%
     mutate(date_scraped=today()) %>%
     print(n=Inf)
   
   fbref_urls$match$all <-
     bind_rows(fbref_urls$league$keep,fbref_urls$league$new) %>%
-    mutate(data_type="match")
+    mutate(data_type="match") %>%
+    rename(data_league=data)
   
   fbref_urls$match$keep <-
     fbref_urls_saved %>%
@@ -51,6 +54,7 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),save_path_urls=here(
   fbref_urls$match$new <-
     anti_join(fbref_urls$match$all, fbref_urls$match$keep) %>%
     mutate(data=pmap(list(country,gender="M",season),get_match_urls)) %>%
+    select(-data_league) %>%
     mutate(date_scraped=today()) %>%
     print(n=Inf)
   
