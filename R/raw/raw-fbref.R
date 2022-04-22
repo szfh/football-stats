@@ -78,6 +78,25 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),save_path_urls=here(
     mutate(date_scraped=today()) %>%
     print(n=Inf)
   
+  fbref$match_results_allcomp$all <-
+    bind_rows(fbref_urls$team$keep,fbref_urls$team$new) %>%
+    select(-date_scraped) %>%
+    unnest(cols=data) %>%
+    rename(url=data) %>%
+    mutate(data_type="match_result_allcomp")
+  
+  fbref$match_results_allcomp$keep <-
+    fbref_saved %>%
+    filter(data_type=="match_result_allcomp") %>%
+    filter(season!=current_season) %>%
+    filter(!is.na(data))
+  
+  fbref$match_results_allcomp$new <-
+    anti_join(fbref$match_results_allcomp$all, fbref$match_results_allcomp$keep) %>%
+    mutate(data=map(url,possibly(get_team_match_results,otherwise=NA))) %>%
+    mutate(date_scraped=today()) %>%
+    print(n=Inf)
+  
   fbref$season_stats$all <-
     tibble() %>%
     bind_rows(
@@ -175,6 +194,7 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),save_path_urls=here(
   fbref_all <-
     bind_rows(
       fbref$match_results$keep,fbref$match_results$new,
+      fbref$match_results_allcomp$keep,fbref$match_results_allcomp$new,
       fbref$season_stats$keep,fbref$season_stats$new,
       fbref$match_lineups$keep,fbref$match_lineups$new,
       fbref$match_summary$keep,fbref$match_summary$new,
