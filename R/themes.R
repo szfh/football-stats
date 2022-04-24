@@ -1,13 +1,9 @@
 # themes
 theme <- list()
-theme[["base_size"]] <- 12
-# theme[["base_family"]] <- "sans"
-# theme[["base_family"]] <- "serif"
-# theme[["base_family"]] <- "Noto Sans"
-# theme[["base_family"]] <- "Open Sans"
-theme[["base_family"]] <- "Verdana"
+theme$base_size <- 12
+theme$base_family <- "Verdana"
 
-theme[["white"]] <- function(base_size=theme[["base_size"]],base_family=theme[["base_family"]]){
+theme$white <- function(base_size=theme$base_size,base_family=theme$base_family){
   theme_bw(base_size=base_size,base_family=base_family) +
     theme(
       axis.ticks=element_blank(),
@@ -35,7 +31,7 @@ theme[["white"]] <- function(base_size=theme[["base_size"]],base_family=theme[["
 }
 
 # https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/
-theme[["solar"]] <- function(base_size=theme[["base_size"]],base_family=theme[["base_family"]]){
+theme$solar <- function(base_size=theme$base_size,base_family=theme$base_family){
   theme_solarized(base_size=base_size,base_family=base_family) +
     theme(
       axis.ticks=element_blank(),
@@ -62,8 +58,8 @@ theme[["solar"]] <- function(base_size=theme[["base_size"]],base_family=theme[["
     )
 }
 
-theme[["solarfacet"]] <- function(base_size=theme[["base_size"]],base_family=theme[["base_family"]]){
-  theme[["solar"]]() +
+theme$solarfacet <- function(base_size=theme$base_size,base_family=theme$base_family){
+  theme$solar() +
     theme(
       axis.line.x=element_blank(),
       axis.ticks.x=element_blank(),
@@ -73,8 +69,8 @@ theme[["solarfacet"]] <- function(base_size=theme[["base_size"]],base_family=the
     )
 }
 
-theme[["dark"]] <- function(base_size=theme[["base_size"]],base_family=theme[["base_family"]]){
-  theme_solarized(base_size=theme[["base_size"]],base_family=theme[["base_family"]], light=FALSE) +
+theme$dark <- function(base_size=theme$base_size,base_family=theme$base_family){
+  theme_solarized(base_size=theme$base_size,base_family=theme$base_family, light=FALSE) +
     theme(
       axis.ticks=element_blank(),
       axis.line=element_line(size=0.6),
@@ -101,7 +97,7 @@ theme[["dark"]] <- function(base_size=theme[["base_size"]],base_family=theme[["b
 
 # palettes
 palette <- list()
-palette[["epl"]] <- function(team_name){
+palette$epl <- function(team_name){
   colours <- c(
     `Other` = "lightgrey",
     `Arsenal` = "#EF0107",
@@ -153,7 +149,7 @@ palette[["epl"]] <- function(team_name){
   return(colours[team_name])
 }
 
-palette[["cpl"]] <- function(team_name){
+palette$cpl <- function(team_name){
   colours <- c(
     `Other` = "lightgrey",
     `Pacific` = "#8c1aff",
@@ -173,7 +169,7 @@ palette[["cpl"]] <- function(team_name){
   return(colours[team_name])
 }
 
-palette[["cpl2"]] <- function(team_id){
+palette$cpl2 <- function(team_id){
   colours <- c(
     `Other` = "lightgrey",
     `15380` = "#8c1aff",
@@ -193,7 +189,7 @@ palette[["cpl2"]] <- function(team_id){
   return(colours[team_id])
 }
 
-palette[["sfc"]] <- function(p){
+palette$sfc <- function(p){
   colours <- c(
     "main" = "#D71920", # normal
     "light" = "#ED5C5C", # light
@@ -209,15 +205,15 @@ palette[["sfc"]] <- function(p){
 
 # colours
 colour <- list()
-colour[["light"]] <- few_pal("Light")(8)
-colour[["medium"]] <- few_pal("Medium")(8)
-colour[["dark"]] <- few_pal("Dark")(8)
-colour[["gdocs"]] <- gdocs_pal()(10)
-colour[["sfc"]] <- c(
+colour$light <- few_pal("Light")(8)
+colour$medium <- few_pal("Medium")(8)
+colour$dark <- few_pal("Dark")(8)
+colour$gdocs <- gdocs_pal()(10)
+colour$sfc <- c(
   "main"="#D71920",
   "light"="#ED5C5C",
-  "grey"=ggthemes_data[["solarized"]][["Base"]][["value"]][[5]],
-  "solar"=ggthemes_data[["solarized"]][["Base"]][["value"]][[7]],
+  "grey"=ggthemes_data$solarized$Base$value[[5]],
+  "solar"=ggthemes_data$solarized$Base$value[[7]],
   "black"="#000000"
 )
 
@@ -228,5 +224,5 @@ caption <- list(
 )
 
 # tests
-# colorspace::swatchplot(colour[["medium"]])
-# colorspace::swatchplot(ggthemes_data[["solarized"]][["Base"]][["value"]])
+# colorspace::swatchplot(colour$medium)
+# colorspace::swatchplot(ggthemes_data$solarized$Base$value)
