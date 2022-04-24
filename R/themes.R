@@ -1,4 +1,3 @@
-# themes
 theme <- list()
 theme$base_size <- 12
 theme$base_family <- "Verdana"
@@ -143,9 +142,6 @@ palette$epl <- function(team_name){
     `Wolves` = "#FDB913"
   )
   
-  # if(is.null(colours))
-  #   return(colours)
-  
   return(colours[team_name])
 }
 
@@ -163,9 +159,6 @@ palette$cpl <- function(team_name){
     `Atletico Ottawa` = "#e62e00"
   )
   
-  # if(is.null(colours))
-  #   return(colours)
-  
   return(colours[team_name])
 }
 
@@ -179,12 +172,8 @@ palette$cpl2 <- function(team_id){
     `15377` = "#ffa64d",
     `15382` = "#66cc00",
     `15376` = "#80bfff",
-    # `Atlético Ottawa` = "#e62e00",
     `16614` = "#e62e00"
   )
-  
-  # if(is.null(colours))
-  #   return(colours)
   
   return(colours[team_id])
 }
