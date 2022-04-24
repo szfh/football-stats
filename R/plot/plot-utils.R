@@ -4,23 +4,6 @@ expand_seasons <- function(season){
   return(season)
 }
 
-expand_teams <- function(team){
-  team <- team %>%
-    str_replace("United","Utd")
-  team <- case_when(
-    team %in% "Brighton & Hove Albion" ~ "Brighton",
-    # team %in% "Manchester United" ~ "Manchester Utd",
-    team %in% 
-      # team %in% "Sheffield United" ~ "Sheffield Utd",
-      team %in% "West Bromwich Albion" ~ "West Brom",
-    # team %in% "West Ham United" ~ "West Ham Utd",
-    team %in% "Wolverhampton Wanderers" ~ "Wolves",
-    TRUE ~ team
-  )
-  
-  return(team)
-}
-
 shorten_team_names <- function(team){
   team <- team %>%
     str_replace("United","Utd")
@@ -169,11 +152,6 @@ get_unused_subs <- function(data,Subs_Available,Subs_Used){
   }
 }
 
-# latest_data <- matches %>%
-#   filter(!is.na(GoalsHome)&!is.na(GoalsAway)) %>%
-#   summarise(last(Date)) %>%
-#   extract2(1)
-
 get_opposition <- function(team=NA,home_away=NA,home_team,away_team){
   opposition <- ifelse(home_away=="Home",away_team,home_team)
   # opposition <- ifelse(team==home_team,away_team,home_team)
@@ -208,13 +186,8 @@ save_plots <- function(plots,path,dpi=1500){
 }
 
 save_tables <- function(tables,path,extention="png"){
-  # browser()
   for(i in 1:length(tables)){
-    # browser()
     name <- names(tables[i])
-    # gtsave(data=tables[[i]], filename=glue("{path}/{name}.jpg"))
-    # save_plot(glue("{path}/{name}.jpg"),plots[[i]],dpi=dpi)
-    # browser()
     tables[[i]] %>%
       gtsave(filename=glue("{name}.{extention}"),path=glue("{path}"))
   }
