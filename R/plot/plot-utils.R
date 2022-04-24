@@ -1,5 +1,6 @@
 expand_seasons <- function(season){
   season <- c(season,str_sub(season,-4))
+  season <- distinct(season)
   return(season)
 }
 
