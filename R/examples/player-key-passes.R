@@ -70,7 +70,7 @@
   
   plots <- list()
   
-  plots$key_passes <-
+  plots$player_key_passes <-
     bind_rows(
       shots_player %>%
         filter(Shot_Type=="OP") %>%
