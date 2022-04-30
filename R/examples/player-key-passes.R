@@ -75,12 +75,12 @@
       shots_player %>%
         filter(Shot_Type=="OP") %>%
         count(Date,Shot_Type) %>%
-        full_join(matches,.) %>%
+        left_join(matches,.) %>%
         mutate(Shot_Type="OP"),
       shots_player %>%
         filter(Shot_Type=="SP") %>%
         count(Date) %>%
-        full_join(matches,.) %>%
+        left_join(matches,.) %>%
         mutate(Shot_Type="SP")
     ) %>% 
     arrange(Date) %>%
