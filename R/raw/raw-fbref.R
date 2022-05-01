@@ -49,8 +49,9 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),save_path_urls=here(
   
   fbref_urls$match$keep <-
     fbref_urls_saved %>%
-    filter(data_type=="match")
   
+    filter(data_type=="match") %>%
+    filter(season!=current_season)
   fbref_urls$match$new <-
     anti_join(fbref_urls$match$all, fbref_urls$match$keep) %>%
     mutate(data=pmap(list(country,gender="M",season),get_match_urls)) %>%
