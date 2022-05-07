@@ -46,7 +46,9 @@ tidy_understat <- function(data){
 tidy_canpl <- function(data){
   data <-
     data %>%
-    select(-contains(c("Season")))
+    select(-contains(c("Season"))) %>%
+    select(-contains(c("Date"))) %>%
+    select(-contains(c("xGPerShot")))
   
   return(data)
 }
