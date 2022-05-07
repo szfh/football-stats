@@ -265,9 +265,11 @@ join_fivethirtyeight <- function(fivethirtyeight){
 }
 
 join_canpl <- function(canpl){
+  
   canpl_tidy <-
     canpl %>%
     mutate(Season=as.numeric(str_sub(name,start=-8,end=-5)),.before="name") %>%
+    mutate(Data_Type=as.character(str_sub(name,start=4,end=-9)),.before="name") %>%
     mutate(data=map(data,as_tibble)) %>%
     mutate(data=map(data,tidy_canpl))
   
@@ -275,25 +277,25 @@ join_canpl <- function(canpl){
   
   data$team_total <-
     canpl_tidy %>%
-    filter(str_detect(name,"TeamTotals")) %>%
+    filter(Data_Type=="TeamTotals") %>%
     select(Season,data) %>%
     unnest(data)
   
   data$player_total <-
     canpl_tidy %>%
-    filter(str_detect(name,"PlayerTotals")) %>%
+    filter(Data_Type=="PlayerTotals") %>%
     select(Season,data) %>%
     unnest(data)
   
   data$team_match <-
     canpl_tidy %>%
-    filter(str_detect(name,"TeamByGame")) %>%
+    filter(Data_Type=="TeamByGame") %>%
     select(Season,data) %>%
     unnest(data)
   
   data$player_match <-
     canpl_tidy %>%
-    filter(str_detect(name,"PlayerByGame")) %>%
+    filter(Data_Type=="PlayerByGame") %>%
     select(Season,data) %>%
     unnest(data)
   
