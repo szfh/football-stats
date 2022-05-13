@@ -268,35 +268,35 @@ join_canpl <- function(canpl){
   
   canpl_tidy <-
     canpl %>%
-    mutate(Season=as.numeric(str_sub(name,start=-8,end=-5)),.before="name") %>%
-    mutate(Data_Type=as.character(str_sub(name,start=4,end=-9)),.before="name") %>%
+    mutate(season=as.numeric(str_sub(name,start=-8,end=-5)),.before="name") %>%
+    mutate(data_type=as.character(str_sub(name,start=4,end=-9)),.before="name") %>%
     mutate(data=map(data,as_tibble)) %>%
-    mutate(data=map(data,tidy_canpl))
+    mutate(data=pmap(list(data,data_type,season),tidy_canpl))
   
   data <- list()
   
   data$team_total <-
     canpl_tidy %>%
-    filter(Data_Type=="TeamTotals") %>%
-    select(Season,data) %>%
+    filter(data_type=="TeamTotals") %>%
+    select(season,data) %>%
     unnest(data)
   
   data$player_total <-
     canpl_tidy %>%
-    filter(Data_Type=="PlayerTotals") %>%
-    select(Season,data) %>%
+    filter(data_type=="PlayerTotals") %>%
+    select(season,data) %>%
     unnest(data)
   
   data$team_match <-
     canpl_tidy %>%
-    filter(Data_Type=="TeamByGame") %>%
-    select(Season,data) %>%
+    filter(data_type=="TeamByGame") %>%
+    select(season,data) %>%
     unnest(data)
   
   data$player_match <-
     canpl_tidy %>%
-    filter(Data_Type=="PlayerByGame") %>%
-    select(Season,data) %>%
+    filter(data_type=="PlayerByGame") %>%
+    select(season,data) %>%
     unnest(data)
   
   return(data)
