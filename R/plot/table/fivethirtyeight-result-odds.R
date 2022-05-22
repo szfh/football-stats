@@ -21,6 +21,7 @@ fivethirtyeight_result_odds <- function(season="2022",league="EPL",hide_season=T
       TRUE ~ 1
     )) %>%
     ungroup() %>%
+    mutate(across(c(team1,team2),shorten_team_names)) %>%
     filter(result_odds!=1)
   
   match_odds %>%
