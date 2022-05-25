@@ -49,9 +49,9 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),save_path_urls=here(
   
   fbref_urls$match$keep <-
     fbref_urls_saved %>%
-  
     filter(data_type=="match") %>%
     filter(season!=current_season)
+  
   fbref_urls$match$new <-
     anti_join(fbref_urls$match$all, fbref_urls$match$keep) %>%
     mutate(data=pmap(list(country,gender="M",season),get_match_urls)) %>%
@@ -164,7 +164,8 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),save_path_urls=here(
   fbref$match_shots$keep <-
     fbref_saved %>%
     filter(data_type=="match_shots") %>%
-    filter(!is.na(data))
+    filter(!is.na(data)) %>%
+    filter(map(data,length)>0)
   
   fbref$match_shots$new <-
     anti_join(fbref$match_shots$all, fbref$match_shots$keep) %>%
