@@ -1,6 +1,11 @@
+font_add_google("Roboto", "roboto")
+# font_families()
+showtext_auto(enable=TRUE)
+showtext_opts(dpi=1500)
+
 theme <- list()
 theme$base_size <- 12
-theme$base_family <- "Verdana"
+theme$base_family <- "roboto"
 
 theme$white <- function(base_size=theme$base_size,base_family=theme$base_family){
   theme_bw(base_size=base_size,base_family=base_family) +
