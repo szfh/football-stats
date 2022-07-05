@@ -101,12 +101,12 @@
   peak_ages <-
     tribble(
       ~"position",~"age_start",~"age_end",
-      "GK",27,29,
-      "CB",26,28,
-      "FB",24,26,
-      "CM",24,26,
-      "AM",25,27,
-      "ST",26,28,
+      "GK",27,31,
+      "CB",26,30,
+      "FB",25,28,
+      "CM",24,28,
+      "AM",24,28,
+      "ST",25,29,
     ) %>%
     mutate(
       age_start=age_start-0.3,
@@ -139,6 +139,6 @@
     scale_x_continuous(breaks=seq(0,100,2),expand=expansion(add=0.25)) +
     scale_y_discrete()
   
-  save_path <- here("plots","team","ages-contracts.jpg")
-  ggsave(filename=save_path,plot=last_plot())
+  # save_path <- here("plots","team","ages-contracts.jpg")
+  # ggsave(filename=save_path,plot=last_plot())
 }
