@@ -48,20 +48,7 @@
       player_name=="Alex McCarthy" ~ contract_expires+years(1),
       player_name=="Jack Stephens" ~ contract_expires+years(2),
       TRUE ~ contract_expires
-    )) %>%
-    # new signings
-    add_row(
-      player_name="Gavin Bazunu",
-      position="Goalkeeper",
-      date_of_birth=as.Date("2002-02-20"),
-      contract_expires=as.Date("2027-06-30")
-    ) %>%
-    add_row(
-      player_name="Mateusz Lis",
-      position="Goalkeeper",
-      date_of_birth=as.Date("1997-02-27"),
-      contract_expires=as.Date("2025-06-30")
-    )
+    ))
   
   # custom function to simplify positions
   transfermarket_positions <- function(positions){
