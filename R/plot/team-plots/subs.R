@@ -35,7 +35,10 @@ subs <- function(team,season,since=NA,lastn=NA){
     mutate(Home_Away_Short=ifelse(Home_Away=="Home","H","A"),.after="Home_Away") %>%
     nest_by(Season,Match_Date,Home_Team,Home_Score,Away_Team,Away_Score,Team,Opposition,Home_Away,Home_Away_Short,Team_Score,Opposition_Score) %>%
     mutate(
-      Subs_Available=ifelse((Match_Date>=as_date("2020-4-1") & Match_Date<as_date("2020-9-1")),5,3),
+      Subs_Available=case_when(
+        Match_Date>=as_date("2020-4-1") & Match_Date<as_date("2020-9-1") ~ 5,
+        Match_Date>=as_date("2022-7-1") ~ 5,
+        TRUE ~ 3),
       Subs_Used=dim(data)[1]) %>%
     ungroup() %>%
     mutate(data=pmap(list(.$data,Subs_Available,Subs_Used),possibly(get_unused_subs, otherwise=NA))) %>%
