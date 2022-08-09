@@ -1,15 +1,15 @@
 source(here("R","raw","raw-utils.R"),encoding="utf-8")
 source(here("R","themes.R"),encoding="utf-8")
 
-scrape_understat <- function(save_path=here("data","understat.rds"),current_season="2022",include_shots=FALSE){
+scrape_understat <- function(save_path=here("data","understat.rds"),current_season="2023",include_shots=FALSE){
   
   data_types <- get_data_types()
   
   understat_saved <- readRDS(save_path)
   understat <- list()
   
-  seasons <- tibble(season=as.character(2014:2022))
   leagues <- tibble(league=c("EPL","La liga","Ligue 1","Bundesliga","Serie A"))
+  seasons <- tibble(season=as.character(2014:2023))
   
   understat$results$all <-
     tibble() %>%
@@ -29,23 +29,23 @@ scrape_understat <- function(save_path=here("data","understat.rds"),current_seas
     mutate(date_scraped=Sys.Date()) %>%
     glimpse
   
-  understat$team_stats$all <-
-    tibble() %>%
-    bind_rows(
-      crossing(seasons,league="EPL")
-    )
+  # understat$team_stats$all <-
+  #   tibble() %>%
+  #   bind_rows(
+  #     crossing(seasons,league="EPL")
+  #   )
   
-  understat$team_stats$keep <-
-    understat_saved %>%
-    filter(data_type=="team_stats") %>%
-    filter(season!=current_season)
+  # understat$team_stats$keep <-
+  #   understat_saved %>%
+  #   filter(data_type=="team_stats") %>%
+  #   filter(season!=current_season)
   
-  understat$team_stats$new <-
-    anti_join(understat$team_stats$all,understat$team_stats$keep) %>%
-    mutate(data=pmap(list(league,season),understatr::get_league_teams_stats)) %>%
-    mutate(data_type="team_stats") %>%
-    mutate(date_scraped=Sys.Date()) %>%
-    glimpse
+  # understat$team_stats$new <-
+  #   anti_join(understat$team_stats$all,understat$team_stats$keep) %>%
+  #   mutate(data=pmap(list(league,season),understatr::get_league_teams_stats)) %>%
+  #   mutate(data_type="team_stats") %>%
+  #   mutate(date_scraped=Sys.Date()) %>%
+  #   glimpse
   
   understat$shots$all <-
     tibble() %>%
@@ -68,7 +68,7 @@ scrape_understat <- function(save_path=here("data","understat.rds"),current_seas
   understat_all <-
     bind_rows(
       understat$results$keep,understat$results$new,
-      understat$match_stats$keep,understat$match_stats$new,
+      # understat$match_stats$keep,understat$match_stats$new,
       understat$shots$keep,understat$shots$new
     ) %>%
     filter(!is.na(data)) %>%

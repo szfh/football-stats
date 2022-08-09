@@ -1,6 +1,6 @@
 get_data_types <- function(){
   data_types <- list()
-  data_types$season <- tibble(season=2018:2022)
+  data_types$season <- tibble(season=2018:2023)
   data_types$country <- tibble(country="ENG")
   # data_types$gender <- tibble(gender="M")
   data_types$advanced_stats <- tibble(stat=c("summary","passing","passing_types","defense" ,"possession","misc","keeper"))
