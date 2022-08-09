@@ -34,7 +34,7 @@ age_contract <- function(url=NA){
     mutate(position=factor(position,levels=c("GK","CB","FB","CM","AM","ST")))
   
   team_urls <- 
-    c("https://www.transfermarkt.com/fc-southampton/startseite/verein/180/saison_id/2022",
+    c("https://www.transfermarkt.com/fc-southampton/startseite/verein/180",
       "https://www.transfermarkt.co.uk/fc-southampton-u21/startseite/verein/36546")
 
   player_urls <- team_urls %>%
