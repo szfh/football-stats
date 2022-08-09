@@ -1,15 +1,15 @@
 source(here("R","raw","raw-utils.R"),encoding="utf-8")
 source(here("R","themes.R"),encoding="utf-8")
 
-scrape_understat <- function(save_path=here("data","understat.rds"),current_season="2022",include_shots=FALSE){
+scrape_understat <- function(save_path=here("data","understat.rds"),current_season="2023",include_shots=FALSE){
   
   data_types <- get_data_types()
   
   understat_saved <- readRDS(save_path)
   understat <- list()
   
-  seasons <- tibble(season=as.character(2014:2022))
   leagues <- tibble(league=c("EPL","La liga","Ligue 1","Bundesliga","Serie A"))
+  seasons <- tibble(season=as.character(2014:2023))
   
   understat$results$all <-
     tibble() %>%
