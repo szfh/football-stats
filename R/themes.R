@@ -106,6 +106,7 @@ palette$epl <- function(team_name){
     `Other` = "lightgrey",
     `Arsenal` = "#EF0107",
     `Aston Villa` = "#670E36",
+    `AFC Bournemouth` = "#DA291C",
     `Brentford` = "#E30613",
     `Brighton & Hove Albion` = "#0057B8",
     `Brighton` = "#0057B8",
