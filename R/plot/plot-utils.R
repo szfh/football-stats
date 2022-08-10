@@ -192,3 +192,8 @@ save_tables <- function(tables,path,extention="png"){
       gtsave(filename=glue("{name}.{extention}"),path=glue("{path}"))
   }
 }
+
+padj <- function(stat,possession){
+  stat_padj <- stat * 2/(1 + exp(-0.1*(team_possession-50)))
+  return(stat_padj)
+}
