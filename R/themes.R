@@ -130,6 +130,7 @@ palette$epl <- function(team_name){
     `Newcastle United` = "#241F20",
     `Newcastle Utd` = "#241F20",
     `Norwich City` = "#FFEE00",
+    `Nottingham Forest` = "#e53233",
     `Sheffield United` = "#EE2737",
     `Sheffield Utd` = "#EE2737",
     `Southampton` = "#D71920",
