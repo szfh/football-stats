@@ -155,3 +155,25 @@
   
   ggsave(filename=here::here("plots","test","isolation_forest.png"),dpi=1000)
 }
+{
+  ggplot() +
+    annotate_pitch(dimensions=pitch_statsbomb) +
+    theme_pitch() +
+    geom_rect(aes(xmin=0,xmax=60,ymin=0,ymax=80),colour="darkred",fill="white",alpha=0,size=2) +
+    geom_rect(aes(xmin=60,xmax=80,ymin=0,ymax=20),colour="darkred",fill="white",alpha=0,size=2) +
+    geom_rect(aes(xmin=60,xmax=80,ymin=20,ymax=40),colour="darkred",fill="white",alpha=0,size=2) +
+    geom_rect(aes(xmin=60,xmax=80,ymin=40,ymax=60),colour="darkred",fill="white",alpha=0,size=2) +
+    geom_rect(aes(xmin=60,xmax=80,ymin=60,ymax=80),colour="darkred",fill="white",alpha=0,size=2) +
+    geom_rect(aes(xmin=80,xmax=100,ymin=0,ymax=20),colour="darkred",fill="white",alpha=0,size=2) +
+    geom_rect(aes(xmin=80,xmax=100,ymin=20,ymax=40),colour="darkred",fill="white",alpha=0,size=2) +
+    geom_rect(aes(xmin=80,xmax=100,ymin=40,ymax=60),colour="darkred",fill="white",alpha=0,size=2) +
+    geom_rect(aes(xmin=80,xmax=100,ymin=60,ymax=80),colour="darkred",fill="white",alpha=0,size=2) +
+    geom_rect(aes(xmin=100,xmax=120,ymin=0,ymax=20),colour="darkred",fill="white",alpha=0,size=2) +
+    geom_rect(aes(xmin=100,xmax=120,ymin=20,ymax=40),colour="darkred",fill="white",alpha=0,size=2) +
+    geom_rect(aes(xmin=100,xmax=120,ymin=40,ymax=60),colour="darkred",fill="white",alpha=0,size=2) +
+    geom_rect(aes(xmin=100,xmax=120,ymin=60,ymax=80),colour="darkred",fill="white",alpha=0,size=2) +
+    direction_label() +
+    NULL
+  
+  ggsave(filename=here::here("plots","test","isolation_forest_pitch.png"),dpi=1000)
+}
