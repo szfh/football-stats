@@ -75,22 +75,27 @@
   
   transition_matrix <-
     passes %>%
-    group_by(player.name,across(contains("bin"))) %>%
+    group_by(player.name,across(contains(".bin"))) %>%
     summarise(passes=n(),.groups="drop") %>%
     pivot_wider(
       names_from = c(location.x.bin,location.y.bin,pass.end_location.x.bin,pass.end_location.y.bin),
       values_from = passes,
       values_fill = 0
-    ) %>%
-    # divide by total player passes to normalise rows
+    ) 
+  
+  transition_matrix_normal <-
+    transition_matrix %>%
+    # join total passes column
     inner_join(passes_total) %>%
+    # divide by total player passes to normalise rows
     mutate(across(!c(player.name,passes),~.x/passes))
 }
 {
   # create isolation forest using isotree function
   forest <-
-    transition_matrix %>%
-    select(-player.name) %>%
+    transition_matrix_normal %>%
+    # keep only transition matrix columns
+    select(-player.name,-passes) %>%
     isolation.forest(
       data=.,
       ndim=1,
@@ -106,7 +111,7 @@
     # join the prediction to the transition matrix containing player names
     bind_cols(
       # predict using isotree function
-      predict(forest, transition_matrix) %>%
+      predict(forest, transition_matrix_normal) %>%
         tibble("anomaly_score"=.),
       # join to transition matrix
       transition_matrix
