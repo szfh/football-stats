@@ -140,7 +140,7 @@
     mutate(player.name=fct_reorder(player.name,desc(anomaly_score))) %>%
     ggplot() +
     annotate_pitch(dimensions=pitch_statsbomb) +
-    geom_segment(aes(x=location.x,xend=pass.end_location.x,y=location.y,yend=pass.end_location.y),size=0.3,arrow=arrow(length=unit(0.1, "cm"))) +
+    geom_segment(aes(x=location.x,xend=pass.end_location.x,y=location.y,yend=pass.end_location.y),size=0.2,arrow=arrow(length=unit(0.1, "cm"))) +
     theme_pitch() +
     theme(
       strip.text=element_text(size=6),
