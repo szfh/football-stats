@@ -42,7 +42,8 @@
       # treat the defensive half as one zone
       # split the attacking half into 20 x 20 zones
       across(where(is.numeric) & contains("x"),cut,breaks=c(0,60,80,100,120),.names="{.col}.bin"),
-      across(where(is.numeric) & contains("y"),cut,breaks=seq(0,80,20),.names="{.col}.bin")
+      across(where(is.numeric) & contains("y"),cut,breaks=seq(0,80,20),.names="{.col}.bin"),
+      across(contains(".bin"),as.character)
     ) %>%
     # mutate(location.y.bin=fct_expand(location.y.bin,"[0,80)")) %>%
     mutate(
@@ -50,7 +51,6 @@
       location.y.bin=ifelse(location.x.bin=="(0,60]","(0,80]",location.y.bin),
       pass.end_location.y.bin=ifelse(pass.end_location.x.bin=="(0,60]","(0,80]",pass.end_location.y.bin),
     ) %>%
-    mutate(across(contains(".bin"),factor)) %>%
     print(n=20)
   
   # count the number of passes a player has made starting and ending in each zone
