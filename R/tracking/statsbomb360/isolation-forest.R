@@ -79,6 +79,7 @@
     summarise(passes=n(),.groups="drop") %>%
     pivot_wider(
       names_from = c(location.x.bin,location.y.bin,pass.end_location.x.bin,pass.end_location.y.bin),
+      names_sort = TRUE,
       values_from = passes,
       values_fill = 0
     ) 
