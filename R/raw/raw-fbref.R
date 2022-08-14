@@ -54,7 +54,7 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),save_path_urls=here(
   
   fbref_urls$match$new <-
     anti_join(fbref_urls$match$all, fbref_urls$match$keep) %>%
-    mutate(data=pmap(list(country,gender="M",season),get_match_urls)) %>%
+    mutate(data=pmap(list(country,gender="M",season),fb_match_urls)) %>%
     select(-data_league) %>%
     mutate(date_scraped=today()) %>%
     print(n=Inf)
