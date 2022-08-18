@@ -189,6 +189,7 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),save_path_urls=here(
   
   fbref$advanced_stats$new <-
     anti_join(fbref$advanced_stats$all, fbref$advanced_stats$keep) %>%
+    filter(season %in% c(2022,2023)) %>%
     mutate(data=pmap(list(url,stat,team_or_player),possibly(fb_advanced_match_stats,otherwise=NA))) %>%
     mutate(date_scraped=today()) %>%
     print(n=Inf)
