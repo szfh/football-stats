@@ -1,7 +1,7 @@
 source(here("R","raw","raw-utils.R"),encoding="utf-8")
 source(here("R","themes.R"),encoding="utf-8")
 
-scrape_fbref <- function(save_path=here("data","fbref.rds"),save_path_urls=here("data","fbref_urls.rds"),current_season=2023){
+scrape_fbref <- function(save_path=here("data","fbref.rds"),save_path_urls=here("data","fbref_urls.rds"),refresh_results_allcomp=FALSE,current_season=2023){
   data_types <- get_data_types()
   
   fbref_saved <- readRDS(save_path)
@@ -89,7 +89,7 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),save_path_urls=here(
   fbref$match_results_allcomp$keep <-
     fbref_saved %>%
     filter(data_type=="match_result_allcomp") %>%
-    filter(season!=current_season) %>%
+    {if(refresh_results_allcomp) filter(., season!=current_season) else .} %>%
     filter(!is.na(data))
   
   fbref$match_results_allcomp$new <-
