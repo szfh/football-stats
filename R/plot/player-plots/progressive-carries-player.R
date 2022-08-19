@@ -2,7 +2,7 @@ progressive_carries_player <- function(season,player=NA){
   
   plot <-
     data$fbref$advanced_stats_player_possession %>%
-    filter(Season %in% !!season) %>% 
+    filter(season %in% !!season) %>% 
     select(Player,Team,Min,Carries1=Prog_Carries,Carries2=Final_Third_Carries,Carries3=CPA_Carries) %>%
     group_by(Player,Team) %>%
     summarise(across(where(is.numeric),sum,na.rm=TRUE),.groups="drop") %>%

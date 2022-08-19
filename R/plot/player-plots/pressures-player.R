@@ -2,7 +2,7 @@ pressures_player <- function(season,player=NA){
   
   plot <-
     data$fbref$advanced_stats_player_defense %>%
-    filter(Season %in% !!season) %>%
+    filter(season %in% !!season) %>%
     select(Player,Team,Min,Pressures1=`Def 3rd_Pressures`,Pressures2=`Mid 3rd_Pressures`,Pressures3=`Att 3rd_Pressures`) %>%
     group_by(Player,Team) %>%
     summarise(across(where(is.numeric),sum,na.rm=TRUE),.groups="drop") %>%
