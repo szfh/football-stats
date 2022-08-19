@@ -2,16 +2,16 @@ xg_team <- function(season,per90=TRUE,since=NA,highlight=NA,highlight_colour="da
   
   penalties <-
     data$fbref$advanced_stats_team_summary %>%
-    mutate(Match_Date=parse_date_time(Match_Date,"mdy")) %>%
+    mutate(Match_Date=parse_date_time(Match_Date,"ymd")) %>%
     filter(!is.na(PKatt)) %>%
     select(Match_Date,Home_Team,Away_Team,Home_Away,PKatt) %>%
     pivot_wider(names_from=Home_Away, values_from=PKatt, names_glue="PK_{Home_Away}")
   
   plot <-
     data$fbref$advanced_stats_team_summary %>%
-    filter(Season %in% !!season) %>%
+    filter(season %in% !!season) %>%
     filter((!is.na(Home_xG))|!is.na(Away_xG)) %>%
-    mutate(Match_Date=parse_date_time(Match_Date,"mdy")) %>%
+    mutate(Match_Date=parse_date_time(Match_Date,"ymd")) %>%
     {if (is.na(since)) filter(., TRUE) else filter(., Match_Date>=as.Date(since))} %>%
     select(Match_Date,Home_Team,Away_Team,Home_xG,Away_xG,Team,Home_Away) %>%
     left_join(penalties) %>%
