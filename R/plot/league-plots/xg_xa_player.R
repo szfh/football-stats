@@ -2,7 +2,7 @@ xg_xa_player <- function(season){
   
   plot <-
     data$fbref$advanced_stats_player_summary %>% 
-    filter(Season %in% !!season) %>% 
+    filter(season %in% !!season) %>% 
     select(Player,Team,npxG=npxG_Expected,xA=xA_Expected) %>%
     group_by(Player,Team) %>%
     summarise(across(where(is.numeric),sum,na.rm=TRUE),.groups="drop") %>%

@@ -2,7 +2,7 @@ goals_xg_player <- function(season){
   
   plot <-
     data$fbref$advanced_stats_player_summary %>%
-    filter(Season %in% !!season) %>%
+    filter(season %in% !!season) %>%
     select(Player,Team,Gls,PK,npxG=npxG_Expected) %>%
     mutate(npG=Gls-PK,.keep="unused",.after="PK") %>%
     group_by(Player,Team) %>%
