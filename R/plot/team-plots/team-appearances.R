@@ -28,9 +28,9 @@ team_appearances <- function(team,season,since=NA){
   
   plot <-
     data$fbref$advanced_stats_player_summary %>%
-    filter(Season %in% !!season) %>%
+    filter(season %in% !!season) %>%
     filter(Team %in% !!team) %>%
-    mutate(Match_Date=parse_date_time(Match_Date,"mdy")) %>%
+    mutate(Match_Date=parse_date_time(Match_Date,"ymd")) %>%
     {if (!is.na(since)) filter(., Matchday>=as.Date(since)) else .} %>%
     mutate(
       Home_Team=shorten_team_names(Home_Team),
@@ -44,8 +44,8 @@ team_appearances <- function(team,season,since=NA){
     ) %>%
     mutate(Home_Away_Short=ifelse(Home_Away=="Home","H","A")) %>%
     mutate(Match=glue("{Opposition} {Home_Away_Short} {Team_Score}-{Opposition_Score}")) %>%
-    mutate(Match=reorder_within(Match, Match_Date, Season)) %>%
-    select(Season,Match_Date,Match,Player,Min) %>%
+    mutate(Match=reorder_within(Match, Match_Date, season)) %>%
+    select(season,Match_Date,Match,Player,Min) %>%
     group_by(Player) %>%
     mutate(Min_Total=sum(Min)) %>%
     ungroup() %>%
@@ -55,7 +55,7 @@ team_appearances <- function(team,season,since=NA){
     ggplot(aes(x=Match,y=Player)) +
     geom_tile(aes(alpha=Min),fill="darkred") +
     geom_text(aes(label=Min),color="black",size=1.8) +
-    facet_grid(Pos ~ Season, scales="free", space="free") +
+    facet_grid(Pos ~ season, scales="free", space="free") +
     theme[["solar"]]() +
     theme(
       axis.text.x=element_text(size=5,angle=45,hjust=1),
