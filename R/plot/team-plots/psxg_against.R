@@ -1,16 +1,19 @@
 psxg_against <- function(team,season,since=NA){
   
   plot <-
-    data$fbref$advanced_stats_team_keeper %>%
-    left_join(data$fbref$advanced_stats_team_misc) %>%
-    mutate(Match_Date=parse_date_time(Match_Date,"mdy")) %>%
+    inner_join(
+      data$fbref$advanced_stats_team_keeper %>%
+        select(season,Team,Match_Date,GA=GA_Shot_Stopping,psxG=PSxG_Shot_Stopping,SoTA=SoTA_Shot_Stopping),
+      data$fbref$advanced_stats_team_misc %>%
+        select(season,Team,Match_Date,OG)
+    ) %>%
+    mutate(Match_Date=parse_date_time(Match_Date,"ymd")) %>%
     {if (!is.na(since)) filter(., Match_Date>=as.Date(since)) else .} %>%
-    filter(Season %in% !!season) %>%
-    select(Team,Match_Date,GA=GA_Shot_Stopping,psxG=PSxG_Shot_Stopping,SoTA=SoTA_Shot_Stopping,OG) %>%
+    filter(season %in% !!season) %>%
     filter(!is.na(psxG)) %>%
     bind_rows(
       tibble(
-        Team=data$fbref$advanced_stats_team_keeper %>% filter(Season %in% !!season) %>% pull(Team) %>% unique(),
+        Team=data$fbref$advanced_stats_team_keeper %>% filter(season %in% !!season) %>% pull(Team) %>% unique(),
         Match_Date=as.Date("1970-01-01"),
         SoTA=0,
         GA=0,
