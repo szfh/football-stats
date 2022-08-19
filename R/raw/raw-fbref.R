@@ -54,7 +54,7 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),save_path_urls=here(
   
   fbref_urls$match$new <-
     anti_join(fbref_urls$match$all, fbref_urls$match$keep) %>%
-    mutate(data=pmap(list(country,gender="M",season),get_match_urls)) %>%
+    mutate(data=pmap(list(country,gender="M",season),fb_match_urls)) %>%
     select(-data_league) %>%
     mutate(date_scraped=today()) %>%
     print(n=Inf)
@@ -74,7 +74,7 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),save_path_urls=here(
   
   fbref$match_results$new <-
     anti_join(fbref$match_results$all, fbref$match_results$keep) %>%
-    mutate(data=pmap(list(country,gender="M",season,tier="1st"),possibly(get_match_results,otherwise=NA))) %>%
+    mutate(data=pmap(list(country,gender="M",season,tier="1st"),possibly(fb_match_results,otherwise=NA))) %>%
     mutate(data=map(data,unique)) %>%
     mutate(date_scraped=today()) %>%
     print(n=Inf)
@@ -94,7 +94,7 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),save_path_urls=here(
   
   fbref$match_results_allcomp$new <-
     anti_join(fbref$match_results_allcomp$all, fbref$match_results_allcomp$keep) %>%
-    mutate(data=map(url,possibly(get_team_match_results,otherwise=NA))) %>%
+    mutate(data=map(url,possibly(fb_team_match_results,otherwise=NA))) %>%
     mutate(date_scraped=today()) %>%
     print(n=Inf)
   
@@ -113,7 +113,7 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),save_path_urls=here(
   
   fbref$season_stats$new <-
     anti_join(fbref$season_stats$all, fbref$season_stats$keep) %>%
-    mutate(data=pmap(list(country,gender="M",season,tier="1st",stat),possibly(get_season_team_stats,otherwise=NA))) %>%
+    mutate(data=pmap(list(country,gender="M",season,tier="1st",stat),possibly(fb_season_team_stats,otherwise=NA))) %>%
     mutate(data=map(data,unique)) %>%
     mutate(date_scraped=today()) %>%
     print(n=Inf)
@@ -132,7 +132,7 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),save_path_urls=here(
   
   fbref$match_summary$new <-
     anti_join(fbref$match_summary$all, fbref$match_summary$keep) %>%
-    mutate(data=map(url,possibly(get_match_summary,otherwise=NA))) %>%
+    mutate(data=map(url,possibly(fb_match_summary,otherwise=NA))) %>%
     mutate(date_scraped=today()) %>%
     print(n=Inf)
   
@@ -150,7 +150,7 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),save_path_urls=here(
   
   fbref$match_lineups$new <-
     anti_join(fbref$match_lineups$all, fbref$match_lineups$keep) %>%
-    mutate(data=map(url,possibly(get_match_lineups,otherwise=NA))) %>%
+    mutate(data=map(url,possibly(fb_match_lineups,otherwise=NA))) %>%
     mutate(date_scraped=today()) %>%
     print(n=Inf)
   
@@ -169,7 +169,7 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),save_path_urls=here(
   
   fbref$match_shots$new <-
     anti_join(fbref$match_shots$all, fbref$match_shots$keep) %>%
-    mutate(data=map(url,possibly(get_match_shooting,otherwise=NA))) %>%
+    mutate(data=map(url,possibly(fb_match_shooting,otherwise=NA))) %>%
     mutate(date_scraped=today()) %>%
     print(n=Inf)
   
@@ -189,7 +189,8 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),save_path_urls=here(
   
   fbref$advanced_stats$new <-
     anti_join(fbref$advanced_stats$all, fbref$advanced_stats$keep) %>%
-    mutate(data=pmap(list(url,stat,team_or_player),possibly(get_advanced_match_stats,otherwise=NA))) %>%
+    filter(season %in% c(2022,2023)) %>%
+    mutate(data=pmap(list(url,stat,team_or_player),possibly(fb_advanced_match_stats,otherwise=NA))) %>%
     mutate(date_scraped=today()) %>%
     print(n=Inf)
   
