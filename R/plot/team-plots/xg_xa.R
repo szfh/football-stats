@@ -2,9 +2,9 @@ xg_xa <- function(team,season,since=NA,per90=TRUE){
   
   plot <-
     data$fbref$advanced_stats_player_summary %>%
-    filter(Season %in% !!season) %>%
+    filter(season %in% !!season) %>%
     filter(Team %in% !!team) %>%
-    mutate(Match_Date=parse_date_time(Match_Date,"mdy")) %>%
+    mutate(Match_Date=parse_date_time(Match_Date,"ymd")) %>%
     {if (!is.na(since)) filter(., Match_Date>=as.Date(since)) else .} %>%
     select(Player,Min,npxG=npxG_Expected,xA=xA_Expected) %>%
     group_by(Player) %>%
