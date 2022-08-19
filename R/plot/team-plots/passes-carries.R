@@ -3,13 +3,13 @@ passes_carries <- function(team,season,since=NA,per90=TRUE){
   plot <-
     inner_join(
       data$fbref$advanced_stats_player_possession %>%
-        select(League,Gender,Season,Match_Date,Team,Player,Min,Carries=Final_Third_Carries),
+        select(season,Match_Date,Team,Player,Min,Carries=Final_Third_Carries),
       data$fbref$advanced_stats_player_passing %>%
-        select(League,Gender,Season,Match_Date,Team,Player,Min,Passes=Final_Third)
+        select(season,Match_Date,Team,Player,Min,Passes=Final_Third)
     ) %>%
-    filter(Season %in% !!season) %>%
+    filter(season %in% !!season) %>%
     filter(Team %in% !!team) %>%
-    mutate(Match_Date=parse_date_time(Match_Date,"mdy")) %>%
+    mutate(Match_Date=parse_date_time(Match_Date,"ymd")) %>%
     {if (!is.na(since)) filter(., Match_Date>=as.Date(since)) else .} %>%
     select(Player,Min,Carries,Passes) %>%
     group_by(Player) %>%
