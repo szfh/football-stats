@@ -1,10 +1,14 @@
 shots_key_passes <- function(team,season){
   
   plot <-
-    data$fbref$advanced_stats_player_summary %>%
-    left_join(data$fbref$advanced_stats_player_passing) %>%
+    inner_join(
+      data$fbref$advanced_stats_player_summary %>%
+        select(season,Team,Player,Match_Date,Sh),
+      data$fbref$advanced_stats_player_passing %>%
+        select(season,Team,Player,Match_Date,KP)
+    ) %>%
     filter(Team %in% !!team) %>%
-    filter(Season %in% !!season) %>%
+    filter(season %in% !!season) %>%
     select(Player,Sh,KP) %>%
     group_by(Player) %>%
     summarise(across(where(is.numeric),sum,na.rm=TRUE),.groups="drop") %>%
