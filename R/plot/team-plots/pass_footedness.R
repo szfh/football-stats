@@ -3,12 +3,12 @@ pass_footedness <- function(team,season){
   plot <-
     data$fbref$advanced_stats_player_passing_types %>%
     filter(Team %in% !!team) %>%
-    filter(Season %in% !!season) %>%
+    filter(season %in% !!season) %>%
     select(Player,Left=Left_Body_Parts,Right=Right_Body_Parts) %>%
     group_by(Player) %>%
     summarise(across(where(is.numeric),sum,na.rm=TRUE),.groups="drop") %>%
     mutate(All=Left+Right) %>%
-    filter(All>=100) %>%
+    filter(All>=max(0.1*All)) %>%
     group_by(Player) %>%
     mutate(
       Most=max(Left,Right),
