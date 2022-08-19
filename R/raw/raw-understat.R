@@ -8,8 +8,8 @@ scrape_understat <- function(save_path=here("data","understat.rds"),current_seas
   understat_saved <- readRDS(save_path)
   understat <- list()
   
-  leagues <- tibble(league=c("EPL","La liga","Ligue 1","Bundesliga","Serie A"))
   seasons <- tibble(season=as.character(2014:2023))
+  leagues <- tibble(league=c("EPL","La liga","Ligue 1","Bundesliga","Serie A"))
   
   understat$results$all <-
     tibble() %>%
@@ -60,6 +60,7 @@ scrape_understat <- function(save_path=here("data","understat.rds"),current_seas
   
   understat$shots$new <-
     anti_join(understat$shots$all,understat$shots$keep) %>%
+    filter(league=="EPL") %>%
     mutate(data=pmap(list(league,season),understat_league_season_shots)) %>%
     mutate(data_type="shots") %>%
     mutate(date_scraped=Sys.Date()) %>%
