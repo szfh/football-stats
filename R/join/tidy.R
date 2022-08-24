@@ -19,6 +19,11 @@ tidy_fbref <- function(data,data_type=NA,stat=NA,team_or_player=NA){
       data %>%
       select(-contains(c("Players","Playing","90","Last.5","Top.Team.Scorer","Goalkeeper","Notes")))
   }
+  if(data_type=="season_stat"){
+    data <-
+      data %>%
+      mutate(across(contains("Age"),as.numeric))
+  }
   if(data_type=="advanced_stats" && stat=="keeper"){
     data <-
       data %>%
