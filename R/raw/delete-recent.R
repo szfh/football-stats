@@ -31,7 +31,7 @@ get_event_date <- function(data,data_type=NA){
       data %>%
       select(Match_Date) %>%
       distinct() %>%
-      lubridate::parse_date_time("mdy")
+      lubridate::parse_date_time("ymd")
   } else if(data_type=="match_shots"){
     event_date <- 
       data %>%
@@ -43,7 +43,7 @@ get_event_date <- function(data,data_type=NA){
       data %>%
       select(Match_Date) %>%
       distinct() %>%
-      lubridate::parse_date_time("mdy")
+      lubridate::parse_date_time("ymd")
   } else {
     event_date <- lubridate::NA_Date_
   }
