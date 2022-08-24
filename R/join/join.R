@@ -92,21 +92,21 @@ join_fbref <- function(fbref){
   
   data$season_stat_gca <-
     fbref_tidy %>%
-    filter(data_type=="season_stat" & stat=="goal_shot_creation") %>%
+    filter(data_type=="season_stat" & stat=="gca") %>%
     # select(data) %>%
     unnest(data) %>%
     janitor::remove_empty("cols")
   
   data$season_stat_keeper <-
     fbref_tidy %>%
-    filter(data_type=="season_stat" & stat=="keeper") %>%
+    filter(data_type=="season_stat" & stat=="keepers") %>%
     # select(data) %>%
     unnest(data) %>%
     janitor::remove_empty("cols")
   
   data$season_stat_keeper_adv <-
     fbref_tidy %>%
-    filter(data_type=="season_stat" & stat=="keeper_adv") %>%
+    filter(data_type=="season_stat" & stat=="keepers_adv") %>%
     # select(data) %>%
     unnest(data) %>%
     janitor::remove_empty("cols")
