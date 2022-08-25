@@ -1,7 +1,7 @@
 source(here("R","raw","raw-utils.R"),encoding="utf-8")
 source(here("R","themes.R"),encoding="utf-8")
 
-scrape_fbref <- function(save_path=here("data","fbref.rds"),save_path_urls=here("data","fbref_urls.rds"),refresh_results_allcomp=FALSE,current_season=2023){
+scrape_fbref <- function(save_path=here("data","fbref.rds"),save_path_urls=here("data","fbref_urls.rds"),current_season=2023){
   data_types <- get_data_types()
   
   fbref_saved <- readRDS(save_path)
@@ -59,43 +59,41 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),save_path_urls=here(
     mutate(date_scraped=today()) %>%
     print(n=Inf)
   
-  fbref$match_results$all <-
-    tibble() %>%
-    bind_rows(
-      crossing(data_types$season,data_types$country)
+  fbref$match_results_league$all <-
+    crossing(
+      data_types$season,
+      country="ENG"
     ) %>%
-    mutate(data_type="match_result")
+    mutate(data_type="match_result_league")
   
-  fbref$match_results$keep <-
+  fbref$match_results_league$keep <-
     fbref_saved %>%
-    filter(data_type=="match_result") %>%
+    filter(data_type=="match_result_league") %>%
     filter(season!=current_season) %>%
     filter(!is.na(data))
   
-  fbref$match_results$new <-
-    anti_join(fbref$match_results$all, fbref$match_results$keep) %>%
-    mutate(data=pmap(list(country,gender="M",season,tier="1st"),possibly(fb_match_results,otherwise=NA))) %>%
-    mutate(data=map(data,unique)) %>%
-    mutate(date_scraped=today()) %>%
+  fbref$match_results_league$new <-
+    anti_join(fbref$match_results_league$all, fbref$match_results_league$keep) %>%
+    mutate(data=pmap(list(country,gender="M",season,tier="1st"),possibly(load_match_results,otherwise=NA))) %>%
     print(n=Inf)
   
-  fbref$match_results_allcomp$all <-
-    bind_rows(fbref_urls$team$keep,fbref_urls$team$new) %>%
-    select(-date_scraped) %>%
-    unnest(cols=data) %>%
-    rename(url=data) %>%
-    mutate(data_type="match_result_allcomp")
+  fbref$match_results_cup$all <-
+    crossing(
+      competition=
+        c("FA Cup","English Football League Cup",
+          "UEFA Champions League","UEFA Europa League","UEFA Europa Conference League")
+    ) %>%
+    mutate(data_type="match_result_cup")
   
-  fbref$match_results_allcomp$keep <-
+  fbref$match_results_cup$keep <-
     fbref_saved %>%
-    filter(data_type=="match_result_allcomp") %>%
-    {if(refresh_results_allcomp) filter(., season!=current_season) else .} %>%
+    filter(data_type=="match_result_cup") %>%
+    filter(!is.na(season)) %>%
     filter(!is.na(data))
   
-  fbref$match_results_allcomp$new <-
-    anti_join(fbref$match_results_allcomp$all, fbref$match_results_allcomp$keep) %>%
-    mutate(data=map(url,possibly(fb_team_match_results,otherwise=NA))) %>%
-    mutate(date_scraped=today()) %>%
+  fbref$match_results_cup$new <-
+    anti_join(fbref$match_results_cup$all, fbref$match_results_cup$keep) %>%
+    mutate(data=pmap(list(competition),possibly(load_match_comp_results,otherwise=NA))) %>%
     print(n=Inf)
   
   fbref$season_stats$all <-
@@ -195,8 +193,8 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),save_path_urls=here(
   
   fbref_all <-
     bind_rows(
-      fbref$match_results$keep,fbref$match_results$new,
-      fbref$match_results_allcomp$keep,fbref$match_results_allcomp$new,
+      fbref$match_results_league$keep,fbref$match_results_league$new,
+      fbref$match_results_cup$keep,fbref$match_results_cup$new,
       fbref$season_stats$keep,fbref$season_stats$new,
       fbref$match_lineups$keep,fbref$match_lineups$new,
       fbref$match_summary$keep,fbref$match_summary$new,
