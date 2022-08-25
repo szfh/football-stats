@@ -33,17 +33,16 @@ join_fbref <- function(fbref){
     mutate(data=pmap(list(data,data_type,stat,team_or_player),tidy_fbref))
   
   data <- list()
-  
-  data$match_results <-
+  data$match_results_league <-
     fbref_tidy %>%
-    filter(data_type=="match_result") %>%
+    filter(data_type=="match_result_league") %>%
     # select(data) %>%
     unnest(data) %>%
     janitor::remove_empty("cols")
   
-  data$match_results_allcomp <-
+  data$match_results_cup <-
     fbref_tidy %>%
-    filter(data_type=="match_result_allcomp") %>%
+    filter(data_type=="match_result_cup") %>%
     # select(season,data) %>%
     unnest(data) %>%
     janitor::remove_empty("cols")
