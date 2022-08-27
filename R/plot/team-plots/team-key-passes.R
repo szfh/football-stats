@@ -17,12 +17,12 @@ team_key_passes <- function(team,season,lastn=NA,since=NA){
   
   matches <-
     data$fbref$advanced_stats_team_summary %>%
-    filter(Season %in% !!season) %>%
+    filter(season %in% !!season) %>%
     filter(Team==!!team) %>%
-    mutate(Date=parse_date_time(Match_Date,"mdy")) %>%
+    mutate(Date=parse_date_time(Match_Date,"ymd")) %>%
     {if (!is.na(since)) filter(., Match_Date>=as.Date(since)) else .} %>%
     {if (!is.na(lastn)) slice_tail(., n=lastn) else .} %>%
-    select(Season,Date,Home_Team,Home_Score,Away_Team,Away_Score,Team,Home_Away) %>%
+    select(season,Date,Home_Team,Home_Score,Away_Team,Away_Score,Team,Home_Away) %>%
     mutate(across(c(Home_Team,Away_Team,Team),shorten_team_names)) %>%
     glimpse
   
@@ -38,7 +38,7 @@ team_key_passes <- function(team,season,lastn=NA,since=NA){
     left_join(matches,shots) %>%
     arrange(Date) %>%
     filter(Shot_Type %in% c("OP","SP")) %>%
-    count(Season,Date,Home_Team,Home_Score,Away_Team,Away_Score,Team,Home_Away,Shot_Type,name="Shots") %>%
+    count(season,Date,Home_Team,Home_Score,Away_Team,Away_Score,Team,Home_Away,Shot_Type,name="Shots") %>%
     mutate(Shots=replace_na(Shots,0)) %>%
     mutate(across(c(Home_Team,Away_Team),shorten_team_names)) %>%
     pivot_wider(names_from=Shot_Type,values_from=Shots,values_fill=0) %>%
@@ -46,12 +46,12 @@ team_key_passes <- function(team,season,lastn=NA,since=NA){
     mutate(Score=ifelse(Home_Away=="Home",glue("{Home_Score}-{Away_Score}"),glue("{Away_Score}-{Home_Score}"))) %>%
     mutate(H_A=ifelse(Home_Away=="Home","H","A")) %>%
     mutate(Match=glue("{Opposition} {H_A} {Score}")) %>%
-    mutate(Match=reorder_within(Match, Date, Season)) %>%
+    mutate(Match=reorder_within(Match, Date, season)) %>%
     ggplot(aes(x=Match)) +
     geom_path(aes(y=OP,group=1),colour="darkred",linetype="solid",size=0.75,alpha=0.6) +
     geom_path(aes(y=SP,group=1),colour="royalblue",linetype="longdash",size=0.75,alpha=1) +
     theme[["solar"]]() +
-    facet_grid(cols=vars(Season), space="free", scales="free_x") +
+    facet_grid(cols=vars(season), space="free", scales="free_x") +
     theme(
       plot.title=element_markdown(),
       axis.text.x=element_markdown(angle=60,hjust=1,size=rel(0.75)),
