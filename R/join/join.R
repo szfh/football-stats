@@ -30,7 +30,12 @@ join_fbref <- function(fbref){
   fbref_tidy <-
     fbref %>%
     mutate(data=map(data,as_tibble)) %>%
-    mutate(data=pmap(list(data,data_type,stat,team_or_player),tidy_fbref))
+    mutate(data=pmap(list(data,data_type,stat,team_or_player),possibly(tidy_fbref, otherwise=NA)))
+  
+  errors <-
+    fbref_tidy %>%
+    filter(is.na(data)) %>%
+    print(n=Inf)
   
   data <- list()
   data$match_results_league <-
