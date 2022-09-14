@@ -100,7 +100,7 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),save_path_urls=here(
     crossing(
       data_types$season,
       team_or_player=c("team","player"),
-      stat=c("standard","shooting","passing","passing_types","gca","defense","possession","playing_time","misc","keepers","keepers_adv")
+      data_types$season_team_stats
     ) %>%
     mutate(data_type="season_stat")
   
@@ -112,7 +112,7 @@ scrape_fbref <- function(save_path=here("data","fbref.rds"),save_path_urls=here(
   
   fbref$season_stats$new <-
     anti_join(fbref$season_stats$all, fbref$season_stats$keep) %>%
-    mutate(data=pmap(list(season,stat,team_or_player),load_fb_big5_advanced_season_stats)) %>%
+    mutate(data=pmap(list(country="ENG",gender="M",season,tier="1st",stat),possibly(fb_season_team_stats,otherwise=NA))) %>%
     print(n=Inf)
   
   fbref$match_summary$all <-
