@@ -4,6 +4,7 @@ join <- function(
     save_path_fbref=here("data","fbref.rds"),
     save_path_fbref_urls=here("data","fbref_urls.rds"),
     save_path_understat_results=here("data","understat_results.rds"),
+    save_path_understat_team_stats=here("data","understat_team_stats.rds"),
     save_path_understat_shots=here("data","understat_shots.rds"),
     save_path_fivethirtyeight=here("data","fivethirtyeight.rds"),
     save_path_canpl=here("data","canpl.rds")
@@ -11,6 +12,7 @@ join <- function(
   fbref_join <- possibly(join_fbref, otherwise=NA)(readRDS(save_path_fbref))
   fbref_urls_join <- possibly(join_fbref_urls, otherwise=NA)(readRDS(save_path_fbref_urls))
   understat_results_join <- possibly(join_understat_results, otherwise=NA)(readRDS(save_path_understat_results))
+  understat_team_stats_join <- possibly(join_understat_team_stats, otherwise=NA)(readRDS(save_path_understat_team_stats))
   understat_shots_join <- possibly(join_understat_shots, otherwise=NA)(readRDS(save_path_understat_shots))
   fivethirtyeight_join <- possibly(join_fivethirtyeight, otherwise=NA)(readRDS(save_path_fivethirtyeight))
   canpl_join <- possibly(join_canpl, otherwise=NA)(readRDS(save_path_canpl))
@@ -18,6 +20,7 @@ join <- function(
     fbref=fbref_join,
     fbref_urls=fbref_urls_join,
     understat_results=understat_results_join,
+    understat_team_stats=understat_team_stats_join,
     understat_shots=understat_shots_join,
     fivethirtyeight=fivethirtyeight_join,
     canpl=canpl_join
@@ -284,6 +287,17 @@ join_understat_shots <- function(understat_shots){
     unite("lastAction",last_action,lastAction,na.rm=TRUE,remove=TRUE) %>%
     mutate(date=parse_date_time(date,"ymd HMS")) %>%
     type_convert()
+  
+  return(data)
+}
+
+join_understat_team_stats <- function(understat_team_stats){
+  
+  data <-
+    understat_team_stats %>%
+    filter(data_type=="team_stats") %>%
+    select(data) %>%
+    unnest(data)
   
   return(data)
 }
