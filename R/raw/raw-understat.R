@@ -1,7 +1,12 @@
 source(here("R","raw","raw-utils.R"),encoding="utf-8")
 source(here("R","themes.R"),encoding="utf-8")
 
-scrape_understat <- function(save_path_results=here("data","understat_results.rds"),save_path_shots=here("data","understat_shots.rds"),current_season="2023"){
+scrape_understat <- function(
+    save_path_results=here("data","understat_results.rds"),
+    save_path_team_stats=here("data","understat_team_stats.rds"),
+    save_path_shots=here("data","understat_shots.rds"),
+    current_season="2023"
+){
   
   data_types <- get_data_types()
   
