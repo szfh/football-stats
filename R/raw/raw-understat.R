@@ -5,7 +5,8 @@ scrape_understat <- function(
     save_path_results=here("data","understat_results.rds"),
     save_path_team_stats=here("data","understat_team_stats.rds"),
     save_path_shots=here("data","understat_shots.rds"),
-    current_season="2023"
+    current_season="2023",
+    refresh_season_stats=FALSE
 ){
   
   data_types <- get_data_types()
@@ -40,14 +41,16 @@ scrape_understat <- function(
     bind_rows(understat$results$keep,understat$results$new) %>%
     select(data) %>%
     unnest(cols=data) %>%
-    select(league,home_team,away_team) %>%
+    select(season,league,home_team,away_team) %>%
+    mutate(season=str_sub(season,end=4)) %>%
     pivot_longer(cols=c("home_team","away_team"),values_to="team",names_to=NULL) %>%
     unique() %>%
     arrange(league,team)
   
   understat$team_meta$keep <-
     understat_team_stats_saved %>%
-    filter(data_type=="team_meta")
+    filter(data_type=="team_meta") %>%
+    {if(refresh_season_stats) filter(., (year+1)!=current_season) else .}
   
   understat$team_meta$new <-
     anti_join(understat$team_meta$all,understat$team_meta$keep) %>%
@@ -64,7 +67,8 @@ scrape_understat <- function(
   
   understat$team_stats$keep <-
     understat_team_stats_saved %>%
-    filter(data_type=="team_stats")
+    filter(data_type=="team_stats") %>%
+    {if(refresh_season_stats) filter(., (year+1)!=current_season) else .}
   
   understat$team_stats$new <-
     anti_join(understat$team_stats$all,understat$team_stats$keep) %>%
