@@ -41,8 +41,7 @@ scrape_understat <- function(
     bind_rows(understat$results$keep,understat$results$new) %>%
     select(data) %>%
     unnest(cols=data) %>%
-    select(season,league,home_team,away_team) %>%
-    mutate(season=str_sub(season,end=4)) %>%
+    select(league,home_team,away_team) %>%
     pivot_longer(cols=c("home_team","away_team"),values_to="team",names_to=NULL) %>%
     unique() %>%
     arrange(league,team)
@@ -50,7 +49,7 @@ scrape_understat <- function(
   understat$team_meta$keep <-
     understat_team_stats_saved %>%
     filter(data_type=="team_meta") %>%
-    {if(refresh_season_stats) filter(., (year+1)!=current_season) else .}
+    {if(refresh_season_stats) filter(., (as.numeric(year)+1)!=as.numeric(current_season)) else .}
   
   understat$team_meta$new <-
     anti_join(understat$team_meta$all,understat$team_meta$keep) %>%
