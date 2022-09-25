@@ -195,6 +195,16 @@ scrape_fbref <- function(
     mutate(date_scraped=today()) %>%
     print(n=Inf)
   
+  fbref$data_mapping <- 
+    tibble(
+      data_type="player_dictionary_mapping",
+      date_scraped=today(),
+      data=player_dictionary_mapping() %>%
+        nest(data=everything()) %>%
+        list()
+    ) %>%
+    print(n=Inf)
+  
   fbref_all <-
     bind_rows(
       fbref$match_results_league$keep,fbref$match_results_league$new,
@@ -204,6 +214,7 @@ scrape_fbref <- function(
       fbref$match_summary$keep,fbref$match_summary$new,
       fbref$match_shots$keep,fbref$match_shots$new,
       fbref$advanced_stats$keep,fbref$advanced_stats$new,
+      fbref$data_mapping
     ) %>%
     filter(!is.na(data)) %>%
     relocate(data_type) %>%
