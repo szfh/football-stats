@@ -15,9 +15,11 @@
     for packages.
 -   [R/themes.R](https://github.com/szfh/football-stats/blob/main/R/themes.R)
     for themes.
+-   [R/examples/](https://github.com/szfh/football-stats/blob/main/R/examples)
+    for self-contained example scripts.
 -   [positions.csv](https://github.com/szfh/football-stats/blob/main/positions.csv)
     for a .csv file of positions based on FBRef match data. For EPL
-    players between 2017-08-01 and 2021-12-31.
+    players between **2017-08-01** and **2022-10-01**.
 -   [@saintsbynumbers](https://twitter.com/saintsbynumbers) for the
     author. I [blog](https://szfh.github.io/) about twice a year.
 
