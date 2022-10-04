@@ -11,6 +11,7 @@ join <- function(
 ){
   fbref_join <- possibly(join_fbref, otherwise=NA)(readRDS(save_path_fbref))
   fbref_urls_join <- possibly(join_fbref_urls, otherwise=NA)(readRDS(save_path_fbref_urls))
+  data_mapping_join <- possibly(join_data_mapping, otherwise=NA)(readRDS(save_path_fbref))
   understat_results_join <- possibly(join_understat_results, otherwise=NA)(readRDS(save_path_understat_results))
   understat_team_stats_join <- possibly(join_understat_team_stats, otherwise=NA)(readRDS(save_path_understat_team_stats))
   understat_shots_join <- possibly(join_understat_shots, otherwise=NA)(readRDS(save_path_understat_shots))
@@ -19,6 +20,7 @@ join <- function(
   data <- list(
     fbref=fbref_join,
     fbref_urls=fbref_urls_join,
+    data_mapping=data_mapping_join,
     understat_results=understat_results_join,
     understat_team_stats=understat_team_stats_join,
     understat_shots=understat_shots_join,
@@ -257,6 +259,17 @@ join_fbref <- function(fbref){
 join_fbref_urls <- function(fbref_urls){
   data <-
     fbref_urls
+  
+  return(data)
+}
+
+join_data_mapping <- function(fbref){
+  data <-
+    fbref %>%
+    filter(data_type=="player_dictionary_mapping") %>%
+    unnest(data) %>%
+    unnest(data) %>%
+    janitor::remove_empty("cols")
   
   return(data)
 }
