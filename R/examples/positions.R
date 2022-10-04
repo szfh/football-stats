@@ -7,7 +7,6 @@
   positions <-
     data$fbref$match_lineups %>%
     filter(Matchday>=as.Date("2017-08-01")) %>%
-    # filter(Matchday<=as.Date("2021-12-31")) %>%
     select(Player=Player_Name,Position=Pos,Min) %>%
     mutate(Position=str_sub(Position,1,2)) %>%
     filter(!is.na(Position)) %>%
