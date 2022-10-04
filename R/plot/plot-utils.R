@@ -194,6 +194,6 @@ save_tables <- function(tables,path,extention="png"){
 }
 
 padj <- function(stat,possession){
-  stat_padj <- stat * 2/(1 + exp(-0.1*(team_possession-50)))
+  stat_padj <- stat * 2/(1 + exp(-10*(possession-0.5)))
   return(stat_padj)
 }
