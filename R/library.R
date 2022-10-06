@@ -16,6 +16,7 @@ pacman::p_load(
   slider,
   polite,
   worldfootballR,
+  progress,
   ggformula,
   gghighlight,
   ggforce,
