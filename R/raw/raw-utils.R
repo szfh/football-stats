@@ -198,3 +198,14 @@ fbref_clean_names <- function(data,page,stat=NA){
     data %>%
     type_convert # refactor data types
 }
+
+pmap_pbar <- function(.l, .f, ...) {
+  .f <- purrr::as_mapper(.f, ...)
+  pb <- progress::progress_bar$new(total = length(.l[[1]]), force = TRUE)
+  
+  f <- function(...) {
+    pb$tick()
+    .f(...)
+  }
+  purrr::pmap(.l, f, ...)
+}
