@@ -201,7 +201,12 @@ fbref_clean_names <- function(data,page,stat=NA){
 
 pmap_pbar <- function(.l, .f, ...) {
   .f <- purrr::as_mapper(.f, ...)
-  pb <- progress::progress_bar$new(total = length(.l[[1]]), force = TRUE)
+  pb <-
+    progress::progress_bar$new(
+      format = "[:bar] :current/:total taken :elapsed eta :eta rate :tick_rate/sec",
+      total = length(.l[[1]]),
+      force = TRUE
+    )
   
   f <- function(...) {
     pb$tick()
