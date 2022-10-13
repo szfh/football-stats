@@ -16,7 +16,7 @@ scrape_fbref <- function(
   fbref_urls$league$all <-
     tibble() %>%
     bind_rows(
-      crossing(data_types$season,data_types$country)
+      crossing(data_types$season,data_types$country,gender="M")
     ) %>%
     mutate(data_type="league")
   
@@ -26,7 +26,7 @@ scrape_fbref <- function(
   
   fbref_urls$league$new <-
     anti_join(fbref_urls$league$all, fbref_urls$league$keep) %>%
-    mutate(data=pmap(list(country,gender="M",season),fb_league_urls)) %>%
+    mutate(data=pmap_pbar(list(country,gender,season),fb_league_urls)) %>%
     mutate(date_scraped=today()) %>%
     print(n=Inf)
   
@@ -41,7 +41,7 @@ scrape_fbref <- function(
   
   fbref_urls$team$new <-
     anti_join(fbref_urls$team$all, fbref_urls$team$keep) %>%
-    mutate(data=map(data_league,fb_teams_urls)) %>%
+    mutate(data=pmap_pbar(list(data_league),fb_teams_urls)) %>%
     select(-data_league) %>%
     mutate(date_scraped=today()) %>%
     print(n=Inf)
@@ -58,7 +58,7 @@ scrape_fbref <- function(
   
   fbref_urls$match$new <-
     anti_join(fbref_urls$match$all, fbref_urls$match$keep) %>%
-    mutate(data=pmap(list(country,gender="M",season),fb_match_urls)) %>%
+    mutate(data=pmap_pbar(list(country,gender,season),fb_match_urls)) %>%
     select(-data_league) %>%
     mutate(date_scraped=today()) %>%
     print(n=Inf)
@@ -66,7 +66,9 @@ scrape_fbref <- function(
   fbref$match_results_league$all <-
     crossing(
       data_types$season,
-      country="ENG"
+      country="ENG",
+      gender="M",
+      tier="1st"
     ) %>%
     mutate(data_type="match_result_league")
   
@@ -78,7 +80,7 @@ scrape_fbref <- function(
   
   fbref$match_results_league$new <-
     anti_join(fbref$match_results_league$all, fbref$match_results_league$keep) %>%
-    mutate(data=pmap(list(country,gender="M",season,tier="1st"),possibly(load_match_results,otherwise=NA))) %>%
+    mutate(data=pmap(list(country,gender,season,tier),possibly(load_match_results,otherwise=NA))) %>%
     print(n=Inf)
   
   fbref$match_results_cup$all <-
@@ -104,7 +106,10 @@ scrape_fbref <- function(
     crossing(
       data_types$season,
       team_or_player=c("team","player"),
-      data_types$season_team_stats
+      data_types$season_team_stats,
+      country="ENG",
+      gender="M",
+      tier="1st"
     ) %>%
     mutate(data_type="season_stat")
   
@@ -116,7 +121,7 @@ scrape_fbref <- function(
   
   fbref$season_stats$new <-
     anti_join(fbref$season_stats$all, fbref$season_stats$keep) %>%
-    mutate(data=pmap(list(country="ENG",gender="M",season,tier="1st",stat),possibly(fb_season_team_stats,otherwise=NA))) %>%
+    mutate(data=pmap_pbar(list(country,gender,season,tier,stat),possibly(fb_season_team_stats,otherwise=NA))) %>%
     print(n=Inf)
   
   fbref$match_summary$all <-
@@ -133,7 +138,7 @@ scrape_fbref <- function(
   
   fbref$match_summary$new <-
     anti_join(fbref$match_summary$all, fbref$match_summary$keep) %>%
-    mutate(data=map(url,possibly(fb_match_summary,otherwise=NA))) %>%
+    mutate(data=pmap_pbar(list(url),possibly(fb_match_summary,otherwise=NA))) %>%
     mutate(date_scraped=today()) %>%
     print(n=Inf)
   
@@ -151,7 +156,7 @@ scrape_fbref <- function(
   
   fbref$match_lineups$new <-
     anti_join(fbref$match_lineups$all, fbref$match_lineups$keep) %>%
-    mutate(data=map(url,possibly(fb_match_lineups,otherwise=NA))) %>%
+    mutate(data=pmap_pbar(list(url),possibly(fb_match_lineups,otherwise=NA))) %>%
     mutate(date_scraped=today()) %>%
     print(n=Inf)
   
@@ -170,7 +175,7 @@ scrape_fbref <- function(
   
   fbref$match_shots$new <-
     anti_join(fbref$match_shots$all, fbref$match_shots$keep) %>%
-    mutate(data=map(url,possibly(fb_match_shooting,otherwise=NA))) %>%
+    mutate(data=pmap_pbar(list(url),possibly(fb_match_shooting,otherwise=NA))) %>%
     mutate(date_scraped=today()) %>%
     print(n=Inf)
   
