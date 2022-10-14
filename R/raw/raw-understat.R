@@ -32,7 +32,7 @@ scrape_understat <- function(
   
   understat$results$new <-
     anti_join(understat$results$all,understat$results$keep) %>%
-    mutate(data=pmap(list(league,season),understat_league_match_results)) %>%
+    mutate(data=pmap_pbar(list(league,season),understat_league_match_results)) %>%
     mutate(data_type="results") %>%
     mutate(date_scraped=Sys.Date()) %>%
     print(n=Inf)
@@ -53,7 +53,7 @@ scrape_understat <- function(
   
   understat$team_meta$new <-
     anti_join(understat$team_meta$all,understat$team_meta$keep) %>%
-    mutate(data=pmap(list(team),understat_team_meta)) %>%
+    mutate(data=pmap_pbar(list(team),understat_team_meta)) %>%
     mutate(data_type="team_meta") %>%
     mutate(date_scraped=Sys.Date()) %>%
     print(n=Inf)
@@ -71,7 +71,7 @@ scrape_understat <- function(
   
   understat$team_stats$new <-
     anti_join(understat$team_stats$all,understat$team_stats$keep) %>%
-    mutate(data=pmap(list(url),understat_team_stats_breakdown)) %>%
+    mutate(data=pmap_pbar(list(url),understat_team_stats_breakdown)) %>%
     mutate(data_type="team_stats") %>%
     mutate(date_scraped=Sys.Date()) %>%
     print(n=Inf)
