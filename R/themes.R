@@ -40,6 +40,8 @@ theme$solar <- function(base_size=theme$base_size,base_family=theme$base_family)
     theme(
       axis.ticks=element_blank(),
       axis.line=element_line(size=0.6),
+      axis.line.x=element_blank(),
+      axis.line.y=element_blank(),
       axis.title=element_text(size=10,colour="black",face="bold",hjust=0.5,vjust=0.5),
       axis.text=element_text(size=8,colour="black",hjust=0.5,vjust=0.5),
       
