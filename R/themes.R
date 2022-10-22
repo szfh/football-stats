@@ -1,4 +1,6 @@
 font_add_google("Roboto", "roboto")
+font_add_google("Roboto Condensed", "roboto condensed")
+font_add_google("Roboto Slab", "roboto slab")
 # font_families()
 showtext_auto(enable=TRUE)
 showtext_opts(dpi=1500)
