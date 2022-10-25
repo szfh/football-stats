@@ -17,6 +17,11 @@ scrape_fivethirtyeight <- function(save_path=here("data","fivethirtyeight.rds"))
     read.csv("https://projects.fivethirtyeight.com/soccer-api/international/spi_global_rankings_intl.csv") %>%
     as_tibble(.name_repair = "unique")
   
+  fivethirtyeight$forecast_epl <-
+    jsonlite::fromJSON("https://projects.fivethirtyeight.com/soccer-predictions/forecasts/2022_premier-league_forecast.json") %>%
+    .[["forecasts"]] %>%
+    glimpse
+  
   saveRDS(fivethirtyeight,file=save_path)
   
   return(fivethirtyeight)
