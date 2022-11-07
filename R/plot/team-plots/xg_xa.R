@@ -6,22 +6,22 @@ xg_xa <- function(team,season,since=NA,per90=TRUE){
     filter(Team %in% !!team) %>%
     mutate(Match_Date=parse_date_time(Match_Date,"ymd")) %>%
     {if (!is.na(since)) filter(., Match_Date>=as.Date(since)) else .} %>%
-    select(Player,Min,npxG=npxG_Expected,xA=xA_Expected) %>%
+    select(Player,Min,npxG=npxG_Expected,xAG=xAG_Expected) %>%
     group_by(Player) %>%
     summarise(., across(where(is.numeric),sum,na.rm=TRUE),.groups="drop") %>%
     filter(Min>=0.1*max(Min)) %>%
-    {if(per90) mutate(., npxG=90*npxG/Min, xA=90*xA/Min) else mutate(., npxG=npxG, xA=xA)} %>%
+    {if(per90) mutate(., npxG=90*npxG/Min, xAG=90*xAG/Min) else mutate(., npxG=npxG, xAG=xAG)} %>%
     mutate(Focus=case_when(
-      npxG==0 & xA==0 ~ FALSE,
+      npxG==0 & xAG==0 ~ FALSE,
       min_rank(desc(npxG))<=8 ~ TRUE,
-      min_rank(desc(xA))<=8 ~ TRUE,
+      min_rank(desc(xAG))<=8 ~ TRUE,
       TRUE ~ FALSE)) %>%
-    ggplot(aes(x=npxG,y=xA)) +
+    ggplot(aes(x=npxG,y=xAG)) +
     geom_point(aes(fill=Focus),shape=23,size=2.5,alpha=0.8,colour=colour[["sfc"]][["black"]]) +
     geom_text_repel(aes(label=ifelse(Focus,Player,"")),size=rel(2.5)) +
     theme[["solar"]]() +
     labs(
-      title=glue("{team} xG/xA"),
+      title=glue("{team} xG/xAG"),
       x="Expected goals (penalties excluded)",
       y="Expected assists"
     ) +
