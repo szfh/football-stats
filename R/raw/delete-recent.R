@@ -1,7 +1,7 @@
 source(here("R","raw","raw-utils.R"),encoding="utf-8")
 source(here("R","themes.R"),encoding="utf-8")
 
-delete_recent <- function(save_path=here("data","fbref.rds"),days=7,current_season=2022){
+delete_recent <- function(save_path=here("data","fbref.rds"),days=7){
   fbref_saved <- readRDS(save_path)
   
   fbref <-
