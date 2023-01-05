@@ -31,7 +31,7 @@ team_appearances <- function(team,season,since=NA){
     filter(season %in% !!season) %>%
     filter(Team %in% !!team) %>%
     mutate(Match_Date=parse_date_time(Match_Date,"ymd")) %>%
-    {if (!is.na(since)) filter(., Matchday>=as.Date(since)) else .} %>%
+    {if (!is.na(since)) filter(., Match_Date>=as.Date(since)) else .} %>%
     mutate(
       Home_Team=shorten_team_names(Home_Team),
       Away_Team=shorten_team_names(Away_Team)
@@ -54,12 +54,12 @@ team_appearances <- function(team,season,since=NA){
     mutate(Player=fct_reorder(Player,Min_Total)) %>%
     ggplot(aes(x=Match,y=Player)) +
     geom_tile(aes(alpha=Min),fill="darkred") +
-    geom_text(aes(label=Min),color="black",size=1.8) +
+    geom_text(aes(label=Min),color="black",size=1.6) +
     facet_grid(Pos ~ season, scales="free", space="free") +
     theme[["solar"]]() +
     theme(
-      axis.text.x=element_text(size=5,angle=45,hjust=1),
-      axis.text.y=element_text(size=5),
+      axis.text.x=element_text(size=4,angle=45,hjust=1),
+      axis.text.y=element_text(size=4),
       plot.title=element_markdown(),
       plot.caption=element_text(size=5),
       strip.text.x=element_blank(),
