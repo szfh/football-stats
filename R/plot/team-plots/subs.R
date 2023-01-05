@@ -2,13 +2,13 @@ subs <- function(team,season,since=NA,lastn=NA){
   
   plot <-
     data$fbref$match_summary %>%
-    mutate(Match_Date=parse_date_time(Match_Date,"mdy")) %>%
+    mutate(Match_Date=parse_date_time(Match_Date,"ymd")) %>%
     filter(Team %in% !!team) %>%
-    filter(Season %in% !!season) %>%
+    filter(season %in% !!season) %>%
     {if (!is.na(since)) filter(., Match_Date>=as.Date(since)) else .} %>%
     {if (!is.na(lastn)) filter(., Match_Date>=(group_by(., Match_Date) %>% group_keys(.) %>% slice(n()-lastn+1) %>% pull())) else .} %>%
     filter(Event_Type=="Substitute") %>%
-    select(Season,Match_Date,Home_Team,Home_Score,Away_Team,Away_Score,Team,Home_Away,Event_Half,Event_Time,Score_Progression) %>%
+    select(season,Match_Date,Home_Team,Home_Score,Away_Team,Away_Score,Team,Home_Away,Event_Half,Event_Time,Score_Progression) %>%
     mutate(Opposition=ifelse(Home_Away=="Home",Away_Team,Home_Team),.after="Team") %>%
     mutate(
       Home_Team=shorten_team_names(Home_Team),
@@ -33,7 +33,7 @@ subs <- function(team,season,since=NA,lastn=NA){
         TRUE ~ "Drawing"
       )) %>%
     mutate(Home_Away_Short=ifelse(Home_Away=="Home","H","A"),.after="Home_Away") %>%
-    nest_by(Season,Match_Date,Home_Team,Home_Score,Away_Team,Away_Score,Team,Opposition,Home_Away,Home_Away_Short,Team_Score,Opposition_Score) %>%
+    nest_by(season,Match_Date,Home_Team,Home_Score,Away_Team,Away_Score,Team,Opposition,Home_Away,Home_Away_Short,Team_Score,Opposition_Score) %>%
     mutate(
       Subs_Available=case_when(
         Match_Date>=as_date("2020-4-1") & Match_Date<as_date("2020-9-1") ~ 5,
@@ -58,12 +58,12 @@ subs <- function(team,season,since=NA,lastn=NA){
       TRUE ~ Event_Time
     )) %>%
     mutate(Match=glue("{Team_Score}-{Opposition_Score} {Opposition} {Home_Away_Short}")) %>%
-    mutate(Match=reorder_within(Match, desc(Match_Date), Season)) %>%
+    mutate(Match=reorder_within(Match, desc(Match_Date), season)) %>%
     ggplot(aes(x=Event_Time,y=Match,fill=Game_State)) +
-    geom_beeswarm(size=2.5,shape=23,cex=1,colour="black",groupOnX=FALSE,priority="descending",alpha=0.75) +
+    geom_beeswarm(size=2.5,shape=23,cex=1,colour="black",priority="descending",alpha=0.75) +
     # geom_blank(data=data.frame(Event_Time=c(45.5,94.5),Match=c(NA,NA),Game_State=c(NA,NA),Event_Period=c("Second Half","Second Half"))) +
     theme[["solar"]]() +
-    facet_grid(Season ~ Event_Period, space="free", scales="free") +
+    facet_grid(season ~ Event_Period, space="free", scales="free") +
     theme(
       axis.text.x=element_text(size=5),
       axis.text.y=element_text(size=5),
