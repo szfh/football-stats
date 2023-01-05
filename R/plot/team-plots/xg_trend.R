@@ -34,10 +34,12 @@ xg_trend <- function(team,season,lastn=NA,since=NA){
       Team_npxG_mva=get_mva(Team_npxG),
       Opposition_npxG_mva=get_mva(Opposition_npxG)) %>%
     filter(season %in% !!season) %>%
-    # mutate(season=case_when(
-    #   Match_Date>=as.Date("2019-08-01") & Match_Date<as.Date("2020-04-01") ~ "2019-20 part 1",
-    #   Match_Date>=as.Date("2020-04-01") & Match_Date<as.Date("2020-08-01") ~ "2019-20 part 2",
-    #   TRUE ~ season)) %>%
+    mutate(season=case_when(
+      season==2019 & Match_Date < as.Date("2022-04-01")~ 2019.1,
+      season==2019 ~ 2019.2,
+      season==2023 & Match_Date < as.Date("2022-12-01")~ 2023.1,
+      season==2023 ~ 2023.2,
+      TRUE ~ season)) %>%
     {if (!is.na(since)) filter(., Match_Date>=as.Date(since)) else .} %>%
     {if (!is.na(lastn)) slice_tail(., n=lastn) else .} %>%
     mutate(Home_Away_Short=ifelse(Home_Away=="Home","H","A"),.after="Home_Away") %>%

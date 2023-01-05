@@ -31,7 +31,13 @@ team_appearances <- function(team,season,since=NA){
     filter(season %in% !!season) %>%
     filter(Team %in% !!team) %>%
     mutate(Match_Date=parse_date_time(Match_Date,"ymd")) %>%
-    {if (!is.na(since)) filter(., Matchday>=as.Date(since)) else .} %>%
+    {if (!is.na(since)) filter(., Match_Date>=as.Date(since)) else .} %>%
+    mutate(season=case_when(
+      season==2019 & Match_Date < as.Date("2022-04-01")~ 2019.1,
+      season==2019 ~ 2019.2,
+      season==2023 & Match_Date < as.Date("2022-12-01")~ 2023.1,
+      season==2023 ~ 2023.2,
+      TRUE ~ season)) %>%
     mutate(
       Home_Team=shorten_team_names(Home_Team),
       Away_Team=shorten_team_names(Away_Team)
