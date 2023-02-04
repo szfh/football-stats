@@ -40,8 +40,11 @@
   # update data with changes that haven't been listed in Transfermarkt yet
   player_bio_updated <-
     player_bio_type_converted %>%
-    # players leaving
-    filter(!(player_name %in% c("Fraser Forster","Harry Lewis"))) %>%
+    # fix date of birth
+    mutate(date_of_birth=case_when(
+      player_name=="Lyanco" ~ as.Date("1997-2-1"),
+      TRUE ~ date_of_birth
+    )) %>%
     # new contracts
     mutate(contract_expires=case_when(
       player_name=="Willy Caballero" ~ contract_expires+years(1),
@@ -64,9 +67,10 @@
         position=="midfield - Central Midfield" ~ "CM",
         position=="midfield - Left Midfield" ~ "AM",
         position=="midfield - Right Midfield" ~ "AM",
-        position=="attack - Left Winger" ~ "AM",
-        position=="attack - Right Winger" ~ "AM",
-        position=="attack - Centre-Forward" ~ "ST",
+        position=="midfield - Attacking Midfield" ~ "AM",
+        position=="Attack - Left Winger" ~ "AM",
+        position=="Attack - Right Winger" ~ "AM",
+        position=="Attack - Centre-Forward" ~ "ST",
         TRUE ~ "Other"))
     
     return(positions$position_new)
@@ -106,7 +110,7 @@
   player_data %>%
     ggplot() +
     geom_rect(data=peak_ages,aes(xmin=age_start,xmax=age_end,ymin=-Inf,ymax=Inf), fill="black", alpha=0.15) +
-    geom_segment(aes(y=player_name,yend=player_name,x=age_now+0.1,xend=age_contract_expiry-0.1),alpha=0.8,size=0.4) +
+    geom_segment(aes(y=player_name,yend=player_name,x=age_now+0.1,xend=age_contract_expiry-0.1),alpha=0.8,linewidth=0.4) +
     geom_point(aes(y=player_name,x=age_now),alpha=0.75,shape=23,fill="darkred") +
     geom_point(aes(y=player_name,x=age_contract_expiry),alpha=0.75,shape=23,fill="royalblue") +
     facet_grid(position ~ ., scales="free", space="free") +
