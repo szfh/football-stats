@@ -2,15 +2,15 @@ xg_xa_player <- function(season){
   
   plot <-
     data$fbref$advanced_stats_player_summary %>% 
-    filter(season %in% !!season) %>% 
-    select(Player,Team,npxG=npxG_Expected,xA=xA_Expected) %>%
+    filter(season %in% !!season) %>%
+    select(Player,Team,npxG=npxG_Expected,xAG=xAG_Expected) %>%
     group_by(Player,Team) %>%
     summarise(across(where(is.numeric),sum,na.rm=TRUE),.groups="drop") %>%
-    make_long_data(levels=c("npxG","xA"),labels=c("Expected Goals","Expected Assists")) %>%
+    make_long_data(levels=c("npxG","xAG"),labels=c("Expected Goals","Expected Goals Assisted")) %>%
     mutate(focus=case_when(
       key=="Expected Goals" & min_rank(desc(n))<=20 ~ TRUE,
-      key=="Expected Assists" & min_rank(desc(n))<=20 ~ TRUE,
-      TRUE ~ FALSE)) %>%
+      key=="Expected Goals Assisted" & min_rank(desc(n))<=20 ~ TRUE,
+      .default=FALSE)) %>%
     ggplot(aes(x=0.05,y=n,alpha=focus)) +
     geom_text_repel(
       aes(label=ifelse(focus,Player,"")),
@@ -25,11 +25,11 @@ xg_xa_player <- function(season){
     theme[["solarfacet"]]() +
     facet_wrap("key",scales="free") +
     labs(
-      title="Expected Goals/Expected Assists",
+      title="Expected Goals / Expected Goals Assisted",
       x=element_blank(),
       y=element_blank()) +
     scale_x_continuous(limit=c(0,1)) +
-    scale_y_continuous(breaks=breaks_extended(6)) +
+    scale_y_continuous(breaks=breaks_extended(8)) +
     scale_fill_manual(values=palette[["epl"]]()) +
     scale_alpha_manual(values=c("TRUE"=1,"FALSE"=0.1))
   
