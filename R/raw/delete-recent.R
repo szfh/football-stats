@@ -6,9 +6,11 @@ delete_recent <- function(save_path=here("data","fbref.rds"),days=3){
   
   fbref <-
     fbref_saved %>%
-    mutate(event_date=pmap(list(data,data_type),possibly(get_event_date,otherwise=lubridate::NA_Date_))) %>%
-    filter(is.na(event_date) | event_date<lubridate::today()-days) %>%
-    select(-event_date)
+    mutate(event_date=pmap(list(data,data_type),possibly(get_event_date,otherwise=NA))) %>%
+    mutate(remove=ifelse(event_date>=date_scraped-days,TRUE,FALSE)) %>%
+    mutate(remove=replace_na(remove,FALSE)) %>%
+    filter(!remove) %>%
+    select(-event_date,-remove)
   
   removed <-
     anti_join(fbref_saved,fbref) %>%
@@ -19,7 +21,6 @@ delete_recent <- function(save_path=here("data","fbref.rds"),days=3){
 }
 
 get_event_date <- function(data,data_type=NA){
-  
   if(data_type=="match_lineups"){
     event_date <-
       data %>%
@@ -45,7 +46,7 @@ get_event_date <- function(data,data_type=NA){
       distinct() %>%
       lubridate::parse_date_time("ymd")
   } else {
-    event_date <- lubridate::NA_Date_
+    event_date <- NA
   }
   event_date <- as_date(event_date)
   return(event_date)
