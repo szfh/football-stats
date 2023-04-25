@@ -5,7 +5,7 @@ output: github_document
 # date: 2019-07-28
 ---
 
-## @saintbynumbers football data and analytics repository
+## @saintsbynumbers football data and analytics repository
 
 ### Structure
 
@@ -42,4 +42,4 @@ If you use scraping tools including any in this repository, **you must use them 
 1. [Soccermatics course notes](https://soccermatics.readthedocs.io/en/latest/)
 1. [worldfootballR package](https://github.com/JaseZiv/worldfootballR)
 1. [ggshakeR package](https://github.com/abhiamishra/ggshakeR)
-1. [guideR](https://docs.google.com/spreadsheets/d/16Xvhl7fCKEs1JTr-VXPZDmctO2gq4TcmuNmAhoHQQs0/edit#gid=627465558) list of R resources
+1. [guideR](https://docs.google.com/spreadsheets/u/0/d/1LPe8xYduoep9qCrNzBGdJHaHZ8dnmdHNnu7UXZKzawU/) list of R resources - updated April 2023
