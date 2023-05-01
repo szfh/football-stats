@@ -86,16 +86,16 @@ scrape_fbref <- function(
   fbref$match_results_cup$all <-
     crossing(
       competition=
-        c("FA Cup","English Football League Cup",
-          "UEFA Champions League","UEFA Europa League","UEFA Europa Conference League")
+        c("FA Cup","EFL Cup",
+          "UEFA Champions League","UEFA Europa League","UEFA Europa Conference League","UEFA Super Cup")
     ) %>%
     mutate(data_type="match_result_cup")
   
   fbref$match_results_cup$keep <-
     fbref_saved %>%
     filter(data_type=="match_result_cup") %>%
-    filter(!is.na(season)) %>%
-    filter(!is.na(data))
+    filter(!is.na(data)) %>%
+    filter(competition=="")
   
   fbref$match_results_cup$new <-
     anti_join(fbref$match_results_cup$all, fbref$match_results_cup$keep) %>%
