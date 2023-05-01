@@ -68,7 +68,7 @@ scrape_fbref <- function(
       data_types$season,
       country="ENG",
       gender="M",
-      tier="1st"
+      tier=c("1st","2nd")
     ) %>%
     mutate(data_type="match_result_league")
   
