@@ -195,7 +195,7 @@ scrape_fbref <- function(
   
   fbref$advanced_stats$new <-
     anti_join(fbref$advanced_stats$all, fbref$advanced_stats$keep) %>%
-    filter(season %in% c(2022,2023)) %>%
+    filter(season %in% c(2023)) %>%
     mutate(data=pmap_pbar(list(url,stat,team_or_player),possibly(fb_advanced_match_stats,otherwise=NA))) %>%
     mutate(date_scraped=today()) %>%
     print(n=Inf)
