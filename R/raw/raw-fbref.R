@@ -16,7 +16,7 @@ scrape_fbref <- function(
   fbref_urls$league$all <-
     tibble() %>%
     bind_rows(
-      crossing(data_types$season,data_types$country,gender="M")
+      crossing(data_types$season,data_types$country,gender="M",tier=c("1st","2nd"))
     ) %>%
     mutate(data_type="league")
   
