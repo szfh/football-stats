@@ -95,7 +95,7 @@ scrape_fbref <- function(
     fbref_saved %>%
     filter(data_type=="match_result_cup") %>%
     filter(!is.na(data)) %>%
-    filter(competition=="")
+    filter(NA)
   
   fbref$match_results_cup$new <-
     anti_join(fbref$match_results_cup$all, fbref$match_results_cup$keep) %>%
