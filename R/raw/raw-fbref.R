@@ -138,6 +138,7 @@ scrape_fbref <- function(
   
   fbref$match_summary$new <-
     anti_join(fbref$match_summary$all, fbref$match_summary$keep) %>%
+    filter(season %in% c(2022,2023)) %>%
     mutate(data=pmap_pbar(list(url),possibly(fb_match_summary,otherwise=NA))) %>%
     mutate(date_scraped=today()) %>%
     print(n=Inf)
@@ -156,6 +157,7 @@ scrape_fbref <- function(
   
   fbref$match_lineups$new <-
     anti_join(fbref$match_lineups$all, fbref$match_lineups$keep) %>%
+    filter(season %in% c(2022,2023)) %>%
     mutate(data=pmap_pbar(list(url),possibly(fb_match_lineups,otherwise=NA))) %>%
     mutate(date_scraped=today()) %>%
     print(n=Inf)
@@ -175,6 +177,7 @@ scrape_fbref <- function(
   
   fbref$match_shots$new <-
     anti_join(fbref$match_shots$all, fbref$match_shots$keep) %>%
+    filter(season %in% c(2022,2023)) %>%
     mutate(data=pmap_pbar(list(url),possibly(fb_match_shooting,otherwise=NA))) %>%
     mutate(date_scraped=today()) %>%
     print(n=Inf)
@@ -195,6 +198,7 @@ scrape_fbref <- function(
   
   fbref$advanced_stats$new <-
     anti_join(fbref$advanced_stats$all, fbref$advanced_stats$keep) %>%
+    filter(tier=="1st") %>%
     filter(season %in% c(2023)) %>%
     mutate(data=pmap_pbar(list(url,stat,team_or_player),possibly(fb_advanced_match_stats,otherwise=NA))) %>%
     mutate(date_scraped=today()) %>%
