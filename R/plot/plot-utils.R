@@ -35,30 +35,30 @@ make_long_data <- function(data,levels,labels){ # transform data to long format
   return(long_data)
 }
 
-get_mva <- function(xG,n=6){ # windowed average xG
-  get_weighted_mean <- function(xG,n){
-    k <- length(xG)
-    weights <- (1:n)/n
+get_mva <- function(x,n=10){ # windowed average xG
+  get_weighted_mean <- function(x,n){
+    k <- length(x)
+    weights <- (1-exp(-1))^((n-1):0)
     weights <- weights[(n-k+1):n]
     
-    xG_weighted <- list()
+    x_weighted <- list()
     divider <- list()
     
     for(i in 1:k){
-      xG_weighted[[i]] <- xG[[i]]*weights[[i]]
+      x_weighted[[i]] <- x[[i]]*weights[[i]]
       divider[[i]] <- weights[[i]]
     }
     
-    weighted_mean <- reduce(xG_weighted,sum)/reduce(divider,sum)
+    weighted_mean <- reduce(x_weighted,sum)/reduce(divider,sum)
     
     return(weighted_mean)
   }
   
   weighted_mean <-
-    xG %>%
+    x %>%
     as_tibble %>%
-    mutate(xg_mva=slide_dbl(value,possibly(get_weighted_mean,otherwise=NA),.before=(n-1),n=n)) %>%
-    pull(xg_mva)
+    mutate(x_mva=slide_dbl(value,possibly(get_weighted_mean,otherwise=NA),.before=(n-1),n=n)) %>%
+    pull(x_mva)
   
   return(weighted_mean)
 }
