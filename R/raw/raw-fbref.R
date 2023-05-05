@@ -209,7 +209,6 @@ scrape_fbref <- function(
       data_type="player_dictionary_mapping",
       date_scraped=today(),
       data=player_dictionary_mapping() %>%
-        nest(data=everything()) %>%
         list()
     ) %>%
     print(n=Inf)
