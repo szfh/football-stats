@@ -26,7 +26,7 @@ scrape_fbref <- function(
   
   fbref_urls$league$new <-
     anti_join(fbref_urls$league$all, fbref_urls$league$keep) %>%
-    mutate(data=pmap_pbar(list(country,gender,season),fb_league_urls)) %>%
+    mutate(data=pmap_pbar(list(country,gender,season,tier),fb_league_urls)) %>%
     mutate(date_scraped=today()) %>%
     print(n=Inf)
   
@@ -58,7 +58,7 @@ scrape_fbref <- function(
   
   fbref_urls$match$new <-
     anti_join(fbref_urls$match$all, fbref_urls$match$keep) %>%
-    mutate(data=pmap_pbar(list(country,gender,season),fb_match_urls)) %>%
+    mutate(data=pmap_pbar(list(country,gender,season,tier),fb_match_urls)) %>%
     select(-data_league) %>%
     mutate(date_scraped=today()) %>%
     print(n=Inf)
