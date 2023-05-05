@@ -38,7 +38,7 @@ make_long_data <- function(data,levels,labels){ # transform data to long format
 get_mva <- function(xG,n=6){ # windowed average xG
   get_weighted_mean <- function(xG,n){
     k <- length(xG)
-    weights <- (1:n)/n
+    weights <- (1-exp(-1))^((n-1):0)
     weights <- weights[(n-k+1):n]
     
     xG_weighted <- list()
