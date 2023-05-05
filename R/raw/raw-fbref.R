@@ -116,8 +116,7 @@ scrape_fbref <- function(
   fbref$season_stats$keep <-
     fbref_saved %>%
     filter(data_type=="season_stat") %>%
-    filter(season!=current_season) %>%
-    filter(!is.na(data))
+    filter(season!=current_season)
   
   fbref$season_stats$new <-
     anti_join(fbref$season_stats$all, fbref$season_stats$keep) %>%
