@@ -16,7 +16,7 @@ output: github_document
 * [R/themes.R](https://github.com/szfh/football-stats/blob/main/R/themes.R) for themes.
 * [R/examples/](https://github.com/szfh/football-stats/blob/main/R/examples) for self-contained example scripts.
 * [positions.csv](https://github.com/szfh/football-stats/blob/main/positions.csv) for a .csv file of positions based on FBRef match data. For EPL players between **2017-08-01** and **2022-10-01**.
-* [@saintsbynumbers](https://twitter.com/saintsbynumbers) for the author. I [blog](https://szfh.github.io/) about twice a year.
+* saintsbynumbers@gmail.com and [@saintsbynumbers](https://twitter.com/saintsbynumbers) for the author. I [blog](https://szfh.github.io/) about twice a year.
 
 ### Note about scraping
 
@@ -33,6 +33,8 @@ If you use scraping tools including any in this repository, **you must use them 
 <img src="./images/plot2.jpg" width="60%">
 <img src="./images/plot3.jpg" width="60%">
 <img src="./images/plot4.jpg" width="60%">
+<img src="./images/plot5.jpg" width="60%">
+<img src="./images/plot6.jpg" width="60%">
 </center>
 
 ### Useful resources

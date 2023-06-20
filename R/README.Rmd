@@ -16,7 +16,7 @@ output: github_document
 * [R/themes.R](https://github.com/szfh/football-stats/blob/main/R/themes.R) for themes.
 * [R/examples/](https://github.com/szfh/football-stats/blob/main/R/examples) for self-contained example scripts.
 * [positions.csv](https://github.com/szfh/football-stats/blob/main/positions.csv) for a .csv file of positions based on FBRef match data. For EPL players between **2017-08-01** and **2022-10-01**.
-* [@saintsbynumbers](https://twitter.com/saintsbynumbers) for the author. I [blog](https://szfh.github.io/) about twice a year.
+* saintsbynumbers@gmail.com and [@saintsbynumbers](https://twitter.com/saintsbynumbers) for the author. I [blog](https://szfh.github.io/) about twice a year.
 
 ### Note about scraping
 
@@ -31,10 +31,14 @@ file.remove(here::here("images","plot1.jpg"))
 file.remove(here::here("images","plot2.jpg"))
 file.remove(here::here("images","plot3.jpg"))
 file.remove(here::here("images","plot4.jpg"))
+file.remove(here::here("images","plot5.jpg"))
+file.remove(here::here("images","plot6.jpg"))
 file.copy(from=here::here("plots","league","xg_team.jpg"),to=here::here("images","plot1.jpg"))
 file.copy(from=here::here("plots","team","xg_trend.jpg"),to=here::here("images","plot2.jpg"))
 file.copy(from=here::here("plots","team","subs.jpg"),to=here::here("images","plot3.jpg"))
 file.copy(from=here::here("plots","CPL","player_event_share.jpg"),to=here::here("images","plot4.jpg"))
+file.copy(from=here::here("plots","team","team_appearances.jpg"),to=here::here("images","plot5.jpg"))
+file.copy(from=here::here("plots","test","age_contract.jpg"),to=here::here("images","plot6.jpg"))
 ```
 
 <center>
@@ -42,6 +46,8 @@ file.copy(from=here::here("plots","CPL","player_event_share.jpg"),to=here::here(
 <img src="./images/plot2.jpg" width="60%">
 <img src="./images/plot3.jpg" width="60%">
 <img src="./images/plot4.jpg" width="60%">
+<img src="./images/plot5.jpg" width="60%">
+<img src="./images/plot6.jpg" width="60%">
 </center>
 
 ### Useful resources
