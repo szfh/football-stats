@@ -105,7 +105,6 @@ scrape_fbref <- function(
   fbref$season_stats$all <-
     crossing(
       data_types$season,
-      team_or_player=c("team","player"),
       data_types$season_team_stats,
       country="ENG",
       gender="M",
