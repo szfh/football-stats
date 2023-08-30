@@ -38,6 +38,7 @@ theme$white <- function(base_size=theme$base_size,base_family=theme$base_family)
 }
 
 # https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/
+# test mobile edit
 theme$solar <- function(base_size=theme$base_size,base_family=theme$base_family){
   theme_solarized(base_size=base_size,base_family=base_family) +
     theme(
