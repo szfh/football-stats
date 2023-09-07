@@ -70,8 +70,9 @@
         position=="midfield - Attacking Midfield" ~ "AM",
         position=="Attack - Left Winger" ~ "AM",
         position=="Attack - Right Winger" ~ "AM",
+        position=="Attack - Second Striker" ~ "ST",
         position=="Attack - Centre-Forward" ~ "ST",
-        TRUE ~ "Other"))
+        .default="Other"))
     
     return(positions$position_new)
   }
@@ -94,7 +95,7 @@
       ~"position",~"age_start",~"age_end",
       "GK",27,31,
       "CB",26,30,
-      "FB",25,28,
+      "FB",25,29,
       "CM",24,28,
       "AM",24,28,
       "ST",25,29,
